@@ -1,0 +1,8 @@
+{
+  "plugins": ["prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "singleQuote": true,
+  "tailwindFunctions": ["clsx"],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^@(.+)/(.+)$", "^\\..+"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
