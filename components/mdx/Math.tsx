@@ -27,7 +27,6 @@ export default function Math({ children, ...props }: MathProps): JSX.Element {
     }, 2000);
   }, [spanRef]);
 
-  const className = props.className || '';
   return (
     <>
       <Tooltip
@@ -39,16 +38,17 @@ export default function Math({ children, ...props }: MathProps): JSX.Element {
         delay={0}
         closeDelay={0}
       >
-        <span
+        <button 
           {...props}
-          ref={spanRef}
           onMouseEnter={() => setTooltipHover(true)}
           onMouseLeave={() => setTooltipHover(false)}
           onClick={handleCopy}
-          className={clsx(className, 'cursor-pointer')}
+          disabled={copied}
         >
+        <span ref={spanRef} className="relative">
           {children}
         </span>
+        </button>
       </Tooltip>
     </>
   );

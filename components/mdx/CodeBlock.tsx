@@ -6,6 +6,7 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { MotionCheckIcon } from '../icons/motion';
+import { CopyIcon } from '../icons/core';
 
 export default function CodeBlock({
   children,
@@ -16,7 +17,7 @@ export default function CodeBlock({
 }): JSX.Element {
   const preRef = useRef<HTMLPreElement>(null);
   const [copied, setCopied] = useState(false);
-  const [hover, setHover] = useState(false);
+  const [hover, setHover] = useState(true);
   const [tooltipHover, setTooltipHover] = useState(false);
 
   const handleCopy = useCallback(() => {
@@ -32,7 +33,6 @@ export default function CodeBlock({
         className={'block-code relative'}
         {...props}
         onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
       >
         <Tooltip
           content={copied ? 'Copied!' : 'Copy to clipboard'}
@@ -57,7 +57,7 @@ export default function CodeBlock({
               {copied ? (
                 <MotionCheckIcon isVisible={copied} strokeWidth={2} />
               ) : (
-                <FontAwesomeIcon icon={faCopy} />
+                <CopyIcon size={'md'} strokeWidth={'sm'} />
               )}
             </button>
           )}
