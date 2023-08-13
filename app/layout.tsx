@@ -1,13 +1,17 @@
 import { Roboto } from 'next/font/google';
 import clsx from 'clsx';
-import './globals.css';
+import '@/styles/globals.css';
 import type { Metadata } from 'next';
-import Head from 'next/head';
 import ClientThemeProvider from '@/components/providers/theme-provider';
 import AnalyticsWrapper from '@/components/Analytics';
 import Background from '@/components/Background';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faFontAwesome, fas } from '@fortawesome/free-solid-svg-icons';
+library.add(fas, faFontAwesome);
+
+library.add();
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
 
@@ -32,7 +36,7 @@ export default function RootLayout({
       >
         <ClientThemeProvider>
           <Background />
-          <div className="relative min-h-screen">
+          <div className="relative min-h-screen selection:bg-bob-500/50 ">
             <div className="flex h-full flex-col justify-between">
               <div>
                 <Header />

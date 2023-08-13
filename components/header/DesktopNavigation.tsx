@@ -88,14 +88,14 @@ export default function DesktopNavigation({
         }}
       >
         <motion.ul
-          className="flex bg-white/90 px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-100/20 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-zinc-700/20"
+          className="flex bg-white/95 px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-100/20 backdrop-blur dark:bg-zinc-800/95 dark:text-zinc-200 dark:ring-zinc-700/20"
           style={{
             borderRadius: borderRadius,
             borderWidth: borderWidth
           }}
         >
           <motion.li
-            className="my-auto"
+            className="my-auto dark:invert"
             style={{
               width: logoWidth,
               opacity: logoOpacity,

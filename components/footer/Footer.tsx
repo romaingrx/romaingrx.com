@@ -35,25 +35,25 @@ export default function Footer(): JSX.Element {
   return (
     <>
       <footer className="mt-32 max-h-full">
-        <div className="flex justify-between border-t border-zinc-100 px-4 py-8 dark:border-zinc-700/50">
+        <div className="justify-between border-t border-zinc-100 px-4 py-8 dark:border-zinc-700/50">
           <div className="flex flex-col justify-between">
-            <div className="flex flex-row justify-start"></div>
+            <div className="flex flex-row justify-between">
+              <div />
+              <div className="flex flex-row justify-start gap-2">
+                <Link href="https://github.com/romaingrx">Github</Link>
+              </div>
+            </div>
             <div className="flex flex-row justify-between">
               <div className="flex flex-row justify-start gap-2">
-                {pages.map(({ name, href }) => (
+                {pages.map(({ name, href }, id) => (
                   <>
-                    <NavLink href={href} className="font-semibold">
+                    <NavLink href={href} className="font-semibold" key={id}>
                       {name}
                     </NavLink>
                   </>
                 ))}
               </div>
             </div>
-          </div>
-          <div className="flex flex-col justify-between">
-            <p className="text-sm ">
-              © {new Date().getFullYear()} Romain Graux
-            </p>
           </div>
         </div>
       </footer>
