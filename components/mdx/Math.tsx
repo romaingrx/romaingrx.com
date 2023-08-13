@@ -3,13 +3,13 @@ import { Tooltip } from '@nextui-org/react';
 import clsx from 'clsx';
 import { useRef, useCallback, useState } from 'react';
 
-export default function Math({
-  children,
-  ...props
-}: {
+type MathProps = {
   children: React.ReactNode;
+  className: string;
   props: any;
-}): JSX.Element {
+};
+
+export default function Math({ children, ...props }: MathProps): JSX.Element {
   const spanRef = useRef<HTMLSpanElement>(null);
   const [tooltipHover, setTooltipHover] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -27,8 +27,7 @@ export default function Math({
     }, 2000);
   }, [spanRef]);
 
-  const { className } = props;
-
+  const className = props.className || '';
   return (
     <>
       <Tooltip
