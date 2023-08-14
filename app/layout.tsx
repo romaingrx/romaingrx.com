@@ -40,7 +40,7 @@ export default function RootLayout({
             <div className="flex h-full flex-col justify-between">
               <div>
                 <Header />
-                <main>{children}</main>
+                <main className='mt-5'>{children}</main>
               </div>
               <Footer />
             </div>
