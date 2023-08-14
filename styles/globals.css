@@ -2,3 +2,25 @@
 @import './mdx.css';
 @tailwind components;
 @tailwind utilities;
+
+:focus {
+  @apply outline-none;
+} 
+
+ .no-scrollbar::-webkit-scrollbar {
+     display: none;
+ }
+
+ .no-scrollbar {
+     -ms-overflow-style: none;
+     scrollbar-width: none;
+ }
+
+ .thin-scrollbar::-webkit-scrollbar {
+     height: 10px !important;
+ }
+
+ .thin-scrollbar::-webkit-scrollbar-thumb {
+     background-color: theme("colors.bob.500");
+     border-radius: 6px;
+ }

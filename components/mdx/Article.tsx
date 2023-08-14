@@ -53,7 +53,7 @@ function ArticleBody({ article }: { article: Article }): JSX.Element {
 
   return (
     <>
-      <div className="dark:prose-dark prose max-w-none break-before-auto">
+      <div className="dark:prose-invert prose max-w-none break-before-auto">
         <MDXComponent components={mdxComponents as any} />
       </div>
     </>
@@ -67,14 +67,12 @@ export default function ArticleComponent({
 }): JSX.Element {
   return (
     <>
-      <head className="hidden">
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css"
-          integrity="sha384-Um5gpz1odJg5Z4HAmzPtgZKdTBHZdw8S29IecapCSB31ligYPhHQZMIlWLYQGVoc"
-          crossOrigin="anonymous"
-        />
-      </head>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css"
+        integrity="sha384-Um5gpz1odJg5Z4HAmzPtgZKdTBHZdw8S29IecapCSB31ligYPhHQZMIlWLYQGVoc"
+        crossOrigin="anonymous"
+      />
       <div className="mx-auto max-w-6xl rounded-lg bg-white/10 backdrop-blur-md dark:bg-black/10 xl:relative">
         <article className="flex flex-col">
           <header className="mb-6 flex flex-col gap-2">

@@ -18,11 +18,11 @@ type Options = {
  * elements. Can be easily adapted to support other sources too.
  * @param {string} options.root - The root path when reading the image file.
  */
-const remarkSourceRedirect = (
+export default function remarkSourceRedirect(
   options: Options = {
     public_root: undefined,
   },
-) => {
+) {
   return (tree: any, file: any) => {
     // You need to grab a reference of your post's slug.
     // I'm using Contentlayer (https://www.contentlayer.dev/), which makes it
@@ -30,8 +30,8 @@ const remarkSourceRedirect = (
     // should be able to access it under `file.path`, or pass it as a parameter
     // the the plugin `options`.
     const [slug] = file.data.rawDocumentData.flattenedPath.split('/').reverse();
-    const copyImageSrcToPublic = (url: string) => {
-      if (url.startsWith('absolute:')){
+    const copyRessourceToPublic = (url: string) => {
+      if (url.startsWith('absolute:')) {
         return url.replace(/^absolute:/, '');
       }
       const redirectedUrl = `${
@@ -58,8 +58,7 @@ const remarkSourceRedirect = (
     visit(tree, 'paragraph', (node: any) => {
       const image = node.children.find((child: any) => child.type === 'image');
       if (image) {
-        console.log(image.url);
-        const redirectedSrc = copyImageSrcToPublic(image.url);
+        const redirectedSrc = copyRessourceToPublic(image.url);
         image.url = redirectedSrc;
       }
     });
@@ -72,12 +71,57 @@ const remarkSourceRedirect = (
           (attribute: any) => attribute.name === 'src',
         );
         if (srcAttr) {
-          const redirectedSrc = copyImageSrcToPublic(srcAttr.value);
+          const redirectedSrc = copyRessourceToPublic(srcAttr.value);
           srcAttr.value = redirectedSrc;
         }
       }
     });
-  }
-};
 
-export default remarkSourceRedirect;
+    // TODO : modify resources in the frontmatter as well 
+    // yaml
+    // visit(tree, (node: any) => {
+    //   function visitFrontmatter(node: any, visitor: string, fn: any) : any {
+    //     if (Array.isArray(node)) {
+    //       return node.map((child: any) => visitFrontmatter(child, visitor, fn))
+    //     }
+
+    //     if (node.type === visitor) {
+    //       fn(node)
+    //     }
+
+    //     if (node.value && typeof node.value === 'object') {
+    //       if (node.value.properties) {
+    //         node.value.properties.forEach((child: any) => {
+    //           visitFrontmatter(child, visitor, fn)
+    //         })
+    //       }
+    //       if (node.value.elements) {
+    //         node.value.elements.forEach((child: any) => {
+    //           visitFrontmatter(child, visitor, fn)
+    //         })
+    //       }
+    //     }
+    //     return node
+    //   }
+    //   const expressions = node.data.estree.body[0].declaration.declarations[0].init.properties
+    //   const test = visitFrontmatter(expressions, 'Property', (expression: any) => {
+    //     if (expression.key.value === 'src') {
+    //       const redirectedSrc = copyRessourceToPublic(expression.value.value);
+    //       expression.value.value = redirectedSrc;
+    //       expression.value.raw = `"${redirectedSrc}"`
+    //     }
+    //   });
+    //   // node.data.estree.body[0].declaration.declarations[0].init.properties = test;
+    //   node = null
+    // });
+    visit(tree, 'yaml', (node: any) => {
+      node.value = ''
+    });
+    visit(tree, 'link', (node: any) => {
+      if (node.url.startsWith('absolute:') || node.url.startsWith('/')) {
+        const redirectedSrc = copyRessourceToPublic(node.url);
+        node.url = redirectedSrc;
+      }
+    });
+  };
+}
