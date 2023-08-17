@@ -1,8 +1,15 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import localFont from "next/font/local";
 
-const inter = Inter({ subsets: ['latin'] })
+// "Wise Sans", "Inter", sans - serif;
+// Import the font weights you need
+const font = localFont({
+  src: "../assets/fonts/WorldwiseSans.woff2",
+  display: "swap",
+});
+
+
 
 export const metadata: Metadata = {
   title: 'romaingrx',
@@ -16,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={font.className}>{children}</body>
     </html>
-  )
+  );
 }
