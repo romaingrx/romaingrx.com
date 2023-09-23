@@ -38,7 +38,7 @@ export default function Header(): JSX.Element {
         <div className="top-0 z-10">
           <div className="" id="container">
             <div className="relative flex gap-4">
-              <div className="relative flex flex-1 justify-end md:justify-center">
+              <div className="relative flex flex-1 justify-end md:justify-center font-wise">
                 <MobileNavigation
                   pages={pages}
                   className="pointer-events-auto md:hidden"

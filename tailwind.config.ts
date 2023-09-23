@@ -12,6 +12,10 @@ const config: Config = {
   plugins: [nextui(), typo()],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)'],
+        wise: ['var(--font-worldwise)'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -97,7 +101,7 @@ const config: Config = {
             marginBottom: theme('spacing.5'),
           },
 
-          pre: {
+          'pre > code': {
             paddingTop: theme('spacing.3'),
             paddingBottom: theme('spacing.3'),
             // backgroundColor: theme('colors.zinc.800'),

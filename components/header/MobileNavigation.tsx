@@ -43,7 +43,7 @@ export default function MobileNavigation({
               className="pointer-events-auto absolute left-0 top-0 z-10 h-screen w-screen bg-bob-500 dark:bg-gray-800"
             >
               <motion.nav className="w-full flex-col">
-                <ul className="items-left flex h-full flex-col justify-center gap-8 p-8">
+                <ul className="items-left flex h-full flex-col justify-center gap-8 p-8 pr-16">
                   {pages.map((page, idx) => (
                     <motion.span
                       key={page.name}

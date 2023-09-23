@@ -59,7 +59,6 @@ export default function DesktopNavigation({
 
   const marginTop = useTransform(scrollYProgress, [0, 1], ['0rem', '1.5rem']);
   const width = useTransform(scrollYProgress, [0, 1], ['100vw', '0vw']);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const borderRadius = useTransform(
     scrollYProgress,
     [0, 1],
@@ -84,14 +83,13 @@ export default function DesktopNavigation({
         style={{
           width: width,
           marginTop: marginTop,
-          opacity: opacity,
         }}
       >
         <motion.ul
-          className="flex bg-white/95 px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-100/20 dark:bg-zinc-700/95 dark:text-zinc-200 dark:ring-zinc-700/20"
+          className="flex px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
           style={{
             borderRadius: borderRadius,
-            borderWidth: borderWidth
+            borderWidth: borderWidth,
           }}
         >
           <motion.li

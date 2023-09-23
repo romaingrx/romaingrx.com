@@ -1,10 +1,9 @@
-import { Roboto } from 'next/font/google';
 import clsx from 'clsx';
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import ClientThemeProvider from '@/components/providers/theme-provider';
 import AnalyticsWrapper from '@/components/Analytics';
-import Background from '@/components/Background';
+import Background from '@/components/backgrounds/Background';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -13,7 +12,19 @@ library.add(fas, faFontAwesome);
 
 library.add();
 
-const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
+import localFont from 'next/font/local';
+import { Inter } from 'next/font/google';
+
+const worldWise = localFont({
+  src: '../assets/fonts/WorldwiseSans.woff2',
+  variable: '--font-worldwise',
+  weight: '400',
+});
+
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: 'romaingrx.com',
@@ -26,11 +37,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className="h-full antialiased" lang="en">
+    <html className={clsx("h-full antialiased", inter.variable, worldWise.variable)} lang="en">
       <head />
       <body
         className={clsx(
-          roboto.className,
           'flex h-full min-h-screen flex-col bg-zinc-50 dark:bg-black',
         )}
       >
@@ -40,7 +50,7 @@ export default function RootLayout({
             <div className="flex h-full flex-col justify-between">
               <div>
                 <Header />
-                <main className='mt-5'>{children}</main>
+                <main className='mt-12 md:mt-8'>{children}</main>
               </div>
               <Footer />
             </div>

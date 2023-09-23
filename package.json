@@ -16,6 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@nextui-org/react": "^2.0.13",
+    "@react-three/fiber": "^8.14.2",
     "@stefanprobst/rehype-extract-toc": "^2.2.0",
     "@types/node": "20.4.8",
     "@types/react": "18.2.18",
@@ -34,6 +35,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-spotify-api": "^3.0.0",
+    "react-three-fiber": "^6.0.13",
     "reading-time": "^1.5.0",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-katex": "^6.0.3",
@@ -43,6 +45,7 @@
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "sharp": "^0.32.4",
+    "three": "^0.156.1",
     "typescript": "5.1.6",
     "unist-util-visit": "^5.0.0",
     "yaml-unist-parser": "^2.0.1"
