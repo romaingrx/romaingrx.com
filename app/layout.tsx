@@ -49,7 +49,7 @@ export default function RootLayout({
           <div className="relative selection:bg-bob-500/50 ">
             <div className="flex flex-col justify-between min-h-screen">
               <Header />
-              <main className='mt-12 md:mt-8 h-full'>{children}</main>
+              <main className='mt-12 md:mt-8 flex-col flex-grow h-full'>{children}</main>
               <Footer />
             </div>
             <AnalyticsWrapper />

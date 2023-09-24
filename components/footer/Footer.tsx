@@ -44,10 +44,10 @@ export default function Footer(): JSX.Element {
               </div>
             </div>
             <div className="flex flex-row justify-between">
-              <div className="flex flex-row justify-start gap-2">
+              <div className="flex flex-row justify-start gap-2 font-wise">
                 {pages.map(({ name, href }, id) => (
                   <>
-                    <NavLink href={href} className="font-semibold" key={id}>
+                    <NavLink href={href} key={id}>
                       {name}
                     </NavLink>
                   </>
