@@ -46,12 +46,10 @@ export default function RootLayout({
       >
         <ClientThemeProvider>
           <Background />
-          <div className="relative min-h-screen selection:bg-bob-500/50 ">
-            <div className="flex h-full flex-col justify-between">
-              <div>
-                <Header />
-                <main className='mt-12 md:mt-8'>{children}</main>
-              </div>
+          <div className="relative selection:bg-bob-500/50 ">
+            <div className="flex flex-col justify-between min-h-screen">
+              <Header />
+              <main className='mt-12 md:mt-8 h-full'>{children}</main>
               <Footer />
             </div>
             <AnalyticsWrapper />

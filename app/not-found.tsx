@@ -3,13 +3,13 @@ import GameOfLifeBackground from '@/components/backgrounds/GameOfLife';
 export default function Page404() {
   return (
     <>
-      <div className="fixed inset-0 bg-white">
-        <GameOfLifeBackground fill={'#ff00ff'} />
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <GameOfLifeBackground fill={'rgba(200, 200, 200, 0.5)'} fps={5}/>
       </div>
-      <div className="z-10">
-        <div className="flex flex-col w-full">
-          <h1 className="text-4xl font-bold z-10 mx-auto">404</h1>
-          <p className="text-2xl font-medium z-10 mx-auto">Page not found</p>
+      <div className="h-full flex flex-col flex-grow justify-center items-center">
+        <div className='justify-center items-center flex flex-col font-wise flex-grow'>
+          <h1 className="text-8xl font-bold z-10">404</h1>
+          <p className="text-2xl font-medium z-10">Page not found</p>
         </div>
       </div>
     </>

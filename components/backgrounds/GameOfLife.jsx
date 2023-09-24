@@ -2,7 +2,7 @@
 import { getDeadOrAlive } from "@/lib/game_of_life";
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 
-export default function GameOfLifeBackground({ className = '', fill = "black" }) {
+export default function GameOfLifeBackground({ className = '', fill = "black", fps =  30}) {
   const canvasRef = useRef(null);
   const [field, setField] = useState([]);
   const px = 10;
@@ -52,12 +52,10 @@ export default function GameOfLifeBackground({ className = '', fill = "black" })
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
 
-      // Fill entire field
-      context.fillStyle = "#fff";
-      context.fillRect(0, 0, nx * px, ny * px);
+      // Clear the entire canvas
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
       context.fillStyle = fill;
-
       // Fill alive cells as small rectangles
       field.forEach((row, y) =>
         row.forEach((cell, x) => {
@@ -101,7 +99,7 @@ export default function GameOfLifeBackground({ className = '', fill = "black" })
 
   const loop = () => {
     setRun((r) => r + 1);
-    setTimeout(loop, 500);
+    setTimeout(loop, 1000 / fps);
   };
 
   return (

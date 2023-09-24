@@ -101,11 +101,10 @@ const config: Config = {
             marginBottom: theme('spacing.5'),
           },
 
-          'pre > code': {
-            paddingTop: theme('spacing.3'),
-            paddingBottom: theme('spacing.3'),
-            // backgroundColor: theme('colors.zinc.800'),
-          },
+          //pre: {
+          //  paddingTop: theme('spacing.3'),
+          //  paddingBottom: theme('spacing.3'),
+          //},
 
           // Headings
           'h2, h3': {
