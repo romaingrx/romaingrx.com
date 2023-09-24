@@ -66,7 +66,7 @@ function TimelineSurroundings({ first, second, timelineSeparator }: TimelineSurr
     </>);
 }
 
-type TimelineJobItemProps = {
+type TimelineCardItemProps = {
     title: string;
     subtitle: string;
     date: string;
@@ -76,7 +76,7 @@ type TimelineJobItemProps = {
 };
 
 
-function TimelineJobItem({ title, subtitle, date, align, timelineSeparator, description }: TimelineJobItemProps): JSX.Element {
+function TimelineCardItem({ title, subtitle, date, align, timelineSeparator, description }: TimelineCardItemProps): JSX.Element {
     return (<>
         <TimelineSurroundings
             first={
@@ -97,7 +97,7 @@ function ProjectsTimeline() {
                 <h1 className="font-wise text-4xl rounded-md px-2 py-1 bg-zinc-100 dark:bg-zinc-700/50 text-zinc-800 dark:text-zinc-100">Projects</h1>
             </div>
             <Timeline position="alternate-reverse">
-                <TimelineJobItem
+                <TimelineCardItem
                     title="Co-Creator and Vice President"
                     subtitle="Lausanne AI Alignemnt Group"
                     date="Jan 2023 - Now"
@@ -122,7 +122,7 @@ function ExperienceTimeline() {
                 <h1 className="font-wise text-4xl rounded-md px-2 py-1 bg-zinc-100 dark:bg-zinc-700/50 text-zinc-800 dark:text-zinc-100">Experience</h1>
             </div>
             <Timeline position="alternate">
-                <TimelineJobItem
+                <TimelineCardItem
                     title="Data Officer"
                     subtitle="NCCR Catalysis (EPFL/ETHZ)"
                     date="Jan 2023 - Now"
@@ -130,13 +130,13 @@ function ExperienceTimeline() {
                     align='right'
                     timelineSeparator={false}
                 />
-                <TimelineJobItem
+                <TimelineCardItem
                     title="Fullstack software engineer"
                     subtitle="Graux Guitar Loops"
                     date="Jul 2022 - Now"
                     description='Created and launched SpicyX, a streaming platform for guitar loops. Leveraged NextJS, MongoDB, and Vercel to build a scalable platform, attracting over 100+ monthly subscribed producers.'
                 />
-                <TimelineJobItem
+                <TimelineCardItem
                     title="Teaching Assistant"
                     subtitle="École Polytechnique de Louvain"
                     date="Sep 2020 - Jun 2021"
@@ -152,7 +152,7 @@ function ExperienceTimeline() {
                     </>}
                     align='right'
                 />
-                <TimelineJobItem
+                <TimelineCardItem
                     title="Computer Vision Internship"
                     subtitle="Aerospacelab"
                     date="Jul 2020 - Sep 2020"
@@ -170,7 +170,7 @@ function EducationTimeline() {
                 <h1 className="font-wise text-4xl rounded-md px-2 py-1 bg-zinc-100 dark:bg-zinc-700/50 text-zinc-800 dark:text-zinc-100">Education</h1>
             </div>
             <Timeline position="alternate">
-                <TimelineJobItem
+                <TimelineCardItem
                     title="M.S. Data Science Engineering"
                     subtitle="École Polytechnique Fédérale de Lausanne"
                     date="Sep 2021 - Sep 2022"
@@ -178,13 +178,13 @@ function EducationTimeline() {
                     align='right'
                     timelineSeparator={false}
                 />
-                <TimelineJobItem
+                <TimelineCardItem
                     title="M.S. Data Science Engineering"
                     subtitle="École Polytechnique de Louvain"
                     date="Sep 2020 - Sep 2022"
                     description='Master degree in data science with a specialization in cryptography and computer systems. Grade: Cum Laude.'
                 />
-                <TimelineJobItem
+                <TimelineCardItem
                     title="B. Sc. Engineering"
                     subtitle="École Polytechnique de Louvain"
                     date="Sep 2017 - Sep 2020"

@@ -4,6 +4,7 @@ import { Card, CardBody, Chip } from '@nextui-org/react';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useState } from 'react';
+import LiquidGradient from '../backgrounds/LiquidGradient';
 
 function toReadableDate(date: string) {
   const d = new Date(date);
@@ -39,14 +40,19 @@ export function ArticleCard({ article }: { article: Article }) {
         </div>
         <div className={clsx('flex flex-col', isHovered && 'blur-sm')}>
           {article.cover && (
-            <div className="relative left-0 top-0 h-4/5 w-full bg-opacity-70 bg-gradient-to-br from-bob-400 from-60% to-white dark:from-bob-500 dark:to-zinc-900">
-              <div className="m-3">
-                <Image
-                  src={article.cover.src}
-                  alt={article.title}
-                  width={1024}
-                  height={1024}
-                />
+            <div className="relative left-0 top-0 h-4/5 w-full bg-opacity-70">
+              <div className="absolute inset-0 w-full h-full" id="test">
+                <LiquidGradient />
+              </div>
+              <div className="relative left-0 top-0 h-full w-full">
+                <div className="m-3">
+                  <Image
+                    src={article.cover.src}
+                    alt={article.title}
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
               </div>
             </div>
           )}
