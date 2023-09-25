@@ -108,7 +108,7 @@ function TimelineJobItem({ title, subtitle, date, align, timelineSeparator, desc
                 <TimelineCard title={title} subtitle={subtitle} date={date} align={align} />
             }
             second={
-                <TimelineParagraph title={title} substitle={subtitle} date={date}>
+                <TimelineParagraph title={title} subtitle={subtitle} date={date}>
                     {description}
                 </TimelineParagraph>
             }
