@@ -58,7 +58,7 @@ export function MenuButton({
   width = 24,
   height = 24,
   strokeWidth = 1,
-  color = '#000',
+  color = '',
   transition = {
     type: 'spring',
     stiffness: 260,
@@ -97,7 +97,6 @@ export function MenuButton({
     },
   };
   lineProps = {
-    stroke: color,
     strokeWidth: strokeWidth as number,
     vectorEffect: 'non-scaling-stroke',
     initial: 'closed',
@@ -105,6 +104,9 @@ export function MenuButton({
     transition,
     ...lineProps,
   };
+  if (color) {
+    lineProps.stroke = color;
+  }
   const unitHeight = 4;
   const unitWidth = (unitHeight * (width as number)) / (height as number);
 

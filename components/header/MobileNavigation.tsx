@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { type PageProps } from './Header';
 import { Modal } from '@mui/material';
+import clsx from 'clsx';
 
 type Props = {
   pages: PageProps[];
@@ -23,16 +24,15 @@ export default function MobileNavigation({
         <button
           onClick={() => setIsOpen((open) => !open)}
           className="absolute right-0 top-0 m-5"
-          style={{ zIndex: 1301 }}
+          style={{ zIndex: 11 }}
         >
           <MenuButton
             id='mobile-menu-button'
             isOpen={isOpen}
-            className={'pointer-events-auto'}
+            className={clsx('pointer-events-auto', isOpen ? 'stroke-white' : 'dark:stroke-white stroke-black')}
             strokeWidth={2.5}
             width={32}
             height={32}
-            color={isOpen ? '#fff' : '#000'}
           />
         </button>
         <AnimatePresence>
@@ -45,10 +45,10 @@ export default function MobileNavigation({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: '-100%' }}
                 transition={{ duration: 0.2 }}
-                className="pointer-events-auto z-10 h-screen w-screen bg-bob-500 dark:bg-gray-800"
+                className="pointer-events-auto z-10 h-screen w-screen bg-bob-500 dark:bg-zinc-800"
               >
                 <motion.nav className="w-full flex-col">
-                  <ul className="items-left flex h-full flex-col justify-center gap-8 p-8 pr-16">
+                  <ul className="items-left flex h-full flex-col justify-center gap-8 pl-8 pr-16 pt-16">
                     {pages.map((page, idx) => (
                       <motion.span
                         key={page.name}
