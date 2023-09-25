@@ -2,7 +2,9 @@
 import Link from 'next/link';
 import { pages } from '../header/Header';
 import { usePathname } from 'next/navigation';
+import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import clsx from 'clsx';
+import XIcon from '../icons/x';
 
 function NavLink({
   href,
@@ -38,12 +40,6 @@ export default function Footer(): JSX.Element {
         <div className="justify-between border-t border-zinc-100 px-4 py-8 dark:border-zinc-700/50">
           <div className="flex flex-col justify-between">
             <div className="flex flex-row justify-between">
-              <div />
-              <div className="flex flex-row justify-start gap-2">
-                <Link href="https://github.com/romaingrx">Github</Link>
-              </div>
-            </div>
-            <div className="flex flex-row justify-between">
               <div className="flex flex-row justify-start gap-2 font-wise">
                 {pages.map(({ name, href }, id) => (
                   <>
@@ -52,6 +48,18 @@ export default function Footer(): JSX.Element {
                     </NavLink>
                   </>
                 ))}
+              </div>
+              <div className="flex flex-row justify-center gap-2">
+                <Link href="https://github.com/romaingrx">
+                  <FaGithub className='h-full'/>
+                </Link>
+                <Link href="https://x.com/_romaingrx">
+                  <XIcon className='h-full'/>
+                </Link>
+                <Link href="https://www.linkedin.com/in/romaingraux">
+                  <FaLinkedin className='h-full'/>
+                </Link>
+                
               </div>
             </div>
           </div>
