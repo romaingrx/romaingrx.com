@@ -4,7 +4,9 @@ import { pages } from '../header/Header';
 import { usePathname } from 'next/navigation';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import clsx from 'clsx';
-import XIcon from '../icons/x';
+import XIcon from '@/components/icons/x';
+import { VR } from '@/components/core/base';
+import { useBreakpoint } from '@/hooks/tailwind';
 
 function NavLink({
   href,
@@ -33,13 +35,15 @@ function NavLink({
   );
 }
 
+
 export default function Footer(): JSX.Element {
+  const { isBelowMd } = useBreakpoint('md')
   return (
     <>
       <footer className="mt-32 max-h-full">
-        <div className="justify-between border-t border-zinc-100 px-4 py-8 dark:border-zinc-700/50">
-          <div className="flex flex-col justify-between">
-            <div className="flex flex-row justify-between">
+        <div className="justify-between border-t border-zinc-100 px-4 py-4 dark:border-zinc-700/50">
+          <div className="flex flex-col justify-between gap-2 md:flex-row">
+            <div className="flex flex-row justify-between md:flex-grow">
               <div className="flex flex-row justify-start gap-2 font-wise">
                 {pages.map(({ name, href }, id) => (
                   <>
@@ -49,19 +53,24 @@ export default function Footer(): JSX.Element {
                   </>
                 ))}
               </div>
-              <div className="flex flex-row justify-center gap-2">
-                <Link href="https://github.com/romaingrx">
-                  <FaGithub className='h-full'/>
-                </Link>
-                <Link href="https://x.com/_romaingrx">
-                  <XIcon className='h-full'/>
-                </Link>
-                <Link href="https://www.linkedin.com/in/romaingraux">
-                  <FaLinkedin className='h-full'/>
-                </Link>
-                
+              <div className="flex flex-col md:flex-row justify-center gap-2">
+                <div className='flex flex-row justify-end gap-2'>
+                  <Link href="https://github.com/romaingrx">
+                    <FaGithub className='h-full' />
+                  </Link>
+                  <Link href="https://x.com/_romaingrx">
+                    <XIcon className='h-full' />
+                  </Link>
+                  <Link href="https://www.linkedin.com/in/romaingraux">
+                    <FaLinkedin className='h-full' />
+                  </Link>
+                </div>
+                {!isBelowMd && <VR />}
               </div>
             </div>
+            <span className="text-zinc-600 dark:text-zinc-300 text-xs text-center flex flex-col justify-center">
+              Made with ❤️‍🔥 ️by romaingrx © {new Date().getFullYear()}
+            </span>
           </div>
         </div>
       </footer>
