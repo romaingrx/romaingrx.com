@@ -29,11 +29,17 @@ function NavLink({
           href={href}
           className={clsx(
             'relative block px-3 py-2 transition',
-            isActive
-              ? 'text-bob-500 dark:text-bob-400'
-              : 'hover:text-bob-500 dark:hover:text-bob-400',
+            'hover:text-bob-500 dark:hover:text-bob-400',
+            isActive && 'text-bob-500 dark:text-bob-400',
           )}
         >
+          {isActive && (
+            <motion.div
+              layoutId={'nav'}
+              className="absolute inset-0 bg-bob-500/20 dark:bg-bob-400/20 rounded-md m-1"
+              transition={{ type: 'spring', stiffness: 500, damping: 30, duration: 1.0, ease: [0.83, -0.01, 0.16, 0.99] }}
+            />
+          )}
           {children}
         </Link>
       </li>
