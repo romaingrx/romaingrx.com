@@ -50,6 +50,7 @@ function CorePixelBackground({
                             variants={variants}
                             initial={'hidden'}
                             animate={visible ? 'visible' : 'hidden'}
+                            exit={'hidden'}
                             custom={{ row, column, rows, columns }}
                             style={{
                                 height: `${pixelSize}px`,
@@ -89,6 +90,25 @@ const RandomPixelBackground = ({ visible, className, delay = 0.5, duration = 0.1
     />)
 }
 
+function Transition({children, delay = 0.5, duration = 0.25}: {children: React.ReactNode, delay?: number, duration?: number}) : JSX.Element{
+    const [visible, setVisible] = useState<boolean>(true);
+    useEffect(() => {
+        setTimeout(() => {
+            setVisible(false);
+        }, 250);
+    }, []);
+
+    return (<>
+        <RandomPixelBackground
+            visible={visible}
+            delay={delay}
+            duration={duration}
+            className="z-[10000000000000000000] h-full w-full fixed top-0 left-0 pointer-events-none"
+        />
+        {children}
+    </>)
+}
+
 export default CorePixelBackground;
 export type { CorePixelBackgroundProps, PixelBackgroundProps, RandomPixelBackgroundProps };
-export { RandomPixelBackground };
+export { RandomPixelBackground, Transition };

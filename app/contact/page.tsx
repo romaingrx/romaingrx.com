@@ -1,5 +1,9 @@
-export default function Contact() : JSX.Element {
+import { Transition } from "@/components/backgrounds/PixelBackground";
+
+export default function Contact(): JSX.Element {
     return (<>
-        <h1>Contact</h1>
+        <Transition>
+            <h1>Contact</h1>
+        </Transition>
     </>);
 }
