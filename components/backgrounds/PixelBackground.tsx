@@ -29,7 +29,7 @@ function CorePixelBackground({
     backgroundColor = "var(--color-bob)",
 }: CorePixelBackgroundProps): JSX.Element {
 
-    const { innerWidth, innerHeight } = window;
+    const { innerWidth = 1600, innerHeight = 1600 } = typeof window !== 'undefined' ? window : {};
     const pixelSize = innerWidth / columns;
     const rows = Math.ceil(innerHeight / pixelSize);
 
@@ -37,6 +37,7 @@ function CorePixelBackground({
         <div className={clsx(className, "flex h-full")} onClick={() => { }}>
             {Array.from(Array(columns).keys()).map((_, column) => {
                 return (<div
+                    key={`${column}`}
                     className="h-full"
                     style={{
                         width: `${100 / columns}vw`
@@ -44,6 +45,7 @@ function CorePixelBackground({
                 >
                     {Array.from(Array(rows).keys()).map((_, row) => {
                         return (<motion.div
+                            key={`${row}-${column}`}
                             className="h-full"
                             variants={variants}
                             initial={'hidden'}
