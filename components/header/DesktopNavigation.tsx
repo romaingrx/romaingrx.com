@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import HideOnScroll from '../core/HideOnScroll';
+import { useBreakpoint } from '@/hooks/tailwind';
 
 type Props = {
   pages: {
@@ -51,12 +53,8 @@ export default function DesktopNavigation({
   pages,
   className,
 }: Props): JSX.Element {
+  const { isBelowMd } = useBreakpoint('md');
   const navRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState('0px');
-
-  useEffect(() => {
-    setHeight(`${navRef.current?.offsetHeight}px`);
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: navRef,
@@ -84,43 +82,40 @@ export default function DesktopNavigation({
         ref={navRef}
         className={clsx(
           className,
-          'transition-linear transition-duration-300 fixed min-w-fit transition-all',
+          'transition-linear transition-duration-300 fixed min-w-fit transition-all left-[50%] transform -translate-x-1/2 z-50',
         )}
         style={{
           width: width,
           marginTop: marginTop,
         }}
       >
-        <motion.ul
-          className="flex px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
-          style={{
-            borderRadius: borderRadius,
-            borderWidth: borderWidth,
-          }}
-        >
-          <motion.li
-            className="my-auto dark:invert"
+        <HideOnScroll active={isBelowMd}>
+          <motion.ul
+            className="flex px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
             style={{
-              width: logoWidth,
-              opacity: logoOpacity,
+              borderRadius: borderRadius,
+              borderWidth: borderWidth,
             }}
           >
-            <Link href="/">
-              <Image src="/favicon.ico" alt="logo" width={32} height={32} />
-            </Link>
-          </motion.li>
-          {pages.map(({ name, href }, idx) => (
-            <NavLink key={idx} href={href}>
-              {name}
-            </NavLink>
-          ))}
-        </motion.ul>
+            <motion.li
+              className="my-auto dark:invert"
+              style={{
+                width: logoWidth,
+                opacity: logoOpacity,
+              }}
+            >
+              <Link href="/">
+                <Image src="/favicon.ico" alt="logo" width={32} height={32} />
+              </Link>
+            </motion.li>
+            {pages.map(({ name, href }, idx) => (
+              <NavLink key={idx} href={href}>
+                {name}
+              </NavLink>
+            ))}
+          </motion.ul>
+        </HideOnScroll>
       </motion.nav>
-      <motion.div
-        style={{
-          height: height,
-        }}
-      ></motion.div>
     </>
   );
 }

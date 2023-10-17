@@ -1,11 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DesktopNavigation from './DesktopNavigation';
-import MobileNavigation from './MobileNavigation';
 
 export type PageProps = {
-    name: string;
-    href: string;
-    icon: JSX.Element;
+  name: string;
+  href: string;
+  icon: JSX.Element;
 };
 
 export const pages = [
@@ -37,17 +36,13 @@ export default function Header(): JSX.Element {
       <header className="pointer-events-none relative z-50 flex flex-col">
         <div className="top-0 z-10">
           <div className="" id="container">
-            <div className="relative flex gap-4">
-              <div className="relative flex flex-1 justify-end md:justify-center font-wise">
-                <MobileNavigation
-                  pages={pages}
-                  className="pointer-events-auto md:hidden"
-                />
-                <DesktopNavigation
-                  pages={pages}
-                  className="pointer-events-auto hidden md:block"
-                />
-              </div>
+            <div className="flex gap-4">
+                <div className="relative flex flex-1 justify-end md:justify-center font-wise">
+                  <DesktopNavigation
+                    pages={pages}
+                    className="pointer-events-auto block"
+                  />
+                </div>
             </div>
           </div>
         </div>
