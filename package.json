@@ -53,13 +53,14 @@
     "three": "^0.156.1",
     "typescript": "5.1.6",
     "unist-util-visit": "^5.0.0",
-    "yaml-unist-parser": "^2.0.1"
+    "yaml-unist-parser": "^2.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.0",
-    "postcss": "^8.4.27",
+    "postcss": "^8.4.31",
     "prettier": "^3.0.1",
     "prettier-plugin-sort-imports": "^1.7.2",
     "prettier-plugin-tailwindcss": "^0.4.1",

@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-bob: theme("colors.bob.400");
+}
+
 :focus {
   @apply outline-none;
 } 
