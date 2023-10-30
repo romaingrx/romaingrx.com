@@ -21,6 +21,37 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      spacing: {
+        'sm': 'var(--space-1)',
+        'md': 'var(--space-2)',
+        'lg': 'var(--space-3)',
+        'xl': 'var(--space-4)',
+        '2xl': 'var(--space-5)',
+        '3xl': 'var(--space-6)',
+        '4xl': 'var(--space-7)',
+        '5xl': 'var(--space-8)',
+        '6xl': 'var(--space-9)',
+        '7xl': 'var(--space-10)',
+        '1': 'var(--space-1)',
+        '2': 'var(--space-2)',
+        '3': 'var(--space-3)',
+        '4': 'var(--space-4)',
+        '5': 'var(--space-5)',
+        '6': 'var(--space-6)',
+        '7': 'var(--space-7)',
+        '8': 'var(--space-8)',
+        '9': 'var(--space-9)',
+        '10': 'var(--space-10)',
+      },
+      fontSize: {
+        'xs': 'var(--font-size-1)',
+        'sm': 'var(--font-size-2)',
+        'base': 'var(--font-size-3)',
+        'lg': 'var(--font-size-4)',
+        'xl': 'var(--font-size-5)',
+        '2xl': 'var(--font-size-6)',
+        '3xl': 'var(--font-size-7)',
+      },
       colors: {
         bob: {
           default: '#da7df5',
@@ -35,59 +66,62 @@ const config: Config = {
           '800': '#542561',
           '900': '#2a1231',
         },
+
+        'romaingrx-brand': 'var(--romaingrx-colors-brand)',
+        'romaingrx-body': 'var(--romaingrx-colors-body)',
+        'romaingrx-header': 'var(--romaingrx-colors-header)',
+        'romaingrx-emphasis': 'var(--romaingrx-colors-emphasis)',
+        'romaingrx-foreground': 'var(--romaingrx-colors-foreground)',
+        'romaingrx-danger': {
+          default: 'var(--romaingrx-colors-danger)',
+          'emphasis': 'var(--romaingrx-colors-danger-emphasis)',
+        },
+        'romaingrx-warning': 'var(--romaingrx-colors-warning)',
+        'romaingrx-warning-emphasis': 'var(--romaingrx-colors-warning-emphasis)',
+        'romaingrx-success': 'var(--romaingrx-colors-success)',
+        'romaingrx-success-emphasis': 'var(--romaingrx-colors-success-emphasis)',
+        'romaingrx-typeface': 'var(--romaingrx-colors-typeface-primary)',
+        'romaingrx-typeface-primary': 'var(--romaingrx-colors-typeface-primary)',
+        'romaingrx-typeface-secondary': 'var(--romaingrx-colors-typeface-secondary)',
+        'romaingrx-typeface-tertiary': 'var(--romaingrx-colors-typeface-tertiary)',
+        'romaingrx-typeface-danger': 'var(--romaingrx-colors-typeface-danger)',
+        'romainxrx-border-color': 'var(--romaingrx-border-color)',
+        'romainxrx-card-background-color': 'var(--romaingrx-card-background-color)',
+        'romaingrx-form-input-active': 'var(--romaingrx-form-input-active)',
+        'romaingrx-form-input-background': 'var(--romaingrx-form-input-background)',
+        'romaingrx-form-input-disabled': 'var(--romaingrx-form-input-disabled)',
+        'romaingrx-form-input-border': 'var(--romaingrx-form-input-border)',
+        'romaingrx-form-input-focus': 'var(--romaingrx-form-input-focus)',
+        'shadow-color': 'var(--shadow-color)',
+        'code-snippet-background': 'var(--code-snippet-background)',
+        'token-comment': 'var(--token-comment)',
+        'token-selector': 'var(--token-selector)',
+        'token-symbol': 'var(--token-symbol)',
+        'token-operator': 'var(--token-operator)',
+        'token-keyword': 'var(--token-keyword)',
+        'token-function': 'var(--token-function)',
+        'token-punctuation': 'var(--token-punctuation)',
       },
     },
     typography: (theme: (key: string, defaultValue?: string) => string) => ({
-      invert: {
-        css: {
-          '--tw-prose-body': 'var(--tw-prose-invert-body)',
-          '--tw-prose-headings': 'var(--tw-prose-invert-headings)',
-          '--tw-prose-links': 'var(--tw-prose-invert-links)',
-          '--tw-prose-links-hover': 'var(--tw-prose-invert-links-hover)',
-          '--tw-prose-underline': 'var(--tw-prose-invert-underline)',
-          '--tw-prose-underline-hover':
-            'var(--tw-prose-invert-underline-hover)',
-          '--tw-prose-bold': 'var(--tw-prose-invert-bold)',
-          '--tw-prose-counters': 'var(--tw-prose-invert-counters)',
-          '--tw-prose-bullets': 'var(--tw-prose-invert-bullets)',
-          '--tw-prose-hr': 'var(--tw-prose-invert-hr)',
-          '--tw-prose-quote-borders': 'var(--tw-prose-invert-quote-borders)',
-          '--tw-prose-captions': 'var(--tw-prose-invert-captions)',
-          '--tw-prose-th-borders': 'var(--tw-prose-invert-th-borders)',
-          '--tw-prose-td-borders': 'var(--tw-prose-invert-td-borders)',
-        },
-      },
+
       DEFAULT: {
         css: {
-          '--tw-prose-body': theme('colors.zinc.600'),
-          '--tw-prose-headings': theme('colors.zinc.900'),
-          '--tw-prose-links': theme('colors.bob.500'),
-          '--tw-prose-links-hover': theme('colors.bob.600'),
-          '--tw-prose-underline': theme('colors.bob.500 / 0.2'),
-          '--tw-prose-underline-hover': theme('colors.bob.500'),
-          '--tw-prose-bold': theme('colors.zinc.900'),
-          '--tw-prose-counters': theme('colors.zinc.900'),
-          '--tw-prose-bullets': theme('colors.zinc.900'),
-          '--tw-prose-hr': theme('colors.zinc.100'),
-          '--tw-prose-quote-borders': theme('colors.zinc.200'),
-          '--tw-prose-captions': theme('colors.zinc.400'),
-          '--tw-prose-th-borders': theme('colors.zinc.200'),
-          '--tw-prose-td-borders': theme('colors.zinc.100'),
+          '--tw-prose-body': 'var(--romaingrx-colors-typeface-primary)',
+          '--tw-prose-headings': 'var(--romaingrx-colors-header)',
+          '--tw-prose-links': 'var(--romaingrx-colors-brand)',
+          '--tw-prose-links-hover': 'var(--romaingrx-colors-emphasis)',
+          '--tw-prose-underline': 'var(--romaingrx-colors-brand)',
+          '--tw-prose-underline-hover': 'var(--romaingrx-colors-emphasis)',
+          '--tw-prose-bold': 'var(--romaingrx-colors-typeface-primary)',
+          '--tw-prose-counters': 'var(--romaingrx-colors-emphasis)',
+          '--tw-prose-bullets': 'var(--romaingrx-colors-emphasis)',
+          '--tw-prose-hr': 'var(--romaingrx-colors-emphasis)',
+          '--tw-prose-quote-borders': 'var(--romaingrx-colors-brand)',
+          '--tw-prose-captions': 'var(--romaingrx-colors-typeface-secondary)',
+          '--tw-prose-th-borders': 'var(--romaingrx-colors-emphasis)',
+          '--tw-prose-td-borders': 'var(--romaingrx-colors-emphasis)',
 
-          '--tw-prose-invert-body': theme('colors.zinc.300'),
-          '--tw-prose-invert-headings': theme('colors.zinc.200'),
-          '--tw-prose-invert-links': theme('colors.bob.400'),
-          '--tw-prose-invert-links-hover': theme('colors.bob.400'),
-          '--tw-prose-invert-underline': theme('colors.bob.400 / 0.3'),
-          '--tw-prose-invert-underline-hover': theme('colors.bob.400'),
-          '--tw-prose-invert-bold': theme('colors.zinc.200'),
-          '--tw-prose-invert-counters': theme('colors.zinc.200'),
-          '--tw-prose-invert-bullets': theme('colors.zinc.200'),
-          '--tw-prose-invert-hr': theme('colors.zinc.700 / 0.4'),
-          '--tw-prose-invert-quote-borders': theme('colors.zinc.500'),
-          '--tw-prose-invert-captions': theme('colors.zinc.500'),
-          '--tw-prose-invert-th-borders': theme('colors.zinc.700'),
-          '--tw-prose-invert-td-borders': theme('colors.zinc.800'),
 
           // Base
           color: 'var(--tw-prose-body)',
@@ -129,20 +163,15 @@ const config: Config = {
 
           // Images
           img: {
-            borderRadius: theme('borderRadius.3xl'),
-            marginTop: theme('spacing.10'),
-            marginBottom: theme('spacing.10'),
+            borderRadius: 'var(--space-2)',
+            marginTop: 'var(--space-3)',
+            marginBottom: 'var(--space-3)',
           },
 
           // Inline elements
           a: {
             color: 'var(--tw-prose-links)',
-            fontWeight: theme('fontWeight.semibold'),
-            textDecoration: 'underline',
             textDecorationColor: 'var(--tw-prose-underline)',
-            transitionProperty: 'color, text-decoration-color',
-            transitionDuration: theme('transitionDuration.150'),
-            transitionTimingFunction: theme('transitionTimingFunction.in-out'),
           },
           'a:hover': {
             color: 'var(--tw-prose-links-hover)',
@@ -150,126 +179,17 @@ const config: Config = {
           },
           strong: {
             color: 'var(--tw-prose-bold)',
-            fontWeight: theme('fontWeight.semibold'),
+            fontWeight: 'var(--font-weight-bold)',
           },
 
           // Quotes
           blockquote: {
-            paddingLeft: theme('spacing.6'),
-            borderLeftWidth: theme('borderWidth.2'),
+            paddingLeft: 'var(--space-4)',
+            borderLeftWidth: 'var(--space-1)',
             borderLeftColor: 'var(--tw-prose-quote-borders)',
             fontStyle: 'italic',
           },
 
-          // Figures
-          figcaption: {
-            color: 'var(--tw-prose-captions)',
-            fontSize: theme('fontSize.sm')[0],
-            lineHeight: theme('lineHeight.6'),
-            marginTop: theme('spacing.3'),
-          },
-          'figcaption > p': {
-            margin: 0,
-          },
-
-          // Lists
-          ul: {
-            listStyleType: 'disc',
-          },
-          ol: {
-            listStyleType: 'decimal',
-          },
-          'ul, ol': {
-            marginTop: theme('spacing.5'),
-            marginBottom: theme('spacing.5'),
-            paddingLeft: theme('spacing.5'),
-          },
-          li: {
-            paddingLeft: theme('spacing[3.5]'),
-          },
-          'li::marker': {
-            fontSize: theme('fontSize.sm')[0],
-            fontWeight: theme('fontWeight.semibold'),
-          },
-          'ol > li::marker': {
-            color: 'var(--tw-prose-counters)',
-          },
-          'ul > li::marker': {
-            color: 'var(--tw-prose-bullets)',
-          },
-          'li :is(ol, ul)': {
-            marginTop: theme('spacing.4'),
-            marginBottom: theme('spacing.4'),
-          },
-          'li :is(li, p)': {
-            marginTop: theme('spacing.3'),
-            marginBottom: theme('spacing.3'),
-          },
-
-          // Horizontal rules
-          hr: {
-            marginTop: theme('spacing.10'),
-            marginBottom: theme('spacing.10'),
-            borderTopWidth: '1px',
-            borderColor: 'var(--tw-prose-hr)',
-            '@screen lg': {
-              marginLeft: `calc(${theme('spacing.12')} * -1)`,
-              marginRight: `calc(${theme('spacing.12')} * -1)`,
-            },
-          },
-
-          // Tables
-          table: {
-            marginTop: theme('spacing.5'),
-            marginBottom: theme('spacing.5'),
-            width: '100%',
-            tableLayout: 'auto',
-            textAlign: 'left',
-            fontSize: theme('fontSize.sm')[0],
-          },
-          thead: {
-            borderBottomWidth: '1px',
-            borderBottomColor: 'var(--tw-prose-th-borders)',
-          },
-          'thead th': {
-            color: 'var(--tw-prose-headings)',
-            fontWeight: theme('fontWeight.semibold'),
-            verticalAlign: 'bottom',
-            paddingBottom: theme('spacing.2'),
-          },
-          'thead th:not(:first-child)': {
-            paddingLeft: theme('spacing.2'),
-          },
-          'thead th:not(:last-child)': {
-            paddingRight: theme('spacing.2'),
-          },
-          'tbody tr': {
-            borderBottomWidth: '1px',
-            borderBottomColor: 'var(--tw-prose-td-borders)',
-          },
-          'tbody tr:last-child': {
-            borderBottomWidth: 0,
-          },
-          'tbody td': {
-            verticalAlign: 'baseline',
-          },
-          tfoot: {
-            borderTopWidth: '1px',
-            borderTopColor: 'var(--tw-prose-th-borders)',
-          },
-          'tfoot td': {
-            verticalAlign: 'top',
-          },
-          ':is(tbody, tfoot) td': {
-            paddingTop: theme('spacing.2'),
-            paddingBottom: theme('spacing.2'),
-          },
-          ':is(tbody, tfoot) td:not(:first-child)': {
-            paddingLeft: theme('spacing.2'),
-          },
-          ':is(tbody, tfoot) td:not(:last-child)': {
-            paddingRight: theme('spacing.2'),
-          },
         },
       },
     }),

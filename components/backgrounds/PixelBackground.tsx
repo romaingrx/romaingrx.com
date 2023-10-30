@@ -1,11 +1,9 @@
 "use client"
 
-import { TargetAndTransition, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { AnimatePresence, TargetAndTransition, motion } from "framer-motion";
 import clsx from "clsx";
 
 type PixelBackgroundProps = {
-    visible: boolean;
     columns?: number;
     className?: string;
     backgroundColor?: string;
@@ -13,18 +11,19 @@ type PixelBackgroundProps = {
 
 type CorePixelBackgroundProps = PixelBackgroundProps & {
     variants: {
-        hidden: ({ row, column, rows, columns }: { row: number, column: number, rows: number, columns: number }) => TargetAndTransition;
-        visible: ({ row, column, rows, columns }: { row: number, column: number, rows: number, columns: number }) => TargetAndTransition;
+        initial: ({ row, column, rows, columns }: { row: number, column: number, rows: number, columns: number }) => TargetAndTransition;
+        animate: ({ row, column, rows, columns }: { row: number, column: number, rows: number, columns: number }) => TargetAndTransition;
+        exit: ({ row, column, rows, columns }: { row: number, column: number, rows: number, columns: number }) => TargetAndTransition;
     };
 }
 
 function CorePixelBackground({
-    visible,
     className,
     columns = 20,
     variants = {
-        hidden: () => ({ opacity: 0 }),
-        visible: () => ({ opacity: 1 }),
+        initial: () => ({ opacity: 1 }),
+        animate: () => ({ opacity: 0 }),
+        exit: () => ({ opacity: 1 }),
     },
     backgroundColor = "var(--color-bob)",
 }: CorePixelBackgroundProps): JSX.Element {
@@ -48,9 +47,9 @@ function CorePixelBackground({
                             key={`${row}-${column}`}
                             className="h-full"
                             variants={variants}
-                            initial={'hidden'}
-                            animate={visible ? 'visible' : 'hidden'}
-                            exit={'hidden'}
+                            initial={'initial'}
+                            animate={'animate'}
+                            exit={'exit'}
                             custom={{ row, column, rows, columns }}
                             style={{
                                 height: `${pixelSize}px`,
@@ -65,50 +64,80 @@ function CorePixelBackground({
     </>)
 }
 
-type RandomPixelBackgroundProps = PixelBackgroundProps & {
+type TransformFunctionProps = PixelBackgroundProps & {
     delay?: number;
     duration?: number;
 }
 
-const RandomPixelBackground = ({ visible, className, delay = 0.5, duration = 0.1 }: RandomPixelBackgroundProps): JSX.Element => {
+const RandomPixelBackground = ({ className, delay = 0.5, duration = 0.1 }: TransformFunctionProps): JSX.Element => {
     return (<CorePixelBackground
-        visible={visible}
         className={className}
         columns={Math.floor(Math.random() * 10) + 1}
         variants={{
-            hidden: () => ({
+            initial: () => ({
+                opacity: 1,
+            }),
+            animate: () => ({
                 opacity: 0,
                 transition: {
                     duration: duration,
                     delay: delay * Math.random(),
                 },
             }),
-            visible: () => ({
+            exit: () => ({
                 opacity: 1,
+                transition: {
+                    duration: duration,
+                    delay: delay * Math.random(),
+                },
             }),
         }}
     />)
 }
 
-function Transition({children, delay = 0.5, duration = 0.25}: {children: React.ReactNode, delay?: number, duration?: number}) : JSX.Element{
-    const [visible, setVisible] = useState<boolean>(true);
-    useEffect(() => {
-        setTimeout(() => {
-            setVisible(false);
-        }, 250);
-    }, []);
+function DownToUpPixelBackground({ className, delay = 0.5, duration = 0.1 }: TransformFunctionProps): JSX.Element {
+    return (<CorePixelBackground
+        className={className}
+        columns={20}
+        variants={{
+            initial: () => ({
+                opacity: 1,
+            }),
+            animate: ({ row, rows }) => ({
+                opacity: 0,
+                transition: {
+                    duration: duration,
+                    delay: (rows * (1 + 0.2 * Math.random()) - row) * delay,
+                },
+            }),
+            exit: ({ column, columns }) => ({
+                opacity: 1,
+                backgroundColor: "red",
+                transition: {
+                    duration: duration,
+                    delay: Math.abs(columns / 2 - column) * delay,
+                },
+            }),
+        }}
+    />)
+}
 
+function Transition({ children, delay = 0.02, duration = 0.5, transitionFunction = DownToUpPixelBackground }: { children: React.ReactNode, delay?: number, duration?: number, transitionFunction?: (props: TransformFunctionProps) => JSX.Element }): JSX.Element {
+    const TransitionFunction = transitionFunction;
     return (<>
-        <RandomPixelBackground
-            visible={visible}
-            delay={delay}
-            duration={duration}
-            className="z-[10000000000000000000] h-full w-full fixed top-0 left-0 pointer-events-none"
-        />
+        <div className="z-[10000000000000000000] h-full w-full fixed top-0 left-0 pointer-events-none">
+            <AnimatePresence>
+                <TransitionFunction
+                    delay={delay}
+                    duration={duration}
+                    className="h-full w-full"
+                />
+            </AnimatePresence>
+        </div>
         {children}
     </>)
 }
 
 export default CorePixelBackground;
-export type { CorePixelBackgroundProps, PixelBackgroundProps, RandomPixelBackgroundProps };
+export type { CorePixelBackgroundProps, PixelBackgroundProps, TransformFunctionProps };
 export { RandomPixelBackground, Transition };

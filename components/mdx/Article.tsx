@@ -5,7 +5,7 @@ import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
 import Image from 'next/image';
-import CodeBlock from './CodeBlock';
+import CodeBlock from './CodeBlock/CodeBlock';
 import Math from './Math';
 
 function localeDateString(date: string): string {

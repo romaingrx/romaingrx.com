@@ -14,7 +14,7 @@ export default function Test() {
 
     return (<>
         <div className="h-screen w-screen fixed top-0 left-0">
-            <RandomPixelBackground visible={visible} />
+            <RandomPixelBackground />
         </div>
     </>)
 }

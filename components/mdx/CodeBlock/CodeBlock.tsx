@@ -2,11 +2,9 @@
 
 import { Tooltip } from '@nextui-org/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { MotionCheckIcon } from '../icons/motion';
-import { CopyIcon } from '../icons/core';
+import { MotionCheckIcon } from '../../icon/motion';
+import { CopyIcon } from '../../icon/core';
 
 export default function CodeBlock({
   children,

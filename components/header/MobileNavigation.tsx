@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { MenuButton } from '../icons/motion';
+import { MenuButton } from '../icon/motion';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { type PageProps } from './Header';

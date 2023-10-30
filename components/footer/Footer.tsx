@@ -4,7 +4,7 @@ import { pages } from '../header/Header';
 import { usePathname } from 'next/navigation';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import clsx from 'clsx';
-import XIcon from '@/components/icons/x';
+import XIcon from '@/components/icon/x';
 import { VR } from '@/components/core/base';
 import { useBreakpoint } from '@/hooks/tailwind';
 

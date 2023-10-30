@@ -91,7 +91,7 @@ export default function DesktopNavigation({
       >
         <HideOnScroll active={isBelowMd}>
           <motion.ul
-            className="flex px-3 text-sm text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
+            className="flex px-3 text-md text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
             style={{
               borderRadius: borderRadius,
               borderWidth: borderWidth,
