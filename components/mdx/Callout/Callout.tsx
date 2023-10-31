@@ -1,4 +1,4 @@
-import { InfoIcon, WarningIcon } from "@/components/icon/Icon";
+import { InfoIcon, SuccessIcon, WarningIcon } from "@/components/icon/Icon";
 import { CalloutProps } from "./Callout.types";
 import { StyledCallout, StyledCalloutIconWrapper } from "./Callout.styles";
 
@@ -7,7 +7,10 @@ const getVariantIcon = (icon: CalloutProps["variant"]) => {
         case "info":
             return <InfoIcon />;
         case "warning":
+        case "danger":
             return <WarningIcon />;
+        case "success":
+            return <SuccessIcon />;
         default:
             return null;
     }

@@ -64,7 +64,7 @@
     "babel-plugin-styled-components": "^2.1.4",
     "concurrently": "^8.2.0",
     "postcss": "^8.4.31",
-    "prettier": "^3.0.1",
+    "prettier": "^3.0.3",
     "prettier-plugin-sort-imports": "^1.7.2",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "tailwindcss": "^3.3.3"

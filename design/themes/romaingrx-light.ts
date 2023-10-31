@@ -7,10 +7,10 @@ const lightTheme = {
     '--romaingrx-colors-foreground': 'hsla(var(--palette-gray-05), 60%)',
     '--romaingrx-colors-danger': 'hsla(var(--palette-red-55), 100%)',
     '--romaingrx-colors-danger-emphasis': 'hsla(var(--palette-red-15), 15%)',
-    '--romaingrx-colors-warning': 'hsla(var(--palette-orange-80), 100%)',
+    '--romaingrx-colors-warning': 'hsla(var(--palette-orange-30), 100%)',
     '--romaingrx-colors-warning-emphasis':
       'hsla(var(--palette-orange-45), 15%)',
-    '--romaingrx-colors-success': 'hsl(var(--palette-green-80))',
+    '--romaingrx-colors-success': 'hsl(var(--palette-green-65))',
     '--romaingrx-colors-success-emphasis':
       'hsla(var(--palette-green-45), 15%)',
     '--romaingrx-colors-typeface-primary':
