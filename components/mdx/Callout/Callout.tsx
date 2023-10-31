@@ -8,10 +8,6 @@ const getVariantIcon = (icon: CalloutProps["variant"]) => {
             return <InfoIcon />;
         case "warning":
             return <WarningIcon />;
-        case "danger":
-            return <WarningIcon />;
-        case "success":
-            return <WarningIcon />;
         default:
             return null;
     }
@@ -24,7 +20,7 @@ const Callout = (props: CalloutProps) => {
 
     return (
         <StyledCallout variant={variant} css={css}>
-            {icon && <StyledCalloutIconWrapper>{icon}</StyledCalloutIconWrapper>}
+            {icon && <StyledCalloutIconWrapper variant={variant}>{icon}</StyledCalloutIconWrapper>}
             {children}
         </StyledCallout>
     );

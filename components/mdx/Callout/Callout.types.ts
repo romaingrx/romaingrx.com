@@ -1,7 +1,7 @@
 import React from 'react';
 import { CSS } from '@/design';
 
-export type CalloutVariant = 'info' | 'warning' | 'danger' | 'success';
+export type CalloutVariant = 'info' | 'warning';
 
 export interface CalloutProps {
     children: React.ReactNode;
