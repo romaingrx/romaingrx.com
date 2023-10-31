@@ -17,6 +17,11 @@
  }
 
  .thin-scrollbar::-webkit-scrollbar-thumb {
-     background-color: theme("colors.bob.500");
+     background-color: var(--romaingrx-colors-brand);
      border-radius: 6px;
+ }
+
+ ::selection {
+     background-color: var(--romaingrx-colors-emphasis);
+     color: var(--romaingrx-colors-brand);
  }
