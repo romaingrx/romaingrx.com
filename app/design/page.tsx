@@ -3,25 +3,23 @@ import clsx from 'clsx';
 import { styled } from '@/design';
 import { Callout } from '@/components/mdx/Callout/Callout';
 import Layout from '@/components/layout';
+import { WarningIcon } from '@/components/icon/Icon';
 
 const Button = styled('button', {
   backgroundColor: 'var(--romaingrx-colors-brand)',
 });
 
-function ColorPill({
-  color = 'bg-romaingrx-brand',
-  name,
-}: {
-  color?: string;
-  name?: string;
-}) {
+function ColorPill({ color, name }: { color: string; name: string }) {
   return (
     <div className="flex gap-sm">
       <div
-        style={{ backgroundColor: color }}
+        style={{
+          backgroundColor: color,
+          border: '2px solid var(--romaingrx-colors-emphasis)',
+        }}
         className={clsx('h-12 w-12 rounded-full', color)}
       />
-      {name && <span className="my-auto">{name}</span>}
+      {name && <span className="my-auto font-wise">{name}</span>}
     </div>
   );
 }
@@ -39,7 +37,12 @@ function Palette({ color = 'pink' }: { color?: string }) {
             style={{ backgroundColor: `hsl(var(--palette-${color}-${scale}))` }}
             className="relative h-8 w-8 rounded-full"
           >
-            <div className='w-full h-full flex flex-col text-center justify-center text-white' style={{mixBlendMode: "difference"}}>{scale}</div>
+            <div
+              className="flex h-full w-full flex-col justify-center text-center text-white"
+              style={{ mixBlendMode: 'difference' }}
+            >
+              {scale}
+            </div>
           </div>
         ))}
       </div>
@@ -51,14 +54,36 @@ export default function DesignPage() {
   return (
     <>
       <Layout>
-        <ColorPill color="bg-romaingrx-brand" name="brand" />
-        <ColorPill color="bg-romaingrx-emphasis" name="emphasis" />
-        <h1 className="my-6 font-wise text-5xl">Callouts</h1>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-          <Callout variant="info">Info</Callout>
-          <Callout variant="warning">Warning</Callout>
-          <Callout variant="danger">Danger</Callout>
-          <Callout variant="success">Success</Callout>
+        <div className="my-6 flex flex-col">
+          <h1 className="font-wise text-5xl">Theme colors</h1>
+          <h2 className="text-lg">romaingrx-light</h2>
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: '2rem',
+            width: '100%',
+            justifyContent: 'center',
+          }}
+        >
+          <ColorPill color="bg-romaingrx-brand" name="brand" />
+          <ColorPill color="bg-romaingrx-body" name="body" />
+          <ColorPill color="bg-romaingrx-emphasis" name="emphasis" />
+          <ColorPill color="bg-romaingrx-header" name="header" />
+          <ColorPill color="bg-romaingrx-foreground" name="foreground" />
+          <ColorPill
+            color="bg-romaingrx-typeface-primary"
+            name="typeface-primary"
+          />
+          <ColorPill
+            color="bg-romaingrx-typeface-secondary"
+            name="typeface-secondary"
+          />
+          <ColorPill
+            color="bg-romaingrx-typeface-tertiary"
+            name="typeface-tertiary"
+          />
         </div>
         <h1 className="my-6 font-wise text-5xl">Palettes</h1>
         <div
@@ -78,6 +103,21 @@ export default function DesignPage() {
           <Palette color="orange" />
           <Palette color="green" />
           <Palette color="forest" />
+        </div>
+        <h1 className="my-6 font-wise text-5xl">Callouts</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <Callout variant="info">Info</Callout>
+          <Callout variant="warning">Warning</Callout>
+          <Callout variant="danger">Danger</Callout>
+          <Callout variant="success">Success</Callout>
+          <Callout
+            label={<WarningIcon />}
+            css={{
+              '--icon-background': 'var(--romaingrx-colors-success)',
+            }}
+          >
+            Custom
+          </Callout>
         </div>
       </Layout>
     </>
