@@ -2,9 +2,9 @@ import { styled } from '@/design';
 
 const StyledBlockQuoteScreenWidth = styled('div', {
   position: 'relative',
-  top: '0',
   left: '50%',
-  transform: 'translate(-50%, 0)',
+  right: '50%',
+  margin: '0 -50vw',
   height: '100%',
   width: '100vw',
 });
@@ -56,7 +56,6 @@ const StyledBlockQuoteText = styled('div', {
   zIndex: '1',
   width: '100%',
   height: '100%',
-  margin: '15px 20px',
   padding: '30px 30px',
   color: 'inherit',
   fontSize: 'var(--blockquote-font-size, var(--font-size-6))',
