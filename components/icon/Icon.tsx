@@ -61,3 +61,20 @@ export const SuccessIcon = (props: IconProps) => (
     />
   </StyledSVG>
 );
+
+export const QuoteIcon = (props: IconProps) => (
+  <StyledSVG
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 -5 34 34"
+    stroke="currentColor"
+    {...props}
+  >
+    <title>Quote icon</title>
+    <path
+      d="m31.2 0h-7.2l-4.8 9.6v14.4h14.4v-14.4h-7.2zm-19.2 0h-7.2l-4.8 9.6v14.4h14.4v-14.4h-7.2z"
+      fill="currentColor"
+    />
+  </StyledSVG>
+);

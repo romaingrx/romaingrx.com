@@ -4,6 +4,7 @@ import { styled } from '@/design';
 import { Callout } from '@/components/mdx/Callout/Callout';
 import Layout from '@/components/layout';
 import { WarningIcon } from '@/components/icon/Icon';
+import { BlockQuote } from '@/components/mdx/BlockQuote/BlockQuote';
 
 const Button = styled('button', {
   backgroundColor: 'var(--romaingrx-colors-brand)',
@@ -36,6 +37,7 @@ function Palette({ color = 'pink' }: { color?: string }) {
           <div
             style={{ backgroundColor: `hsl(var(--palette-${color}-${scale}))` }}
             className="relative h-8 w-8 rounded-full"
+            key={scale}
           >
             <div
               className="flex h-full w-full flex-col justify-center text-center text-white"
@@ -113,12 +115,21 @@ export default function DesignPage() {
           <Callout
             label={<WarningIcon />}
             css={{
-              '--icon-background': 'var(--romaingrx-colors-success)',
+              '--icon-background': 'hsl(var(--palette-orange-10))',
             }}
           >
             Custom
           </Callout>
         </div>
+        <BlockQuote screenWidth={true}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </BlockQuote>
       </Layout>
     </>
   );

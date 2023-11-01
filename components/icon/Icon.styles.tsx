@@ -5,32 +5,32 @@ export const StyledSVG = styled('svg', {
         variant: {
             default: { stroke: 'currentColor', fill: 'none' },
             primary: {
-                stroke: 'var(--maximeheckel-colors-typeface-primary)',
+                stroke: 'var(--romaingrx-colors-typeface-primary)',
                 fill: 'none',
             },
             secondary: {
-                stroke: 'var(--maximeheckel-colors-typeface-secondary)',
+                stroke: 'var(--romaingrx-colors-typeface-secondary)',
                 fill: 'none',
             },
             tertiary: {
-                stroke: 'var(--maximeheckel-colors-typeface-tertiary)',
+                stroke: 'var(--romaingrx-colors-typeface-tertiary)',
                 fill: 'none',
             },
             info: {
-                stroke: 'var(--maximeheckel-colors-brand)',
-                fill: 'var(--maximeheckel-colors-emphasis)',
+                stroke: 'var(--romaingrx-colors-brand)',
+                fill: 'var(--romaingrx-colors-emphasis)',
             },
             danger: {
-                stroke: 'var(--maximeheckel-colors-danger)',
-                fill: 'var(--maximeheckel-colors-danger-emphasis)',
+                stroke: 'var(--romaingrx-colors-danger)',
+                fill: 'var(--romaingrx-colors-danger-emphasis)',
             },
             success: {
-                stroke: 'var(--maximeheckel-colors-success)',
-                fill: 'var(--maximeheckel-colors-success-emphasis)',
+                stroke: 'var(--romaingrx-colors-success)',
+                fill: 'var(--romaingrx-colors-success-emphasis)',
             },
             warning: {
-                stroke: 'var(--maximeheckel-colors-warning)',
-                fill: 'var(--maximeheckel-colors-warning-emphasis)',
+                stroke: 'var(--romaingrx-colors-warning)',
+                fill: 'var(--romaingrx-colors-warning-emphasis)',
             },
         },
         outline: {
