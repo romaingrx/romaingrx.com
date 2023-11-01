@@ -38,15 +38,14 @@ const StyledBlockQuoteWrapper = styled('div', {
 const StyledBlockQuote = styled('aside', {
   position: 'relative',
   color: 'var(--romaingrx-colors-typeface-primary)',
-  // border: '1px solid var(--romaingrx-colors-emphasis)',
   borderRadius: 'var(--space-1)',
   backgroundColor:
-    'var(--blockquote-background, var(--romaingrx-colors-emphasis))',
+    'var(--blockquote-background, var(--romaingrx-colors-foreground))',
 
   variants: {
     variant: {
       classy: {
-        '--blockquote-background': 'hsla(var(--palette-gray-05), 30%)',
+        '--blockquote-background': 'var(--romaingrx-colors-foreground)',
       },
     },
   },
@@ -64,4 +63,9 @@ const StyledBlockQuoteText = styled('div', {
   fontWeight: 'var(--blockquote-font-weight, var(--font-weight-3))',
 });
 
-export { StyledBlockQuoteScreenWidth, StyledBlockQuote, StyledBlockQuoteWrapper, StyledBlockQuoteText };
+export {
+  StyledBlockQuoteScreenWidth,
+  StyledBlockQuote,
+  StyledBlockQuoteWrapper,
+  StyledBlockQuoteText,
+};
