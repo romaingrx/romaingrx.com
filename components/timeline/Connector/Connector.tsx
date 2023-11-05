@@ -1,33 +1,37 @@
 'use client';
-import { useScroll, useSpring, useTransform } from 'framer-motion';
-import { StyledConnector, StyledConnectorHover } from './Connector.styles';
+import { useInView } from 'framer-motion';
+import {
+  StyledConnector,
+  StyledConnectorChildren,
+  StyledConnectorHover,
+} from './Connector.styles';
 import { ConnectorProps } from './Connector.types';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
-const Connector = ({ children, ...rest }: ConnectorProps) => {
+const Connector = ({ children, ...props }: ConnectorProps) => {
   const connectorRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: connectorRef,
-    offset: ['start center', 'center center'],
+  const inView = useInView(connectorRef, {
+    once: true,
   });
-
-  const scrollYSpringProgress = useSpring(scrollYProgress, {
-    damping: 20,
-    stiffness: 100,
-  });
-  const connectorHeight = useTransform(
-    scrollYSpringProgress,
-    [0, 0.75],
-    ['0%', '100%'],
-  );
 
   return (
-    <StyledConnector {...rest} ref={connectorRef}>
+    <StyledConnector {...props} ref={connectorRef}>
       <StyledConnectorHover
-        style={{
-          height: connectorHeight,
+        initial={{
+          height: '0%',
+        }}
+        animate={{
+          height: inView ? '100%' : '0%',
+        }}
+        exit={{
+          height: '0%',
+        }}
+        transition={{
+          delay: 0.5,
+          duration: 1.0,
         }}
       />
+      <StyledConnectorChildren>{children}</StyledConnectorChildren>
     </StyledConnector>
   );
 };

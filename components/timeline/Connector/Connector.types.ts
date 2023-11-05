@@ -1,7 +1,7 @@
 import { CSS } from "@/design";
 
 interface ConnectorProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** The color of the separator. */
+  children?: React.ReactNode;
   css?: CSS;
 }
 

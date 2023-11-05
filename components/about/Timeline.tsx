@@ -11,6 +11,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { Modal } from '@/components/core/Modal';
 import { Connector } from '../timeline/Connector/Connector';
+import { Dot } from '../timeline/Dot/Dot';
+import { DotProps, DotVariant } from '../timeline/Dot/Dot.types';
 
 type TimelineCardProps = {
   title: string;
@@ -110,25 +112,24 @@ function TimelineParagraph({
 type TimelineSurroundingsProps = {
   first: React.ReactNode;
   second: React.ReactNode;
-  timelineSeparator?: boolean | undefined;
+  dotVariant?: DotVariant;
 };
 
 function TimelineSurroundings({
   first,
   second,
-  timelineSeparator,
+  dotVariant 
 }: TimelineSurroundingsProps): JSX.Element {
-  timelineSeparator =
-    timelineSeparator === undefined ? true : timelineSeparator;
   return (
     <>
       <TimelineItem>
         <TimelineOppositeContent className="flex flex-col justify-center pt-2 md:pt-8">
           {first}
         </TimelineOppositeContent>
-        <TimelineSeparator>
-          {timelineSeparator && <TimelineDot />}
-          <Connector />
+        <TimelineSeparator className="">
+          <Connector>
+            <Dot variant={dotVariant} />
+          </Connector>
         </TimelineSeparator>
         <TimelineContent className="flex flex-col justify-center pt-2 md:pt-8">
           {second}
@@ -143,7 +144,7 @@ type TimelineJobItemProps = {
   subtitle: string;
   date: string;
   align?: 'left' | 'right';
-  timelineSeparator?: boolean;
+  dotVariant?: DotVariant;
   description: React.ReactNode | string;
 };
 
@@ -152,7 +153,7 @@ function TimelineJobItem({
   subtitle,
   date,
   align,
-  timelineSeparator,
+  dotVariant,
   description,
 }: TimelineJobItemProps): JSX.Element {
   return (
@@ -171,7 +172,7 @@ function TimelineJobItem({
             {description}
           </TimelineParagraph>
         }
-        timelineSeparator={timelineSeparator}
+        dotVariant={dotVariant}
       />
     </>
   );
@@ -203,6 +204,7 @@ function ProjectsTimeline() {
             title="Co-Creator and Vice President"
             subtitle="Lausanne AI Alignemnt Group"
             date="Jan 2023 - Now"
+            dotVariant='pulsating'
             description={
               <>
                 Co-created and leading a volunteer-driven organization focused
@@ -226,7 +228,6 @@ function ProjectsTimeline() {
                 </ul>
               </>
             }
-            timelineSeparator={false}
           />
         </Timeline>
       </div>
@@ -248,7 +249,6 @@ function ExperienceTimeline() {
             date="Jan 2023 - Now"
             description="In my role as a Data Officer at NCCR Catalysis (EPFL/ETHZ), I collaborate with 50 labs across Switzerland to standardize practices and optimize data management. I am developing a technique for uniform catalyst storage and sharing, and facilitating open science through AI model platforms. Additionally, I am co-authoring a manuscript detailing our research on ML-based detection of metallic atoms in microscope images."
             align="right"
-            timelineSeparator={false}
           />
           <TimelineJobItem
             title="Fullstack software engineer"
@@ -301,7 +301,6 @@ function EducationTimeline() {
             date="Sep 2021 - Sep 2022"
             description='One year exchange at EPFL, where I undertook a master thesis titled "Point cloud compression for DNA based storage" and achieved a grade of 5.75/6. This research involved building an end-to-end point cloud compressor for quaternary based coding while adhering to DNA sequencing, storage, and synthesis constraints. In addition to my thesis, I completed the courses Cryptography and security, Information security and privacy, Decentralized systems and Seminar in advanced topics in machine learning. Took part in the Effective Altruism Lausanne and GNU Generation associations.'
             align="right"
-            timelineSeparator={false}
           />
           <TimelineJobItem
             title="M.S. Data Science Engineering"
