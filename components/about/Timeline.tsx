@@ -2,17 +2,23 @@
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+
 import { Button, CardContent } from '@mui/material';
 import clsx from 'clsx';
 import React from 'react';
-import { Modal } from '@/components/core/Modal';
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@nextui-org/react';
 import { Connector } from '../timeline/Connector/Connector';
 import { Dot } from '../timeline/Dot/Dot';
-import { DotProps, DotVariant } from '../timeline/Dot/Dot.types';
+import { DotVariant } from '../timeline/Dot/Dot.types';
 
 type TimelineCardProps = {
   title: string;
@@ -59,31 +65,32 @@ function ModalTimelineParagraph({
   date,
   children,
 }: TimelineCardProps): JSX.Element {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Button
-        className="text-md font-wise text-inherit"
-        onClick={() => setIsExpanded(true)}
-      >
+      <Button className="text-md font-wise text-inherit" onClick={onOpen}>
         Read more
       </Button>
       <Modal
-        open={isExpanded}
-        onClose={() => setIsExpanded(false)}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        placement="center"
+        backdrop="blur"
       >
-        <div className="flex flex-col gap-2">
-          <div className="text-md flex justify-center font-wise">{title}</div>
-          <hr className="border-romaingrx-brand" />
-          {children}
-          <hr className="border-romaingrx-brand" />
-          <div className="flex flex-row justify-between">
-            <p className="text-xs font-semibold sm:text-sm">{subtitle}</p>
-            <p className="text-xs font-semibold sm:text-sm">{date}</p>
-          </div>
-        </div>
+        <ModalContent>
+          <ModalHeader>
+            <div className="font-wise text-xl font-thin">{title}</div>
+          </ModalHeader>
+          <ModalBody>{children}</ModalBody>
+          <ModalFooter>
+            <div className="flex w-full flex-row justify-between">
+              <p className="text-xs font-semibold sm:text-sm">{subtitle}</p>
+              <p className="text-xs font-semibold sm:text-sm">{date}</p>
+            </div>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </>
   );
@@ -118,7 +125,7 @@ type TimelineSurroundingsProps = {
 function TimelineSurroundings({
   first,
   second,
-  dotVariant 
+  dotVariant,
 }: TimelineSurroundingsProps): JSX.Element {
   return (
     <>
@@ -204,7 +211,7 @@ function ProjectsTimeline() {
             title="Co-Creator and Vice President"
             subtitle="Lausanne AI Alignemnt Group"
             date="Jan 2023 - Now"
-            dotVariant='pulsating'
+            dotVariant="pulsating"
             description={
               <>
                 Co-created and leading a volunteer-driven organization focused
@@ -247,7 +254,7 @@ function ExperienceTimeline() {
             title="Data Officer"
             subtitle="NCCR Catalysis (EPFL/ETHZ)"
             date="Jan 2023 - Now"
-            dotVariant='pulsating'
+            dotVariant="pulsating"
             description="In my role as a Data Officer at NCCR Catalysis (EPFL/ETHZ), I collaborate with 50 labs across Switzerland to standardize practices and optimize data management. I am developing a technique for uniform catalyst storage and sharing, and facilitating open science through AI model platforms. Additionally, I am co-authoring a manuscript detailing our research on ML-based detection of metallic atoms in microscope images."
             align="right"
           />
@@ -255,7 +262,7 @@ function ExperienceTimeline() {
             title="Fullstack software engineer"
             subtitle="Graux Guitar Loops"
             date="Jul 2022 - Now"
-            dotVariant='pulsating'
+            dotVariant="pulsating"
             description="Created and launched SpicyX, a streaming platform for guitar loops. Leveraged NextJS, MongoDB, and Vercel to build a scalable platform, attracting over 100+ monthly subscribed producers."
           />
           <TimelineJobItem

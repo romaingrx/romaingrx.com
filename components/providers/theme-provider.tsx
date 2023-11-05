@@ -9,9 +9,12 @@ export default function ClientThemeProvider({
 }): JSX.Element {
   return (
     <>
-        <NextThemeProvider attribute="class" enableSystem={true}>
-          <NextUIProvider>{children}</NextUIProvider>
-        </NextThemeProvider>
+      <NextThemeProvider
+        attribute="class"
+        enableSystem={true}
+      >
+        <NextUIProvider>{children}</NextUIProvider>
+      </NextThemeProvider>
     </>
   );
 }
