@@ -185,7 +185,7 @@ function TimelineTitle({
 }): JSX.Element {
   return (
     <>
-      <h1 className="rounded-md bg-romaingrx-emphasis px-2 py-1 font-wise text-4xl text-romaingrx-brand ">
+      <h1 className="rounded-md bg-romaingrx-emphasis px-2 py-1 font-wise text-4xl">
         {children}
       </h1>
     </>
@@ -247,6 +247,7 @@ function ExperienceTimeline() {
             title="Data Officer"
             subtitle="NCCR Catalysis (EPFL/ETHZ)"
             date="Jan 2023 - Now"
+            dotVariant='pulsating'
             description="In my role as a Data Officer at NCCR Catalysis (EPFL/ETHZ), I collaborate with 50 labs across Switzerland to standardize practices and optimize data management. I am developing a technique for uniform catalyst storage and sharing, and facilitating open science through AI model platforms. Additionally, I am co-authoring a manuscript detailing our research on ML-based detection of metallic atoms in microscope images."
             align="right"
           />
@@ -254,6 +255,7 @@ function ExperienceTimeline() {
             title="Fullstack software engineer"
             subtitle="Graux Guitar Loops"
             date="Jul 2022 - Now"
+            dotVariant='pulsating'
             description="Created and launched SpicyX, a streaming platform for guitar loops. Leveraged NextJS, MongoDB, and Vercel to build a scalable platform, attracting over 100+ monthly subscribed producers."
           />
           <TimelineJobItem

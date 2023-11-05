@@ -7,7 +7,6 @@ const StyledDot = styled('div', {
   backgroundColor: 'var(--dot-background, var(--romaingrx-colors-body))',
   padding: 'var(--dot-padding, 0.25rem)',
   flexShrink: 0,
-  overflow: 'visible',
 });
 
 const StyledInnerDot = styled(motion.div, {
