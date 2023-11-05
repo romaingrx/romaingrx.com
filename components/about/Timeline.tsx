@@ -10,6 +10,7 @@ import { Button, CardContent } from '@mui/material';
 import clsx from 'clsx';
 import React from 'react';
 import { Modal } from '@/components/core/Modal';
+import { Connector } from '../timeline/Connector/Connector';
 
 type TimelineCardProps = {
   title: string;
@@ -127,7 +128,7 @@ function TimelineSurroundings({
         </TimelineOppositeContent>
         <TimelineSeparator>
           {timelineSeparator && <TimelineDot />}
-          <TimelineConnector />
+          <Connector />
         </TimelineSeparator>
         <TimelineContent className="flex flex-col justify-center pt-2 md:pt-8">
           {second}
