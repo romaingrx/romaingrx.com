@@ -1,14 +1,9 @@
-'use client';
 import clsx from 'clsx';
-import { styled } from '@/design';
 import { Callout } from '@/components/mdx/Callout/Callout';
 import Layout from '@/components/layout';
 import { WarningIcon } from '@/components/icon/Icon';
 import { BlockQuote } from '@/components/mdx/BlockQuote/BlockQuote';
-
-const Button = styled('button', {
-  backgroundColor: 'var(--romaingrx-colors-brand)',
-});
+import { StringTheme } from '@/lib/theme';
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -56,9 +51,12 @@ export default function DesignPage() {
   return (
     <>
       <Layout>
-        <div className="my-6 flex flex-col">
+        <div className="flex flex-col">
           <h1 className="font-wise text-5xl">Theme colors</h1>
-          <h2 className="text-lg">romaingrx-light</h2>
+          <h2 className="text-lg">
+            romaingrx-
+            <StringTheme />
+          </h2>
         </div>
         <div
           style={{
@@ -87,7 +85,7 @@ export default function DesignPage() {
             name="typeface-tertiary"
           />
         </div>
-        <h1 className="my-6 font-wise text-5xl">Palettes</h1>
+        <h1 className="font-wise text-5xl">Palettes</h1>
         <div
           style={{
             display: 'grid',
@@ -106,7 +104,7 @@ export default function DesignPage() {
           <Palette color="green" />
           <Palette color="forest" />
         </div>
-        <h1 className="my-6 font-wise text-5xl">Callouts</h1>
+        <h1 className="font-wise text-5xl">Callouts</h1>
         <div className="grid grid-cols-1 md:grid-cols-2">
           <Callout variant="info">Info</Callout>
           <Callout variant="warning">Warning</Callout>

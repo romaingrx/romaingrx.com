@@ -1,3 +1,4 @@
+"use client"
 import { QuoteIcon } from '@/components/icon/Icon';
 import {
   StyledBlockQuote,
