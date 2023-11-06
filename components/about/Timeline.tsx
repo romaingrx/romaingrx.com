@@ -19,6 +19,7 @@ import {
 import { Connector } from '../timeline/Connector/Connector';
 import { Dot } from '../timeline/Dot/Dot';
 import { DotVariant } from '../timeline/Dot/Dot.types';
+import { useBreakpoint } from '@/hooks/tailwind';
 
 type TimelineCardProps = {
   title: string;
@@ -35,12 +36,13 @@ function TimelineCard({
   align,
   children,
 }: TimelineCardProps): JSX.Element {
-  align = align || 'left';
   return (
     <>
-      <CardContent className="flex flex-col gap-1">
-        <h3 className="font-wise text-lg sm:text-xl md:text-2xl">{title}</h3>
-        <p className="font-wise text-xs sm:text-sm ">{subtitle}</p>
+      <div className="flex flex-col justify-between">
+        <h3 className="font-wise text-sm sm:text-xl md:text-2xl">{title}</h3>
+        <p className="font-wise text-xs text-romaingrx-brand sm:text-sm ">
+          {subtitle}
+        </p>
         <div
           className={clsx(
             'flex flex-row',
@@ -48,13 +50,13 @@ function TimelineCard({
           )}
         >
           <div className="w-fit rounded-md bg-romaingrx-emphasis p-2">
-            <p className="font-wise text-xs sm:text-sm">{date}</p>
+            <p className="font-wise text-xs font-thin sm:text-sm">{date}</p>
           </div>
         </div>
         {children && (
           <div className="flex flex-row justify-between">{children}</div>
         )}
-      </CardContent>
+      </div>
     </>
   );
 }
@@ -130,16 +132,22 @@ function TimelineSurroundings({
   return (
     <>
       <TimelineItem>
-        <TimelineOppositeContent className="flex flex-col justify-center pt-2 md:pt-8">
+        <TimelineOppositeContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8">
           {first}
         </TimelineOppositeContent>
-        <TimelineSeparator className="">
+        <TimelineSeparator>
           <Connector>
             <Dot variant={dotVariant} />
           </Connector>
         </TimelineSeparator>
-        <TimelineContent className="flex flex-col justify-center pt-2 md:pt-8">
+        <TimelineContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8">
           {second}
+        </TimelineContent>
+        <TimelineContent className="flex flex-col pt-2 sm:hidden md:pt-8">
+          <div className="flex flex-col gap-2">
+            {first}
+            {second}
+          </div>
         </TimelineContent>
       </TimelineItem>
     </>
@@ -163,6 +171,11 @@ function TimelineJobItem({
   dotVariant,
   description,
 }: TimelineJobItemProps): JSX.Element {
+  const { isBelowSm } = useBreakpoint('sm');
+  align = align || 'left';
+  if (isBelowSm) {
+    align = align === 'right' ? 'left' : 'right';
+  }
   return (
     <>
       <TimelineSurroundings
@@ -333,7 +346,7 @@ function EducationTimeline() {
 export default function AboutTimeline() {
   return (
     <>
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center gap-4 md:gap-0">
         <ProjectsTimeline />
         <ExperienceTimeline />
         <EducationTimeline />
