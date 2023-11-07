@@ -78,3 +78,29 @@ export const QuoteIcon = (props: IconProps) => (
     />
   </StyledSVG>
 );
+
+export const ArrowIcon = ({
+  angle = 0,
+  title = 'Arrow icon',
+  ...props
+}: IconProps & { angle?: number; title?: string }) => (
+  <StyledSVG
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    role="img"
+    {...props}
+  >
+    <title>{title}</title>
+    <path d="M5 12h14M12 5l7 7-7 7" transform={`rotate(${-angle} 12 12)`} />
+  </StyledSVG>
+);
+
+export const ExternalArrowIcon = (props: IconProps) =>
+  ArrowIcon({ angle: 45, title: 'External arrow icon', ...props });

@@ -5,7 +5,7 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 
-import { Button, CardContent } from '@mui/material';
+import Button from '@/components/Button/Button';
 import clsx from 'clsx';
 import React from 'react';
 import {
@@ -20,6 +20,7 @@ import { Connector } from '../timeline/Connector/Connector';
 import { Dot } from '../timeline/Dot/Dot';
 import { DotVariant } from '../timeline/Dot/Dot.types';
 import { useBreakpoint } from '@/hooks/tailwind';
+import { GradientText } from '../text';
 
 type TimelineCardProps = {
   title: string;
@@ -33,7 +34,6 @@ function TimelineCard({
   title,
   subtitle,
   date,
-  align,
   children,
 }: TimelineCardProps): JSX.Element {
   return (
@@ -43,16 +43,8 @@ function TimelineCard({
         <p className="font-wise text-xs text-romaingrx-brand sm:text-sm ">
           {subtitle}
         </p>
-        <div
-          className={clsx(
-            'flex flex-row',
-            align === 'left' ? 'justify-start' : 'justify-end',
-          )}
-        >
-          <div className="w-fit rounded-md bg-romaingrx-emphasis p-2">
-            <p className="font-wise text-xs font-thin sm:text-sm">{date}</p>
-          </div>
-        </div>
+
+        <p className="font-wise text-xs font-thin sm:text-sm">{date}</p>
         {children && (
           <div className="flex flex-row justify-between">{children}</div>
         )}
@@ -70,8 +62,14 @@ function ModalTimelineParagraph({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Button className="text-md font-wise text-inherit" onClick={onOpen}>
-        Read more
+      <Button
+        css={{
+          display: 'inline-block',
+        }}
+        variant="secondary"
+        onClick={onOpen}
+      >
+        <span className="font-wise">Read more</span>
       </Button>
       <Modal
         isOpen={isOpen}
@@ -132,7 +130,7 @@ function TimelineSurroundings({
   return (
     <>
       <TimelineItem>
-        <TimelineOppositeContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8">
+        <TimelineOppositeContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8 mx-8 md:mx-4">
           {first}
         </TimelineOppositeContent>
         <TimelineSeparator>
@@ -140,11 +138,11 @@ function TimelineSurroundings({
             <Dot variant={dotVariant} />
           </Connector>
         </TimelineSeparator>
-        <TimelineContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8">
+        <TimelineContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8 mx-8 md:mx-4">
           {second}
         </TimelineContent>
         <TimelineContent className="flex flex-col pt-2 sm:hidden md:pt-8">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mx-4">
             {first}
             {second}
           </div>
@@ -205,7 +203,10 @@ function TimelineTitle({
 }): JSX.Element {
   return (
     <>
-      <h1 className="rounded-md bg-romaingrx-emphasis px-2 py-1 font-wise text-4xl">
+      <h1 className="mb-4 font-wise text-4xl md:hidden">
+        <GradientText variant="radial-smoky">{children}</GradientText>
+      </h1>
+      <h1 className="rounded-md bg-romaingrx-emphasis px-2 py-1 font-wise text-4xl hidden md:block">
         {children}
       </h1>
     </>
