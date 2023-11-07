@@ -7,12 +7,13 @@ const Button = ({
   children,
   variant = 'primary',
   type = 'normal',
+  disabled,
   startIcon,
   endIcon,
   ...props
 }: ButtonProps) => {
   return (
-    <StyledButton variant={variant} type={type} {...props}>
+    <StyledButton variant={variant} type={type} disabled={disabled} {...props}>
       {startIcon && <span>{startIcon}</span>}
       {children}
       {endIcon && <span>{endIcon}</span>}

@@ -5,6 +5,7 @@ type ButtonTypes = 'normal' | 'icon';
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariants;
+  disabled?: boolean;
   type?: ButtonTypes;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
