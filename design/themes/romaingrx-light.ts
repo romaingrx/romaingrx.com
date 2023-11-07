@@ -1,6 +1,7 @@
 const lightTheme = {
   '.light': {
     '--romaingrx-colors-brand': 'hsla(var(--palette-pink-30), 100%)',
+    '--romaingrx-colors-brand-complementary': 'hsla(var(--palette-indigo-40), 100%)',
     '--romaingrx-colors-body': 'hsla(var(--palette-beige-10), 100%)',
     '--romaingrx-colors-header': 'hsla(var(--palette-gray-02), 40%)',
     '--romaingrx-colors-emphasis': 'hsla(var(--palette-pink-50), 5%)',

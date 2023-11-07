@@ -1,6 +1,8 @@
-import TypeWriter from 'typewriter-effect'
-import { styled } from '@/design'
+import TypeWriter from 'typewriter-effect';
+import { styled } from '@/design';
 
 export const StyledTypeWriter = styled(TypeWriter, {
-    position: 'absolute',
-})
+    "&& .Typewriter__wrapper": {
+        color: 'var(--romaingrx-colors-brand)',
+    }
+});

@@ -25,3 +25,7 @@
      background-color: var(--romaingrx-colors-emphasis);
      color: var(--romaingrx-colors-brand);
  }
+
+ .Typewriter__cursor {
+    color: var(--romaingrx-colors-brand);
+ }

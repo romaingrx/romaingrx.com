@@ -1,6 +1,8 @@
 const darkTheme = {
   '.dark': {
     '--romaingrx-colors-brand': 'hsla(var(--palette-pink-35), 100%)',
+    '--romaingrx-colors-brand-complementary':
+      'hsla(var(--palette-indigo-40), 100%)',
     '--romaingrx-colors-body': 'hsla(var(--palette-gray-85), 100%)',
     '--romaingrx-colors-header': 'hsla(var(--palette-gray-90), 40%)',
     '--romaingrx-colors-emphasis': 'hsla(var(--palette-pink-35), 15%)',
@@ -11,16 +13,14 @@ const darkTheme = {
     '--romaingrx-colors-warning-emphasis':
       'hsla(var(--palette-orange-45), 15%)',
     '--romaingrx-colors-success': 'hsla(var(--palette-green-45), 100%)',
-    '--romaingrx-colors-success-emphasis':
-      'hsla(var(--palette-green-45), 15%)',
+    '--romaingrx-colors-success-emphasis': 'hsla(var(--palette-green-45), 15%)',
     '--romaingrx-colors-typeface-primary':
       'hsla(var(--palette-indigo-05), 100%)',
     '--romaingrx-colors-typeface-secondary':
       'hsla(var(--palette-gray-35), 100%)',
     '--romaingrx-colors-typeface-tertiary':
       'hsla(var(--palette-gray-20), 100%)',
-    '--romaingrx-colors-typeface-danger':
-      'hsla(var(--palette-red-20), 100%)',
+    '--romaingrx-colors-typeface-danger': 'hsla(var(--palette-red-20), 100%)',
     '--romaingrx-border-color': 'hsl(var(--palette-gray-80))',
     '--romaingrx-card-background-color': 'hsl(var(--palette-gray-88))',
     '--romaingrx-form-input-active': 'var(--romaingrx-colors-brand)',

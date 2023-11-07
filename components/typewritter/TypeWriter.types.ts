@@ -1,9 +1,7 @@
-export interface TypeWriterOptionsType {
-    strings: string[];
-    typeSpeed?: number;
-    deleteSpeed?: number;
-    pause?: number;
-    loop?: boolean;
-    cursor?: string;
-}
+import { CSS } from '@/design';
+import { Options, TypewriterClass } from 'typewriter-effect';
 
+export interface TypeWriterOptionsType extends Options {
+  css?: CSS;
+  onInit?: (typewriter: TypewriterClass) => void;
+}
