@@ -9,6 +9,7 @@ import {
 import { BlockQuote } from '@/components/mdx/BlockQuote/BlockQuote';
 import { StringTheme } from '@/lib/theme';
 import Button from '@/components/Button/Button';
+import Link from '@/components/Link';
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -137,10 +138,7 @@ export default function DesignPage() {
           <h1 className="font-wise text-5xl">Buttons</h1>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <Button variant="primary">Primary</Button>
-            <Button
-              variant="primary"
-              endIcon={<ExternalArrowIcon />}
-            >
+            <Button variant="primary" endIcon={<ExternalArrowIcon />}>
               Primary
             </Button>
             <Button variant="primary" disabled>
@@ -156,6 +154,11 @@ export default function DesignPage() {
             <Button variant="secondary" type="icon">
               <ArrowIcon />
             </Button>
+          </div>
+          <h1 className="font-wise text-5xl">Typography</h1>
+          <h2 className="font-wise text-3xl">Anchors</h2>
+          <div className="flex flex-col gap-4">
+            <Link href="/">romaingrx.com</Link>
           </div>
         </div>
       </Layout>

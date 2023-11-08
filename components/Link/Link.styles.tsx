@@ -5,6 +5,7 @@ const StyledLink = styled(Link, {
   position: 'relative;',
   decoration: 'none;',
   color: 'inherit;',
+  width: 'fit-content;',
   // margin: '0 var(--spacing, 0px);',
   // transition: 'margin .25s;',
   svg: {
