@@ -21,6 +21,7 @@ import { Dot } from '../timeline/Dot/Dot';
 import { DotVariant } from '../timeline/Dot/Dot.types';
 import { useBreakpoint } from '@/hooks/tailwind';
 import { GradientText } from '../text';
+import Link from '../Link';
 
 type TimelineCardProps = {
   title: string;
@@ -39,7 +40,7 @@ function TimelineCard({
   return (
     <>
       <div className="flex flex-col justify-between">
-        <h3 className="font-wise text-sm sm:text-xl md:text-2xl">{title}</h3>
+        <h3 className="text-md font-wise sm:text-xl md:text-2xl">{title}</h3>
         <p className="font-wise text-xs text-romaingrx-brand sm:text-sm ">
           {subtitle}
         </p>
@@ -130,7 +131,7 @@ function TimelineSurroundings({
   return (
     <>
       <TimelineItem>
-        <TimelineOppositeContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8 mx-8 md:mx-4">
+        <TimelineOppositeContent className="mx-8 hidden flex-col justify-center pt-2 sm:flex md:mx-4 md:pt-8">
           {first}
         </TimelineOppositeContent>
         <TimelineSeparator>
@@ -138,11 +139,11 @@ function TimelineSurroundings({
             <Dot variant={dotVariant} />
           </Connector>
         </TimelineSeparator>
-        <TimelineContent className="hidden flex-col justify-center pt-2 sm:flex md:pt-8 mx-8 md:mx-4">
+        <TimelineContent className="mx-8 hidden flex-col justify-center pt-2 sm:flex md:mx-4 md:pt-8">
           {second}
         </TimelineContent>
         <TimelineContent className="flex flex-col pt-2 sm:hidden md:pt-8">
-          <div className="flex flex-col gap-2 mx-4">
+          <div className="mx-4 flex flex-col gap-2">
             {first}
             {second}
           </div>
@@ -206,7 +207,7 @@ function TimelineTitle({
       <h1 className="mb-4 font-wise text-4xl md:hidden">
         <GradientText variant="radial-smoky">{children}</GradientText>
       </h1>
-      <h1 className="rounded-md bg-romaingrx-emphasis px-2 py-1 font-wise text-4xl hidden md:block">
+      <h1 className="hidden rounded-md bg-romaingrx-emphasis px-2 py-1 font-wise text-4xl md:block">
         {children}
       </h1>
     </>
@@ -220,14 +221,45 @@ function ProjectsTimeline() {
         <div className="flex flex-row justify-center">
           <TimelineTitle>Projects</TimelineTitle>
         </div>
-        <Timeline position="alternate-reverse">
+        <Timeline position="alternate">
+          <TimelineJobItem
+            title="Second Order Jailbreak"
+            subtitle="NeurIPS 2023"
+            date="Dec 2023"
+            dotVariant="pulsating"
+            description={
+              <p>
+                We authored a paper on Second Order Jailbreak where we delved into
+                the risks posed by malignant intelligent actors spreading their
+                influence over networks of agents with varying intelligence and
+                motivations. We run experiments on a multi-agent environment
+                available{' '}
+                <Link href="https://github.com/romaingrx/second-order-jailbreak">
+                  here
+                </Link>
+                . You can see all the different conversations the agents had
+                with each other on our{' '}
+                <Link href="https://second-order-jailbreak.romaingrx.com">
+                  playground website
+                </Link>
+                . We'll be presenting our work at NeurIPS 2023. The current
+                version of the paper can be found{' '}
+                <Link href="https://docs.google.com/document/d/1OY5fOWC2_Zf1cCfdAV8PxrL3lwignZi6R_6Mv8vnDoI/export?format=pdf">
+                  here
+                </Link>
+                . We are currently working on a follow-up paper, which will
+                include a more detailed analysis of the risks and the strategies that can be used to
+                mitigate them.
+              </p>
+            }
+          />
           <TimelineJobItem
             title="Co-Creator and Vice President"
-            subtitle="Lausanne AI Alignemnt Group"
+            subtitle="Safe AI Lausanne Group"
             date="Jan 2023 - Now"
             dotVariant="pulsating"
             description={
-              <>
+              <p>
                 Co-created and leading a volunteer-driven organization focused
                 on AI safety and alignment, organizing talks, round tables,
                 seminars and bootcamps to foster knowledge exchange and raise
@@ -247,7 +279,7 @@ function ProjectsTimeline() {
                     lessons on RL, RLHF and jailbreaking of LLMs.
                   </li>
                 </ul>
-              </>
+              </p>
             }
           />
         </Timeline>
