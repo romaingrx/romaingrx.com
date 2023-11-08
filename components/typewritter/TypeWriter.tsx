@@ -1,7 +1,7 @@
 import { TypeWriterOptionsType } from './TypeWriter.types';
 import { StyledTypeWriter } from './TypeWriter.styles';
 
-export function TypeWriterOptions({ css, ...props }: TypeWriterOptionsType) {
+function TypeWriter({ css, ...props }: TypeWriterOptionsType) {
   return (
     <>
       <StyledTypeWriter
@@ -11,3 +11,5 @@ export function TypeWriterOptions({ css, ...props }: TypeWriterOptionsType) {
     </>
   );
 }
+
+export default TypeWriter;
