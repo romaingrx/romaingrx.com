@@ -1,7 +1,7 @@
 'use client';
 import { Transition } from '@/components/backgrounds/PixelBackground';
 import { AnimatePresence } from 'framer-motion';
-import TypeWriter from '@/components/Typewritter/TypeWriter';
+import TypeWriter from '@/components/typewritter/TypeWriter';
 import Layout from '@/components/layout';
 
 function Home() {
