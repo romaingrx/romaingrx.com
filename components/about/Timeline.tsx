@@ -233,17 +233,17 @@ function ProjectsTimeline() {
                 the risks posed by malignant intelligent actors spreading their
                 influence over networks of agents with varying intelligence and
                 motivations. We run experiments on a multi-agent environment
-                available{' '}
+                available&nbsp;
                 <Link href="https://github.com/romaingrx/second-order-jailbreak">
                   here
                 </Link>
                 . You can see all the different conversations the agents had
-                with each other on our{' '}
+                with each other on our&nbsp;
                 <Link href="https://second-order-jailbreak.romaingrx.com">
                   playground website
                 </Link>
-                . We'll be presenting our work at NeurIPS 2023. The current
-                version of the paper can be found{' '}
+                . We&apos;ll be presenting our work at NeurIPS 2023. The current
+                version of the paper can be found&nbsp;
                 <Link href="https://docs.google.com/document/d/1OY5fOWC2_Zf1cCfdAV8PxrL3lwignZi6R_6Mv8vnDoI/export?format=pdf">
                   here
                 </Link>
