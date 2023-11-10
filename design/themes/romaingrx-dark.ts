@@ -30,6 +30,7 @@ const darkTheme = {
     '--romaingrx-form-input-focus': 'hsla(var(--palette-pink-50), 1)',
     '--shadow-color': 'var(--local-shadow-color, 223deg 5% 1%)',
     '--code-snippet-background': 'hsla(var(--palette-gray-85), 0.5)',
+    '--code-snippet-border': 'hsla(var(--palette-gray-50), 0.5)',
     '--token-comment': 'var(--romaingrx-colors-typeface-tertiary)',
     '--token-selector': 'hsl(var(--palette-indigo-20))',
     '--token-symbol': 'hsl(var(--palette-blue-35))',

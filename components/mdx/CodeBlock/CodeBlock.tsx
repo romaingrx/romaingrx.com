@@ -4,7 +4,7 @@ import { Tooltip } from '@nextui-org/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { MotionCheckIcon } from '../../icon/motion';
-import { CopyIcon } from '../../icon/core';
+import { CopyIconOld } from '../../icon/core';
 
 export default function CodeBlock({
   children,
@@ -70,7 +70,7 @@ export default function CodeBlock({
                   {copied ? (
                     <MotionCheckIcon isVisible={copied} strokeWidth={2} />
                   ) : (
-                    <CopyIcon size={'md'} strokeWidth={'sm'} />
+                    <CopyIconOld size={'md'} strokeWidth={'sm'} />
                   )}
                 </button>
               )}

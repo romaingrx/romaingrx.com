@@ -31,6 +31,7 @@ const lightTheme = {
     '--romaingrx-form-input-focus': 'hsla(var(--palette-pink-40), 0.55)',
     '--shadow-color': 'var(--local-shadow-color, 223deg 5% 80%)',
     '--code-snippet-background': 'hsla(var(--palette-gray-03), 0.2)',
+    '--code-snippet-border': 'hsla(var(--palette-gray-00), 0.5)',
     '--token-comment': 'var(--romaingrx-colors-typeface-tertiary)',
     '--token-selector': 'hsl(var(--palette-indigo-50))',
     '--token-symbol': 'hsl(var(--palette-pink-60))',

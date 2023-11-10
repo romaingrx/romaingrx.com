@@ -33,7 +33,7 @@ export const icon = cva([], {
   },
 });
 
-export function CopyIcon({
+export function CopyIconOld({
     size,
     strokeWidth,
     color,

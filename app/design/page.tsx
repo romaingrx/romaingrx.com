@@ -10,6 +10,7 @@ import { BlockQuote } from '@/components/mdx/BlockQuote/BlockQuote';
 import { StringTheme } from '@/lib/theme';
 import Button from '@/components/Button/Button';
 import Link from '@/components/Link';
+import CodeBlock from '@/components/mdx/Code';
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -160,6 +161,22 @@ export default function DesignPage() {
           <div className="flex flex-col gap-4">
             <Link href="/">romaingrx.com</Link>
           </div>
+          <h1 className="font-wise text-5xl">Code</h1>
+          <CodeBlock
+            metastring="{3-5} title=Basic example in C++"
+            language="cpp"
+            codeString={`#include <iostream>
+
+int add(int a, int b){
+  return a + b;
+}
+
+int main(){
+  std::cout << "hello world" << std::endl;
+  int c = add(1, 2);
+  // 3
+}`}
+          />
         </div>
       </Layout>
     </>
