@@ -5,8 +5,9 @@ import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
 import Image from 'next/image';
-import CodeBlock from './CodeBlock/CodeBlock';
 import Math from './Math';
+import Pre from './Code/Pre';
+import {default as _Link } from '../Link';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -39,13 +40,14 @@ function TagChip({ tag }: { tag: string }): JSX.Element {
 }
 
 const mdxComponents = {
-  pre: CodeBlock,
+  pre: Pre,
   span: (props: any) => {
     if (props.className?.split(' ').includes('math')) {
       return <Math {...props} />;
     }
     return <span {...props} />;
   },
+  a: _Link,
 };
 
 function ArticleBody({ article }: { article: Article }): JSX.Element {
