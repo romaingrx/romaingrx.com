@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import Math from './Math';
-import { default as _Link } from '../Link';
+import { default as _Link } from '../core/Link';
 
 const Pre = dynamic(() => import('@/components/core/CodeBlock/Pre'));
 const Callout = dynamic(() => import('@/components/core/Callout'));

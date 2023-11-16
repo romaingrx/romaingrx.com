@@ -21,7 +21,7 @@ import { useBreakpoint } from '@/hooks/tailwind';
 
 import { GradientText } from '@/components/core/Text';
 import { Button } from '@/components/core';
-import Link from '../Link';
+import Link from '../core/Link';
 
 type TimelineCardProps = {
   title: string;

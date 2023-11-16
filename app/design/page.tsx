@@ -6,7 +6,7 @@ import {
   WarningIcon,
 } from '@/components/core/Icon/Icon';
 import { StringTheme } from '@/lib/theme';
-import Link from '@/components/Link';
+import Link from '@/components/core/Link';
 
 import { Callout, BlockQuote, CodeBlock, Button } from '@/components/core';
 

@@ -1,3 +1,2 @@
-import BlockQuote from './BlockQuote';
-
-export default BlockQuote;
+export type { BlockQuoteProps } from './BlockQuote.types';
+export { default } from './BlockQuote';

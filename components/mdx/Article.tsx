@@ -5,7 +5,7 @@ import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
 import Image from 'next/image';
-import {default as _Link } from '../Link';
+import {default as _Link } from '../core/Link';
 import mdxComponents from './Components';
 
 function localeDateString(date: string): string {

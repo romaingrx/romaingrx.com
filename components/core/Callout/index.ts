@@ -1,3 +1,2 @@
-import Callout from './Callout';
-
-export default Callout;
+export type { CalloutProps } from './Callout.types';
+export { default } from './Callout';

@@ -14,7 +14,6 @@ import { unpackMetastring } from './utils';
 // @ts-ignore
 (typeof global !== 'undefined' ? global : window).Prism = Prism;
 
-
 export const HighlightedCodeText = (props: HighlightedCodeTextProps) => {
   const { codeString, language, highlightLine } = props;
 
@@ -77,9 +76,12 @@ function CodeBlock({ codeString, language, metastring }: CodeBlockProps) {
   const { title, highlightLineFn } = unpackMetastring(metastring);
   // TODO romaingrx : Implement my own card
   return (
-    <Card className="w-full p-0" style={{
-      overflow: 'visible'
-    }}>
+    <Card
+      className="w-full p-0"
+      style={{
+        overflow: 'visible',
+      }}
+    >
       {title ? (
         <CardHeader
           style={{
@@ -105,4 +107,4 @@ function CodeBlock({ codeString, language, metastring }: CodeBlockProps) {
   );
 }
 
-export { CodeBlock };
+export default CodeBlock;
