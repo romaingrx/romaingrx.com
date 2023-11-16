@@ -30,4 +30,4 @@ const Callout = (props: CalloutProps) => {
     );
 }
 
-export { Callout };
+export  default Callout ;

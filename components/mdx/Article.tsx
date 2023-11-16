@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Math from './Math';
 import Pre from './Code/Pre';
 import {default as _Link } from '../Link';
+import dynamic from 'next/dynamic';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -48,6 +49,7 @@ const mdxComponents = {
     return <span {...props} />;
   },
   a: _Link,
+  Callout : dynamic(() => import('./Callout/Callout')),
 };
 
 function ArticleBody({ article }: { article: Article }): JSX.Element {

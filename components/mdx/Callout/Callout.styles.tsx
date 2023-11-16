@@ -40,6 +40,10 @@ const StyledCallout = styled('aside', {
     borderRadius: 'var(--space-1)',
     backgroundColor: 'var(--callout-background, var(--romaingrx-colors-emphasis))',
 
+    "& p": {
+        margin: '0',
+    },
+
     variants: {
         variant: {
             info: {

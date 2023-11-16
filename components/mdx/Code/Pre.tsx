@@ -20,7 +20,6 @@ function translateProps({ children }: PreProps): CodeBlockProps {
 
   const languageMatch = className.match(/language-(?<lang>.*)/);
   const language = (languageMatch?.groups?.lang || '') as Language;
-  console.log({ children })
 
   return {
     codeString: codeString?.trim(),
