@@ -9,6 +9,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkSourceRedirect from './content/plugins/remarkSourceRedirect';
+import rehypeMetaAsAttributes from './content/plugins/metastringExtraction';
 
 export default makeSource({
   contentDirPath: 'content/articles',
@@ -33,6 +34,7 @@ export default makeSource({
           },
         },
       ],
+      [rehypeMetaAsAttributes],
     ],
   },
 });

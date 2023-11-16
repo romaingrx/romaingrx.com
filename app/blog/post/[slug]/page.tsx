@@ -1,4 +1,5 @@
 import { allArticles } from '@/.contentlayer/generated';
+import Layout from '@/components/layout';
 import ArticleComponent from '@/components/mdx/Article';
 
 export async function generateStaticParams() {
@@ -21,9 +22,9 @@ export default function BlogPostPage({
   }
   return (
     <>
-    <div className="mt-8 p-16 max-w-6xl mx-auto rounded-lg shadow-md dark:shadow-zinc-800 bg-white dark:bg-zinc-900">
-      <ArticleComponent article={article} />
-    </div>
+      <Layout>
+        <ArticleComponent article={article} />
+      </Layout>
     </>
   );
 }

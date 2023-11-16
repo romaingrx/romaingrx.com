@@ -11,6 +11,11 @@ function toReadableDate(date: string) {
   const diff = new Date().getTime() - d.getTime();
   // If less than five days ago, return "X days ago"
   if (diff < 432000000) {
+    if (diff < 86400000) {
+      return `${Math.floor(diff / 3600000)} hours ago`;
+    } else if (diff < 172800000) {
+      return 'Yesterday';
+    }
     return `${Math.floor(diff / 86400000)} days ago`;
   }
   // Otherwise, return "Month Day, Year"
@@ -41,7 +46,7 @@ export function ArticleCard({ article }: { article: Article }) {
         <div className={clsx('flex flex-col', isHovered && 'blur-sm')}>
           {article.cover && (
             <div className="relative left-0 top-0 h-4/5 w-full bg-opacity-70">
-              <div className="absolute inset-0 w-full h-full" id="test">
+              <div className="absolute inset-0 h-full w-full" id="test">
                 <LiquidGradient />
               </div>
               <div className="relative left-0 top-0 h-full w-full">

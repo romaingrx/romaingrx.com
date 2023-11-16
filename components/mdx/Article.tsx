@@ -75,7 +75,7 @@ export default function ArticleComponent({
         integrity="sha384-Um5gpz1odJg5Z4HAmzPtgZKdTBHZdw8S29IecapCSB31ligYPhHQZMIlWLYQGVoc"
         crossOrigin="anonymous"
       />
-      <div className="mx-auto max-w-6xl rounded-lg bg-white/10 backdrop-blur-md dark:bg-black/10 xl:relative">
+      <div className="mx-auto max-w-6xl rounded-lg backdrop-blur-md xl:relative">
         <article className="flex flex-col">
           <header className="mb-6 flex flex-col gap-2">
             <h1 className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-4xl">
