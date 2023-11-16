@@ -1,5 +1,5 @@
 "use client"
-import { InfoIcon, SuccessIcon, WarningIcon } from "@/components/icon/Icon";
+import { InfoIcon, SuccessIcon, WarningIcon } from "@/components/core/Icon/Icon";
 import { CalloutProps } from "./Callout.types";
 import { StyledCallout, StyledCalloutIconWrapper } from "./Callout.styles";
 

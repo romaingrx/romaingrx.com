@@ -8,10 +8,6 @@ type ConditionalWrapperProps = {
     children: React.ReactNode;
 }
 
-function ConditionalWrapper({ condition, wrapper, children }: ConditionalWrapperProps): React.ReactNode {
-    return condition ? wrapper(children) : children;
-}
-
 export {
     VR
 }

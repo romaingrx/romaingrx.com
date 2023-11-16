@@ -5,10 +5,8 @@ import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
 import Image from 'next/image';
-import Math from './Math';
-import Pre from './Code/Pre';
 import {default as _Link } from '../Link';
-import dynamic from 'next/dynamic';
+import mdxComponents from './Components';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -40,17 +38,7 @@ function TagChip({ tag }: { tag: string }): JSX.Element {
   return <LinkChip text={tag} href={`/blog/tag/${slugify(tag)}`} />;
 }
 
-const mdxComponents = {
-  pre: Pre,
-  span: (props: any) => {
-    if (props.className?.split(' ').includes('math')) {
-      return <Math {...props} />;
-    }
-    return <span {...props} />;
-  },
-  a: _Link,
-  Callout : dynamic(() => import('./Callout/Callout')),
-};
+
 
 function ArticleBody({ article }: { article: Article }): JSX.Element {
   const MDXComponent = useMDXComponent(article.body.code);

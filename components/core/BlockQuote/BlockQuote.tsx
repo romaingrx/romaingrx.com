@@ -1,5 +1,5 @@
-"use client"
-import { QuoteIcon } from '@/components/icon/Icon';
+'use client';
+import { QuoteIcon } from '@/components/core/Icon/Icon';
 import {
   StyledBlockQuote,
   StyledBlockQuoteScreenWidth,
@@ -41,4 +41,4 @@ const BlockQuote = ({
   );
 };
 
-export { BlockQuote };
+export default BlockQuote;

@@ -8,7 +8,7 @@ import {
   StyledLineNo,
   StyledPre,
 } from './CodeBlock.styles';
-import CopyButton from '@/components/Button/Copy';
+import CopyButton from '@/components/core/Button/Copy';
 import { unpackMetastring } from './utils';
 
 // @ts-ignore

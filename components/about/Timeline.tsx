@@ -5,8 +5,6 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 
-import Button from '@/components/Button/Button';
-import clsx from 'clsx';
 import React from 'react';
 import {
   Modal,
@@ -20,7 +18,9 @@ import { Connector } from '../timeline/Connector/Connector';
 import { Dot } from '../timeline/Dot/Dot';
 import { DotVariant } from '../timeline/Dot/Dot.types';
 import { useBreakpoint } from '@/hooks/tailwind';
-import { GradientText } from '../text';
+
+import { GradientText } from '@/components/core/Text';
+import { Button } from '@/components/core';
 import Link from '../Link';
 
 type TimelineCardProps = {

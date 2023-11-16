@@ -1,6 +1,6 @@
 import { Transition } from '@/components/backgrounds/PixelBackground';
 import Articles from '@/components/blog/Articles';
-import Layout from '@/components/layout';
+import Layout from '@/components/core/layout';
 import ArticlesPlaceholder from '@/components/skeletons/ArticlesPlaceholder';
 import { Suspense } from 'react';
 

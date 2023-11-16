@@ -1,16 +1,14 @@
 import clsx from 'clsx';
-import { Callout } from '@/components/mdx/Callout/Callout';
-import Layout from '@/components/layout';
+import Layout from '@/components/core/layout';
 import {
   ArrowIcon,
   ExternalArrowIcon,
   WarningIcon,
-} from '@/components/icon/Icon';
-import { BlockQuote } from '@/components/mdx/BlockQuote/BlockQuote';
+} from '@/components/core/Icon/Icon';
 import { StringTheme } from '@/lib/theme';
-import Button from '@/components/Button/Button';
 import Link from '@/components/Link';
-import CodeBlock from '@/components/mdx/Code';
+
+import { Callout, BlockQuote, CodeBlock, Button } from '@/components/core';
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -177,6 +175,11 @@ int main(){
   // 3
 }`}
           />
+          <h1 className="font-wise text-5xl">List</h1>
+          <ul className="list-inside list-disc">
+            <li>Item 1</li>
+            <li>Item 2</li>
+          </ul>
         </div>
       </Layout>
     </>

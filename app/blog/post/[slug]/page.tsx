@@ -1,5 +1,5 @@
 import { allArticles } from '@/.contentlayer/generated';
-import Layout from '@/components/layout';
+import Layout from '@/components/core/layout';
 import ArticleComponent from '@/components/mdx/Article';
 
 export async function generateStaticParams() {

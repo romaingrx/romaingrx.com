@@ -1,10 +1,10 @@
 'use client';
-import { IconProps } from '@/components/icon/Icon.types';
+import { IconProps } from '@/components/core/Icon/Icon.types';
 import { ButtonProps } from '../Button.types';
 import Button from '../Button';
 import { useCallback, useState } from 'react';
-import { CopyIcon } from '@/components/icon/Icon';
-import { MotionCheckIcon } from '@/components/icon/motion';
+import { CopyIcon } from '@/components/core/Icon/Icon';
+import { MotionCheckIcon } from '@/components/core/Icon/motion';
 
 interface CopyButtonProps extends ButtonProps {
   value: string;
