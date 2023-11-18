@@ -82,7 +82,7 @@ export default function DesktopNavigation({
         ref={navRef}
         className={clsx(
           className,
-          'transition-linear transition-duration-300 fixed min-w-fit transition-all left-[50%] transform -translate-x-1/2 z-50',
+          'transition-linear transition-duration-300 fixed left-[50%] z-50 min-w-fit -translate-x-1/2 transform transition-all',
         )}
         style={{
           width: width,
@@ -91,7 +91,7 @@ export default function DesktopNavigation({
       >
         <HideOnScroll active={isBelowMd}>
           <motion.ul
-            className="flex px-3 text-md text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
+            className="text-md flex px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
             style={{
               borderRadius: borderRadius,
               borderWidth: borderWidth,
@@ -108,8 +108,8 @@ export default function DesktopNavigation({
                 <Image src="/favicon.ico" alt="logo" width={32} height={32} />
               </Link>
             </motion.li>
-            {pages.map(({ name, href }, idx) => (
-              <NavLink key={idx} href={href}>
+            {pages.map(({ name, href }) => (
+              <NavLink key={href} href={href}>
                 {name}
               </NavLink>
             ))}

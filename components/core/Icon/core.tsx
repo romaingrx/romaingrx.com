@@ -43,10 +43,9 @@ export function CopyIconOld({
     <>
       <svg
         className={icon({ size, strokeWidth, color })}
-        data-testid="geist-icon"
-        shape-rendering="geometricPrecision"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        shapeRendering="geometricPrecision"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         viewBox="0 0 24 24"
         fill='none'
         {...props}

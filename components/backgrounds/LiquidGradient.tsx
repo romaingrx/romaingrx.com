@@ -30,8 +30,8 @@ export default function LiquidGradient({
     return (<>
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 700 700" width={width} height={height} preserveAspectRatio="none">
             <defs>
-                <linearGradient gradientTransform={`rotate(${rotation}, 0.5, 0.5)`} x1="50%" y1="0%" x2="50%" y2="100%" id="ffflux-gradient"><stop stop-color={color1} stop-opacity="1" offset="0%"></stop><stop stop-color={color2} stop-opacity="1" offset="100%"></stop></linearGradient>
-                <filter id="ffflux-filter" x={x} y={y} width={width} height={height} filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <linearGradient gradientTransform={`rotate(${rotation}, 0.5, 0.5)`} x1="50%" y1="0%" x2="50%" y2="100%" id="ffflux-gradient"><stop stopColor={color1} stopOpacity="1" offset="0%"></stop><stop stopColor={color2} stopOpacity="1" offset="100%"></stop></linearGradient>
+                <filter id="ffflux-filter" x={x} y={y} width={width} height={height} filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feTurbulence type="fractalNoise" baseFrequency={baseFrequency} numOctaves={numOctaves} seed={seed} stitchTiles="stitch" x={x} y={y} width={width} height={height} result="turbulence"></feTurbulence>
                     <feGaussianBlur stdDeviation={stdDeviation} x={x} y={y} width={width} height={height} in="turbulence" edgeMode="duplicate" result="blur"></feGaussianBlur>
                     <feBlend mode={mode} x={x} y={y} width={width} height={height} in="SourceGraphic" in2="blur" result="blend"></feBlend>

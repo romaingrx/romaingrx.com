@@ -9,9 +9,7 @@ export default async function Blog(): Promise<JSX.Element> {
     <>
       <Transition>
         <Layout>
-          <h1 className="text-4xl font-bold">
-            Blog posts
-          </h1>
+          <h1 className="text-4xl font-bold">Blog posts</h1>
           <p>
             I write about software engineering, AI Safety, and other topics that
             interest me.
