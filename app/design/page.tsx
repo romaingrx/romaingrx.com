@@ -1,3 +1,4 @@
+"use client"
 import clsx from 'clsx';
 import Layout from '@/components/core/layout';
 import {
@@ -8,7 +9,16 @@ import {
 import { StringTheme } from '@/lib/theme';
 import Link from '@/components/core/Link';
 
-import { Callout, BlockQuote, CodeBlock, Button } from '@/components/core';
+import {
+  Callout,
+  BlockQuote,
+  CodeBlock,
+  Button,
+  Card,
+  H1,
+  H2,
+} from '@/components/core';
+import { CardBody, CardHeader } from '@nextui-org/react';
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -155,6 +165,11 @@ export default function DesignPage() {
             </Button>
           </div>
           <h1 className="font-wise text-5xl">Typography</h1>
+          <h2 className="font-wise text-3xl">Headings</h2>
+          <div className="flex flex-col gap-4">
+            <H1>Heading 1</H1>
+            <H2>Heading 2</H2>
+          </div>
           <h2 className="font-wise text-3xl">Anchors</h2>
           <div className="flex flex-col gap-4">
             <Link href="/">romaingrx.com</Link>
@@ -175,11 +190,10 @@ int main(){
   // 3
 }`}
           />
-          <h1 className="font-wise text-5xl">List</h1>
-          <ul className="list-inside list-disc">
-            <li>Item 1</li>
-            <li>Item 2</li>
-          </ul>
+          <Card depth={1}>
+            <CardHeader>test</CardHeader>
+            <CardBody>test</CardBody>
+          </Card>
         </div>
       </Layout>
     </>

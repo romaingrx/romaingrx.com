@@ -29,7 +29,8 @@ const lightTheme = {
     '--romaingrx-form-input-disabled': 'hsl(var(--palette-gray-09))',
     '--romaingrx-form-input-border': 'hsl(var(--palette-pink-10))',
     '--romaingrx-form-input-focus': 'hsla(var(--palette-pink-40), 0.55)',
-    '--shadow-color': 'var(--local-shadow-color, 223deg 5% 80%)',
+    // '--shadow-color': 'var(--local-shadow-color, 223deg 5% 80%)',
+    '--shadow-color': 'var(--local-shadow-color, 287deg 86% 90%)', // pink version
     '--code-snippet-background': 'hsla(var(--palette-gray-03), 0.2)',
     '--code-snippet-border': 'hsla(var(--palette-gray-00), 0.5)',
     '--token-comment': 'var(--romaingrx-colors-typeface-tertiary)',

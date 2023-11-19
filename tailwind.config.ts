@@ -22,10 +22,10 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       spacing: {
-        'sm': 'var(--space-1)',
-        'md': 'var(--space-2)',
-        'lg': 'var(--space-3)',
-        'xl': 'var(--space-4)',
+        sm: 'var(--space-1)',
+        md: 'var(--space-2)',
+        lg: 'var(--space-3)',
+        xl: 'var(--space-4)',
         '2xl': 'var(--space-5)',
         '3xl': 'var(--space-6)',
         '4xl': 'var(--space-7)',
@@ -44,11 +44,11 @@ const config: Config = {
         '10': 'var(--space-10)',
       },
       fontSize: {
-        'xs': 'var(--font-size-1)',
-        'sm': 'var(--font-size-2)',
-        'base': 'var(--font-size-3)',
-        'lg': 'var(--font-size-4)',
-        'xl': 'var(--font-size-5)',
+        xs: 'var(--font-size-1)',
+        sm: 'var(--font-size-2)',
+        base: 'var(--font-size-3)',
+        lg: 'var(--font-size-4)',
+        xl: 'var(--font-size-5)',
         '2xl': 'var(--font-size-6)',
         '3xl': 'var(--font-size-7)',
       },
@@ -74,21 +74,28 @@ const config: Config = {
         'romaingrx-foreground': 'var(--romaingrx-colors-foreground)',
         'romaingrx-danger': {
           default: 'var(--romaingrx-colors-danger)',
-          'emphasis': 'var(--romaingrx-colors-danger-emphasis)',
+          emphasis: 'var(--romaingrx-colors-danger-emphasis)',
         },
         'romaingrx-warning': 'var(--romaingrx-colors-warning)',
-        'romaingrx-warning-emphasis': 'var(--romaingrx-colors-warning-emphasis)',
+        'romaingrx-warning-emphasis':
+          'var(--romaingrx-colors-warning-emphasis)',
         'romaingrx-success': 'var(--romaingrx-colors-success)',
-        'romaingrx-success-emphasis': 'var(--romaingrx-colors-success-emphasis)',
+        'romaingrx-success-emphasis':
+          'var(--romaingrx-colors-success-emphasis)',
         'romaingrx-typeface': 'var(--romaingrx-colors-typeface-primary)',
-        'romaingrx-typeface-primary': 'var(--romaingrx-colors-typeface-primary)',
-        'romaingrx-typeface-secondary': 'var(--romaingrx-colors-typeface-secondary)',
-        'romaingrx-typeface-tertiary': 'var(--romaingrx-colors-typeface-tertiary)',
+        'romaingrx-typeface-primary':
+          'var(--romaingrx-colors-typeface-primary)',
+        'romaingrx-typeface-secondary':
+          'var(--romaingrx-colors-typeface-secondary)',
+        'romaingrx-typeface-tertiary':
+          'var(--romaingrx-colors-typeface-tertiary)',
         'romaingrx-typeface-danger': 'var(--romaingrx-colors-typeface-danger)',
         'romainxrx-border-color': 'var(--romaingrx-border-color)',
-        'romainxrx-card-background-color': 'var(--romaingrx-card-background-color)',
+        'romainxrx-card-background-color':
+          'var(--romaingrx-card-background-color)',
         'romaingrx-form-input-active': 'var(--romaingrx-form-input-active)',
-        'romaingrx-form-input-background': 'var(--romaingrx-form-input-background)',
+        'romaingrx-form-input-background':
+          'var(--romaingrx-form-input-background)',
         'romaingrx-form-input-disabled': 'var(--romaingrx-form-input-disabled)',
         'romaingrx-form-input-border': 'var(--romaingrx-form-input-border)',
         'romaingrx-form-input-focus': 'var(--romaingrx-form-input-focus)',
@@ -103,8 +110,7 @@ const config: Config = {
         'token-punctuation': 'var(--token-punctuation)',
       },
     },
-    typography: (theme: (key: string, defaultValue?: string) => string) => ({
-
+    typography: {
       DEFAULT: {
         css: {
           '--tw-prose-body': 'var(--romaingrx-colors-typeface-primary)',
@@ -121,78 +127,9 @@ const config: Config = {
           '--tw-prose-captions': 'var(--romaingrx-colors-typeface-secondary)',
           '--tw-prose-th-borders': 'var(--romaingrx-colors-emphasis)',
           '--tw-prose-td-borders': 'var(--romaingrx-colors-emphasis)',
-
-
-          // Base
-          color: 'var(--tw-prose-body)',
-          lineHeight: theme('lineHeight.7'),
-          //   '> *': {
-          //     marginTop: theme('spacing.10'),
-          //     marginBottom: theme('spacing.10'),
-          //   },
-          p: {
-            marginTop: theme('spacing.5'),
-            marginBottom: theme('spacing.5'),
-          },
-
-          //pre: {
-          //  paddingTop: theme('spacing.3'),
-          //  paddingBottom: theme('spacing.3'),
-          //},
-
-          // Headings
-          'h2, h3': {
-            color: 'var(--tw-prose-headings)',
-            fontWeight: theme('fontWeight.semibold'),
-          },
-          h2: {
-            fontSize: theme('fontSize.xl')[0],
-            lineHeight: theme('lineHeight.7'),
-            marginTop: theme('spacing.10'),
-            marginBottom: theme('spacing.4'),
-          },
-          h3: {
-            fontSize: theme('fontSize.base')[0],
-            lineHeight: theme('lineHeight.7'),
-            marginTop: theme('spacing.5'),
-            marginBottom: theme('spacing.4'),
-          },
-          ':is(h2, h3) + *': {
-            marginTop: 0,
-          },
-
-          // Images
-          img: {
-            borderRadius: 'var(--space-2)',
-            marginTop: 'var(--space-3)',
-            marginBottom: 'var(--space-3)',
-          },
-
-          // Inline elements
-          a: {
-            color: 'var(--tw-prose-links)',
-            textDecorationColor: 'var(--tw-prose-underline)',
-          },
-          'a:hover': {
-            color: 'var(--tw-prose-links-hover)',
-            textDecorationColor: 'var(--tw-prose-underline-hover)',
-          },
-          strong: {
-            color: 'var(--tw-prose-bold)',
-            fontWeight: 'var(--font-weight-bold)',
-          },
-
-          // Quotes
-          blockquote: {
-            paddingLeft: 'var(--space-4)',
-            borderLeftWidth: 'var(--space-1)',
-            borderLeftColor: 'var(--tw-prose-quote-borders)',
-            fontStyle: 'italic',
-          },
-
         },
       },
-    }),
+    },
   },
 };
 export default config;

@@ -3,13 +3,9 @@ import { Tooltip } from '@nextui-org/react';
 import clsx from 'clsx';
 import { useRef, useCallback, useState } from 'react';
 
-type MathProps = {
-  children: React.ReactNode;
-  className: string;
-  props: any;
-};
 
-export default function Math({ children, ...props }: MathProps): JSX.Element {
+
+export default function Math({ children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   const spanRef = useRef<HTMLSpanElement>(null);
   const [tooltipHover, setTooltipHover] = useState(false);
   const [copied, setCopied] = useState(false);
