@@ -3,9 +3,9 @@
 import { CardProps } from './Card.props';
 import { StyledCard } from './Card.styles';
 
-function Card({ depth, glass, children, ...props }: CardProps) {
+function Card({ depth, glass, hoverable, children, ...props }: CardProps) {
   return (
-    <StyledCard depth={depth} glass={glass} {...props}>
+    <StyledCard depth={depth} glass={glass} hoverable={hoverable} {...props}>
       {children}
     </StyledCard>
   );

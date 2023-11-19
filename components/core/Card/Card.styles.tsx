@@ -11,11 +11,14 @@ export const StyledCard = styled(Card, {
   border: '1px solid var(--romaingrx-border-color)',
   overflow: 'hidden',
 
-  "&:hover": {
-    '--card-shadow': shadows[3],
-  },
-
   variants: {
+    hoverable: {
+      true: {
+        '&:hover': {
+          '--card-shadow': shadows[3],
+        },
+      },
+    },
     glass: {
       true: {
         '--card-background': 'var(--romaingrx-colors-foreground)',
@@ -38,6 +41,7 @@ export const StyledCard = styled(Card, {
     },
   },
   defaultVariants: {
+    // hoverable: true,
     depth: 1,
   },
 });
