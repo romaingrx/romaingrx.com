@@ -7,6 +7,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import Image from 'next/image';
 import {default as _Link } from '../core/Link';
 import mdxComponents from './Components';
+import Pill from '@/components/core/Pill';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -20,9 +21,9 @@ function LinkChip({ text, href }: { text: string; href: string }): JSX.Element {
   return (
     <>
       <Link href={href}>
-        <span className="inline-block rounded-sm bg-zinc-200 px-2 py-1 text-xs font-semibold text-zinc-800 dark:bg-zinc-300">
-          {text}
-        </span>
+        <Pill variant='default' css={{
+          cursor: 'pointer',
+        }}>{text}</Pill>
       </Link>
     </>
   );
