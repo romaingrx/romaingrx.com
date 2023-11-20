@@ -12,7 +12,7 @@ export const StyledCard = styled(Card, {
   overflow: 'hidden',
 
   variants: {
-    hoverable: {
+    isHoverable: {
       true: {
         '&:hover': {
           '--card-shadow': shadows[3],

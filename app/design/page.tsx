@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import clsx from 'clsx';
 import Layout from '@/components/core/layout';
 import {
@@ -19,6 +19,7 @@ import {
   H2,
 } from '@/components/core';
 import { CardBody, CardHeader } from '@nextui-org/react';
+import Pill from '@/components/core/Pill';
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -190,10 +191,29 @@ int main(){
   // 3
 }`}
           />
-          <Card depth={1}>
-            <CardHeader>test</CardHeader>
-            <CardBody>test</CardBody>
-          </Card>
+          <h1 className="font-wise text-5xl">Cards</h1>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <Card depth={0} isHoverable>
+              <CardBody>This is a card with depth=0 and hoverable</CardBody>
+            </Card>
+            <Card depth={1} glass>
+              <CardBody>This is a card with depth=1 and made of glass</CardBody>
+            </Card>
+            <Card depth={2}>
+              <CardBody>This is a card with depth=2</CardBody>
+            </Card>
+            <Card depth={3}>
+              <CardBody>This is a card with depth=3</CardBody>
+            </Card>
+          </div>
+          <h1 className="font-wise text-5xl">Pills</h1>
+          <div className="flex flex-col gap-4">
+            <Pill>Primary</Pill>
+            <Pill variant="success">Success</Pill>
+            <Pill variant="warning">Warning</Pill>
+            <Pill variant="danger">Danger</Pill>
+            <Pill variant="info">Info</Pill>
+          </div>
         </div>
       </Layout>
     </>
