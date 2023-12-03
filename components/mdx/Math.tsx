@@ -1,11 +1,14 @@
 'use client';
+import { styled } from '@/design';
 import { Tooltip } from '@nextui-org/react';
-import clsx from 'clsx';
 import { useRef, useCallback, useState } from 'react';
 
+const StyledMath = styled('span');
 
-
-export default function Math({ children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
+export default function Math({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement>) {
   const spanRef = useRef<HTMLSpanElement>(null);
   const [tooltipHover, setTooltipHover] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -34,16 +37,24 @@ export default function Math({ children, ...props }: React.HTMLAttributes<HTMLSp
         delay={0}
         closeDelay={0}
       >
-        <button 
+        <button
           {...props}
           onMouseEnter={() => setTooltipHover(true)}
           onMouseLeave={() => setTooltipHover(false)}
           onClick={handleCopy}
           disabled={copied}
         >
-        <span ref={spanRef} className="relative">
-          {children}
-        </span>
+          <StyledMath
+            ref={spanRef}
+            className="relative"
+            css={{
+              '.katex-html': {
+                display: 'none',
+              },
+            }}
+          >
+            {children}
+          </StyledMath>
         </button>
       </Tooltip>
     </>
