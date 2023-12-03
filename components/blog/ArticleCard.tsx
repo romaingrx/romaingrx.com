@@ -56,6 +56,7 @@ export function ArticleCard({ article }: { article: Article }) {
                     alt={article.title}
                     width={1024}
                     height={1024}
+                    className='rounded-sm'
                   />
                 </div>
               </div>

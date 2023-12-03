@@ -42,7 +42,7 @@ export default async function Articles({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
         {articles.map((article: Article) => (
           <div className="p-4" key={article.slug}>
             <a href={`/blog/post/${article.slug}`}>
