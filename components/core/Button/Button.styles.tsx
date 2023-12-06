@@ -10,11 +10,8 @@ const StyledButton = styled('button', {
   border: '0',
   font: 'inherit',
 
-  fontSize: 'var(--font-size-2)',
-  fontWeight: 'var(--font-weight-3)',
   height: '44px',
   width: 'max-content',
-  padding: '11px 16px',
   transition: 'background 0.2s, transform 0.2s, color 0.2s, box-shadow 0.3s',
   borderRadius: 'var(--border-radius-1)',
 
@@ -50,6 +47,23 @@ const StyledButton = styled('button', {
   },
 
   variants: {
+    size: {
+      sm: {
+        fontSize: 'var(--font-size-1)',
+        fontWeight: 'var(--font-weight-2)',
+        padding: '6px 12px',
+      },
+      md: {
+        fontSize: 'var(--font-size-2)',
+        fontWeight: 'var(--font-weight-2)',
+        padding: '12px 18px',
+      },
+      lg: {
+        fontSize: 'var(--font-size-3)',
+        fontWeight: 'var(--font-weight-3)',
+        padding: '16px 24px',
+      },
+    },
     variant: {
       primary: {
         '--icon-hover-color': 'var(--romaingrx-colors-brand)',
@@ -111,6 +125,11 @@ const StyledButton = styled('button', {
         },
       },
     },
+  },
+  defaultVariants: {
+    size: 'md',
+    variant: 'primary',
+    type: 'normal',
   },
 });
 

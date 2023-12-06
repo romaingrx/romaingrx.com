@@ -1,7 +1,6 @@
 'use client';
 
 import { Article } from '@/.contentlayer/generated';
-import { ArticleCard } from '@/components/blog/ArticleCard';
 import {
   motion,
   useMotionValueEvent,
@@ -14,6 +13,7 @@ import LiquidGradient from '@/components/backgrounds/LiquidGradient';
 import { toReadableDate } from '@/lib/utils';
 import Pill from '@/components/core/Pill';
 import Link from 'next/link';
+import { clsx } from 'clsx';
 
 export function BlogPost({
   article,
@@ -37,11 +37,16 @@ export function BlogPost({
   });
   console.log({ index });
 
-  const timing = [0, 0.1, 0.4, 0.7];
+  const timing = [0, 0.1, 0.4, 0.6];
 
   const opacity = useTransform(scrollYProgress, timing, [0, 1, 1, 0]);
   const scale = useTransform(scrollYProgress, timing, [0.7, 1, 1, 0.7]);
-  const y = useTransform(scrollYProgress, timing, [200, 0, 0, -200]);
+  const y = useTransform(scrollYProgress, timing, [
+    '75%',
+    '-50%',
+    '-50%',
+    '-75%',
+  ]);
 
   const pVariants = {
     hidden: {},
@@ -57,39 +62,25 @@ export function BlogPost({
     },
   };
 
-  const px = useTransform(scrollYProgress, timing, [
-    '5rem',
-    '0rem',
-    '0rem',
-    '5rem',
-  ]);
-  const ix = useTransform(scrollYProgress, timing, [
-    '-5rem',
-    '0rem',
-    '0rem',
-    '-5rem',
-  ]);
-
   return (
     <motion.div ref={target} className="h-screen">
       <motion.div
         style={{
           opacity,
-          y,
           scale,
+          y,
           x: '-50%',
           width: 'clamp(300px, 100%, 900px)',
         }}
-        className="fixed left-1/2 top-1/2 grid grid-cols-2 gap-2  px-4 sm:gap-4 md:gap-8"
+        className={clsx(
+          'fixed left-1/2 top-1/2 grid',
+          'grid-cols-1 grid-rows-[2fr,1fr] px-8',
+          'md:grid-rows-1 md:gap-4 md:px-4 md:grid-cols-[1fr,1fr]',
+        )}
       >
-        <motion.div
-          style={{
-            x: ix,
-          }}
-          className="flex flex-col"
-        >
+        <motion.div className="flex flex-col">
           <div className="relative overflow-hidden rounded-md bg-opacity-70">
-            <div className="absolute inset-0 h-full w-full">
+            <div className="absolute inset-0 w-full">
               <LiquidGradient />
             </div>
             <div className="relative left-0 top-0 h-full w-full">
@@ -108,10 +99,7 @@ export function BlogPost({
           </div>
         </motion.div>
         <motion.div
-          style={{
-            x: px,
-          }}
-          className="flex h-full flex-col justify-between py-2"
+          className="flex  flex-col gap-4 px-2 py-2 md:justify-between"
           initial="hidden"
           animate={textVisible ? 'visible' : 'hidden'}
           variants={pVariants}
@@ -132,7 +120,7 @@ export function BlogPost({
             className="flex items-center gap-2"
           >
             <span>{toReadableDate(article.date)}</span>
-            <Pill variant={'default'}>{article.readingTime.text}</Pill>
+            <Pill>{article.readingTime.text}</Pill>
           </motion.div>
         </motion.div>
       </motion.div>
@@ -149,7 +137,7 @@ export function ScrollAnimation({ articles }: { articles: Article[] }) {
 
   const opacity = useTransform(
     scrollYProgress,
-    [0.2, 0.3, 0.8, 1],
+    [0.2, 0.3, 0.9, 1],
     [0, 1, 1, 0],
   );
 
@@ -163,17 +151,17 @@ export function ScrollAnimation({ articles }: { articles: Article[] }) {
     <motion.section ref={targetRef} className="relative mb-[8rem]">
       <motion.div
         style={{ opacity: backgroundOpacity }}
-        className="fixed left-0 top-0 h-screen w-screen bg-romaingrx-emphasis pointer-events-none"
+        className="pointer-events-none fixed left-0 top-0 h-screen w-screen bg-romaingrx-emphasis"
       />
       <motion.div className="flex w-full flex-col items-center gap-32">
         <motion.span
           style={{ opacity }}
-          className="sticky top-0 pt-32 font-wise text-5xl md:py-48"
+          className="sticky top-0 mb-48 py-24 font-wise text-4xl md:py-32 md:text-5xl"
         >
           Recent blog posts
         </motion.span>
 
-        <motion.div className="flex flex-col gap-2">
+        <motion.div className="flex flex-col">
           {articles.map((article, index) => (
             <Link href={`/blog/post/${article.slug}`} key={index}>
               <BlogPost article={article} index={index} />

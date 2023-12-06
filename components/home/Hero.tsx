@@ -30,13 +30,13 @@ export default function HeroSection() {
           scale,
           x: '-50%',
         }}
-        className="fixed left-1/2 my-16 md:my-32 flex w-full flex-col items-center gap-4 md:gap-8"
+        className="fixed left-1/2 my-16 flex w-full flex-col items-center gap-4 md:my-32 md:gap-8"
       >
         <div
           style={{ width: 'clamp(300px, 80%, 900px)' }}
-          className="flex w-full flex-col gap-16 font-wise text-2xl md:text-5xl"
+          className="flex w-full flex-col gap-8 md:gap-16 font-wise text-2xl sm:text-3xl md:text-5xl"
         >
-          <div className='flex flex-col gap-4'>
+          <div className="flex flex-col gap-0 md:gap-4">
             <div className="flex">
               <motion.span
                 initial={{ x: -50, opacity: 0 }}
@@ -71,14 +71,14 @@ export default function HeroSection() {
                 }}
                 onInit={(typewriter) => {
                   typewriter
-                    .pauseFor(1)
+                    .pauseFor(500)
                     .typeString('a Machine Learning Engineer')
                     .pauseFor(1000)
                     .deleteAll()
                     .typeString('a Software Engineer')
                     .pauseFor(1000)
                     .deleteAll()
-                    .typeString('a Human')
+                    .typeString('a Tech Enthusiast')
                     .start();
                 }}
               />
