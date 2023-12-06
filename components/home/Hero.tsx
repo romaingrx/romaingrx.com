@@ -42,7 +42,7 @@ export default function HeroSection() {
                 initial={{ x: -50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
               >
-                Hi, I'm
+                Hi, I&apos;m
               </motion.span>
               &nbsp;
               <motion.span
