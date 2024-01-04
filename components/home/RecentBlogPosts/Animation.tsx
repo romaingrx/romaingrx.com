@@ -5,6 +5,7 @@ import {
   motion,
   useMotionValueEvent,
   useScroll,
+  useSpring,
   useTransform,
 } from 'framer-motion';
 import { useRef, useState } from 'react';
@@ -14,6 +15,7 @@ import { toReadableDate } from '@/lib/utils';
 import Pill from '@/components/core/Pill';
 import Link from 'next/link';
 import { clsx } from 'clsx';
+import { springConfigs } from '@/components/core/constants';
 
 export function BlogPost({
   article,
@@ -23,10 +25,12 @@ export function BlogPost({
   index: number;
 }) {
   const target = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
+  let { scrollYProgress } = useScroll({
     target: target,
     offset: ['start end', 'end start'],
   });
+
+  scrollYProgress = useSpring(scrollYProgress, springConfigs.scroll);
 
   const [textVisible, setTextVisible] = useState(false);
 
@@ -35,7 +39,6 @@ export function BlogPost({
       setTextVisible(true);
     }
   });
-  console.log({ index });
 
   const timing = [0, 0.1, 0.4, 0.6];
 
@@ -75,7 +78,7 @@ export function BlogPost({
         className={clsx(
           'fixed left-1/2 top-1/2 grid',
           'grid-cols-1 grid-rows-[2fr,1fr] px-8',
-          'md:grid-rows-1 md:gap-4 md:px-4 md:grid-cols-[1fr,1fr]',
+          'md:grid-cols-[1fr,1fr] md:grid-rows-1 md:gap-4 md:px-4',
         )}
       >
         <motion.div className="flex flex-col">
@@ -130,10 +133,11 @@ export function BlogPost({
 
 export function ScrollAnimation({ articles }: { articles: Article[] }) {
   const targetRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
+  let { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ['start end', 'end end'],
   });
+  scrollYProgress = useSpring(scrollYProgress, springConfigs.scroll);
 
   const opacity = useTransform(
     scrollYProgress,
