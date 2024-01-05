@@ -30,17 +30,16 @@ export function BlogPost({
     offset: ['start end', 'end start'],
   });
 
-  scrollYProgress = useSpring(scrollYProgress, springConfigs.scroll);
-
+  const timing = [0, 0.1, 0.4, 0.6];
   const [textVisible, setTextVisible] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useMotionValueEvent(scrollYProgress, 'change', (progress) => {
-    if (progress > 0.1) {
+    if (progress > timing[1]) {
       setTextVisible(true);
     }
+    setDisabled(progress > timing[3]);
   });
-
-  const timing = [0, 0.1, 0.4, 0.6];
 
   const opacity = useTransform(scrollYProgress, timing, [0, 1, 1, 0]);
   const scale = useTransform(scrollYProgress, timing, [0.7, 1, 1, 0.7]);
@@ -79,6 +78,7 @@ export function BlogPost({
           'fixed left-1/2 top-1/2 grid',
           'grid-cols-1 grid-rows-[2fr,1fr] px-8',
           'md:grid-cols-[1fr,1fr] md:grid-rows-1 md:gap-4 md:px-4',
+          disabled && 'pointer-events-none',
         )}
       >
         <motion.div className="flex flex-col">

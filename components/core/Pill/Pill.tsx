@@ -6,7 +6,6 @@ import { StyledPill } from './Pill.styles';
 const Pill = (props: PillProps) => {
   const { children, variant } = props;
   const { resolvedTheme } = useTheme();
-  console.log({ resolvedTheme, variant });
 
   return (
     <StyledPill {...props} dark={resolvedTheme === 'dark'} variant={variant}>

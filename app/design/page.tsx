@@ -154,14 +154,14 @@ export default function DesignPage() {
             <Button variant="primary" disabled>
               Disabled
             </Button>
-            <Button variant="primary" type="icon">
+            <Button variant="primary" contentType="icon">
               <ArrowIcon />
             </Button>
-            <Button variant="primary" type="icon" disabled>
+            <Button variant="primary" contentType="icon" disabled>
               <ArrowIcon />
             </Button>
             <Button variant="secondary">Secondary</Button>
-            <Button variant="secondary" type="icon">
+            <Button variant="secondary" contentType="icon">
               <ArrowIcon />
             </Button>
           </div>
