@@ -12,7 +12,7 @@ export function ContactMe() {
               Want to get in touch?
             </span>
             <span className="text-sm">
-              I'm always happy to discuss new projects or simply chat about
+              I&apos;m always happy to discuss new projects or simply chat about
               exciting stuff.
             </span>
           </div>

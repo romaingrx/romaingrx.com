@@ -31,7 +31,7 @@ function CopyButton({
     <Button
       {...props}
       onClick={handleCopy}
-      type="icon"
+      contentType="icon"
       disabled={isCopied}
       aria-checked={isCopied}
       aria-label={isCopied ? 'Text copied' : 'Copy text to clipboard'}

@@ -107,7 +107,7 @@ const StyledButton = styled('button', {
         },
       },
     },
-    type: {
+    contentType: {
       normal: {},
       icon: {
         aspectRatio: '1',
@@ -129,7 +129,7 @@ const StyledButton = styled('button', {
   defaultVariants: {
     size: 'md',
     variant: 'primary',
-    type: 'normal',
+    contentType: 'normal',
   },
 });
 

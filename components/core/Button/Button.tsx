@@ -11,7 +11,7 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <StyledButton disabled={disabled} {...props}>
+    <StyledButton {...props}>
       {startIcon && <span>{startIcon}</span>}
       {children}
       {endIcon && <span>{endIcon}</span>}
