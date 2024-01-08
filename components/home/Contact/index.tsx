@@ -1,13 +1,12 @@
 import Layout from '@/components/core/layout';
 import ContactMeForm from './Form';
-import { Card, Link } from '@/components/core';
 
 export function ContactMe() {
   return (
-    <div className="py-8">
+    <div className="">
       <Layout>
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-0">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col">
             <span className="font-wise text-3xl text-romaingrx-brand">
               Want to get in touch?
             </span>
