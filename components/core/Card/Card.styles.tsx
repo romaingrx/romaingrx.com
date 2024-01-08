@@ -1,10 +1,9 @@
-import { styled, shadows } from "@/design";
-import { Card } from "@nextui-org/react";
+import { styled, shadows } from '@/design';
+import { Card } from '@nextui-org/react';
 
 export const StyledCard = styled(Card, {
   position: 'relative',
-  background:
-    'var(--card-background, var(--romaingrx-card-background-color))',
+  background: 'var(--card-background, var(--romaingrx-card-background-color))',
   backdropFilter: 'var(--card-blur, none)',
   borderRadius: 'var(--border-radius-2)',
   boxShadow: 'var(--card-shadow)',
@@ -14,6 +13,7 @@ export const StyledCard = styled(Card, {
   variants: {
     isHoverable: {
       true: {
+        transition: 'box-shadow 0.1s ease-in-out',
         '&:hover': {
           '--card-shadow': shadows[3],
         },
