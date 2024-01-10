@@ -98,14 +98,19 @@ export default function DesktopNavigation({
             }}
           >
             <motion.li
-              className="my-auto dark:invert"
+              className="my-auto"
               style={{
                 width: logoWidth,
                 opacity: logoOpacity,
               }}
             >
               <Link href="/">
-                <Image src="/favicon.ico" alt="logo" width={32} height={32} />
+                <Image
+                  src="/icon/sm?w=32&h=32&auto=format"
+                  alt="logo"
+                  width={32}
+                  height={32}
+                />
               </Link>
             </motion.li>
             {pages.map(({ name, href }) => (

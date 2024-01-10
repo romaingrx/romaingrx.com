@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import '@/styles/globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import ClientThemeProvider from '@/components/providers/theme-provider';
 import AnalyticsWrapper from '@/components/Analytics';
 import Header from '@/components/header/Header';
@@ -8,13 +8,27 @@ import Footer from '@/components/footer/Footer';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFontAwesome, fas } from '@fortawesome/free-solid-svg-icons';
 library.add(fas, faFontAwesome);
-import { fonts, getCssText, globalCss, globalStyles } from '@/design';
+import { fonts } from '@/design';
 import { ServerStylesheet } from './ServerStyleSheet';
 
-export const metadata: Metadata = {
-  title: 'romaingrx.com',
-  description: "romaingrx's personal website",
-};
+export async function generateMetadata(
+  {},
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const title = 'romaingrx.com';
+  const description = "romaingrx's personal website";
+  const url = 'https://romaingrx.com';
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: 'romaingrx.com',
+      images: ['/api/og'],
+      url,
+    },
+  };
+}
 
 export default function RootLayout({
   children,
@@ -22,26 +36,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className={clsx("", ...fonts.map(font => font.variable))} lang="en">
+    <html className={clsx('', ...fonts.map((font) => font.variable))} lang="en">
       <head>
         <ServerStylesheet />
       </head>
       <body
-        className={clsx(
-          'flex h-full min-h-screen flex-col bg-romaingrx-body',
-        )}
+        className={clsx('flex h-full min-h-screen flex-col bg-romaingrx-body')}
       >
         <ClientThemeProvider>
           <div className="relative">
-            <div className="flex flex-col min-h-screen">
+            <div className="flex min-h-screen flex-col">
               <Header />
-              <main className='flex-col flex-grow h-full'>{children}</main>
+              <main className="h-full flex-grow flex-col">{children}</main>
               <Footer />
             </div>
             <AnalyticsWrapper />
           </div>
         </ClientThemeProvider>
       </body>
-    </html >
+    </html>
   );
 }

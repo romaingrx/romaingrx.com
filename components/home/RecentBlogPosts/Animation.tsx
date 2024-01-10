@@ -159,8 +159,8 @@ export function ScrollAnimation({ articles }: { articles: Article[] }) {
 
   const opacity = useTransform(
     scrollYProgress,
-    [0.2, 0.3, 0.75, 0.85],
-    [0, 1, 1, 0],
+    [0.15, 0.2, 0.3, 0.75, 0.85],
+    [0, 1, 1, 1, 0],
   );
 
   const backgroundOpacity = useTransform(
