@@ -68,10 +68,12 @@ function HashArticleLiquidGradientProps({
 
 function ArticleCoverWithBg({ article }: { article: Article }) {
   if (!article.cover) return null;
+  const liquidProps = article.cover.liquidGradientProps || HashArticleLiquidGradientProps({ article });
+
   return (
     <div className="relative left-0 top-0 h-4/5 w-full bg-opacity-70">
       <div className="absolute inset-0 h-full w-full" id="test">
-        <LiquidGradient {...HashArticleLiquidGradientProps({ article })} />
+        <LiquidGradient {...liquidProps} />
       </div>
       <div className="relative left-0 top-0">
         <div className="relative m-3 h-[128px]">

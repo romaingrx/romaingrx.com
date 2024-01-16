@@ -4,11 +4,10 @@ import { Card } from '../core';
 import { CardBody } from '@nextui-org/card';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { useState } from 'react';
-import LiquidGradient from '../backgrounds/LiquidGradient';
 import { toReadableDate } from '@/lib/utils';
 import ArticleCoverWithBg from './ArticleCover';
+import Pill from '../core/Pill';
 
 export function ArticleCard({ article }: { article: Article }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -33,9 +32,7 @@ export function ArticleCard({ article }: { article: Article }) {
               </span>
             </ScrollShadow>
             <div className="flex flex-row items-center gap-2">
-              <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                {toReadableDate(article.date)}
-              </span>
+              <Pill variant={'info'}>{toReadableDate(article.date)}</Pill>
               <span className="text-xs text-zinc-600 dark:text-zinc-300">
                 {article.readingTime.text}
               </span>

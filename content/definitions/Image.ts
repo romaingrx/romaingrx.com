@@ -1,4 +1,4 @@
-import { defineNestedType } from "contentlayer/source-files";
+import { defineNestedType } from 'contentlayer/source-files';
 
 const Image = defineNestedType(() => ({
   name: 'Image',
@@ -13,6 +13,10 @@ const Image = defineNestedType(() => ({
       type: 'string',
       description: 'The alt text of the image',
       required: false,
+    },
+    liquidGradientProps: {
+      type: 'json',
+      description: 'The liquid gradient props of the article cover',
     },
   },
 }));
