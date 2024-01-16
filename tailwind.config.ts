@@ -9,7 +9,25 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
-  plugins: [nextui(), typo()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            content1: '#f0ebdb', // background
+            content4: '#eacee0', // emphasis
+          },
+        },
+        dark: {
+          colors: {
+            content1: '#21242c',
+            content4: '#463654',
+          },
+        },
+      },
+    }),
+    typo(),
+  ],
   theme: {
     extend: {
       fontFamily: {

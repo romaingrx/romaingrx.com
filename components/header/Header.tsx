@@ -23,11 +23,6 @@ export const pages = [
     href: '/blog',
     icon: <FontAwesomeIcon icon={['fas', 'blog']} />,
   },
-  {
-    name: 'Contact',
-    href: '/contact',
-    icon: <FontAwesomeIcon icon={['fas', 'envelope']} />,
-  },
 ];
 
 export default function Header(): JSX.Element {

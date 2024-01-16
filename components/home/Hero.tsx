@@ -5,6 +5,7 @@ import TypeWriter from 'typewriter-effect';
 import { ArrowIcon } from '../core/Icon/Icon';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import Link from 'next/link';
 
 export default function HeroSection() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -34,7 +35,7 @@ export default function HeroSection() {
       >
         <div
           style={{ width: 'clamp(300px, 80%, 900px)' }}
-          className="flex w-full flex-col gap-8 md:gap-16 font-wise text-2xl sm:text-3xl md:text-5xl"
+          className="flex w-full flex-col gap-8 font-wise text-2xl sm:text-3xl md:gap-16 md:text-5xl"
         >
           <div className="flex flex-col gap-0 md:gap-4">
             <div className="flex">
@@ -89,24 +90,26 @@ export default function HeroSection() {
             className="flex w-full justify-between"
           >
             <div className="flex justify-start gap-4">
-              <motion.a
+              <motion.div
                 initial={{ x: -100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                href="/about"
               >
-                <Button variant="secondary" endIcon={<ArrowIcon />}>
-                  About me
-                </Button>
-              </motion.a>
-              <motion.a
+                <Link href="/about">
+                  <Button variant="secondary" endIcon={<ArrowIcon />}>
+                    About me
+                  </Button>
+                </Link>
+              </motion.div>
+              <motion.div
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                href="/blog"
               >
-                <Button variant="secondary" endIcon={<ArrowIcon />}>
-                  Blog
-                </Button>
-              </motion.a>
+                <Link href="/blog">
+                  <Button variant="secondary" endIcon={<ArrowIcon />}>
+                    Blog
+                  </Button>
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         </div>
