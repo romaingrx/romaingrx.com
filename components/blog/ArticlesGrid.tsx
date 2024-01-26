@@ -2,6 +2,7 @@
 import { Article } from 'contentlayer/generated';
 import { ArticleCard, animateVariants } from '@/components/blog/ArticleCard';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function ArticlesGrid({ articles }: { articles: Article[] }) {
   return (
@@ -13,9 +14,9 @@ export default function ArticlesGrid({ articles }: { articles: Article[] }) {
     >
       {articles.map((article: Article) => (
         <div className="p-4" key={article.slug}>
-          <a href={`/blog/post/${article.slug}`} className="h-64">
+          <Link href={`/blog/post/${article.slug}`} className="h-64">
             <ArticleCard article={article} />
-          </a>
+          </Link>
         </div>
       ))}
     </motion.div>

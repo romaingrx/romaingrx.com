@@ -38,8 +38,14 @@ function NavLink({
           {isActive && (
             <motion.div
               layoutId={'nav'}
-              className="absolute inset-0 bg-bob-500/20 dark:bg-bob-400/20 rounded-md m-1"
-              transition={{ type: 'spring', stiffness: 500, damping: 30, duration: 1.0, ease: [0.83, -0.01, 0.16, 0.99] }}
+              className="absolute inset-0 m-1 rounded-md bg-bob-500/20 dark:bg-bob-400/20"
+              transition={{
+                type: 'spring',
+                stiffness: 500,
+                damping: 30,
+                duration: 1.0,
+                ease: [0.83, -0.01, 0.16, 0.99],
+              }}
             />
           )}
           {children}
@@ -56,25 +62,28 @@ export default function DesktopNavigation({
   const { isBelowMd } = useBreakpoint('md');
   const navRef = useRef<HTMLDivElement>(null);
 
+  // TODO : review the timing to make it more snappy (probably with a function instead of an smooth animation)
   const { scrollYProgress } = useScroll({
     target: navRef,
     offset: ['start start', 'end start'],
   });
 
-  const marginTop = useTransform(scrollYProgress, [0, 1], ['0rem', '1.5rem']);
-  const width = useTransform(scrollYProgress, [0, 1], ['100vw', '0vw']);
+  const timing = [0.5, 0.75]
+  const marginTop = useTransform(scrollYProgress, timing, ['0rem', '1.5rem']);
+  const height = useTransform(scrollYProgress, timing, ['3rem', '2.5rem']);
+  const width = useTransform(scrollYProgress, timing, ['100vw', '0vw']);
   const borderRadius = useTransform(
     scrollYProgress,
-    [0, 1],
+    timing,
     ['0rem', '0.75rem'],
   );
   const borderWidth = useTransform(
     scrollYProgress,
-    [0, 1],
+    timing,
     ['0rem', '0.05rem'],
   );
-  const logoWidth = useTransform(scrollYProgress, [0, 0.8], ['32px', '0px']);
-  const logoOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const logoWidth = useTransform(scrollYProgress, timing, ['32px', '0px']);
+  const logoOpacity = useTransform(scrollYProgress, timing, [1, 0]);
 
   return (
     <>
@@ -85,16 +94,17 @@ export default function DesktopNavigation({
           'transition-linear transition-duration-300 fixed left-[50%] z-50 min-w-fit -translate-x-1/2 transform transition-all',
         )}
         style={{
-          width: width,
-          marginTop: marginTop,
+          width,
+          marginTop,
         }}
       >
         <HideOnScroll active={isBelowMd}>
           <motion.ul
-            className="text-md flex px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
+            className="text-md flex items-center bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
             style={{
-              borderRadius: borderRadius,
-              borderWidth: borderWidth,
+              height,
+              borderRadius,
+              borderWidth,
             }}
           >
             <motion.li

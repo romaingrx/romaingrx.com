@@ -20,10 +20,16 @@ export async function generateMetadata(
   const url = 'https://romaingrx.com';
 
   return {
-    title,
+    title: {
+      template: `%s | ${title}`,
+      default: title,
+    },
     description,
     openGraph: {
-      title: 'romaingrx.com',
+      title: {
+        template: `%s | ${title}`,
+        default: title,
+      },
       images: ['/api/og'],
       url,
     },
