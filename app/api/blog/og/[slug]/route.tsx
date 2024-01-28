@@ -4,6 +4,12 @@ import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { getFontasArrayBuffer } from '@/lib/fonts';
 
+export async function generateStaticParams() {
+  return allArticles.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
 const Footer = () => (
   <div
     style={{

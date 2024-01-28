@@ -27,12 +27,6 @@ function LiquidGradient({
   width = '100%',
   height = '100%',
 }: LiquidGradientProps): React.ReactElement {
-  console.log({
-    seed,
-    rotation,
-    color1,
-    color2,
-  });
   const gradientId = `ffflux-gradient-${seed}`;
   const filterId = `ffflux-filter-${seed}`;
 
