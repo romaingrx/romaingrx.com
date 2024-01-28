@@ -1,13 +1,16 @@
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { type Article } from '@/.contentlayer/generated';
 import Link from 'next/link';
+import { default as CoreLink } from '@/components/core/Link';
 import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
 import Image from 'next/image';
-import {default as _Link } from '../core/Link';
+import { default as _Link } from '../core/Link';
 import mdxComponents from './Components';
 import Pill from '@/components/core/Pill';
+import { H1 } from '../core';
+import { ArrowIcon } from '../core/Icon/Icon';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -21,9 +24,14 @@ function LinkChip({ text, href }: { text: string; href: string }): JSX.Element {
   return (
     <>
       <Link href={href}>
-        <Pill variant='default' css={{
-          cursor: 'pointer',
-        }}>{text}</Pill>
+        <Pill
+          variant="default"
+          css={{
+            cursor: 'pointer',
+          }}
+        >
+          {text}
+        </Pill>
       </Link>
     </>
   );
@@ -38,8 +46,6 @@ function CategoryChip({ category }: { category: string }): JSX.Element {
 function TagChip({ tag }: { tag: string }): JSX.Element {
   return <LinkChip text={tag} href={`/blog/tag/${slugify(tag)}`} />;
 }
-
-
 
 function ArticleBody({ article }: { article: Article }): JSX.Element {
   const MDXComponent = useMDXComponent(article.body.code);
@@ -69,9 +75,16 @@ export default function ArticleComponent({
       <div className="mx-auto max-w-6xl rounded-lg backdrop-blur-md xl:relative">
         <article className="flex flex-col">
           <header className="mb-6 flex flex-col gap-2">
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-4xl">
-              {article.title}
-            </h1>
+            <span className="text-xs text-romaingrx-typeface-secondary">
+              <CoreLink
+                href="/blog"
+                variant="none"
+                startIcon={<ArrowIcon angle={180} size={4} />}
+              >
+                Back to blog
+              </CoreLink>
+            </span>
+            <H1 className="font-semibold">{article.title}</H1>
             <div className="flex items-baseline gap-3">
               <div className="flex gap-1">
                 <span className="text-zinc-800 dark:text-zinc-100">by</span>
@@ -114,7 +127,7 @@ export default function ArticleComponent({
             </div>
             {article.cover && (
               <Image
-                className="mx-auto rounded-xl"
+                className="mx-auto hidden rounded-xl"
                 src={article.cover.src}
                 alt={article.cover.alt || 'Cover'}
                 width={512}

@@ -1,5 +1,5 @@
 import { allArticles } from '@/.contentlayer/generated';
-import Layout from '@/components/core/layout';
+import { ArticleLayout } from '@/components/core/layout';
 import ArticleComponent from '@/components/mdx/Article';
 import { Metadata, ResolvingMetadata } from 'next';
 
@@ -65,9 +65,9 @@ export default function BlogPostPage({
   }
   return (
     <>
-      <Layout>
+      <ArticleLayout>
         <ArticleComponent article={article} />
-      </Layout>
+      </ArticleLayout>
     </>
   );
 }

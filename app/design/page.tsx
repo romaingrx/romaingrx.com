@@ -174,6 +174,19 @@ export default function DesignPage() {
           <h2 className="font-wise text-3xl">Anchors</h2>
           <div className="flex flex-col gap-4">
             <Link href="/">romaingrx.com</Link>
+            <Link
+              href="/"
+              endIcon={<ArrowIcon angle={45} />}
+              css={{
+                '--translateX': '2px;',
+                '--translateY': '2px;',
+              }}
+            >
+              romaingrx.com
+            </Link>
+            <Link href="/" startIcon={<ArrowIcon angle={180} />} variant="none">
+              romaingrx.com
+            </Link>
           </div>
           <h1 className="font-wise text-5xl">Code</h1>
           <CodeBlock
