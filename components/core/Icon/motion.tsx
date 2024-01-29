@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion, Transition, SVGMotionProps, AnimatePresence } from 'framer-motion';
+import { IconProps } from '.';
+import { StyledSVG } from './Icon.styles';
 
 export function MotionCheckIcon({
   isVisible,
@@ -7,18 +9,16 @@ export function MotionCheckIcon({
   initial = true,
   strokeWidth = 1.5,
   ...props
-}: {
+}: IconProps & {
   isVisible: boolean;
   duration?: number;
   initial?: boolean;
   strokeWidth?: number;
-  props?: any;
 }) {
   return (
     <AnimatePresence initial={initial}>
       {isVisible && (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
+        <StyledSVG
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={strokeWidth}
@@ -38,7 +38,7 @@ export function MotionCheckIcon({
             strokeLinejoin="round"
             d="M4.5 12.75l6 6 9-13.5"
           />
-        </svg>
+        </StyledSVG>
       )}
     </AnimatePresence>
   );

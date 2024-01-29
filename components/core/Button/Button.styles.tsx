@@ -8,6 +8,7 @@ const StyledButton = styled('button', {
   cursor: 'pointer',
   border: '0',
   font: 'inherit',
+  justifyContent: 'center',
 
   height: '44px',
   width: 'max-content',
@@ -123,6 +124,9 @@ const StyledButton = styled('button', {
     contentType: {
       normal: {},
       icon: {
+        padding: '0',
+        aspectRatio: '1',
+
         '#children': {
           transition: 'transform .4s',
         },

@@ -104,7 +104,7 @@ export const StyledSVG = styled('svg', {
   defaultVariants: {
     variant: 'default',
     outline: true,
-    size: 4,
+    size: "5",
   },
 });
 

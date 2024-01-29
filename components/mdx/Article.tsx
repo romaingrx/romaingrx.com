@@ -79,7 +79,7 @@ export default function ArticleComponent({
               <CoreLink
                 href="/blog"
                 variant="none"
-                startIcon={<ArrowIcon angle={180} size={4} />}
+                startIcon={<ArrowIcon angle={180} />}
               >
                 Back to blog
               </CoreLink>
