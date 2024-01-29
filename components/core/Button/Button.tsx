@@ -3,18 +3,12 @@ import React from 'react';
 import { ButtonProps } from './Button.types';
 import { StyledButton } from './Button.styles';
 
-const Button = ({
-  children,
-  disabled,
-  startIcon,
-  endIcon,
-  ...props
-}: ButtonProps) => {
+const Button = ({ children, startIcon, endIcon, ...props }: ButtonProps) => {
   return (
     <StyledButton {...props}>
-      {startIcon && <span>{startIcon}</span>}
-      {children}
-      {endIcon && <span>{endIcon}</span>}
+      {startIcon && <span id="startIcon">{startIcon}</span>}
+      <span id="children">{children}</span>
+      {endIcon && <span id="endIcon">{endIcon}</span>}
     </StyledButton>
   );
 };

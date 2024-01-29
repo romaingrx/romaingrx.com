@@ -148,13 +148,18 @@ export default function DesignPage() {
           <h1 className="font-wise text-5xl">Buttons</h1>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <Button variant="primary">Primary</Button>
-            <Button variant="primary" endIcon={<ExternalArrowIcon />}>
+            <Button variant="primary" endIcon={<ExternalArrowIcon />} css={{
+              '--translateX': '2px;',
+              '--translateY': '2px;',
+            }}>
               Primary
             </Button>
             <Button variant="primary" disabled>
               Disabled
             </Button>
-            <Button variant="primary" contentType="icon">
+            <Button variant="primary" contentType="icon" css={{
+              '--translateX': '2px;',
+            }}>
               <ArrowIcon />
             </Button>
             <Button variant="primary" contentType="icon" disabled>

@@ -1,7 +1,6 @@
 import { styled } from '@/design';
 
 const StyledButton = styled('button', {
-  position: 'relative',
   display: 'flex',
   gap: 'var(--space-2)',
   alignItems: 'center',
@@ -44,6 +43,20 @@ const StyledButton = styled('button', {
   },
   '&:disabled': {
     cursor: 'not-allowed',
+  },
+
+  '#startIcon, #endIcon': {
+    transition: 'transform .4s',
+  },
+  '&:not(:disabled)': {
+    '&:hover #startIcon, &:focus #startIcon': {
+      transform:
+        'translateX(calc(var(--translateX, 0px) * -1)) translateY(calc(var(--translateY, 0px) * -1));',
+    },
+    '&:hover #endIcon, &:focus #endIcon': {
+      transform:
+        'translateX(var(--translateX, 0px)) translateY(calc(var(--translateY, 0px) * -1));',
+    },
   },
 
   variants: {
@@ -110,8 +123,16 @@ const StyledButton = styled('button', {
     contentType: {
       normal: {},
       icon: {
-        aspectRatio: '1',
-        padding: '11px',
+        '#children': {
+          transition: 'transform .4s',
+        },
+
+        '&:not(:disabled)': {
+          '&:hover #children, &:focus #children': {
+            transform:
+              'translateX(var(--translateX, 0px)) translateY(var(--translateY, 0px));',
+          },
+        },
 
         '&:hover': {
           '&:not(:disabled)': {
