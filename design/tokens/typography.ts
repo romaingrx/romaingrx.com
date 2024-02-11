@@ -15,6 +15,7 @@ export const fontSizes = {
     '--font-size-5': '1.25rem',
     '--font-size-6': '1.5rem',
     '--font-size-7': '2rem',
+    '--font-size-8': '2.5rem',
 };
 
 export const fontWeights = {

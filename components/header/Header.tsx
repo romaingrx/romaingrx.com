@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import DesktopNavigation from './DesktopNavigation';
+import DesktopHeader from './Desktop';
 
 export type PageProps = {
   name: string;
@@ -28,16 +28,16 @@ export const pages = [
 export default function Header(): JSX.Element {
   return (
     <>
-      <header className="pointer-events-none relative z-50 flex flex-col h-12">
+      <header className="pointer-events-none relative z-50 flex h-12 flex-col">
         <div className="top-0 z-10">
           <div className="" id="container">
             <div className="flex gap-4">
-                <div className="relative flex flex-1 justify-end md:justify-center font-wise">
-                  <DesktopNavigation
-                    pages={pages}
-                    className="pointer-events-auto block"
-                  />
-                </div>
+              <div className="relative flex flex-1 justify-end font-wise md:justify-center">
+                <DesktopHeader
+                  pages={pages}
+                  className="pointer-events-auto block"
+                />
+              </div>
             </div>
           </div>
         </div>

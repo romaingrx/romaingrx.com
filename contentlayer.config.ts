@@ -24,7 +24,7 @@ export default makeSource({
       [rehypeKatex],
       [rehypeSlug],
       [withToc],
-      [withTocExport, { name: 'toc' }],
+      [withTocExport],
       [
         rehypeAutolinkHeadings,
         {

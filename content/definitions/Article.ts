@@ -4,6 +4,7 @@ import Tag from './Tag';
 import Category from './Category';
 import Author from './Author';
 import Image from './Image';
+import GithubSlugger from 'github-slugger';
 
 const Article = defineDocumentType(() => ({
   name: 'Article',
@@ -70,6 +71,25 @@ const Article = defineDocumentType(() => ({
       type: 'string',
       description: 'The slug of the article',
       resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx$/, ''),
+    },
+    headings: {
+      type: 'json',
+      resolve: async (doc) => {
+        const slugger = new GithubSlugger();
+        const regXHeader = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
+        const headings = Array.from(doc.body.raw.matchAll(regXHeader)).map(
+          ({ groups }) => {
+            const flag = groups?.flag;
+            const content = groups?.content;
+            return {
+              level: flag?.length || 0,
+              text: content,
+              slug: content ? slugger.slug(content) : undefined, // Should probably be a more robust slugger
+            };
+          },
+        );
+        return headings;
+      },
     },
   },
 }));

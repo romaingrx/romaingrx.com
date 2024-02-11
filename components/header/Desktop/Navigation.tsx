@@ -4,8 +4,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import HideOnScroll from '../core/HideOnScroll';
+import { useRef } from 'react';
+import HideOnScroll from '@/components/core/HideOnScroll';
 import { useBreakpoint } from '@/hooks/tailwind';
 
 type Props = {

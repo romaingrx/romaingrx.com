@@ -4,7 +4,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import ClientThemeProvider from '@/components/providers/theme-provider';
 import AnalyticsWrapper from '@/components/Analytics';
 import Header from '@/components/header/Header';
-import Footer from '@/components/footer/Footer';
+import Footer from '@/components/footer';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFontAwesome, fas } from '@fortawesome/free-solid-svg-icons';
 library.add(fas, faFontAwesome);

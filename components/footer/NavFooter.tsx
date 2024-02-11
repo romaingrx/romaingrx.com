@@ -1,8 +1,12 @@
+"use client"
 import Link from 'next/link';
+import { pages } from '../header/Header';
+import { usePathname } from 'next/navigation';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import clsx from 'clsx';
 import XIcon from '@/components/core/Icon/x';
 import { VR } from '@/components/core/base';
-import clsx from 'clsx';
+import { useBreakpoint } from '@/hooks/tailwind';
 
 function NavLink({
   href,
@@ -13,11 +17,17 @@ function NavLink({
   children: React.ReactNode;
   className?: string;
 }): JSX.Element {
+  const isActive = usePathname() === href;
   return (
     <>
       <Link
         href={href}
-        className={clsx('hover:text-romaingrx-brand', className)}
+        className={clsx(
+          className,
+          isActive
+            ? 'text-bob-500 dark:text-bob-400'
+            : 'hover:text-bob-500 dark:hover:text-bob-400',
+        )}
       >
         {children}
       </Link>
@@ -25,7 +35,9 @@ function NavLink({
   );
 }
 
+
 export default function Footer(): JSX.Element {
+  const { isBelowMd } = useBreakpoint('md')
   return (
     <>
       <footer className="mt-32 max-h-full">
@@ -33,27 +45,30 @@ export default function Footer(): JSX.Element {
           <div className="flex flex-col justify-between gap-2 md:flex-row">
             <div className="flex flex-row justify-between md:flex-grow">
               <div className="flex flex-row justify-start gap-2 font-wise">
-                <NavLink href="/">Home</NavLink>
-                <NavLink href="/design">Design</NavLink>
+                {pages.map(({ name, href }, id) => (
+                  <>
+                    <NavLink href={href} key={id}>
+                      {name}
+                    </NavLink>
+                  </>
+                ))}
               </div>
-              <div className="flex flex-col justify-center gap-2 md:flex-row">
-                <div className="flex flex-row justify-end gap-2">
+              <div className="flex flex-col md:flex-row justify-center gap-2">
+                <div className='flex flex-row justify-end gap-2'>
                   <Link href="https://github.com/romaingrx">
-                    <FaGithub className="h-full" />
+                    <FaGithub className='h-full' />
                   </Link>
                   <Link href="https://x.com/_romaingrx">
-                    <XIcon className="h-full" />
+                    <XIcon className='h-full' />
                   </Link>
                   <Link href="https://www.linkedin.com/in/romaingraux">
-                    <FaLinkedin className="h-full" />
+                    <FaLinkedin className='h-full' />
                   </Link>
                 </div>
-                <div className="hidden md:flex">
-                  <VR />
-                </div>
+                {!isBelowMd && <VR />}
               </div>
             </div>
-            <span className="flex flex-col justify-center text-center text-xs text-zinc-600 dark:text-zinc-300">
+            <span className="text-zinc-600 dark:text-zinc-300 text-xs text-center flex flex-col justify-center">
               Made with ❤️‍🔥 ️by romaingrx © {new Date().getFullYear()}
             </span>
           </div>

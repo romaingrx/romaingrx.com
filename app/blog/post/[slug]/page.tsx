@@ -1,6 +1,7 @@
 import { allArticles } from '@/.contentlayer/generated';
 import { ArticleLayout } from '@/components/core/layout';
 import ArticleComponent from '@/components/mdx/Article';
+import ArticleTOC from '@/components/mdx/ArticleTOC';
 import { Metadata, ResolvingMetadata } from 'next';
 
 export async function generateStaticParams() {
@@ -66,6 +67,7 @@ export default function BlogPostPage({
   return (
     <>
       <ArticleLayout>
+        <ArticleTOC article={article} />
         <ArticleComponent article={article} />
       </ArticleLayout>
     </>
