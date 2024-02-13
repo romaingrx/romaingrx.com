@@ -7,16 +7,14 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import HideOnScroll from '@/components/core/HideOnScroll';
 import { useBreakpoint } from '@/hooks/tailwind';
+import { PageProps } from '../Header';
 
 type Props = {
-  pages: {
-    name: string;
-    href: string;
-  }[];
+  pages: PageProps[];
   className: string;
 };
 
-function NavLink({
+export function NavLink({
   href,
   children,
 }: {
@@ -26,31 +24,29 @@ function NavLink({
   const isActive = usePathname() === href;
   return (
     <>
-      <li>
-        <Link
-          href={href}
-          className={clsx(
-            'relative block px-3 py-2 transition',
-            'hover:text-bob-500 dark:hover:text-bob-400',
-            isActive && 'text-bob-500 dark:text-bob-400',
-          )}
-        >
-          {isActive && (
-            <motion.div
-              layoutId={'nav'}
-              className="absolute inset-0 m-1 rounded-md bg-bob-500/20 dark:bg-bob-400/20"
-              transition={{
-                type: 'spring',
-                stiffness: 500,
-                damping: 30,
-                duration: 1.0,
-                ease: [0.83, -0.01, 0.16, 0.99],
-              }}
-            />
-          )}
-          {children}
-        </Link>
-      </li>
+      <Link
+        href={href}
+        className={clsx(
+          'relative block py-2 transition',
+          'hover:text-bob-500 dark:hover:text-bob-400',
+          isActive && 'text-bob-500 dark:text-bob-400',
+        )}
+      >
+        {isActive && (
+          <motion.div
+            layoutId={'nav'}
+            className="absolute inset-0 m-1 rounded-md bg-bob-500/20 dark:bg-bob-400/20"
+            transition={{
+              type: 'spring',
+              stiffness: 500,
+              damping: 30,
+              duration: 1.0,
+              ease: [0.83, -0.01, 0.16, 0.99],
+            }}
+          />
+        )}
+        {children}
+      </Link>
     </>
   );
 }
@@ -68,20 +64,18 @@ export default function DesktopNavigation({
     offset: ['start start', 'end start'],
   });
 
-  const timing = [0.5, 0.75]
+  const timing = [0.5, 0.75];
   const marginTop = useTransform(scrollYProgress, timing, ['0rem', '1.5rem']);
   const height = useTransform(scrollYProgress, timing, ['3rem', '2.5rem']);
   const width = useTransform(scrollYProgress, timing, ['100vw', '0vw']);
-  const borderRadius = useTransform(
-    scrollYProgress,
-    timing,
-    ['0rem', '0.75rem'],
-  );
-  const borderWidth = useTransform(
-    scrollYProgress,
-    timing,
-    ['0rem', '0.05rem'],
-  );
+  const borderRadius = useTransform(scrollYProgress, timing, [
+    '0rem',
+    '0.75rem',
+  ]);
+  const borderWidth = useTransform(scrollYProgress, timing, [
+    '0rem',
+    '0.05rem',
+  ]);
   const logoWidth = useTransform(scrollYProgress, timing, ['32px', '0px']);
   const logoOpacity = useTransform(scrollYProgress, timing, [1, 0]);
 
@@ -100,7 +94,7 @@ export default function DesktopNavigation({
       >
         <HideOnScroll active={isBelowMd}>
           <motion.ul
-            className="text-md flex items-center bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
+            className="text-md flex items-center gap-3 bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
             style={{
               height,
               borderRadius,
@@ -124,9 +118,9 @@ export default function DesktopNavigation({
               </Link>
             </motion.li>
             {pages.map(({ name, href }) => (
-              <NavLink key={href} href={href}>
-                {name}
-              </NavLink>
+              <li key={name}>
+                <NavLink href={href}>{name}</NavLink>
+              </li>
             ))}
           </motion.ul>
         </HideOnScroll>

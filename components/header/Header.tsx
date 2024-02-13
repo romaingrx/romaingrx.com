@@ -28,7 +28,7 @@ export const pages = [
 export default function Header(): JSX.Element {
   return (
     <>
-      <header className="pointer-events-none relative z-50 flex h-12 flex-col">
+      <header className="relative z-50 flex h-12 flex-col">
         <div className="top-0 z-10">
           <div className="" id="container">
             <div className="flex gap-4">

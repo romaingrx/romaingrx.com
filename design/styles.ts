@@ -25,6 +25,13 @@ export const globalStyles = globalCss({
     ...fontSizes,
     ...fontWeights,
   },
+
+  '@media screen and (prefers-reduced-motion: no-preference)': {
+    html: {
+      'scroll-behavior': 'smooth',
+    },
+  },
+
   ...Object.fromEntries(selectors.map((selector) => [selector, global])),
   ...lightTheme,
   ...darkTheme,
