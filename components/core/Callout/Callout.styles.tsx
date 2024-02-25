@@ -8,7 +8,8 @@ const StyledCallout = styled('aside', {
   margin: '15px 20px',
   padding: '5px 15px',
   color: 'var(--romaingrx-colors-typeface-primary)',
-  background: 'var(--background)',
+  background:
+    'linear-gradient(to right, var(--background), 95%, rgba(255, 255, 255, 0))',
   // border: '1px solid var(--romaingrx-colors-emphasis)',
   borderRadius: 'var(--space-1)',
 
@@ -19,7 +20,7 @@ const StyledCallout = styled('aside', {
     top: '0',
     bottom: '0',
     width: '5px',
-    // borderRadius: '5px 0 0 5px',
+    borderRadius: '5px 0 0 5px',
     background: 'var(--sidebar-background, var(--romaingrx-colors-brand))',
   },
 

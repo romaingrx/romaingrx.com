@@ -17,9 +17,12 @@ import {
   Card,
   H1,
   H2,
+  Pill,
 } from '@/components/core';
-import { CardBody, CardHeader } from '@nextui-org/react';
-import Pill from '@/components/core/Pill';
+import { CardBody } from '@nextui-org/card';
+import { FaTrash } from 'react-icons/fa';
+
+const CALLOUT_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
 
 function ColorPill({ color, name }: { color: string; name: string }) {
   return (
@@ -123,18 +126,20 @@ export default function DesignPage() {
           </div>
           <h1 className="font-wise text-5xl">Callouts</h1>
           <div className="grid grid-cols-1 md:grid-cols-2">
-            <Callout variant="info">Info</Callout>
-            <Callout variant="important">Important</Callout>
-            <Callout variant="warning">Warning</Callout>
-            <Callout variant="danger">Danger</Callout>
-            <Callout variant="success">Success</Callout>
+            <Callout variant="info">{CALLOUT_TEXT}</Callout>
+            <Callout variant="important">{CALLOUT_TEXT}</Callout>
+            <Callout variant="warning">{CALLOUT_TEXT}</Callout>
+            <Callout variant="danger">{CALLOUT_TEXT}</Callout>
+            <Callout variant="success">{CALLOUT_TEXT}</Callout>
             <Callout
-              label={<WarningIcon />}
+              icon={<FaTrash />}
+              label={'Custom callout'}
               css={{
-                '--icon-color': 'hsl(var(--palette-orange-10))',
+                '--icon-color': 'hsl(var(--palette-forest-50))',
+                '--background': 'hsl(var(--palette-pink-05))',
               }}
             >
-              Custom
+              {CALLOUT_TEXT}
             </Callout>
           </div>
           <BlockQuote screenWidth={true}>
@@ -149,18 +154,26 @@ export default function DesignPage() {
           <h1 className="font-wise text-5xl">Buttons</h1>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <Button variant="primary">Primary</Button>
-            <Button variant="primary" endIcon={<ExternalArrowIcon />} css={{
-              '--translateX': '2px;',
-              '--translateY': '2px;',
-            }}>
+            <Button
+              variant="primary"
+              endIcon={<ExternalArrowIcon />}
+              css={{
+                '--translateX': '2px;',
+                '--translateY': '2px;',
+              }}
+            >
               Primary
             </Button>
             <Button variant="primary" disabled>
               Disabled
             </Button>
-            <Button variant="primary" contentType="icon" css={{
-              '--translateX': '2px;',
-            }}>
+            <Button
+              variant="primary"
+              contentType="icon"
+              css={{
+                '--translateX': '2px;',
+              }}
+            >
               <ArrowIcon />
             </Button>
             <Button variant="primary" contentType="icon" disabled>
