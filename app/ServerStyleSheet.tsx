@@ -16,6 +16,10 @@ export function ServerStylesheet({ children }: { children?: JSX.Element }) {
         }
     });
 
-    globalStyles();
+    console.log("ServerStyleSheet")
+    if (typeof window !== 'undefined' ) {
+        console.log("ServerStyleSheet window")
+        globalStyles();
+    }
     return children ? <>{children}</> : null;
 }

@@ -67,8 +67,9 @@ export default function BlogPostPage({
   return (
     <>
       <ArticleLayout>
-        <ArticleTOC article={article} />
+        <div />
         <ArticleComponent article={article} />
+        <ArticleTOC article={article} />
       </ArticleLayout>
     </>
   );

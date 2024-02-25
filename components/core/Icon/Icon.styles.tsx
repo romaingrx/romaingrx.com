@@ -3,6 +3,7 @@ import { styled, VariantProps } from '@/design';
 export const StyledSVG = styled('svg', {
   variants: {
     variant: {
+      none: {},
       default: { stroke: 'currentColor', fill: 'none' },
       primary: {
         stroke: 'var(--romaingrx-colors-typeface-primary)',
@@ -104,7 +105,7 @@ export const StyledSVG = styled('svg', {
   defaultVariants: {
     variant: 'default',
     outline: true,
-    size: "5",
+    size: '5',
   },
 });
 

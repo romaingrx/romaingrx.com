@@ -27,7 +27,7 @@ export function NavLink({
       <Link
         href={href}
         className={clsx(
-          'relative block py-2 transition',
+          'relative block py-2 px-3 transition',
           'hover:text-bob-500 dark:hover:text-bob-400',
           isActive && 'text-bob-500 dark:text-bob-400',
         )}
@@ -94,7 +94,7 @@ export default function DesktopNavigation({
       >
         <HideOnScroll active={isBelowMd}>
           <motion.ul
-            className="text-md flex items-center gap-3 bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
+            className="text-md flex items-center bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-sm dark:text-zinc-200"
             style={{
               height,
               borderRadius,

@@ -7,6 +7,7 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  useVelocity,
 } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,12 +18,11 @@ import { Article } from '@/.contentlayer/generated';
 import { PageProps } from '../Header';
 import { NavLink } from './Navigation';
 import { ArrowIcon } from '@/components/core/Icon/Icon';
-import { Button } from '@/components/core';
 
-const variants: Variants = {
+const variants = (isScrollingDown: boolean): Variants => ({
   initial: {
     opacity: 0,
-    y: -10,
+    y: isScrollingDown ? 10 : -10,
   },
   animate: {
     opacity: 1,
@@ -30,9 +30,9 @@ const variants: Variants = {
   },
   exit: {
     opacity: 0,
-    y: -10,
+    y: isScrollingDown ? 10 : -10,
   },
-};
+});
 
 export default function BlogHeader({
   pages,
@@ -46,6 +46,7 @@ export default function BlogHeader({
 
   // TODO : review the timing to make it more snappy (probably with a function instead of an smooth animation)
   const { scrollY, scrollYProgress } = useScroll();
+  const scrollYVelocity = useVelocity(scrollYProgress);
   const scrollYProgressSpring = useSpring(scrollYProgress, {
     stiffness: 400,
     damping: 90,
@@ -53,6 +54,12 @@ export default function BlogHeader({
 
   // const hideonScroll = useTransform(scrollY, (value) => value > 300);
   let progress = useTransform(scrollYProgressSpring, [0, 1], ['0%', '100%']);
+
+  const [scrollDown, setScrollDown] = useState(false);
+  scrollYVelocity.on('change', (value) => {
+    setScrollDown(value > 0);
+    console.log(value);
+  });
 
   const [showTitle, setShowTitle] = useState(false);
   scrollY.on('change', (value) => {
@@ -72,27 +79,19 @@ export default function BlogHeader({
         )}
       >
         <HideOnScroll active={isBelowMd}>
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.ul
-              className="text-md flex items-center gap-3 bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-md dark:text-zinc-200"
+              className="text-md flex items-center bg-romaingrx-header px-3 text-zinc-800 shadow-lg shadow-zinc-800/5 backdrop-blur-md dark:text-zinc-200"
               style={{
                 height: '3rem',
               }}
             >
               <motion.li
                 className="my-auto"
-                initial={{
-                  opacity: 0,
-                  x: -10,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  x: -10,
-                }}
+                variants={variants(scrollDown)}
+                initial="initial"
+                animate="animate"
+                exit="exit"
               >
                 <Link href="/">
                   <Image
@@ -104,40 +103,28 @@ export default function BlogHeader({
                 </Link>
               </motion.li>
               {showTitle ? (
-                <>
-                  <motion.li
-                    className="my-auto flex"
-                    variants={variants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
+                <motion.li
+                  className="my-auto px-3"
+                  variants={variants(scrollDown)}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <a href="#" className="group flex gap-3">
                     <span className="my-auto text-lg">{article.title}</span>
-                  </motion.li>
-                  <motion.li
-                    className="my-auto"
-                    variants={variants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    whileHover={{
-                      scale: 1.1,
-                      y: -2,
-                    }}
-                  >
-                    <a
-                      className="my-auto transition-colors duration-300 hover:text-romaingrx-brand"
-                      href="#"
-                    >
-                      <ArrowIcon angle={90} size={'4'} title="Go back to top" />
-                    </a>
-                  </motion.li>
-                </>
+                    <ArrowIcon
+                      angle={90}
+                      size={'4'}
+                      title="Go back to top"
+                      className="my-auto origin-center transform transition-all duration-300 group-hover:translate-y-[-0.1rem] group-hover:scale-110 group-hover:text-romaingrx-brand"
+                    />
+                  </a>
+                </motion.li>
               ) : (
                 pages.map(({ name, href }) => (
                   <motion.li
                     className="my-auto"
-                    variants={variants}
+                    variants={variants(scrollDown)}
                     initial="initial"
                     animate="animate"
                     exit="exit"

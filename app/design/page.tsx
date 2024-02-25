@@ -124,13 +124,14 @@ export default function DesignPage() {
           <h1 className="font-wise text-5xl">Callouts</h1>
           <div className="grid grid-cols-1 md:grid-cols-2">
             <Callout variant="info">Info</Callout>
+            <Callout variant="important">Important</Callout>
             <Callout variant="warning">Warning</Callout>
             <Callout variant="danger">Danger</Callout>
             <Callout variant="success">Success</Callout>
             <Callout
               label={<WarningIcon />}
               css={{
-                '--icon-background': 'hsl(var(--palette-orange-10))',
+                '--icon-color': 'hsl(var(--palette-orange-10))',
               }}
             >
               Custom

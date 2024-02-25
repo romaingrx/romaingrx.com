@@ -1,65 +1,71 @@
-import { styled } from "@/design";
-
-export const StyledCalloutIconWrapper = styled('div', {
-    position: 'absolute',
-    display: 'flex',
-    top: '0',
-    right: '0',
-    transform: 'translate(35%, -35%)',
-    borderRadius: '50%',
-    padding: '8px',
-    width: 'fit-content',
-    color: 'var(--romaingrx-colors-body)',
-    border: '8px solid var(--romaingrx-colors-body)',
-    background: 'var(--icon-background, var(--romaingrx-colors-brand))',
-
-    variants: {
-        variant: {
-            info: {
-                '--icon-background': 'var(--romaingrx-colors-brand)',
-            },
-            warning: {
-                '--icon-background': 'var(--romaingrx-colors-warning)',
-            },
-            danger: {
-                '--icon-background': 'var(--romaingrx-colors-danger)',
-            },
-            success: {
-                '--icon-background': 'var(--romaingrx-colors-success)',
-            },
-        },
-    },
-});
+import { styled } from '@/design';
 
 const StyledCallout = styled('aside', {
-    position: 'relative',
-    margin: '15px 20px',
-    padding: '30px 30px',
-    color: 'var(--romaingrx-colors-typeface-primary)',
-    border: '1px solid var(--romaingrx-colors-emphasis)',
-    borderRadius: 'var(--space-1)',
-    backgroundColor: 'var(--callout-background, var(--romaingrx-colors-emphasis))',
+  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--space-1)',
+  margin: '15px 20px',
+  padding: '5px 15px',
+  color: 'var(--romaingrx-colors-typeface-primary)',
+  background: 'var(--background)',
+  // border: '1px solid var(--romaingrx-colors-emphasis)',
+  borderRadius: 'var(--space-1)',
 
-    "& p": {
-        margin: '0',
-    },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: '0',
+    top: '0',
+    bottom: '0',
+    width: '5px',
+    // borderRadius: '5px 0 0 5px',
+    background: 'var(--sidebar-background, var(--romaingrx-colors-brand))',
+  },
 
-    variants: {
-        variant: {
-            info: {
-                '--callout-background': 'var(--romaingrx-colors-emphasis)',
-            },
-            warning: {
-                '--callout-background': 'var(--romaingrx-colors-warning-emphasis)',
-            },
-            danger: {
-                '--callout-background': 'var(--romaingrx-colors-danger-emphasis)',
-            },
-            success: {
-                '--callout-background': 'var(--romaingrx-colors-success-emphasis)',
-            },
-        },
+  '& p': {
+    margin: '0',
+  },
+
+  '& #header': {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: 'var(--font-size-1)',
+    fontWeight: 'var(--font-weight-bold)',
+    gap: 'var(--space-2)',
+    marginLeft: '5px',
+    color: 'var(--icon-color)',
+  },
+
+  variants: {
+    variant: {
+      info: {
+        '--background': 'var(--romaingrx-colors-emphasis)',
+        '--icon-color': 'var(--romaingrx-colors-brand)',
+        '--sidebar-background': 'var(--romaingrx-colors-brand)',
+      },
+      important: {
+        '--background': 'var(--romaingrx-colors-emphasis)',
+        '--icon-color': 'var(--romaingrx-colors-brand)',
+        '--sidebar-background': 'var(--romaingrx-colors-brand)',
+      },
+      warning: {
+        '--background': 'var(--romaingrx-colors-warning-emphasis)',
+        '--icon-color': 'var(--romaingrx-colors-warning)',
+        '--sidebar-background': 'var(--romaingrx-colors-warning)',
+      },
+      danger: {
+        '--background': 'var(--romaingrx-colors-danger-emphasis)',
+        '--icon-color': 'var(--romaingrx-colors-danger)',
+        '--sidebar-background': 'var(--romaingrx-colors-danger)',
+      },
+      success: {
+        '--background': 'var(--romaingrx-colors-success-emphasis)',
+        '--icon-color': 'var(--romaingrx-colors-success)',
+        '--sidebar-background': 'var(--romaingrx-colors-success)',
+      },
     },
+  },
 });
 
-export { StyledCallout }
+export { StyledCallout };
