@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { CSS } from '@/design';
 import React from 'react';
@@ -57,19 +57,9 @@ const Heading = (props: HeadingProps) => {
   );
 };
 
-export const H1 = React.forwardRef<
-  React.ElementRef<'h1'>,
-  ShortHandHeadingProps
->((props, ref) => (
-  <Heading
-    {...props}
-    ref={ref}
-    as="h1"
-    size="4"
-    spaced={false}
-    variant="primary"
-  />
-));
+export const H1 = (props: ShortHandHeadingProps) => (
+  <Heading {...props} as="h1" size="4" spaced={false} variant="primary" />
+);
 
 H1.displayName = 'H1';
 

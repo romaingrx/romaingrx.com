@@ -32,7 +32,7 @@ const StyledLink = styled(Link, {
         '--line': 'var(--romaingrx-colors-brand)',
         '--line-active': 'var(--romaingrx-colors-brand)',
 
-        svg: {
+        '& svg': {
           position: 'absolute;',
           width: '120%;',
           height: '140%;',

@@ -12,10 +12,14 @@ import {
   Callout,
   BlockQuote,
 } from '@/components/core';
+import type { MDXComponents } from 'mdx/types';
+import { Component, DetailedHTMLProps } from 'react';
+import { ArrowIcon } from '../core/Icon/Icon';
+import clsx from 'clsx';
 
 const Pre = dynamic(() => import('@/components/core/CodeBlock/Pre'));
 
-const mdxComponents = {
+const mdxComponents: MDXComponents = {
   pre: Pre,
   span: (props: React.HTMLAttributes<HTMLSpanElement>) => {
     if (props.className?.split(' ').includes('math')) {
@@ -23,7 +27,24 @@ const mdxComponents = {
     }
     return <span {...props} />;
   },
-  a: Link,
+  a: (
+    props: DetailedHTMLProps<
+      React.AnchorHTMLAttributes<HTMLAnchorElement>,
+      HTMLAnchorElement
+    >,
+  ) => {
+    if (!props.href) return <a {...props} />;
+    return (
+      <Link
+        href={props.href}
+        variant={'underline'}
+        className={clsx('inline-block w-fit', props.className)}
+        {...props}
+      >
+        {props.children}
+      </Link>
+    );
+  },
   Callout,
   BlockQuote,
   h1: H1,

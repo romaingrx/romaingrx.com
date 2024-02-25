@@ -20,7 +20,7 @@ function Link({ children, variant, startIcon, endIcon, ...props }: LinkProps) {
         {endIcon && <span id="endIcon">{endIcon}</span>}
       </span>
       {isUnderline && (
-        <svg viewBox="0 0 70 36" preserveAspectRatio="none">
+        <svg viewBox="0 0 70 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d={
               `M8.9739 30.8153` +

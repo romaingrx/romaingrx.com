@@ -5,7 +5,6 @@ import { default as CoreLink } from '@/components/core/Link';
 import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
-import Image from 'next/image';
 import { default as _Link } from '../core/Link';
 import mdxComponents from './Components';
 import Pill from '@/components/core/Pill';
@@ -54,7 +53,7 @@ function ArticleBody({ article }: { article: Article }): JSX.Element {
   return (
     <>
       <div className="max-w-none break-before-auto">
-        <MDXComponent components={mdxComponents as any} />
+        <MDXComponent components={mdxComponents} />
       </div>
     </>
   );
