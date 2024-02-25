@@ -58,7 +58,6 @@ export default function BlogHeader({
   const [scrollDown, setScrollDown] = useState(false);
   scrollYVelocity.on('change', (value) => {
     setScrollDown(value > 0);
-    console.log(value);
   });
 
   const [showTitle, setShowTitle] = useState(false);

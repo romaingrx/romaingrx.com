@@ -67,7 +67,6 @@ const CalloutHeader = (props: {
 
 const Callout = (props: CalloutProps) => {
   const { children, variant, icon, label, css } = props;
-  console.log({ variant, icon, label });
 
   if (variant && !defaultVariants[variant]) {
     throw new Error(`Callout: Invalid variant "${variant}"`);

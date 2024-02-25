@@ -72,13 +72,13 @@ export default function ArticleTOC({
 
   return (
     <div className="sticky top-8 hidden h-[50vh] gap-3 pt-16 lg:flex ">
-      <div className="relative w-[0.15rem] bg-romaingrx-emphasis">
+      <div className="relative w-[0.15rem] overflow-hidden rounded-sm bg-romaingrx-emphasis">
         <motion.div
           className="absolute left-0 top-0 h-full w-full bg-romaingrx-brand"
           style={{ scaleY: readingProgress, originY: 0 }}
         />
       </div>
-      <ul className="h-fit flex-col gap-2:">
+      <ul className="gap-2: h-fit flex-col">
         {headings.map(({ level, text, slug, active }: Heading) => (
           <li
             key={slug}
@@ -92,7 +92,7 @@ export default function ArticleTOC({
                   window.scroll({
                     top: elem.offsetTop + OFFSET,
                     left: 0,
-                    behavior: 'smooth'
+                    behavior: 'smooth',
                   });
                   elem.style.width = 'fit-content';
 
