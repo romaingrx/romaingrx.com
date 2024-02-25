@@ -47,11 +47,6 @@ export default function Math({
           <StyledMath
             ref={spanRef}
             className="relative"
-            css={{
-              '.katex-html': {
-                display: 'none',
-              },
-            }}
           >
             {children}
           </StyledMath>
