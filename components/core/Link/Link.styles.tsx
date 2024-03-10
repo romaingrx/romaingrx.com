@@ -2,10 +2,10 @@ import { VariantProps, styled } from '@/design';
 import Link from 'next/link';
 
 const StyledLink = styled(Link, {
-  position: 'relative;',
-  decoration: 'none;',
-  color: 'inherit;',
-  width: 'fit-content;',
+  position: 'relative',
+  display: 'inline-block',
+  color: 'inherit',
+  width: 'fit-content',
   // margin: '0 var(--spacing, 0px);',
   // transition: 'margin .25s;',
   '#box': {
@@ -17,7 +17,8 @@ const StyledLink = styled(Link, {
     transition: 'transform .4s, color .1s;',
   },
   '&:hover #startIcon, &:focus #startIcon': {
-    transform: 'translateX(calc(var(--translateX, 0px) * -1)) translateY(calc(var(--translateY, 0px) * -1));',
+    transform:
+      'translateX(calc(var(--translateX, 0px) * -1)) translateY(calc(var(--translateY, 0px) * -1));',
     color: 'var(--romaingrx-colors-brand)',
   },
   '&:hover #endIcon, &:focus #endIcon': {
