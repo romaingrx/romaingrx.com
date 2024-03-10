@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 
 interface GradientElement {
@@ -12,6 +13,7 @@ interface GradientElement {
 interface GradientBackgroundProps {
   elements?: GradientElement[];
   children: React.ReactNode;
+  className?: string;
 }
 
 export function createGradientElem({
@@ -66,10 +68,11 @@ export default function GradientBackground({
       animationClockwise: false,
     },
   ],
+  className,
   children,
 }: GradientBackgroundProps) {
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div className={cn('relative h-full w-full', className)}>
       <motion.div
         id="gradient-container"
         className="absolute inset-0 z-[1] mx-auto my-auto flex h-full w-full items-center justify-center"
@@ -91,7 +94,7 @@ export default function GradientBackground({
         <motion.div
           id="gradient-panel"
           className={
-            'before:bg-size[10%] dark:before:bg-[url(/noise/dark.png)]before:bg-[url(/noise/light.png) relative z-[2] flex h-full w-full items-center justify-center blur-sm before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:aspect-square before:bg-repeat before:bg-blend-soft-light before:blur-sm'
+            "before:bg-size[10%] dark:before:bg-[url(/noise/dark.png)]before:bg-[url(/noise/light.png) relative z-[2] flex h-full w-full items-center justify-center blur-sm before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:aspect-square before:bg-repeat before:bg-blend-soft-light before:content-['']"
           }
         >
           {elements.map((elem, index) =>

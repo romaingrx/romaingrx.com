@@ -50,7 +50,7 @@ export default function RootLayout({
         <ServerStylesheet />
       </head>
       <body
-        className={clsx('flex h-full min-h-screen flex-col bg-romaingrx-body')}
+        className={clsx('flex h-full min-h-screen flex-col bg-romaingrx-body overflow-x-clip')}
       >
         <ClientThemeProvider>
           <div className="relative">
