@@ -229,11 +229,11 @@ function ProjectsTimeline() {
             dotVariant="pulsating"
             description={
               <p>
-                We authored a paper on Second Order Jailbreak where we delved into
-                the risks posed by malignant intelligent actors spreading their
-                influence over networks of agents with varying intelligence and
-                motivations. We run experiments on a multi-agent environment
-                available&nbsp;
+                We authored a paper on Second Order Jailbreak where we delved
+                into the risks posed by malignant intelligent actors spreading
+                their influence over networks of agents with varying
+                intelligence and motivations. We run experiments on a
+                multi-agent environment available&nbsp;
                 <Link href="https://github.com/romaingrx/second-order-jailbreak">
                   here
                 </Link>
@@ -248,8 +248,8 @@ function ProjectsTimeline() {
                   here
                 </Link>
                 . We are currently working on a follow-up paper, which will
-                include a more detailed analysis of the risks and the strategies that can be used to
-                mitigate them.
+                include a more detailed analysis of the risks and the strategies
+                that can be used to mitigate them.
               </p>
             }
           />

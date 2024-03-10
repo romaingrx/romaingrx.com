@@ -33,6 +33,11 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)'],
         wise: ['var(--font-worldwise)'],
+        polysans: [
+          'var(--font-polysans-median)',
+          'var(--font-polysans-neutral)',
+          'var(--font-polysans-slim)',
+        ],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

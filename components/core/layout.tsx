@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 export function ArticleLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="my-6 grid w-full grid-cols-[1fr] flex-col gap-4 px-2 pt-16 md:px-4 md:pt-32 lg:grid-cols-[0fr_1fr_15rem] xl:grid-cols-[15rem_1fr_15rem] xl:gap-8">
+    <div className="my-6 grid w-full grid-cols-[1fr] flex-col gap-4 px-2 pt-8 md:px-4 md:pt-16 lg:grid-cols-[0fr_1fr_15rem] xl:grid-cols-[15rem_1fr_15rem] xl:gap-8">
       {children}
     </div>
   );

@@ -8,7 +8,18 @@ export { default as darkTheme } from './themes/romaingrx-dark';
 // fonts
 import inter from './fonts/inter';
 import worldWise from './fonts/worldwise';
-export const fonts = [inter, worldWise];
+import {
+  polySansSlim,
+  polySansNeutral,
+  polySansMedian,
+} from './fonts/polysans';
+export const fonts = [
+  inter,
+  worldWise,
+  polySansSlim,
+  polySansNeutral,
+  polySansMedian,
+];
 
 // stitches.config.ts
 export {

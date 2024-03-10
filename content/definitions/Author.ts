@@ -11,6 +11,11 @@ const Author = defineNestedType(() => ({
       description: 'The name of the author',
       required: true,
     },
+    handle: {
+      type: 'string',
+      description: 'The handle of the author',
+      required: true,
+    },
     url: {
       type: 'nested',
       of: URL,

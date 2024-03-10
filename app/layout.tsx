@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className={clsx('', ...fonts.map((font) => font.variable))} lang="en">
+    <html className={clsx('text-poly', ...fonts.map((font) => font.variable))} lang="en">
       <head>
         <ServerStylesheet />
       </head>
