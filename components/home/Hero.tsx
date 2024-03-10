@@ -6,6 +6,7 @@ import { ArrowIcon } from '../core/Icon/Icon';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
+import GradientBackground from '../core/GradientBackground';
 
 export default function HeroSection() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -23,8 +24,13 @@ export default function HeroSection() {
     <motion.section
       style={{ opacity }}
       ref={targetRef}
-      className="relative mb-[8rem] h-[40vh] py-16"
+      className="relative mb-[8rem] h-[50vh] py-16"
     >
+      <div className="absolute w-2/3 inset-0 z-[0] ml-auto">
+        <GradientBackground>
+          <div className="h-1/3 w-1/3" />
+        </GradientBackground>
+      </div>
       <motion.div
         style={{
           position,

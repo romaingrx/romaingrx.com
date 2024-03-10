@@ -91,6 +91,8 @@ const config: Config = {
         },
 
         'romaingrx-brand': 'var(--romaingrx-colors-brand)',
+        'romaingrx-brand-complementary':
+          'var(--romaingrx-colors-brand-complementary)',
         'romaingrx-body': 'var(--romaingrx-colors-body)',
         'romaingrx-header': 'var(--romaingrx-colors-header)',
         'romaingrx-emphasis': 'var(--romaingrx-colors-emphasis)',

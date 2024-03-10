@@ -3,12 +3,14 @@ import { Article } from '@/.contentlayer/generated';
 import { Variants, motion, useScroll, useSpring } from 'framer-motion';
 import useScrollSpy from 'react-use-scrollspy';
 import { RefObject, useEffect, useMemo, useState } from 'react';
+import clsx from 'clsx';
 
 interface Heading {
   level: number;
   text: string;
   slug: string;
   active?: boolean;
+  afterActive?: boolean;
 }
 
 const OFFSET = 150;
@@ -61,14 +63,20 @@ export default function ArticleTOC({
     offsetPx: -OFFSET,
   }) as number;
 
-  const headings: Heading[] = useMemo(
-    () =>
-      article.headings.map((heading: Heading, idx: number) => ({
+  const headings: Heading[] = useMemo(() => {
+    let afterActive = false;
+    return article.headings.map((heading: Heading, idx: number) => {
+      const active = idx === activeHeading;
+      if (active) {
+        afterActive = true;
+      }
+      return {
         ...heading,
-        active: idx === activeHeading,
-      })),
-    [article.headings, activeHeading],
-  );
+        active,
+        afterActive: afterActive && !active,
+      };
+    });
+  }, [article.headings, activeHeading]);
 
   return (
     <div className="sticky top-8 hidden h-[50vh] gap-3 pt-16 lg:flex ">
@@ -79,18 +87,22 @@ export default function ArticleTOC({
         />
       </div>
       <ul className="gap-2: h-fit flex-col">
-        {headings.map(({ level, text, slug, active }: Heading) => (
+        {headings.map(({ level, text, slug, active, afterActive }: Heading) => (
           <li
             key={slug}
             className={'flex w-fit flex-col gap-0 text-sm'}
             style={{ marginLeft: `${level - 1}rem` }}
           >
             <button
+              className={clsx(
+                afterActive ? 'text-default-500' : '',
+                "transition-colors"
+              )}
               onClick={() => {
                 const elem = document.getElementById(slug);
                 if (elem) {
                   window.scroll({
-                    top: elem.offsetTop + OFFSET,
+                    top: elem.offsetTop,
                     left: 0,
                     behavior: 'smooth',
                   });

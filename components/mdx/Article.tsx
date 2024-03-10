@@ -12,6 +12,7 @@ import { ArrowIcon } from '../core/Icon/Icon';
 import { VR } from '../core/base';
 import { Button, H1, Heading } from '../core';
 import 'katex/dist/katex.min.css';
+import { GetInTouchElem } from '../home/Contact';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -78,11 +79,11 @@ export default function ArticleComponent({
                 <h1 className="mx-auto font-polysans text-5xl font-semibold">
                   {article.title}
                 </h1>
-                <div className="flex w-full max-w-2xl justify-between">
+                <div className="flex w-full max-w-2xl justify-between gap-8 text-right">
                   <AuthorCard author={article.author} />
-                  <div className="flex flex-col items-baseline justify-start my-auto">
+                  <div className="my-auto flex flex-col items-baseline justify-start text-right">
                     <time
-                      className="text-sm text-default-500"
+                      className="ml-auto text-sm text-default-500"
                       dateTime={localeDateString(article.date)}
                     >
                       {localeDateString(article.date)}
@@ -93,7 +94,7 @@ export default function ArticleComponent({
                       delay={0}
                       closeDelay={0}
                     >
-                      <span className="text-sm text-zinc-500">
+                      <span className="ml-auto text-sm text-default-500">
                         {article.readingTime.text}
                       </span>
                     </Tooltip>
@@ -106,15 +107,18 @@ export default function ArticleComponent({
           </header>
           <ArticleBody article={article} />
           <footer className="mt-6 flex flex-col gap-2">
-            <div className="flex justify-between">
-              <div className="flex flex-wrap gap-2">
-                {article.tags.map((tag) => (
-                  <TagChip key={tag.name} tag={tag.name} />
-                ))}
-              </div>
-              <div className="flex gap-2"></div>
+            <div className="flex flex-col gap-4">
+              <GetInTouchElem />
+              <span className="text-xs text-romaingrx-typeface-secondary">
+                <CoreLink
+                  href="/blog"
+                  variant="none"
+                  startIcon={<ArrowIcon angle={180} />}
+                >
+                  Back to blog
+                </CoreLink>
+              </span>
             </div>
-            <AuthorCard author={article.author} />
           </footer>
         </article>
       </div>

@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { emailRegex } from '@/components/core/constants';
 import { sendMessage } from '@/lib/notion';
 import Pill from '@/components/core/Pill';
+import { usePathname } from 'next/navigation';
 
 interface FormData {
   message: string;
@@ -23,15 +24,17 @@ export default function ContactMeForm() {
     formState: { errors },
   } = useForm<FormData>();
 
+  const pathname = usePathname();
+
   const [showEmail, setShowEmail] = useState(false);
   const [done, setDone] = useState(false);
   const [defaultMessage, setDefaultMessage] = useLocalStorage(
-    'contactme-message',
+    `[${pathname}]:contactme-message`,
     '',
   );
 
   const [defaultEmail, setDefaultEmail] = useLocalStorage(
-    'contactme-email',
+    `[${pathname}]:contactme-email`,
     '',
   );
 
