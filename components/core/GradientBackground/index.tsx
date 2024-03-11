@@ -25,13 +25,13 @@ export function createGradientElem({
   const initialPosition =
     Array(2)
       .fill(0)
-      .map(() => Math.floor((Math.random() - 0.5) * 50))
+      .map(() => Math.floor(Math.random() * 40) * (animationClockwise ? 1 : -1))
       .join('% ') + '%';
 
   return (
     <motion.div
       key={key}
-      className="max-w-1/2 absolute bottom-auto left-auto right-auto top-auto aspect-square h-1/2 rounded-full opacity-50 blur-3xl"
+      className="max-w-1/2 absolute bottom-auto left-auto right-auto top-auto aspect-square h-1/2 rounded-full opacity-50 blur-2xl"
       style={{
         backgroundImage: `radial-gradient(circle farthest-corner at 80% 60%, ${from} 38%, ${to})`,
         transformStyle: 'preserve-3d',
@@ -94,7 +94,7 @@ export default function GradientBackground({
         <motion.div
           id="gradient-panel"
           className={
-            "before:bg-size[10%] dark:before:bg-[url(/noise/dark.png)]before:bg-[url(/noise/light.png) relative z-[2] flex h-full w-full items-center justify-center blur-sm before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:aspect-square before:bg-repeat before:bg-blend-soft-light before:content-['']"
+            "before:bg-size[10%] relative z-[2] flex h-full w-full items-center justify-center blur-none before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:aspect-square before:bg-[url(/noise/light.png)] before:bg-repeat before:bg-blend-soft-light before:content-[''] dark:before:bg-[url(/noise/dark.png)]"
           }
         >
           {elements.map((elem, index) =>
