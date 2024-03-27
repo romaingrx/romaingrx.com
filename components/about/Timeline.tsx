@@ -242,7 +242,7 @@ function ProjectsTimeline() {
                 <Link href="https://second-order-jailbreak.romaingrx.com">
                   playground website
                 </Link>
-                . We&apos;ll be presenting our work at NeurIPS 2023. The current
+                . We&apos;ve presented our work at NeurIPS 2023. The current
                 version of the paper can be found&nbsp;
                 <Link href="https://docs.google.com/document/d/1OY5fOWC2_Zf1cCfdAV8PxrL3lwignZi6R_6Mv8vnDoI/export?format=pdf">
                   here
@@ -301,7 +301,7 @@ function ExperienceTimeline() {
             subtitle="NCCR Catalysis (EPFL/ETHZ)"
             date="Jan 2023 - Now"
             dotVariant="pulsating"
-            description="In my role as a Data Officer at NCCR Catalysis (EPFL/ETHZ), I collaborate with 50 labs across Switzerland to standardize practices and optimize data management. I am developing a technique for uniform catalyst storage and sharing, and facilitating open science through AI model platforms. Additionally, I am co-authoring a manuscript detailing our research on ML-based detection of metallic atoms in microscope images."
+            description="In my role as a Data Officer at NCCR Catalysis (EPFL/ETHZ), I collaborate with numerous labs across Switzerland to standardize practices and optimize data management. I am developing a technique for uniform catalyst storage and sharing, and facilitating open science through AI model platforms. Additionally, I am co-authoring a manuscript detailing our research on ML-based detection of metallic atoms in microscope images and in the process of publish a second publication that will enable researchers to label microscope images seamlessly"
             align="right"
           />
           <TimelineJobItem
