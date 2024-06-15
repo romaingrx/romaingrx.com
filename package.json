@@ -63,6 +63,7 @@
     "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
+    "romaingrx.com": ".",
     "sharp": "^0.32.4",
     "three": "^0.156.1",
     "typescript": "5.1.6",
