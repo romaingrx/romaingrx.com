@@ -1,4 +1,4 @@
-import { defineNestedType } from 'contentlayer/source-files';
+import { defineNestedType } from 'contentlayer2/source-files';
 import URL from './URL';
 import Image from './Image';
 

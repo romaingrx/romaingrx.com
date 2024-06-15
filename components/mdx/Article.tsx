@@ -1,4 +1,4 @@
-import { useMDXComponent } from 'next-contentlayer/hooks';
+import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { type Article } from '@/.contentlayer/generated';
 import Link from 'next/link';
 import { default as CoreLink } from '@/components/core/Link';
@@ -9,8 +9,6 @@ import { default as _Link } from '../core/Link';
 import mdxComponents from './Components';
 import Pill from '@/components/core/Pill';
 import { ArrowIcon } from '../core/Icon/Icon';
-import { VR } from '../core/base';
-import { Button, H1, Heading } from '../core';
 import 'katex/dist/katex.min.css';
 import { GetInTouchElem } from '../home/Contact';
 

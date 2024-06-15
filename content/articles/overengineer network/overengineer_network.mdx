@@ -1,0 +1,187 @@
+---
+type: Article
+status: published
+date: 2024-03-10
+title: 'How to overengineer your home network'
+description: 'A guide to overengineering your home network using UniFi equipments, Pi-hole, WireGuard and a lot of time'
+tags:
+  - name: 'network'
+  - name: 'internet'
+  - name: 'ipv6'
+categories:
+  - name: 'network'
+  - name: 'internet'
+  - name: 'ipv6'
+author:
+  name: 'Romain Graux'
+  handle: '_romaingrx'
+  avatar:
+    src: '/romaingrx/profile.jpg'
+  description: 'A human making paperclips in his garage'
+  url:
+    name: 'GitHub'
+    url: 'https://github.com/romaingrx'
+cover:
+  src: '/blog-assets/overengineer_network/images/cover.png'
+  alt: 'How to overengineer your home network'
+---
+
+# Implementation
+
+## Objectives
+
+- **Secure** networks for all devices : 0-trust networks by default
+- **Fast** and **reliable** internet connection : Up to 10Gbe for servers and mesh wifi for the rest
+- **Privacy** first : Block ads and trackers for all devices with Pi-Hole (since the Ad-blocker from Unifi is not that great)
+- **Remote access** to my home network : Using WireGuard VPN
+- **Monitoring** : Keep an eye on the network with Grafana and Prometheus
+- **Backup** : Backup all my data with a self-hosted solution
+
+## Network description
+
+**3 VLANs:**
+
+- **1** : \*\*\*\*Master [10.42.0.0/24] : is used for servers and myself
+- **10** : IoT [10.42.10.0/24] : 0 trust network for all IoT devices (i.e. lamps, sonos, tv, …)
+- **255** : Guest [10.42.255.0/24] : 0 trust network for any friends coming over
+
+**3 SSIDs:**
+
+- Go Go Gadget Internet → Master VLAN
+- Go Go Gadget Internet - IoT → IoT VLAN
+- Go Go Gadget Internet - Guest → Guest VLAN
+
+**1 AP for the moment broadcasting the 3 VLANs**
+
+**Main devices:**
+
+- **TinkyWinky** : Workstation with UnraidOS used for storage and compute (Linux VMs and dockers).
+  - Specs:
+    - Threadripper 1920X
+    - 2x 2080 Ti
+    - 24TB HDD for storage
+    - 3TB NVme for VMs
+    - 512GB SSD for cache
+    - 10GB RJ45
+  - Dockers:
+    - Plex for movies and tv shows streamed to TV
+    - Bitwarden for password management
+    - Caddy for reverse proxy and SSL
+
+**LAN firewall rules:**
+
+1. ✅ Allow master to all VLANs
+2. ✅ Allow TV to access Plex on TinkyWinky
+3. ✅ Allow established and related connections (allow other VLANs to communicated if initiated by master VLAN)
+4. ✅ Allow IoT VLAN to access Home Assistant on TinkyWinky
+5. ❌ Drop invalid state
+6. ❌ Block all traffic matching RFC1918 (all local IPv4 addresses)
+
+## Dockers
+
+### Pi-Hole
+
+Pi-Hole is directly on the the UDM Pro using systemd to create a debian container. I followed the [guide](https://github.com/unifi-utilities/unifios-utilities/tree/main/nspawn-container) from unifi-utilities for UnifiOS 3.x+.
+
+### All dockers on tinkywinky
+
+- **Caddy** : Reverse proxy and SSL and is the only one exposed to the internet and lan, the others are only accessible from an internal docker network from Caddy.
+- **Bitwarden** : Password manager accessible through Caddy.
+- **Nextcloud** : Cloud storage accessible through Caddy.
+- **n8n** : Automation tool accessible through Caddy.
+
+## External access
+
+### WireGuard
+
+The plan is to use wireguard to access my home network from anywhere. The only problem right now is that Unifi doesn't support IPv6 for the easy wireguard setup so I'll have to tweak the configuration a bit to make it work.
+
+# Limitations
+
+- **IPv6** :
+  - First, my ISP only provides IPv6 subnet and no public IPv4 address so for the moment, I can't access my setup from an IPv4 only network, but it could be solved with either another proxy or a VPN on a VPS, or simply using Cloudflare Tunnels but I'm not sure I want all my traffic to be visible by Cloudflare.
+  - Unifi doesn't seem to acknowledge the existence of IPv6 for some services (Wireguard, ...), which is a bit annoying.
+
+# Future improvements
+
+- **External access** : If I want to open some of the instances to the internet, I'll probably switch to Traefik with Authelia for authentication and give access to only trusted users.
+
+```mermaid
+graph TD
+    provider[ISP]
+    modem[Modem]
+
+    device_tinkywinky[TinkyWinky]
+
+    switch_livingroom[Living Room Switch]
+
+    device_tv[Tv]
+    device_sonos[Sonos]
+    device_nanoleaf[Nanoleaf]
+    device_hue[HUE]
+    device_tuya[Tuya]
+
+    ap_sonic0[Sonic #0]
+
+    ssid_gogomaster[Go Go Gadget Internet]
+    ssid_gogoiot[Go Go Gadget Internet - IoT]
+    ssid_gogoguest[Go Go Gadget Internet - Guest]
+
+
+    subgraph "ISP"
+        provider --> modem
+    end
+
+    subgraph "UDM Pro"
+        port_wan1[WAN1]
+        port_lan1[LAN1]
+        port_lan3[LAN3]
+        port_lan5[LAN5]
+
+        port_lan3
+    end
+
+    subgraph "IoT VLAN"
+        ssid_gogoiot
+
+        switch_livingroom
+
+        device_tuya
+        device_nanoleaf
+        device_hue
+        device_sonos
+        device_tv
+    end
+
+    modem --> port_wan1
+
+    port_lan1 --> ap_sonic0
+    ap_sonic0 --> ssid_gogomaster
+    ap_sonic0 --> ssid_gogoiot
+    ap_sonic0 --> ssid_gogoguest
+
+    port_lan3 --> switch_livingroom
+    switch_livingroom --> device_tv
+    switch_livingroom --> device_sonos
+
+    port_lan5 --> device_tinkywinky
+
+    ssid_gogoiot --> device_tuya
+    ssid_gogoiot --> device_nanoleaf
+    ssid_gogoiot --> device_hue
+
+    style provider fill:#f9f,stroke:#333,stroke-width:4px
+    style modem fill:#bbf,stroke:#333,stroke-width:2px
+    style device_tinkywinky fill:#ff9,stroke:#333,stroke-width:2px
+    style switch_livingroom fill:#9f9,stroke:#333,stroke-width:2px
+    style device_tv fill:#f99,stroke:#333,stroke-width:2px
+    style device_sonos fill:#99f,stroke:#333,stroke-width:2px
+    style device_nanoleaf fill:#9ff,stroke:#333,stroke-width:2px
+    style device_hue fill:#f9f,stroke:#333,stroke-width:2px
+    style device_tuya fill:#ff9,stroke:#333,stroke-width:2px
+    style ap_sonic0 fill:#9f9,stroke:#333,stroke-width:2px
+    style ssid_gogomaster fill:#f99,stroke:#333,stroke-width:2px
+    style ssid_gogoiot fill:#99f,stroke:#333,stroke-width:2px
+    style ssid_gogoguest fill:#9ff,stroke:#333,stroke-width:2px
+
+```

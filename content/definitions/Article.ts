@@ -1,4 +1,4 @@
-import { defineDocumentType } from 'contentlayer/source-files';
+import { defineDocumentType } from 'contentlayer2/source-files';
 import readingTime from 'reading-time';
 import Tag from './Tag';
 import Category from './Category';
@@ -8,7 +8,7 @@ import GithubSlugger from 'github-slugger';
 
 const Article = defineDocumentType(() => ({
   name: 'Article',
-  filePathPattern: '**/*.mdx',
+  filePathPattern: 'content/articles/**/*.mdx',
   contentType: 'mdx',
   fields: {
     status: {

@@ -1,4 +1,4 @@
-import { makeSource } from 'contentlayer/source-files';
+import { makeSource } from 'contentlayer2/source-files';
 import Article from './content/definitions/Article';
 
 import withToc from '@stefanprobst/rehype-extract-toc';
@@ -23,8 +23,8 @@ export default makeSource({
     rehypePlugins: [
       [rehypeKatex],
       [rehypeSlug],
-      [withToc],
-      [withTocExport],
+      // [withToc],
+      // [withTocExport],
       [
         rehypeAutolinkHeadings,
         {
