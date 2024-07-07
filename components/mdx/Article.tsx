@@ -1,3 +1,4 @@
+'use client';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { type Article } from '@/.contentlayer/generated';
 import Link from 'next/link';
@@ -10,7 +11,9 @@ import mdxComponents from './Components';
 import Pill from '@/components/core/Pill';
 import { ArrowIcon } from '../core/Icon/Icon';
 import 'katex/dist/katex.min.css';
-import { GetInTouchElem } from '../home/Contact';
+import { useQuery } from '@tanstack/react-query';
+import { get_next_article, get_prev_article } from '@/lib/articles/related';
+import { to_article_metadata } from '@/lib/articles/utils';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -58,11 +61,23 @@ export default function ArticleComponent({
 }: {
   article: Article;
 }): JSX.Element {
+  const { data: previousArticle, isLoading: previousArticleLoading } = useQuery(
+    {
+      queryKey: ['previousArticle', article.slug],
+      queryFn: () => get_prev_article(to_article_metadata(article)),
+    },
+  );
+  const { data: nextArticle, isLoading: nextArticleLoading } = useQuery({
+    queryKey: ['nextArticle', article.slug],
+    queryFn: () => get_next_article(to_article_metadata(article)),
+  });
+
+  console.log(previousArticle, nextArticle);
   return (
     <>
       <div className="mx-auto w-full max-w-5xl rounded-lg backdrop-blur-md xl:relative">
-        <article className="flex flex-col">
-          <header className="mb-6 flex flex-col gap-2">
+        <article className="flex flex-col gap-6">
+          <header className="flex flex-col gap-2">
             <span className="text-xs text-romaingrx-typeface-secondary">
               <CoreLink
                 href="/blog"
@@ -72,50 +87,130 @@ export default function ArticleComponent({
                 Back to blog
               </CoreLink>
             </span>
-            <div className="flex w-full flex-col items-center justify-center gap-4 py-4">
-              <div className="align-start flex flex-col gap-2">
-                <h1 className="mx-auto font-polysans text-5xl font-semibold">
+            <div className="flex w-fit flex-col items-center gap-4 py-4">
+              <div className="flex flex-col gap-4">
+                <h1 className="font-polysans text-xl font-semibold md:text-5xl">
                   {article.title}
                 </h1>
                 <div className="flex w-full max-w-2xl justify-between gap-8 text-right">
-                  <AuthorCard author={article.author} />
-                  <div className="my-auto flex flex-col items-baseline justify-start text-right">
-                    <time
-                      className="ml-auto text-sm text-default-500"
-                      dateTime={localeDateString(article.date)}
-                    >
-                      {localeDateString(article.date)}
-                    </time>
-                    <Tooltip
-                      content={`${article.readingTime.words} words`}
-                      placement={'bottom'}
-                      delay={0}
-                      closeDelay={0}
-                    >
-                      <span className="ml-auto text-sm text-default-500">
-                        {article.readingTime.text}
+                  <div className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
+                    <div className="flex flex-col items-start gap-1">
+                      <span className="text-sm font-semibold">Written by</span>
+                      <AuthorCard author={article.author} />
+                    </div>
+                    <div className="flex flex-col items-start gap-1">
+                      <span className="text-sm font-semibold">
+                        Published on
                       </span>
-                    </Tooltip>
+                      <time
+                        className="text-sm text-default-500 md:text-lg"
+                        dateTime={localeDateString(article.date)}
+                      >
+                        {localeDateString(article.date)}
+                      </time>
+                    </div>
+                    {article.updated && (
+                      <div className="flex flex-col items-start gap-1">
+                        <span className="text-sm font-semibold">
+                          Updated on
+                        </span>
+                        <time
+                          className="text-sm text-default-500 md:text-lg"
+                          dateTime={localeDateString(article.date)}
+                        >
+                          {localeDateString(article.date)}
+                        </time>
+                      </div>
+                    )}
+                    <div className="flex flex-col items-start gap-1">
+                      <span className="text-sm font-semibold">
+                        Reading time
+                      </span>
+                      <Tooltip
+                        content={`${article.readingTime.words} words`}
+                        placement={'bottom'}
+                        delay={0}
+                        closeDelay={0}
+                      >
+                        <span className="text-sm text-default-500 md:text-lg">
+                          {article.readingTime.text}
+                        </span>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-1"></div>
-            <hr className="mx-auto w-2/3 border-romaingrx-brand opacity-10" />
           </header>
+          <hr className="mx-auto h-[0.25rem] w-2/3 rounded-full bg-romaingrx-brand opacity-10" />
           <ArticleBody article={article} />
-          <footer className="mt-6 flex flex-col gap-2">
+          <hr className="mx-auto h-[0.25rem] w-2/3 rounded-full bg-romaingrx-brand opacity-10" />
+          <footer className="flex flex-col gap-2">
             <div className="flex flex-col gap-4">
-              <GetInTouchElem />
-              <span className="text-xs text-romaingrx-typeface-secondary">
-                <CoreLink
-                  href="/blog"
-                  variant="none"
-                  startIcon={<ArrowIcon angle={180} />}
-                >
-                  Back to blog
-                </CoreLink>
-              </span>
+              <div className="hidden flex-col gap-4">
+                <h1 className="font-polysans text-lg font-semibold md:text-3xl">
+                  Written by
+                </h1>
+                <AuthorCard author={article.author} type="description" />
+              </div>
+              <div className="flex flex-col gap-2">
+                {!(previousArticle || nextArticle) && (
+                  <CoreLink
+                    href="/blog"
+                    variant="none"
+                    startIcon={<ArrowIcon angle={180} />}
+                  >
+                    View all articles
+                  </CoreLink>
+                )}
+                {(previousArticle || nextArticle) && (
+                  <h1 className="font-polysans text-lg font-semibold md:text-3xl">
+                    Related articles
+                  </h1>
+                )}
+              </div>
+              <div className="flex justify-between gap-4">
+                <div className="flex-1">
+                  {previousArticle && (
+                    <Link href={`/blog/post/${previousArticle?.slug}`}>
+                      <div className="group flex w-full items-start gap-2 rounded-lg p-2 transition-all duration-300">
+                        <ArrowIcon
+                          angle={180}
+                          className="flex-shrink-0 transition-all duration-300 group-hover:-translate-x-1"
+                        />
+                        <div className="flex flex-col gap-2">
+                          <span className="font-polysans text-xl">
+                            {previousArticle?.title}
+                          </span>
+                          <span className="text-sm text-romaingrx-typeface-secondary">
+                            {previousArticle?.description}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                <div className="flex-1 text-right">
+                  {nextArticle && (
+                    <Link href={`/blog/post/${nextArticle?.slug}`}>
+                      <div className="group flex w-full items-start gap-2 rounded-lg p-2 transition-all duration-300">
+                        <div className="flex flex-col gap-2">
+                          <span className="font-polysans text-xl">
+                            {nextArticle?.title}
+                          </span>
+                          <span className="text-sm text-romaingrx-typeface-secondary">
+                            {nextArticle?.description}
+                          </span>
+                        </div>
+                        <ArrowIcon
+                          angle={0}
+                          className="flex-shrink-0 transition-all duration-300 group-hover:translate-x-1"
+                        />
+                      </div>
+                    </Link>
+                  )}
+                </div>
+              </div>
             </div>
           </footer>
         </article>

@@ -10,6 +10,7 @@ import { faFontAwesome, fas } from '@fortawesome/free-solid-svg-icons';
 library.add(fas, faFontAwesome);
 import { fonts } from '@/design';
 import { ServerStylesheet } from './ServerStyleSheet';
+import { QueryProvider } from '@/components/providers/query-provider';
 
 export async function generateMetadata(
   {},
@@ -50,18 +51,22 @@ export default function RootLayout({
         <ServerStylesheet />
       </head>
       <body
-        className={clsx('flex h-full min-h-screen flex-col bg-romaingrx-body overflow-x-clip')}
+        className={clsx(
+          'flex h-full min-h-screen flex-col overflow-x-clip bg-romaingrx-body',
+        )}
       >
-        <ClientThemeProvider>
-          <div className="relative">
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="h-full flex-grow flex-col">{children}</main>
-              <Footer />
+        <QueryProvider>
+          <ClientThemeProvider>
+            <div className="relative">
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="h-full flex-grow flex-col">{children}</main>
+                <Footer />
+              </div>
+              <AnalyticsWrapper />
             </div>
-            <AnalyticsWrapper />
-          </div>
-        </ClientThemeProvider>
+          </ClientThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
