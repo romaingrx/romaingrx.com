@@ -25,3 +25,14 @@ export function toReadableDate(date: string) {
     });
   }
 }
+
+export function pluralize(
+  count: number,
+  noun: string,
+  suffix = 's',
+  withCount = true,
+) {
+  return withCount
+    ? `${count} ${noun}${count > 1 ? suffix : ''}`
+    : `${noun}${count > 1 ? suffix : ''}`;
+}
