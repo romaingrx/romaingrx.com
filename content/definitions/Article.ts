@@ -22,6 +22,11 @@ const Article = defineDocumentType(() => ({
       description: 'The date the article was published',
       required: true,
     },
+    updated: {
+      type: 'date',
+      description: 'The date of the update of the article',
+      required: false,
+    },
     title: {
       type: 'string',
       description: 'The title of the article',
