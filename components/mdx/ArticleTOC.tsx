@@ -4,6 +4,7 @@ import { Variants, motion, useScroll, useSpring } from 'framer-motion';
 import useScrollSpy from 'react-use-scrollspy';
 import { RefObject, useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
+import { useCallback } from 'react';
 
 interface Heading {
   level: number;
@@ -45,6 +46,7 @@ export default function ArticleTOC({
 }): JSX.Element {
   const { scrollYProgress } = useScroll();
   const [sectionRefs, setSectionRefs] = useState<RefObject<HTMLElement>[]>([]);
+  const [activeHeading, setActiveHeading] = useState(0);
 
   useEffect(() => {
     setSectionRefs(
@@ -53,15 +55,29 @@ export default function ArticleTOC({
       })),
     );
   }, [article]);
+
+  const handleScroll = useCallback(() => {
+    const scrollPosition = window.scrollY + OFFSET;
+    
+    for (let i = sectionRefs.length - 1; i >= 0; i--) {
+      const section = sectionRefs[i].current;
+      if (section && section.offsetTop <= scrollPosition) {
+        setActiveHeading(i);
+        break;
+      }
+    }
+  }, [sectionRefs]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once to set initial active heading
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
   const readingProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 20,
   });
-
-  const activeHeading = useScrollSpy({
-    sectionElementRefs: sectionRefs,
-    offsetPx: -OFFSET,
-  }) as number;
 
   const headings: Heading[] = useMemo(() => {
     let afterActive = false;

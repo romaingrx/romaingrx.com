@@ -3,17 +3,18 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { type Article } from '@/.contentlayer/generated';
 import Link from 'next/link';
 import { default as CoreLink } from '@/components/core/Link';
-import { slugify } from '@/lib/utils';
 import AuthorCard from './AuthorCard';
 import { Tooltip } from '@nextui-org/tooltip';
 import { default as _Link } from '../core/Link';
 import mdxComponents from './Components';
 import Pill from '@/components/core/Pill';
-import { ArrowIcon } from '../core/Icon/Icon';
+import { ArrowIcon, GithubIcon, HuggingFaceIcon } from '../core/Icon/Icon';
 import 'katex/dist/katex.min.css';
 import { useQuery } from '@tanstack/react-query';
 import { get_next_article, get_prev_article } from '@/lib/articles/related';
 import { to_article_metadata } from '@/lib/articles/utils';
+import { Button, Card } from '../core';
+import { CardBody } from '@nextui-org/react';
 
 function localeDateString(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -21,27 +22,6 @@ function localeDateString(date: string): string {
     month: 'long',
     day: 'numeric',
   });
-}
-
-function LinkChip({ text, href }: { text: string; href: string }): JSX.Element {
-  return (
-    <>
-      <Link href={href}>
-        <Pill
-          variant="default"
-          css={{
-            cursor: 'pointer',
-          }}
-        >
-          {text}
-        </Pill>
-      </Link>
-    </>
-  );
-}
-
-function TagChip({ tag }: { tag: string }): JSX.Element {
-  return <LinkChip text={tag} href={`/blog/tag/${slugify(tag)}`} />;
 }
 
 function ArticleBody({ article }: { article: Article }): JSX.Element {
@@ -92,7 +72,7 @@ export default function ArticleComponent({
                 <h1 className="font-polysans text-xl font-semibold md:text-5xl">
                   {article.title}
                 </h1>
-                <div className="flex w-full max-w-2xl justify-between gap-8 text-right">
+                <div className="flex w-full justify-between gap-8 text-right">
                   <div className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
                     <div className="flex flex-col items-start gap-1">
                       <span className="text-sm font-semibold">Written by</span>
@@ -103,7 +83,7 @@ export default function ArticleComponent({
                         Published on
                       </span>
                       <time
-                        className="text-sm text-default-500 md:text-lg"
+                        className="text-sm text-default-500"
                         dateTime={localeDateString(article.date)}
                       >
                         {localeDateString(article.date)}
@@ -115,7 +95,7 @@ export default function ArticleComponent({
                           Updated on
                         </span>
                         <time
-                          className="text-sm text-default-500 md:text-lg"
+                          className="text-sm text-default-500"
                           dateTime={localeDateString(article.date)}
                         >
                           {localeDateString(article.date)}
@@ -132,7 +112,7 @@ export default function ArticleComponent({
                         delay={0}
                         closeDelay={0}
                       >
-                        <span className="text-sm text-default-500 md:text-lg">
+                        <span className="text-sm text-default-500">
                           {article.readingTime.text}
                         </span>
                       </Tooltip>
@@ -146,8 +126,34 @@ export default function ArticleComponent({
           <ArticleBody article={article} />
           <hr className="mx-auto h-[0.25rem] w-2/3 rounded-full bg-romaingrx-brand opacity-10" />
           <footer className="flex flex-col gap-2">
+            <div className="flex gap-4">
+              {article.github_project && (
+                <Link href={article.github_project}>
+                  <Card depth={1} glass className="w-fit">
+                    <CardBody>
+                      <div className="flex gap-2">
+                        <GithubIcon className="h-4 w-4 p-[0.125rem]" />
+                        <span>View code on GitHub</span>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Link>
+              )}
+              {article.huggingface_model && (
+                <Link href={article.huggingface_model}>
+                  <Card depth={1} glass className="w-fit">
+                    <CardBody>
+                      <div className="flex gap-2">
+                        <HuggingFaceIcon className="h-4 w-4" />
+                        <span>View model on Hugging Face</span>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Link>
+              )}
+            </div>
             <div className="flex flex-col gap-4">
-              <div className="hidden flex-col gap-4">
+              <div className="flex-col gap-4 hidden">
                 <h1 className="font-polysans text-lg font-semibold md:text-3xl">
                   Written by
                 </h1>

@@ -11,10 +11,10 @@ import {
   Link,
   Callout,
   BlockQuote,
+  Examples,
 } from '@/components/core';
 import type { MDXComponents } from 'mdx/types';
-import { Component, DetailedHTMLProps } from 'react';
-import { ArrowIcon } from '../core/Icon/Icon';
+import { DetailedHTMLProps } from 'react';
 import clsx from 'clsx';
 
 const Pre = dynamic(() => import('@/components/core/CodeBlock/Pre'));
@@ -45,6 +45,7 @@ const mdxComponents: MDXComponents = {
       </Link>
     );
   },
+  Examples,
   Callout,
   BlockQuote,
   h1: H1,
@@ -53,6 +54,14 @@ const mdxComponents: MDXComponents = {
   em: EM,
   strong: Strong,
   p: Text,
+  li: (props: React.HTMLAttributes<HTMLLIElement>) => {
+    return (
+      <li {...props} className="list-disc pl-4 marker:text-romaingrx-brand" />
+    );
+  },
+  ul: (props: React.HTMLAttributes<HTMLUListElement>) => {
+    return <ul {...props} className="list-disc pl-4" />;
+  },
 };
 
 export default mdxComponents;

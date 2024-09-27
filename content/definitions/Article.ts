@@ -60,6 +60,16 @@ const Article = defineDocumentType(() => ({
       of: Image,
       description: 'The cover image of the article',
     },
+    github_project: {
+      type: 'string',
+      description: 'The URL to the GitHub project',
+      required: false,
+    },
+    huggingface_model: {
+      type: 'string',
+      description: 'The URL to the Hugging Face model',
+      required: false,
+    },
   },
   computedFields: {
     readingTime: {
