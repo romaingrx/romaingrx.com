@@ -7,6 +7,7 @@ export { default as Card, type CardProps } from './Card';
 export { default as Link, type LinkProps } from './Link';
 export { default as Pill, type PillProps } from './Pill';
 export { default as Examples, type ExamplesProps } from './Examples';
+export * from './Charts';
 
 export {
   default as Text,

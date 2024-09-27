@@ -12,6 +12,7 @@ import {
   Callout,
   BlockQuote,
   Examples,
+  BarChart,
 } from '@/components/core';
 import type { MDXComponents } from 'mdx/types';
 import { DetailedHTMLProps } from 'react';
@@ -45,7 +46,6 @@ const mdxComponents: MDXComponents = {
       </Link>
     );
   },
-  Examples,
   Callout,
   BlockQuote,
   h1: H1,
@@ -62,6 +62,8 @@ const mdxComponents: MDXComponents = {
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => {
     return <ul {...props} className="list-disc pl-4" />;
   },
+  Examples,
+  BarChart,
 };
 
 export default mdxComponents;
