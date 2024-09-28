@@ -8,7 +8,7 @@ import GithubSlugger from 'github-slugger';
 
 const Article = defineDocumentType(() => ({
   name: 'Article',
-  filePathPattern: 'content/articles/**/*.mdx',
+  filePathPattern: 'content/articles/[^.]**/*.mdx',
   contentType: 'mdx',
   fields: {
     status: {

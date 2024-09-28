@@ -8,23 +8,13 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkSourceRedirect from './content/plugins/remarkSourceRedirect';
 import rehypeMetaAsAttributes from './content/plugins/metastringExtraction';
-// @ts-ignore
-import { remarkMermaid } from '@theguild/remark-mermaid';
+import rehypeMermaid from 'rehype-mermaid';
 
 export default makeSource({
   contentDirPath: 'content/articles',
   documentTypes: [Article],
   mdx: {
-    esbuildOptions(options) {
-      options.target = 'esnext';
-      return options;
-    },
-    remarkPlugins: [
-      remarkMermaid,
-      [remarkGfm],
-      [remarkMath],
-      [remarkSourceRedirect],
-    ],
+    remarkPlugins: [[remarkGfm], [remarkMath], [remarkSourceRedirect]],
     rehypePlugins: [
       [rehypeKatex],
       [rehypeSlug],
@@ -40,6 +30,7 @@ export default makeSource({
         },
       ],
       [rehypeMetaAsAttributes],
+      // [rehypeMermaid, { strategy: 'img-png' }],
     ],
   },
 });
