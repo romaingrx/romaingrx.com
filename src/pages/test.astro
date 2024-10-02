@@ -1,0 +1,15 @@
+---
+import NoisyImage from '../components/NoisyImage.astro';
+
+const pageHash = 'example-hash-123';
+---
+
+<NoisyImage hash={pageHash} className="full-page">
+  <h1>Content goes here</h1>
+</NoisyImage>
+
+<style>
+  .full-page {
+    min-height: 100vh;
+  }
+</style>
