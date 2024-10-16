@@ -52,7 +52,7 @@ export default function RootLayout({
       </head>
       <body
         className={clsx(
-          'flex h-full min-h-screen flex-col overflow-x-clip bg-romaingrx-body',
+          'flex h-full min-h-screen flex-col overflow-x-hidden bg-romaingrx-body w-screen',
         )}
       >
         <QueryProvider>

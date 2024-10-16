@@ -45,6 +45,28 @@ function ArticleHeader({ article }: { article: Article }): JSX.Element {
                 day: 'numeric',
               })}
             </time>
+            {article.updated && (
+              <div className="flex items-center gap-2 rounded-md bg-romaingrx-emphasis p-1">
+                <span className="text-romaingrx-brand">Updated on</span>
+                <time dateTime={article.updated} className="text-base">
+                  {new Date(article.updated).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+            )}
+          </div>
+          <div>
+            <h2 className="text-sm font-medium text-romaingrx-typeface-secondary">
+              Time to read
+            </h2>
+            <Tooltip content={`${article.readingTime.words} words`}>
+            <span className="text-base">
+              {Math.ceil(article.readingTime.minutes)} min read
+            </span>
+            </Tooltip>
           </div>
           <div className="text-right">
             <h2 className="text-sm font-medium text-romaingrx-typeface-secondary">

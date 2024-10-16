@@ -10,7 +10,7 @@ import {
 
 export function AuthorPreview({ author }: { author: Author }) {
   const btn = (
-    <Button variant="link" className="m-0 p-0 text-base font-normal">
+    <Button variant="link" className="m-0 p-0 text-base font-normal border-0 border-none h-fit">
       {author.name}
     </Button>
   );

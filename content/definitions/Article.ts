@@ -5,6 +5,7 @@ import Category from './Category';
 import Author from './Author';
 import Image from './Image';
 import GithubSlugger from 'github-slugger';
+import Dataset from './Dataset';
 
 const Article = defineDocumentType(() => ({
   name: 'Article',
@@ -68,6 +69,12 @@ const Article = defineDocumentType(() => ({
     huggingface_model: {
       type: 'string',
       description: 'The URL to the Hugging Face model',
+      required: false,
+    },
+    datasets: {
+      type: 'list',
+      of: Dataset,
+      description: 'The datasets used in the article',
       required: false,
     },
   },
