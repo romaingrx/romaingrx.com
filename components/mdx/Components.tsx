@@ -13,7 +13,9 @@ import {
   BlockQuote,
   Examples,
   BarChart,
+  NumberCard,
 } from '@/components/core';
+import { Columns } from '@/components/mdx/layout-components';
 import type { MDXComponents } from 'mdx/types';
 import { DetailedHTMLProps } from 'react';
 import clsx from 'clsx';
@@ -60,10 +62,15 @@ const mdxComponents: MDXComponents = {
     );
   },
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => {
-    return <ul {...props} className="list-disc pl-4" />;
+    return (
+      <ul {...props} className="list-disc pl-4 marker:text-romaingrx-brand" />
+    );
   },
   Examples,
   BarChart,
+  NumberCard,
+  // Layout components
+  Columns,
 };
 
 export default mdxComponents;

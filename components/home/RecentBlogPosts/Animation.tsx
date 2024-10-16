@@ -10,13 +10,13 @@ import {
 } from 'framer-motion';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import LiquidGradient from '@/components/backgrounds/LiquidGradient';
 import { toReadableDate } from '@/lib/utils';
 import Pill from '@/components/core/Pill';
 import Link from 'next/link';
 import { clsx } from 'clsx';
 import { springConfigs } from '@/components/core/constants';
 import { Card } from '@/components/core';
+import BlogPostBackground from '@/components/blog/BlogPostBackground';
 
 export function BlogPost({
   article,
@@ -84,23 +84,21 @@ export function BlogPost({
           <div
             className={clsx(
               'flex flex-col gap-4 text-left',
-              'md:grid md:grid-cols-[1fr,1fr] md:grid-rows-1 md:gap-4 md:px-4', // > md
+              'md:grid md:grid-cols-[1fr,1fr] md:grid-rows-1 md:gap-4', // > md
             )}
           >
             <motion.div className="flex flex-col">
-              <div className="relative mx-auto my-auto h-fit w-fit overflow-hidden rounded-md bg-opacity-70">
-                <div className="absolute inset-0 w-full">
-                  <LiquidGradient />
-                </div>
-                <div className="relative left-0 top-0">
-                  <div className="m-3">
+              <div className="relative my-auto h-48 w-full overflow-hidden rounded-l-md sm:h-64">
+                <BlogPostBackground title={article.title} />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative h-4/5 w-4/5">
                     {article.cover && (
                       <Image
                         src={article.cover.src}
                         alt={article.title}
-                        width={512}
-                        height={512}
-                        className="mx-auto rounded-sm"
+                        fill={true}
+                        objectFit="contain"
+                        className="rounded-sm"
                       />
                     )}
                   </div>
