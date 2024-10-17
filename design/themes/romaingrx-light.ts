@@ -23,7 +23,7 @@ const lightTheme = {
     '--romaingrx-colors-typeface-danger':
       'hsla(var(--palette-red-60), 100%)',
     '--romaingrx-border-color': 'var(--romaingrx-colors-emphasis)',
-    '--romaingrx-card-background-color': 'hsl(var(--palette-gray-88))',
+    '--romaingrx-card-background-color': 'hsl(var(--palette-gray-01))',
     '--romaingrx-form-input-active': 'var(--romaingrx-colors-brand)',
     '--romaingrx-form-input-background': 'hsl(var(--palette-gray-00))',
     '--romaingrx-form-input-disabled': 'hsl(var(--palette-gray-09))',
