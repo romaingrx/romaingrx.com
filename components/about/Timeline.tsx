@@ -4,6 +4,7 @@ import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import Profile from '@/public/romaingrx/lumi.jpeg';
 
 import React from 'react';
 import {
@@ -16,8 +17,9 @@ import {
 } from '@nextui-org/react';
 import { Connector } from '../timeline/Connector/Connector';
 import { Dot } from '../timeline/Dot/Dot';
-import { DotVariant } from '../timeline/Dot/Dot.types';
+import { type DotVariant } from '../timeline/Dot/Dot.types';
 import { useBreakpoint } from '@/hooks/tailwind';
+import Image from 'next/image';
 
 import { GradientText } from '@/components/core/Text';
 import { Button } from '@/components/core';
@@ -299,17 +301,29 @@ function ExperienceTimeline() {
           <TimelineJobItem
             title="Data Officer"
             subtitle="NCCR Catalysis (EPFL/ETHZ)"
-            date="Jan 2023 - Now"
+            date="Jan 2023 - Dec 2024"
             dotVariant="pulsating"
             description="In my role as a Data Officer at NCCR Catalysis (EPFL/ETHZ), I collaborate with numerous labs across Switzerland to standardize practices and optimize data management. I am developing a technique for uniform catalyst storage and sharing, and facilitating open science through AI model platforms. Additionally, I am co-authoring a manuscript detailing our research on ML-based detection of metallic atoms in microscope images and in the process of publish a second publication that will enable researchers to label microscope images seamlessly"
             align="right"
           />
           <TimelineJobItem
             title="Fullstack software engineer"
-            subtitle="Graux Guitar Loops"
-            date="Jul 2022 - Now"
+            subtitle="Graux Music"
+            date="Jan 2024 - Now"
             dotVariant="pulsating"
-            description="Created and launched SpicyX, a streaming platform for guitar loops. Leveraged NextJS, MongoDB, and Vercel to build a scalable platform, attracting over 100+ monthly subscribed producers."
+            description={
+              <span>
+                Creating a melody streaming platform using NextJS, PostgreSQL
+                (Supabase), and AWS services around a event-driven architecture.
+                I developed a custom contrastive ML model used for 0-shot
+                classification (mostly tagging and genre recognition) and
+                semantic search. You can have a look at the{' '}
+                <Link href="https://test.library.grauxmusic.com/features">
+                  webapp here
+                </Link>
+                .
+              </span>
+            }
           />
           <TimelineJobItem
             title="Teaching Assistant"
@@ -376,10 +390,55 @@ function EducationTimeline() {
   );
 }
 
+function AboutMe(): JSX.Element {
+  return (
+    <div className="mb-8 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12">
+      <div className="w-48 flex-shrink-0 md:w-64">
+        <Image
+          src={Profile}
+          width={256}
+          height={256}
+          alt="Romain Graux"
+          className="rounded-lg"
+        />
+      </div>
+      <div className="flex flex-col gap-4">
+        <div className="text-center md:text-left">
+          <h1 className="font-wise text-3xl md:text-4xl">
+            <GradientText variant="radial-smoky">Romain Graux</GradientText>
+          </h1>
+          <p className="mt-2 text-lg text-romaingrx-brand">ML Engineer</p>
+        </div>
+        <p className="text-justify text-sm md:text-base">
+          I'm a ML Engineer passionate about AI Safety and alignment. With
+          experience in both academic research and software engineering, I focus
+          on developing responsible AI systems as well as building softwares
+          during my free time.
+        </p>
+        <div className="bg-romaingrx-emphasis/10 flex items-center justify-center gap-3 rounded-lg border border-romaingrx-brand p-4">
+          <Dot variant="pulsating" />
+          <p className="text-sm font-medium text-romaingrx-brand">
+            Currently seeking opportunities in AI Safety research and
+            engineering roles. Open to full-time positions and collaborations.
+          </p>
+        </div>
+        <div className="flex justify-center md:justify-start">
+          <Button variant="primary">
+            <Link href="https://go.romaingrx.com/email">
+              <span className="font-wise">Get in touch</span>
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AboutTimeline() {
   return (
     <>
       <div className="flex flex-col justify-center gap-4 md:gap-0">
+        <AboutMe />
         <ProjectsTimeline />
         <ExperienceTimeline />
         <EducationTimeline />
