@@ -410,7 +410,7 @@ function AboutMe(): JSX.Element {
           <p className="mt-2 text-lg text-romaingrx-brand">ML Engineer</p>
         </div>
         <p className="text-justify text-sm md:text-base">
-          I'm a ML Engineer passionate about AI Safety and alignment. With
+          I&apos;m a ML Engineer passionate about AI Safety and alignment. With
           experience in both academic research and software engineering, I focus
           on developing responsible AI systems as well as building softwares
           during my free time.

@@ -1,7 +1,6 @@
 'use client';
 import { Article } from '@/.contentlayer/generated';
 import { Card } from '../core';
-import { CardBody } from '@nextui-org/card';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -34,7 +33,6 @@ export function ArticleCard({ article }: { article: Article }) {
         depth={isHovered ? 3 : 0}
         isPressable
       >
-        <CardBody className={clsx('p-0')}>
           <div className={clsx('flex flex-col')}>
             <ArticleCoverWithBg article={article} />
             <div className="flex h-48 flex-col gap-1 p-3">
@@ -54,7 +52,6 @@ export function ArticleCard({ article }: { article: Article }) {
               </div>
             </div>
           </div>
-        </CardBody>
       </Card>
     </motion.div>
   );
