@@ -1,6 +1,6 @@
 function colorFromHash(hash: string): [string, string] {
   // Simple hash function
-  const hashValue = hash.split("").reduce((acc, char) => {
+  const hashValue = hash.split('').reduce((acc, char) => {
     return char.charCodeAt(0) + ((acc << 5) - acc);
   }, 0);
 

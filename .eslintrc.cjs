@@ -18,7 +18,7 @@ module.exports = {
       },
       rules: {
         // Add Astro-specific rules here if needed
-      }
+      },
     },
     {
       // Configure TypeScript files
@@ -27,7 +27,7 @@ module.exports = {
       parserOptions: {
         project: './tsconfig.json',
       },
-    }
+    },
   ],
   rules: {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
@@ -37,4 +37,4 @@ module.exports = {
     node: true,
     es2022: true,
   },
-}; 
+};

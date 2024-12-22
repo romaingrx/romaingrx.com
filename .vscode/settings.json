@@ -7,16 +7,8 @@
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
   },
-  "prettier.documentSelectors": [
-    "**/*.astro"
-  ],
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "astro"
-  ],
+  "prettier.documentSelectors": ["**/*.astro"],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "astro"],
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
