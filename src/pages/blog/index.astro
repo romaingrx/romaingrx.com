@@ -1,16 +1,14 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { getCollection } from 'astro:content';
 
-import BlogCard from '@/components/blog/BlogCard.astro';
+import { BlogCard } from '@/components/blog/BlogCard';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedBlogPosts } from '@/lib/collections';
 
 // Get all published blog posts
-const posts = (
-  await getCollection('blog', ({ data }) => {
-    return data.status === 'published';
-  })
-).sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf());
+const posts = (await getPublishedBlogPosts()).sort(
+  (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf()
+);
 
 // Get unique categories and tags
 const categories = [...new Set(posts.flatMap(post => post.data.categories))];
