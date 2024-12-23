@@ -26,7 +26,6 @@ function getPastelColor(seed: string) {
 
 export function BlogCard({ post, className }: BlogCardProps) {
   const backgroundColor = getPastelColor(post.id);
-  const readingTime = '5 min read';
 
   return (
     <article
@@ -59,14 +58,14 @@ export function BlogCard({ post, className }: BlogCardProps) {
           >
             {format(post.data.published_date, 'MMM d, yyyy')}
           </time>
-          <span className="text-xs text-muted-foreground">{readingTime}</span>
+          <span className="text-xs text-muted-foreground">{}</span>
         </div>
         <div className="space-y-1">
           <h2 className="text-lg font-bold tracking-tight">{post.data.title}</h2>
           <p className="line-clamp-2 text-xs text-muted-foreground">{post.data.description}</p>
         </div>
         <div className="flex flex-wrap gap-1.5">
-          {post.data.tags.map(tag => (
+          {post.data.tags.map((tag: string) => (
             <span
               key={tag}
               className="inline-flex items-center rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium transition-colors hover:bg-black/10"

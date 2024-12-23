@@ -20,8 +20,9 @@ export function slugify(str: string): string {
     .replace(/(^-|-$)+/g, '');
 }
 
-export function getReadingTime(content: string): number {
+export function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
-  return Math.ceil(words / wordsPerMinute);
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
 }

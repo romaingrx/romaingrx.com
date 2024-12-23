@@ -5,9 +5,23 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
+import remarkReadingTime from 'remark-reading-time';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://astro.romaingrx.com',
-  integrations: [mdx(), sitemap(), react(), tailwind({ applyBaseStyles: false }), icon()],
+  integrations: [
+    mdx({
+      shikiConfig: {
+        theme: 'one-dark-pro',
+      },
+      remarkPlugins: [
+        [remarkReadingTime, { name: "readingTime" }],
+      ],
+    }),
+    sitemap(),
+    react(),
+    tailwind({ applyBaseStyles: false }),
+    icon()
+  ],
 });

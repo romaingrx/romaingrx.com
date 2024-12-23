@@ -12,10 +12,11 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
   const authors = await astroGetCollection('author');
 
   return await Promise.all(
-    posts.map(async post => {
+    posts.map(async (post: BlogPost) => {
+      console.log(post.data);
       const postAuthors = await Promise.all(
-        post.data.authors.map(async author => {
-          const authorData = authors.find(a => a.id === author.id);
+        post.data.authors.map(async (author: { id: string }) => {
+          const authorData = authors.find((a: Author) => a.id === author.id);
           if (!authorData) {
             throw new Error(`Author ${author.id} not found`);
           }
