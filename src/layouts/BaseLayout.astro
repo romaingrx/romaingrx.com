@@ -1,0 +1,43 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/Header.astro';
+
+import '@/styles/globals.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string | undefined;
+  type?: string | undefined;
+}
+
+const { title, description, image, type = 'website' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+    <meta property="og:type" content={type} />
+    <ViewTransitions />
+  </head>
+  <body class="min-h-screen bg-background font-sans antialiased">
+    <div class="relative flex min-h-screen flex-col">
+      <Header />
+      <main class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

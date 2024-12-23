@@ -113,6 +113,7 @@ Key Conventions
 3. Implement proper error handling and logging.
 4. Leverage Astro's RSS feed generation for content-heavy sites.
 5. Use Astro's Image component for optimized image delivery.
+6. Use kebab-case file naming.
 
 Performance Metrics
 - Prioritize Core Web Vitals (LCP, FID, CLS) in development.

@@ -1,0 +1,64 @@
+---
+interface TimelineItem {
+  title: string;
+  organization: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  type: 'education' | 'experience';
+  tags?: string[];
+}
+
+interface Props {
+  items: TimelineItem[];
+}
+
+const { items } = Astro.props;
+
+// Sort items by date (most recent first)
+const sortedItems = [...items].sort((a, b) => {
+  return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+});
+---
+
+<div class="space-y-8">
+  {
+    sortedItems.map((item, index) => (
+      <div
+        class="relative grid gap-4 pb-8 pl-8 last:pb-0 md:grid-cols-5 md:gap-8 md:pl-0"
+        data-animate="fade-up"
+        data-animate-delay={index * 100}
+      >
+        <div class="absolute left-0 top-0 h-full w-px bg-border md:left-[50%] md:translate-x-[-50%]">
+          <div class="absolute left-[-4px] top-2 h-2 w-2 rounded-full bg-primary md:left-[50%] md:translate-x-[-50%]" />
+        </div>
+
+        <div class="text-sm text-muted-foreground md:text-right">
+          <time>{item.startDate}</time> - <time>{item.endDate}</time>
+        </div>
+
+        <div class="space-y-3 md:col-span-4">
+          <div class="space-y-1">
+            <h3 class="font-semibold leading-tight">{item.title}</h3>
+            <div class="text-sm text-muted-foreground">
+              {item.organization} • {item.location}
+            </div>
+          </div>
+
+          <p class="text-sm text-muted-foreground">{item.description}</p>
+
+          {item.tags && item.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {item.tags.map(tag => (
+                <span class="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>

@@ -1,0 +1,74 @@
+---
+import { Button } from '@/components/ui/button';
+---
+
+<section class="relative h-[90vh] w-full overflow-hidden">
+  <div class="container relative flex h-full flex-col items-center justify-center">
+    <div
+      class="animate-fade-up space-y-4 text-center opacity-0"
+      style="animation-delay: 0.2s; animation-fill-mode: forwards;"
+    >
+      <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+        Hi, I'm <span class="text-primary">Romain</span>
+      </h1>
+      <p class="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+        I'm a software engineer and machine learning enthusiast. I write about technology,
+        programming, and my journey in the world of AI.
+      </p>
+      <div class="flex justify-center space-x-4">
+        <Button size="lg" asChild>
+          <a href="/blog">Read Blog</a>
+        </Button>
+        <Button size="lg" variant="outline" asChild>
+          <a href="/about">About Me</a>
+        </Button>
+      </div>
+    </div>
+
+    <div
+      class="animate-fade-up absolute bottom-8 opacity-0"
+      style="animation-delay: 0.6s; animation-fill-mode: forwards;"
+    >
+      <button
+        class="flex items-center justify-center rounded-full p-2 transition-colors hover:bg-muted"
+        aria-label="Scroll to content"
+        onclick="document.getElementById('content').scrollIntoView({ behavior: 'smooth' })"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-6 w-6 animate-bounce"
+        >
+          <path d="M12 5v14"></path>
+          <path d="m19 12-7 7-7-7"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div id="content" class="scroll-mt-16"></div>
+
+<style>
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.5s ease-out;
+  }
+</style>

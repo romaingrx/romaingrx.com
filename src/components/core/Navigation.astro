@@ -1,0 +1,36 @@
+---
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+---
+
+<div class="flex w-full items-center justify-between">
+  <div class="flex items-center gap-6 md:gap-10">
+    <a href="/" class="hidden items-center space-x-2 md:flex">
+      <span class="hidden font-bold sm:inline-block"> Romain's Blog </span>
+    </a>
+
+    <nav class="flex gap-6">
+      <a
+        href="/"
+        class="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Home
+      </a>
+      <a
+        href="/blog"
+        class="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Blog
+      </a>
+      <a
+        href="/about"
+        class="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        About
+      </a>
+    </nav>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <ThemeToggle client:load />
+  </div>
+</div>

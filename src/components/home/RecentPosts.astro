@@ -1,0 +1,72 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { formatDate } from '@/lib/utils';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section class="container">
+  <div class="mx-auto max-w-[800px] space-y-12">
+    <div class="space-y-4 text-center">
+      <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Recent Posts</h2>
+      <p class="mx-auto max-w-[600px] text-muted-foreground">
+        Check out my latest blog posts about technology, machine learning, and software development.
+      </p>
+    </div>
+
+    <div class="grid gap-8">
+      {
+        posts.map(post => (
+          <Card class="group relative overflow-hidden">
+            <a
+              href={`/blog/${post.id}`}
+              class="absolute inset-0 z-10"
+              aria-label={`Read ${post.data.title}`}
+            />
+            <CardHeader>
+              <CardTitle class="line-clamp-1 group-hover:text-primary">{post.data.title}</CardTitle>
+              <CardDescription>
+                {formatDate(post.data.published_date)}
+                {post.data.categories.map(category => (
+                  <span class="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium">
+                    {category}
+                  </span>
+                ))}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p class="line-clamp-2 text-muted-foreground">{post.data.description}</p>
+            </CardContent>
+            <CardFooter>
+              <div class="flex items-center space-x-4">
+                {post.data.authors.map(author => (
+                  <span class="text-sm text-muted-foreground">{author}</span>
+                ))}
+              </div>
+            </CardFooter>
+          </Card>
+        ))
+      }
+    </div>
+
+    <div class="flex justify-center">
+      <Button size="lg" variant="outline" asChild>
+        <a href="/blog">View All Posts</a>
+      </Button>
+    </div>
+  </div>
+</section>

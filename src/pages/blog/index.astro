@@ -1,120 +1,77 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
-import { ViewTransitions } from 'astro:transitions';
 
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import BlogCard from '@/components/blog/BlogCard.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+// Get all published blog posts
+const posts = (
+  await getCollection('blog', ({ data }) => {
+    return data.status === 'published';
+  })
+).sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf());
+
+// Get unique categories and tags
+const categories = [...new Set(posts.flatMap(post => post.data.categories))];
+const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+
+const title = 'Blog';
+const description =
+  'Explore my thoughts and insights on AI, machine learning, and software development.';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <ViewTransitions />
-    <style>
-      main {
-        width: 960px;
-      }
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-      ul li {
-        width: calc(50% - 1rem);
-      }
-      ul li * {
-        text-decoration: none;
-        transition: 0.2s ease;
-      }
-      ul li:first-child {
-        width: 100%;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-      ul li:first-child img {
-        width: 100%;
-      }
-      ul li:first-child .title {
-        font-size: 2.369rem;
-      }
-      ul li img {
-        margin-bottom: 0.5rem;
-        border-radius: 12px;
-      }
-      ul li a {
-        display: block;
-      }
-      .title {
-        margin: 0;
-        color: rgb(var(--black));
-        line-height: 1;
-      }
-      .date {
-        margin: 0;
-        color: rgb(var(--gray));
-      }
-      ul li a:hover h4,
-      ul li a:hover .date {
-        color: rgb(var(--accent));
-      }
-      ul a:hover img {
-        box-shadow: var(--box-shadow);
-      }
-      @media (max-width: 720px) {
-        ul {
-          gap: 0.5em;
-        }
-        ul li {
-          width: 100%;
-          text-align: center;
-        }
-        ul li:first-child {
-          margin-bottom: 0;
-        }
-        ul li:first-child .title {
-          font-size: 1.563em;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <Header />
-    <main>
-      <section>
-        <ul>
-          {
-            posts.map(post => (
-              <li>
-                <a href={`/blog/${post.slug}/`}>
-                  <img
-                    width={720}
-                    height={360}
-                    src={post.data.heroImage}
-                    alt=""
-                    transition:name={`hero-${post.slug}`}
-                  />
-                  <h4 class="title">{post.data.title}</h4>
-                  <p class="date">
-                    <FormattedDate date={post.data.pubDate} />
-                  </p>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+<BaseLayout title={title} description={description}>
+  <main class="container mx-auto px-4 py-12 md:py-24">
+    <div class="grid gap-12 lg:grid-cols-[1fr_16rem]">
+      <!-- Blog Posts Grid -->
+      <section class="space-y-12">
+        <h1 class="text-4xl font-bold">Latest Posts</h1>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
+          {posts.map(post => <BlogCard post={post} />)}
+        </div>
       </section>
-    </main>
-    <Footer />
-  </body>
-</html>
+
+      <!-- Sidebar -->
+      <aside class="space-y-8">
+        <!-- Categories -->
+        <div class="space-y-4">
+          <h2 class="text-xl font-semibold">Categories</h2>
+          <ul class="space-y-2">
+            {
+              categories.map(category => (
+                <li>
+                  <a
+                    href={`/blog/category/${category}`}
+                    class="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="lucide:folder" class="h-4 w-4" />
+                    <span>{category}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <!-- Tags -->
+        <div class="space-y-4">
+          <h2 class="text-xl font-semibold">Tags</h2>
+          <div class="flex flex-wrap gap-2">
+            {
+              tags.map(tag => (
+                <a
+                  href={`/blog/tag/${tag}`}
+                  class="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground hover:bg-muted/80"
+                >
+                  <Icon name="lucide:tag" class="h-3 w-3" />
+                  <span>{tag}</span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</BaseLayout>

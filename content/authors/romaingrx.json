@@ -1,0 +1,28 @@
+{
+  "name": "Romain Graux",
+  "title": "AI Researcher & Software Engineer",
+  "description": "AI Researcher and Software Engineer passionate about machine learning, deep learning, and software development.",
+  "image": "/images/authors/romaingrx.jpeg",
+  "socialLinks": [
+    {
+      "platform": "github",
+      "url": "https://github.com/romaingrx",
+      "icon": "mdi:github"
+    },
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/",
+      "icon": "mdi:twitter"
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://linkedin.com/in/",
+      "icon": "mdi:linkedin"
+    },
+    {
+      "platform": "website",
+      "url": "https://romaingrx.com",
+      "icon": "mdi:web"
+    }
+  ]
+}
