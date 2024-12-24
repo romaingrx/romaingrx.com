@@ -21,8 +21,8 @@ const { Content } = await render(post);
 
 <BlogLayout title={post.data.title} description={post.data.description}>
   <PostHeader post={post} />
+  <div class="mt-10"></div>
   <Shell type="blog">
-    <div class="mt-10"></div>
     <article class="prose prose-lg dark:prose-invert">
       <Content components={components} />
     </article>

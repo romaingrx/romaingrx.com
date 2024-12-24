@@ -1,23 +1,9 @@
 import React from 'react';
-import { Github, Globe, Linkedin, Twitter } from 'lucide-react';
+import { Icon } from '@iconify/react';
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import type { Author } from '@/lib/collections';
-
-export function SocialIcon({ type }: { type: Author['data']['socialLinks'][number]['platform'] }) {
-  switch (type) {
-    case 'github':
-      return <Github className="w-4 h-4" />;
-    case 'linkedin':
-      return <Linkedin className="w-4 h-4" />;
-    case 'twitter':
-      return <Twitter className="w-4 h-4" />;
-    case 'website':
-      return <Globe className="w-4 h-4" />;
-    default:
-      return null;
-  }
-}
+import { platforms_info } from '@/configs/platforms';
 
 type Props = {
   author: Author;
@@ -43,7 +29,7 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
                   rel="noopener noreferrer"
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  <SocialIcon type={social.platform} />
+                  <Icon icon={platforms_info[social.platform].icon_name} className="w-4 h-4" />
                 </a>
               ))}
             </div>

@@ -20,6 +20,11 @@ export default defineConfig({
     sitemap(),
     react(),
     tailwind({ applyBaseStyles: false }),
-    icon()
+    icon({
+      include: {
+        mdi: ['*'],
+        'simple-icons': ['*']
+      }
+    })
   ],
 });

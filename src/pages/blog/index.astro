@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-import BlogCard from '@/components/blog/BlogCard.astro';
+import BlogCard from '@/components/blog/card/index.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts } from '@/lib/collections';
 
@@ -26,7 +26,7 @@ const description =
       <section class="space-y-12">
         <h1 class="text-4xl font-bold">Latest Posts</h1>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
-          {posts.map(post => <BlogCard post={post} />)}
+          {posts.map(post => <BlogCard post={post} layout={'horizontal'} />)}
         </div>
       </section>
 

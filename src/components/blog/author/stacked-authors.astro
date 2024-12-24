@@ -8,9 +8,10 @@ interface Props {
   authors: Author[];
   size?: number;
   className?: string;
+  show_name?: boolean;
 }
 
-const { authors, size = 32, className } = Astro.props;
+const { authors, size = 32, className, show_name = true } = Astro.props;
 
 if (!authors.length) return null;
 
@@ -25,8 +26,8 @@ const reversedAuthors = [...authors].reverse();
           <div class="flex items-center justify-center gap-2">
             <div
               class={cn(
-                'relative overflow-hidden rounded-full border-2 border-background',
-                'flex items-center justify-center transition-all duration-200 hover:z-10 hover:scale-110'
+                'relative overflow-hidden rounded-full border-background',
+                'flex items-center justify-center transition-all duration-200 hover:z-10'
               )}
               style={{
                 height: `${size}px`,
@@ -40,7 +41,7 @@ const reversedAuthors = [...authors].reverse();
                 class="h-full w-full object-cover"
               />
             </div>
-            {authors.length === 1 && (
+            {authors.length === 1 && show_name && (
               <div class="flex flex-col items-start justify-start">
                 <span class="text-sm font-semibold">{authors[0]?.data?.name}</span>
                 <span class="text-sm text-muted-foreground">{authors[0]?.data?.title}</span>

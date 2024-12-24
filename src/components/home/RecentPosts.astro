@@ -1,19 +1,10 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-
+import BlogCard from '@/components/blog/card/index.astro';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { formatDate } from '@/lib/utils';
+import type { BlogPostWithAuthors } from '@/lib/collections';
 
 interface Props {
-  posts: CollectionEntry<'blog'>[];
+  posts: BlogPostWithAuthors[];
 }
 
 const { posts } = Astro.props;
@@ -29,38 +20,7 @@ const { posts } = Astro.props;
     </div>
 
     <div class="grid gap-8">
-      {
-        posts.map(post => (
-          <Card class="group relative overflow-hidden">
-            <a
-              href={`/blog/${post.id}`}
-              class="absolute inset-0 z-10"
-              aria-label={`Read ${post.data.title}`}
-            />
-            <CardHeader>
-              <CardTitle class="line-clamp-1 group-hover:text-primary">{post.data.title}</CardTitle>
-              <CardDescription>
-                {formatDate(post.data.published_date)}
-                {post.data.categories.map(category => (
-                  <span class="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium">
-                    {category}
-                  </span>
-                ))}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p class="line-clamp-2 text-muted-foreground">{post.data.description}</p>
-            </CardContent>
-            <CardFooter>
-              <div class="flex items-center space-x-4">
-                {post.data.authors.map(author => (
-                  <span class="text-sm text-muted-foreground">{author}</span>
-                ))}
-              </div>
-            </CardFooter>
-          </Card>
-        ))
-      }
+      {posts.map(post => <BlogCard post={post} layout={'horizontal'} />)}
     </div>
 
     <div class="flex justify-center">

@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  Card as CardPrimitive,
+  CardTitle,
+} from '@/components/ui/card';
+import type { BlogPostWithAuthors } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+import BlogPostBackground from './background';
+
+const cardVariants = cva(
+  'group overflow-hidden transition-all rounded-xl bg-card group-hover:shadow-xl',
+  {
+    variants: {
+      layout: {
+        default: 'flex flex-col max-w-xl',
+        horizontal: 'grid md:grid-cols-[300px_1fr] gap-0 max-w-3xl',
+      },
+    },
+    defaultVariants: {
+      layout: 'default',
+    },
+  }
+);
+
+const imageContainerVariants = cva('relative overflow-hidden flex items-center justify-center', {
+  variants: {
+    layout: {
+      default: 'h-[240px] w-full rounded-t-xl',
+      horizontal: 'h-full w-full rounded-l-xl',
+    },
+  },
+  defaultVariants: {
+    layout: 'default',
+  },
+});
+
+type CardVariants = VariantProps<typeof cardVariants>;
+
+interface Props extends CardVariants {
+  post: BlogPostWithAuthors;
+  className?: string;
+}
+
+const { post, layout = 'default', className } = Astro.props;
+---
+
+<a href={`/blog/${post.id}`} class="block no-underline">
+  <CardPrimitive className={cn(cardVariants({ layout }), className, 'transition-all duration-300')}>
+    {
+      post.data.cover && (
+        <div class={cn(imageContainerVariants({ layout }))}>
+          <div class="absolute inset-0">
+            <BlogPostBackground value={post.id} />
+          </div>
+          <Image
+            src={post.data.cover}
+            alt={post.data.title}
+            class="relative z-10 h-auto max-h-[200px] w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      )
+    }
+
+    <div class="flex h-full flex-col">
+      <CardContent className="flex-1 space-y-4 p-6">
+        <div class="space-y-2">
+          <CardTitle>
+            <h2 class="line-clamp-2 text-xl font-semibold tracking-tight">
+              {post.data.title}
+            </h2>
+          </CardTitle>
+          <CardDescription>
+            <p class="line-clamp-3">
+              {post.data.description}
+            </p>
+          </CardDescription>
+        </div>
+      </CardContent>
+
+      <CardFooter className="flex w-full items-center justify-between">
+        <div class="flex w-full items-center gap-1">
+          <StackedAuthors authors={post.authors} show_name={false} />
+          <span class="text-sm text-muted-foreground">{post.readingTime}</span>
+        </div>
+        <div class="flex w-full items-end justify-end gap-3">
+          <time
+            datetime={post.data.published_date.toISOString()}
+            class="text-sm text-muted-foreground"
+          >
+            {
+              post.data.published_date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })
+            }
+          </time>
+        </div>
+      </CardFooter>
+    </div>
+  </CardPrimitive>
+</a>

@@ -1,27 +1,30 @@
+import type { Platform } from './platforms';
+
 export interface SocialLink {
-  platform: string;
+  platform: Platform;
   url: string;
   label: string;
-  icon: string;
 }
 
 export const socialLinks: SocialLink[] = [
   {
     platform: 'github',
-    url: 'https://github.com/romaingrx',
+    url: 'https://go.romaingrx.com/github',
     label: 'Follow on GitHub',
-    icon: 'github',
   },
   {
     platform: 'twitter',
-    url: 'https://twitter.com/romaingrx',
-    label: 'Follow on Twitter',
-    icon: 'twitter',
+    url: 'https://go.romaingrx.com/x',
+    label: 'Follow on X',
   },
   {
     platform: 'linkedin',
-    url: 'https://linkedin.com/in/romaingrx',
+    url: 'https://go.romaingrx.com/linkedin',
     label: 'Connect on LinkedIn',
-    icon: 'linkedin',
+  },
+  {
+    platform: 'huggingface',
+    url: 'https://go.romaingrx.com/huggingface',
+    label: 'Follow on Hugging Face',
   },
 ];
