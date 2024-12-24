@@ -17,8 +17,8 @@ const SmoothGradient: React.FC<SmoothGradientProps> = ({
   width = '100%',
   height = '100%',
 }) => {
-  const gradientId = `smooth-gradient-${Math.random().toString(36).substr(2, 9)}`;
-  const noiseId = `smooth-noise-${Math.random().toString(36).substr(2, 9)}`;
+  const gradientId = `smooth-gradient-${Math.random().toString(36).slice(2, 11)}`;
+  const noiseId = `smooth-noise-${Math.random().toString(36).slice(2, 11)}`;
 
   return (
     <svg

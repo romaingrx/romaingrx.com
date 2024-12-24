@@ -17,19 +17,19 @@ import { Textarea } from '@/components/ui/textarea';
     <form action="/api/contact" method="POST" class="space-y-8" data-astro-reload>
       <div class="grid gap-4">
         <div class="grid gap-2">
-          <Label for="name">Name</Label>
+          <Label htmlFor="name">Name</Label>
           <Input id="name" name="name" placeholder="John Doe" required />
         </div>
         <div class="grid gap-2">
-          <Label for="email">Email</Label>
+          <Label htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" placeholder="john@example.com" required />
         </div>
         <div class="grid gap-2">
-          <Label for="message">Message</Label>
+          <Label htmlFor="message">Message</Label>
           <Textarea id="message" name="message" placeholder="Your message here..." required />
         </div>
       </div>
-      <Button type="submit" size="lg" class="w-full"> Send Message </Button>
+      <Button type="submit" size="lg" className="w-full"> Send Message </Button>
     </form>
   </div>
 </section>
