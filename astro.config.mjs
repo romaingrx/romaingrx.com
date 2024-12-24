@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
-import remarkReadingTime from 'remark-reading-time';
+import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,9 +15,7 @@ export default defineConfig({
       shikiConfig: {
         theme: 'one-dark-pro',
       },
-      remarkPlugins: [
-        [remarkReadingTime, { name: "readingTime" }],
-      ],
+      remarkPlugins: [remarkReadingTime],
     }),
     sitemap(),
     react(),

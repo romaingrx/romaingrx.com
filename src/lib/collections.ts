@@ -1,10 +1,11 @@
-import { getCollection as astroGetCollection, type CollectionEntry } from 'astro:content';
+import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
 
 export type Author = CollectionEntry<'author'>;
 export type BlogPost = CollectionEntry<'blog'>;
 
 export interface BlogPostWithAuthors extends Omit<BlogPost, 'authors'> {
   authors: Author[];
+  readingTime: string;
 }
 
 export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
@@ -13,7 +14,8 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
 
   return await Promise.all(
     posts.map(async (post: BlogPost) => {
-      console.log(post.data);
+      const { remarkPluginFrontmatter } = await render(post);
+      console.log(remarkPluginFrontmatter);
       const postAuthors = await Promise.all(
         post.data.authors.map(async (author: { id: string }) => {
           const authorData = authors.find((a: Author) => a.id === author.id);
@@ -27,6 +29,7 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
       return {
         ...post,
         authors: postAuthors,
+        readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
       };
     })
   );

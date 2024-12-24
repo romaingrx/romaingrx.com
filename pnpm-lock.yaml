@@ -120,6 +120,9 @@ importers:
       lint-staged:
         specifier: ^15.2.11
         version: 15.2.11
+      mdast-util-to-string:
+        specifier: ^4.0.0
+        version: 4.0.0
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -129,6 +132,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.9
         version: 0.6.9(@ianvs/prettier-plugin-sort-imports@4.4.0(prettier@3.4.2))(prettier-plugin-astro@0.14.1)(prettier@3.4.2)
+      reading-time:
+        specifier: ^1.5.0
+        version: 1.5.0
 
 packages:
 

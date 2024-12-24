@@ -1,11 +1,12 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
+import { render } from 'astro:content';
 
 import { components } from '@/components/blog/components/index.astro';
 import BlogPost from '@/layouts/BlogPost.astro';
+import { getBlogPosts } from '@/lib/collections';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getBlogPosts();
   return posts.map(post => ({
     params: { slug: post.id },
     props: { post },
@@ -14,17 +15,8 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-
-// Resolve author references
-const authors = await Promise.all(
-  post.data.authors.map(async authorRef => {
-    const author = await getEntry(authorRef);
-    if (!author) throw new Error(`Author ${authorRef.id} not found`);
-    return author;
-  })
-);
 ---
 
-<BlogPost blog={post} authors={authors}>
+<BlogPost blog={post}>
   <Content components={components} />
 </BlogPost>
