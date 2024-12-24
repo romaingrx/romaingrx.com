@@ -73,12 +73,15 @@ const { post, layout = 'default', className } = Astro.props;
       <CardContent className="flex-1 space-y-4 p-6">
         <div class="space-y-2">
           <CardTitle>
-            <h2 class="line-clamp-2 text-xl font-semibold tracking-tight">
+            <h2
+              class="line-clamp-2 text-xl font-semibold tracking-tight"
+              transition:name={`${post.id}-title`}
+            >
               {post.data.title}
             </h2>
           </CardTitle>
           <CardDescription>
-            <p class="line-clamp-3">
+            <p class="line-clamp-3" transition:name={`${post.id}-description`}>
               {post.data.description}
             </p>
           </CardDescription>
@@ -87,13 +90,20 @@ const { post, layout = 'default', className } = Astro.props;
 
       <CardFooter className="flex w-full items-center justify-between">
         <div class="flex w-full items-center gap-1">
-          <StackedAuthors authors={post.authors} show_name={false} />
-          <span class="text-sm text-muted-foreground">{post.readingTime}</span>
+          <StackedAuthors
+            authors={post.authors}
+            show_name={false}
+            transition:name={`${post.id}-authors`}
+          />
+          <span class="text-sm text-muted-foreground" transition:name={`${post.id}-reading-time`}>
+            {post.readingTime}
+          </span>
         </div>
         <div class="flex w-full items-end justify-end gap-3">
           <time
             datetime={post.data.published_date.toISOString()}
             class="text-sm text-muted-foreground"
+            transition:name={`${post.id}-published-date`}
           >
             {
               post.data.published_date.toLocaleDateString('en-US', {

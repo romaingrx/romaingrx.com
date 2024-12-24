@@ -3,7 +3,8 @@ import ContinueReading from '@/components/animations/continue-reading.astro';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import Shell from '@/components/Shell.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
-import { getColorFromString } from '@/utils/colors';
+
+import BlogPostBackground from './card/background';
 
 interface Props {
   post: BlogPostWithAuthors;
@@ -11,24 +12,22 @@ interface Props {
 }
 
 const { post, class: className = '' } = Astro.props;
-const backgroundColor = getColorFromString(post.id);
 ---
 
 <header
   class:list={[
     'relative flex w-full flex-col items-center justify-center',
-    'mx-2 overflow-hidden rounded-b-xl py-16 opacity-0',
+    'mx-2 overflow-hidden rounded-b-xl py-16',
     'min-h-[calc(100vh-4rem)]',
+    'transition-all duration-500 ease-out',
+    'translate-y-4 opacity-0',
     className,
   ]}
   data-header
 >
   <!-- Background with subtle gradient -->
-  <div class="absolute inset-0 opacity-20" style={`background-color: ${backgroundColor};`}>
-    <div
-      class="absolute inset-0 bg-gradient-to-b from-background/5 via-transparent to-background/10"
-    >
-    </div>
+  <div class="absolute inset-0 opacity-20">
+    <BlogPostBackground value={post.id} />
   </div>
 
   <!-- Main Content -->
@@ -38,7 +37,10 @@ const backgroundColor = getColorFromString(post.id);
       <div
         class="mb-8 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400"
       >
-        <time datetime={post.data.published_date.toISOString()}>
+        <time
+          datetime={post.data.published_date.toISOString()}
+          transition:name={`${post.id}-published-date`}
+        >
           {
             post.data.published_date.toLocaleDateString('en-US', {
               year: 'numeric',
@@ -48,25 +50,29 @@ const backgroundColor = getColorFromString(post.id);
           }
         </time>
         <span>•</span>
-        <span>{post.readingTime}</span>
+        <span transition:name={`${post.id}-reading-time`}>{post.readingTime}</span>
       </div>
 
       <!-- Title -->
       <h1
         class="mb-6 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-4xl font-bold tracking-tight text-transparent dark:from-white dark:to-gray-200 md:text-5xl lg:text-6xl"
+        transition:name={`${post.id}-title`}
       >
         {post.data.title}
       </h1>
 
       <!-- Description -->
-      <p class="mb-12 text-lg text-gray-700 dark:text-gray-300 md:text-xl">
+      <p
+        class="mb-12 text-lg text-gray-700 dark:text-gray-300 md:text-xl"
+        transition:name={`${post.id}-description`}
+      >
         {post.data.description}
       </p>
 
       <div class="relative">
         <div class="flex flex-col gap-3 text-start">
           <span class="text-sm font-medium text-muted-foreground">Written by</span>
-          <StackedAuthors authors={post.authors} />
+          <StackedAuthors authors={post.authors} transition:name={`${post.id}-authors`} />
         </div>
       </div>
     </div>
@@ -78,13 +84,11 @@ const backgroundColor = getColorFromString(post.id);
 </header>
 
 <style>
-  header {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     header {
       transition: none;
+      opacity: 1;
+      transform: none;
     }
   }
 </style>
@@ -98,9 +102,11 @@ const backgroundColor = getColorFromString(post.id);
     const header = document.querySelector('[data-header]') as HTMLElement;
     if (!header) return;
 
-    // Show the header initially
-    header.style.opacity = '1';
-    header.style.transform = 'translateY(0)';
+    // Show the header with a slight delay to ensure smooth transition
+    setTimeout(() => {
+      header.style.opacity = '1';
+      header.style.transform = 'translateY(0)';
+    }, 0);
 
     const observer = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
@@ -121,8 +127,10 @@ const backgroundColor = getColorFromString(post.id);
     );
 
     observer.observe(header);
+
+    return () => observer.disconnect();
   };
 
-  // Initialize the intersection observer when the document is ready
-  document.addEventListener('DOMContentLoaded', setupIntersectionObserver);
+  // Setup on initial page load and after view transitions
+  document.addEventListener('astro:page-load', setupIntersectionObserver);
 </script>
