@@ -47,6 +47,7 @@ export default [
         process: true,
         URL: true,
         Image: true,
+        Buffer: true,
       },
     },
   },
