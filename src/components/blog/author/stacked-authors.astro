@@ -1,0 +1,62 @@
+---
+import type { Author } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+import AuthorHoverCard from './hover-card.tsx';
+
+interface Props {
+  authors: Author[];
+  size?: number;
+  className?: string;
+}
+
+const { authors, size = 32, className } = Astro.props;
+
+if (!authors.length) return null;
+
+const reversedAuthors = [...authors].reverse();
+---
+
+<div class={cn('flex items-center', className)}>
+  <div class="flex -space-x-4">
+    {
+      reversedAuthors.map((author, i) => (
+        <AuthorHoverCard author={author} with_image={false} client:visible>
+          <div class="flex items-center justify-center gap-2">
+            <div
+              class={cn(
+                'relative overflow-hidden rounded-full border-2 border-background',
+                'flex items-center justify-center transition-all duration-200 hover:z-10 hover:scale-110'
+              )}
+              style={{
+                height: `${size}px`,
+                width: `${size}px`,
+                zIndex: i,
+              }}
+            >
+              <img
+                src={author.data.image}
+                alt={author.data.name}
+                class="h-full w-full object-cover"
+              />
+            </div>
+            {authors.length === 1 && (
+              <div class="flex flex-col items-start justify-start">
+                <span class="text-sm font-semibold">{authors[0]?.data?.name}</span>
+                <span class="text-sm text-muted-foreground">{authors[0]?.data?.title}</span>
+              </div>
+            )}
+          </div>
+        </AuthorHoverCard>
+      ))
+    }
+  </div>
+
+  <div class="ml-3">
+    {
+      authors.length > 1 && (
+        <span class="text-sm text-muted-foreground">{authors.length} authors</span>
+      )
+    }
+  </div>
+</div>

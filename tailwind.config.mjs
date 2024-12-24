@@ -4,10 +4,28 @@ export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
+      keyframes: {
+        'pulse-slow': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
+        'up-down': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+      },
+      animation: {
+        'pulse-slow': 'pulse-slow 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+        'up-down': 'up-down 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      backgroundImage: {
+        dots: 'radial-gradient(circle, #000 1px, transparent 1px)',
+        'dots-dark': 'radial-gradient(circle, #fff 1px, transparent 1px)',
       },
       colors: {
         background: 'hsl(var(--background))',

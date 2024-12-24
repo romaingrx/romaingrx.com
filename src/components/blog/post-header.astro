@@ -1,0 +1,128 @@
+---
+import ContinueReading from '@/components/animations/continue-reading.astro';
+import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import Shell from '@/components/Shell.astro';
+import type { BlogPostWithAuthors } from '@/lib/collections';
+import { getColorFromString } from '@/utils/colors';
+
+interface Props {
+  post: BlogPostWithAuthors;
+  class?: string;
+}
+
+const { post, class: className = '' } = Astro.props;
+const backgroundColor = getColorFromString(post.id);
+---
+
+<header
+  class:list={[
+    'relative flex w-full flex-col items-center justify-center',
+    'mx-2 overflow-hidden rounded-xl py-16 opacity-0',
+    'min-h-[calc(100vh-4rem)]',
+    className,
+  ]}
+  data-header
+>
+  <!-- Background with subtle gradient -->
+  <div class="absolute inset-0 opacity-20" style={`background-color: ${backgroundColor};`}>
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-background/5 via-transparent to-background/10"
+    >
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <Shell type="blog">
+    <div class="relative z-10 mx-auto max-w-3xl text-center">
+      <!-- Meta Information -->
+      <div
+        class="mb-8 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400"
+      >
+        <time datetime={post.data.published_date.toISOString()}>
+          {
+            post.data.published_date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
+        </time>
+        <span>•</span>
+        <span>{post.readingTime}</span>
+      </div>
+
+      <!-- Title -->
+      <h1
+        class="mb-6 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-4xl font-bold tracking-tight text-transparent dark:from-white dark:to-gray-200 md:text-5xl lg:text-6xl"
+      >
+        {post.data.title}
+      </h1>
+
+      <!-- Description -->
+      <p class="mb-12 text-lg text-gray-700 dark:text-gray-300 md:text-xl">
+        {post.data.description}
+      </p>
+
+      <div class="relative">
+        <div class="flex flex-col gap-3 text-start">
+          <span class="text-sm font-medium text-muted-foreground">Written by</span>
+          <StackedAuthors authors={post.authors} />
+        </div>
+      </div>
+    </div>
+  </Shell>
+
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 transform">
+    <ContinueReading />
+  </div>
+</header>
+
+<style>
+  header {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    header {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  interface IntersectionObserverEntry {
+    isIntersecting: boolean;
+  }
+
+  const setupIntersectionObserver = () => {
+    const header = document.querySelector('[data-header]') as HTMLElement;
+    if (!header) return;
+
+    // Show the header initially
+    header.style.opacity = '1';
+    header.style.transform = 'translateY(0)';
+
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            header.style.opacity = '1';
+            header.style.transform = 'translateY(0)';
+          } else {
+            header.style.opacity = '0';
+            header.style.transform = 'translateY(-2rem)';
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '-100px 0px 0px 0px',
+      }
+    );
+
+    observer.observe(header);
+  };
+
+  // Initialize the intersection observer when the document is ready
+  document.addEventListener('DOMContentLoaded', setupIntersectionObserver);
+</script>

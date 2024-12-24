@@ -1,0 +1,25 @@
+---
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const container = cva(['mx-auto', 'max-w-7xl', 'px-4', 'sm:px-6', 'lg:px-8'], {
+  variants: {
+    type: {
+      blog: ['max-w-4xl'],
+      page: ['max-w-7xl'],
+    },
+  },
+  defaultVariants: {
+    type: 'page',
+  },
+});
+
+type Props = {
+  type: VariantProps<typeof container>['type'];
+};
+
+const { type } = Astro.props;
+---
+
+<div class={container({ type })}>
+  <slot />
+</div>

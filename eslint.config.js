@@ -46,6 +46,7 @@ export default [
         require: true,
         process: true,
         URL: true,
+        Image: true,
       },
     },
   },

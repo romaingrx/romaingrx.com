@@ -114,6 +114,7 @@ Key Conventions
 4. Leverage Astro's RSS feed generation for content-heavy sites.
 5. Use Astro's Image component for optimized image delivery.
 6. Use kebab-case file naming.
+7. Never hardcode colors in the code, use the ones from the shadcn/ui library defined in the @/styles/globals.css file.
 
 Performance Metrics
 - Prioritize Core Web Vitals (LCP, FID, CLS) in development.
