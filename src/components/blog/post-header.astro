@@ -1,6 +1,7 @@
 ---
 import ContinueReading from '@/components/animations/continue-reading.astro';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import Resources from '@/components/blog/resources/index.astro';
 import Shell from '@/components/Shell.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 
@@ -63,13 +64,25 @@ const { post, class: className = '' } = Astro.props;
 
       <!-- Description -->
       <p
-        class="mb-12 text-lg text-gray-700 dark:text-gray-300 md:text-xl"
+        class="mb-8 text-lg text-gray-700 dark:text-gray-300 md:text-xl"
         transition:name={`${post.id}-description`}
       >
         {post.data.description}
       </p>
 
-      <div class="relative">
+      <!-- Resources -->
+      {
+        post.data.resources && (
+          <div class="relative mt-4">
+            <div class="flex flex-col gap-3 text-start">
+              <span class="text-sm font-medium text-muted-foreground">Resources</span>
+              <Resources resources={post.data.resources} />
+            </div>
+          </div>
+        )
+      }
+
+      <div class="relative mt-4">
         <div class="flex flex-col gap-3 text-start">
           <span class="text-sm font-medium text-muted-foreground">Written by</span>
           <StackedAuthors authors={post.authors} transition:name={`${post.id}-authors`} />

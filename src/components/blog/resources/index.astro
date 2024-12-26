@@ -1,0 +1,45 @@
+---
+import type { z } from 'astro/zod';
+
+import type { resource_schema } from '@/configs/resources';
+
+import { ResourceBadge } from './resource-badge';
+
+interface Props {
+  resources: z.infer<typeof resource_schema>[];
+}
+
+const { resources } = Astro.props;
+
+// Group resources by type
+const groupedResources = resources.reduce(
+  (acc, resource) => {
+    const { type } = resource;
+    if (!acc[type]) {
+      acc[type] = [];
+    }
+    acc[type].push(resource);
+    return acc;
+  },
+  {} as Record<string, typeof resources>
+);
+---
+
+{
+  resources && resources.length > 0 && (
+    <div class="flex flex-wrap items-start justify-start gap-3">
+      {Object.values(groupedResources)
+        .flat()
+        .map(resource => (
+          <ResourceBadge
+            client:visible
+            type={resource.type}
+            provider={resource.provider}
+            title={resource.title}
+            value={resource.value}
+            description={resource.description}
+          />
+        ))}
+    </div>
+  )
+}

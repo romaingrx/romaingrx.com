@@ -1,6 +1,7 @@
 import { glob } from 'astro/loaders';
 import { defineCollection, reference, z } from 'astro:content';
 
+import { platforms_enum } from './configs/platforms';
 import { resource_schema } from './configs/resources';
 
 // Define the author collection schema
@@ -14,9 +15,8 @@ const author = defineCollection({
       image: z.string(),
       socialLinks: z.array(
         z.object({
-          platform: z.enum(['github', 'twitter', 'linkedin', 'website']),
+          platform: platforms_enum,
           url: z.string().url(),
-          icon: z.string().optional(),
         })
       ),
     })

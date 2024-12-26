@@ -6,23 +6,19 @@
   "socialLinks": [
     {
       "platform": "github",
-      "url": "https://github.com/romaingrx",
-      "icon": "mdi:github"
+      "url": "https://github.com/romaingrx"
     },
     {
       "platform": "twitter",
-      "url": "https://twitter.com/",
-      "icon": "mdi:twitter"
+      "url": "https://twitter.com/"
     },
     {
       "platform": "linkedin",
-      "url": "https://linkedin.com/in/",
-      "icon": "mdi:linkedin"
+      "url": "https://linkedin.com/in/"
     },
     {
       "platform": "website",
-      "url": "https://romaingrx.com",
-      "icon": "mdi:web"
+      "url": "https://romaingrx.com"
     }
   ]
 }
