@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 
+import TagBadge from '@/components/blog/tag-badge.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 
 import BaseLayout from './BaseLayout.astro';
@@ -126,17 +127,7 @@ const formatDate = (date: Date) => {
 
         {/* Tags */}
         <div class="flex flex-wrap items-center justify-center gap-2">
-          {
-            tags?.map((tag: string) => (
-              <a
-                href={`/blog/tag/${tag}`}
-                class="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
-              >
-                <Icon name="lucide:tag" class="h-3 w-3" />
-                <span>{tag}</span>
-              </a>
-            ))
-          }
+          {tags?.map((tag: string) => <TagBadge tag={tag} />)}
         </div>
       </header>
 

@@ -5,18 +5,32 @@ import TagBadge from '@/components/blog/tag-badge.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts } from '@/lib/collections';
 
+export async function getStaticPaths() {
+  const posts = await getPublishedBlogPosts();
+  const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+
+  return tags.map(tag => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+
 // Get all published blog posts
-const posts = (await getPublishedBlogPosts()).sort(
+const allPosts = (await getPublishedBlogPosts()).sort(
   (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf()
 );
 
-// Get unique categories and tags
-const categories = [...new Set(posts.flatMap(post => post.data.categories))];
-const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+// Filter posts by tag
+const posts = allPosts.filter(post => post.data.tags.includes(tag));
 
-const title = 'Blog';
-const description =
-  'Explore my thoughts and insights on AI, machine learning, and software development.';
+// Get unique categories and tags for sidebar
+const categories = [...new Set(allPosts.flatMap(post => post.data.categories))];
+const tags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+
+const title = `Blog - ${tag}`;
+const description = `Explore blog posts tagged with ${tag}.`;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -24,7 +38,12 @@ const description =
     <div class="grid gap-12 lg:grid-cols-[1fr_16rem]">
       <!-- Blog Posts Grid -->
       <section class="space-y-12">
-        <h1 class="text-4xl font-bold">Latest Posts</h1>
+        <div class="space-y-4">
+          <h1 class="text-4xl font-bold">Tag: {tag}</h1>
+          <p class="text-muted-foreground">
+            {posts.length} post{posts.length === 1 ? '' : 's'}
+          </p>
+        </div>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
           {posts.map(post => <BlogCard post={post} layout={'horizontal'} />)}
         </div>
@@ -50,7 +69,7 @@ const description =
         <div class="space-y-4">
           <h2 class="text-xl font-semibold">Tags</h2>
           <div class="flex flex-wrap gap-2">
-            {tags.map(tag => <TagBadge tag={tag} />)}
+            {tags.map(t => <TagBadge tag={t} isActive={t === tag} />)}
           </div>
         </div>
       </aside>
