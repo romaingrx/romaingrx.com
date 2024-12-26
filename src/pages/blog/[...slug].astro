@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 
 import { components } from '@/components/blog/components/index.astro';
+import PostFooter from '@/components/blog/footer/index.astro';
 import PostHeader from '@/components/blog/post-header.astro';
 import Shell from '@/components/Shell.astro';
 import BlogLayout from '@/layouts/BlogLayout.astro';
@@ -26,5 +27,6 @@ const { Content } = await render(post);
     <article class="prose prose-lg dark:prose-invert">
       <Content components={components} />
     </article>
+    <PostFooter post={post} />
   </Shell>
 </BlogLayout>

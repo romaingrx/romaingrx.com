@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { platforms_info } from '@/configs/platforms';
+
+interface Props {
+  authors: CollectionEntry<'author'>[];
+}
+
+const { authors } = Astro.props;
+---
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+  {
+    authors.map(author => (
+      <Card className="border-none bg-muted/50">
+        <CardHeader>
+          <div class="flex items-center gap-4">
+            <Image
+              src={author.data.image}
+              alt={author.data.name}
+              width={56}
+              height={56}
+              class="rounded-lg ring-2 ring-border"
+            />
+            <div>
+              <h3 class="text-lg font-semibold">{author.data.name}</h3>
+              {author.data.title && (
+                <p class="text-sm text-muted-foreground">{author.data.title}</p>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <p class="mb-4 text-sm leading-relaxed text-muted-foreground">
+            {author.data.description}
+          </p>
+          <div class="flex gap-3">
+            {author.data.socialLinks.map(link => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <Icon name={platforms_info[link.platform].icon_name} class="h-5 w-5" />
+                <span class="sr-only">
+                  {author.data.name} on {link.platform}
+                </span>
+              </a>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    ))
+  }
+</div>

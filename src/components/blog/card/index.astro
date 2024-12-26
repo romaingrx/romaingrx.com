@@ -6,7 +6,6 @@ import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import {
   CardContent,
   CardDescription,
-  CardFooter,
   Card as CardPrimitive,
   CardTitle,
 } from '@/components/ui/card';
@@ -16,12 +15,65 @@ import { cn } from '@/lib/utils';
 import BlogPostBackground from './background';
 
 const cardVariants = cva(
-  'group overflow-hidden transition-all rounded-xl bg-card group-hover:shadow-xl',
+  'group overflow-hidden transition-all rounded-xl bg-card hover:bg-accent/40 border shadow-sm',
   {
     variants: {
       layout: {
-        default: 'flex flex-col max-w-xl',
-        horizontal: 'grid md:grid-cols-[300px_1fr] gap-0 max-w-3xl',
+        default: 'flex flex-col',
+        horizontal: 'grid md:grid-cols-[45%_1fr]',
+      },
+      size: {
+        default: 'max-w-2xl',
+        sm: 'max-w-xl',
+        lg: 'max-w-4xl',
+      },
+    },
+    compoundVariants: [
+      {
+        layout: 'horizontal',
+        size: 'default',
+        class: 'min-h-[160px]',
+      },
+      {
+        layout: 'horizontal',
+        size: 'sm',
+        class: 'min-h-[140px]',
+      },
+      {
+        layout: 'horizontal',
+        size: 'lg',
+        class: 'min-h-[180px]',
+      },
+      {
+        layout: 'default',
+        size: 'default',
+        class: 'min-h-[240px]',
+      },
+      {
+        layout: 'default',
+        size: 'sm',
+        class: 'min-h-[220px]',
+      },
+      {
+        layout: 'default',
+        size: 'lg',
+        class: 'min-h-[280px]',
+      },
+    ],
+    defaultVariants: {
+      layout: 'default',
+      size: 'default',
+    },
+  }
+);
+
+const imageContainerVariants = cva(
+  'relative overflow-hidden flex items-center justify-center bg-muted/50',
+  {
+    variants: {
+      layout: {
+        default: 'h-[180px] w-full rounded-t-xl',
+        horizontal: 'h-full w-full rounded-l-xl',
       },
     },
     defaultVariants: {
@@ -30,18 +82,6 @@ const cardVariants = cva(
   }
 );
 
-const imageContainerVariants = cva('relative overflow-hidden flex items-center justify-center', {
-  variants: {
-    layout: {
-      default: 'h-[240px] w-full rounded-t-xl',
-      horizontal: 'h-full w-full rounded-l-xl',
-    },
-  },
-  defaultVariants: {
-    layout: 'default',
-  },
-});
-
 type CardVariants = VariantProps<typeof cardVariants>;
 
 interface Props extends CardVariants {
@@ -49,47 +89,50 @@ interface Props extends CardVariants {
   className?: string;
 }
 
-const { post, layout = 'default', className } = Astro.props;
+const { post, layout = 'default', size = 'default', className } = Astro.props;
 ---
 
-<a href={`/blog/${post.id}`} class="block no-underline">
-  <CardPrimitive className={cn(cardVariants({ layout }), className, 'transition-all duration-300')}>
+<a href={`/blog/${post.id}`} class="group/card block no-underline">
+  <CardPrimitive
+    className={cn(cardVariants({ layout, size }), className, 'h-full transition-all duration-300')}
+  >
     {
       post.data.cover && (
         <div class={cn(imageContainerVariants({ layout }))}>
-          <div class="absolute inset-0">
+          <div class="absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
             <BlogPostBackground value={post.id} />
           </div>
           <Image
             src={post.data.cover}
             alt={post.data.title}
-            class="relative z-10 h-auto max-h-[200px] w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105"
+            class="relative z-10 h-auto w-auto max-w-[65%] object-contain transition-all duration-500 group-hover/card:scale-110"
+            width={300}
+            height={200}
           />
         </div>
       )
     }
-
     <div class="flex h-full flex-col">
-      <CardContent className="flex-1 space-y-4 p-6">
+      <CardContent className="flex-1 space-y-2.5 p-4">
         <div class="space-y-2">
           <CardTitle>
             <h2
-              class="line-clamp-2 text-xl font-semibold tracking-tight"
+              class="line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary"
               transition:name={`${post.id}-title`}
             >
               {post.data.title}
             </h2>
           </CardTitle>
           <CardDescription>
-            <p class="line-clamp-3" transition:name={`${post.id}-description`}>
+            <p class="line-clamp-2 text-sm" transition:name={`${post.id}-description`}>
               {post.data.description}
             </p>
           </CardDescription>
         </div>
       </CardContent>
 
-      <CardFooter className="flex w-full items-center justify-between">
-        <div class="flex w-full items-center gap-1">
+      <div class="flex items-center gap-4 px-4">
+        <div class="flex items-center gap-2">
           <StackedAuthors
             authors={post.authors}
             show_name={false}
@@ -99,22 +142,20 @@ const { post, layout = 'default', className } = Astro.props;
             {post.readingTime}
           </span>
         </div>
-        <div class="flex w-full items-end justify-end gap-3">
-          <time
-            datetime={post.data.published_date.toISOString()}
-            class="text-sm text-muted-foreground"
-            transition:name={`${post.id}-published-date`}
-          >
-            {
-              post.data.published_date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })
-            }
-          </time>
-        </div>
-      </CardFooter>
+        <time
+          datetime={post.data.published_date.toISOString()}
+          class="ml-auto text-sm text-muted-foreground"
+          transition:name={`${post.id}-published-date`}
+        >
+          {
+            post.data.published_date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          }
+        </time>
+      </div>
     </div>
   </CardPrimitive>
 </a>

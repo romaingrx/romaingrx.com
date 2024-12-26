@@ -1,0 +1,107 @@
+---
+import { Icon } from '@iconify/react/dist/iconify.js';
+
+import { Badge } from '@/components/ui/badge';
+import type { BlogPostWithAuthors } from '@/lib/collections';
+
+import ResourceBadges from '../resources/index.astro';
+import AuthorCards from './author-cards.astro';
+import RelatedPosts from './related-posts.astro';
+
+interface Props {
+  post: BlogPostWithAuthors;
+}
+
+const { post } = Astro.props;
+const hasRelatedContent = post.data.related_posts || post.data.tags.length > 0;
+---
+
+<footer class="mt-16">
+  <!-- Authors Section -->
+  {
+    post.authors.length > 0 && (
+      <div class="mb-16">
+        <h2 class="mb-6 text-2xl font-semibold tracking-tight">
+          About the author{post.authors.length > 1 ? 's' : ''}
+        </h2>
+        <AuthorCards authors={post.authors} />
+      </div>
+    )
+  }
+
+  <!-- Related Content Section -->
+  {
+    hasRelatedContent && (
+      <div class="mb-16">
+        <h2 class="mb-6 text-2xl font-semibold tracking-tight">
+          {post.data.related_posts ? 'Related Content' : 'More Posts'}
+        </h2>
+        <RelatedPosts post={post} />
+      </div>
+    )
+  }
+
+  <!-- Metadata Section -->
+  <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+    <div class="space-y-6">
+      <!-- Tags and Categories -->
+      <div class="space-y-4">
+        {
+          post.data.resources && (
+            <div class="space-y-3">
+              <h3 class="text-sm font-medium text-muted-foreground">Resources</h3>
+              <ResourceBadges resources={post.data.resources} />
+            </div>
+          )
+        }
+        {
+          post.data.tags.length > 0 && (
+            <div class="space-y-3">
+              <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
+              <div class="flex flex-wrap gap-2">
+                {post.data.tags.map(tag => (
+                  <Badge variant="secondary" className="capitalize">
+                    <Icon icon="mdi:tag" className="mr-1.5 h-3.5 w-3.5" />
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {
+          post.data.categories.length > 0 && (
+            <div class="space-y-3">
+              <h3 class="text-sm font-medium text-muted-foreground">Categories</h3>
+              <div class="flex flex-wrap gap-2">
+                {post.data.categories.map(category => (
+                  <Badge variant="secondary" className="capitalize">
+                    <Icon icon="mdi:folder" className="mr-1.5 h-3.5 w-3.5" />
+                    {category}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Update Information -->
+      {
+        post.data.updated_date && (
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <Icon icon="mdi:calendar-clock" className="h-4 w-4" />
+            <span>
+              Last updated on{' '}
+              {post.data.updated_date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </span>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</footer>

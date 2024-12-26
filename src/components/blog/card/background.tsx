@@ -22,13 +22,13 @@ function generateSmoothGradientProps(title: string): SmoothGradientProps {
 
   const seed = hash(title);
   const hue1 = seed % 360;
-  const hue2 = (hue1 + 40) % 360;
+  const hue2 = (hue1 + 60) % 360;
 
   return {
-    color1: `hsl(${hue1}, 40%, 85%)`,
-    color2: `hsl(${hue2}, 30%, 90%)`,
-    noiseOpacity: 0.1,
-    rotation: seed % 360,
+    color1: `hsl(${hue1}, 70%, 85%)`,
+    color2: `hsl(${hue2}, 60%, 90%)`,
+    noiseOpacity: 0.15,
+    rotation: (seed % 360) - 180,
   };
 }
 
