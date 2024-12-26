@@ -2,16 +2,15 @@
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 
+import type { Author } from '@/lib/collections';
+import { platforms_info } from '@/configs/platforms';
+
 interface Props {
   name: string;
   title: string;
   description: string;
   image: string;
-  socialLinks?: {
-    platform: string;
-    url: string;
-    icon: string;
-  }[];
+  socialLinks: Author['data']['socialLinks'];
 }
 
 const { name, title, description, image, socialLinks = [] } = Astro.props;
@@ -41,7 +40,7 @@ const { name, title, description, image, socialLinks = [] } = Astro.props;
       {
         socialLinks.length > 0 && (
           <div class="flex gap-4">
-            {socialLinks.map(({ platform, url, icon }) => (
+            {socialLinks.map(({ platform, url }) => (
               <a
                 href={url}
                 target="_blank"
@@ -49,7 +48,7 @@ const { name, title, description, image, socialLinks = [] } = Astro.props;
                 class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
                 title={`Follow on ${platform}`}
               >
-                <Icon name={icon} class="h-5 w-5" />
+                <Icon name={platforms_info[platform].icon_name} class="h-5 w-5" />
                 <span class="sr-only">Follow on {platform}</span>
               </a>
             ))}

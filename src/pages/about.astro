@@ -14,12 +14,6 @@ const { name, title, description, image, socialLinks } = author.data;
 const pageTitle = 'About Me';
 const pageDescription =
   'Learn more about my background, experience, and interests in AI and software development.';
-
-const formattedSocialLinks = socialLinks.map(({ platform, url, icon }) => ({
-  platform: platform as string,
-  url,
-  icon: icon ?? '',
-}));
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -31,7 +25,7 @@ const formattedSocialLinks = socialLinks.map(({ platform, url, icon }) => ({
         title={title ?? ''}
         description={description}
         image={image}
-        socialLinks={formattedSocialLinks}
+        socialLinks={socialLinks}
       />
 
       <!-- Timeline Section -->

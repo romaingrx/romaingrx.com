@@ -31,6 +31,7 @@ const groupedResources = resources.reduce(
       {Object.values(groupedResources)
         .flat()
         .map(resource => (
+          // @ts-ignore
           <ResourceBadge
             client:visible
             type={resource.type}
