@@ -34,51 +34,56 @@ const renderedContent = await Promise.all(
 ---
 
 <div class="flex flex-col">
-  <h1 class="font-wise mb-12 text-center text-4xl text-purple-500">{title}</h1>
+  <h1
+    class="font-wise mb-16 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-center text-5xl text-transparent"
+  >
+    {title}
+  </h1>
 
   <div class="relative">
     {/* Vertical Line */}
-    <div
-      class="absolute left-[19px] top-0 h-full w-0.5 bg-purple-200 dark:bg-purple-900 md:left-1/2 md:-translate-x-px"
-    >
+    <div class="absolute left-[29px] top-0 h-full w-0.5 bg-purple-300/50 dark:bg-purple-500/20">
     </div>
 
     <div class="space-y-16">
       {
-        renderedContent.map(({ item, Content }, index) => (
-          <div class="relative ml-12 md:ml-0">
+        renderedContent.map(({ item, Content }) => (
+          <div class="relative ml-20">
             {/* Timeline Dot */}
-            <div class="absolute -left-[25px] top-0 flex h-10 w-10 items-center justify-center md:left-1/2 md:-translate-x-1/2">
-              <div class="h-3 w-3 rounded-full bg-purple-500" />
+            {/*
+            <div class="absolute left-[60px] top-0 flex items-center justify-center">
+              <div class="relative h-[30px] w-[30px] rounded-full bg-purple-100 dark:bg-purple-900/30">
+                <div class="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500" />
+              </div>
             </div>
+             */}
 
             {/* Content */}
-            <div class={`md:w-[calc(50%-60px)] ${index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'}`}>
+            <div class="min-h-[60px]">
               {/* Header */}
-              <div class="mb-4">
-                <h3 class="text-xl font-semibold">{item.data.title}</h3>
-                <div class="mt-1">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-2xl font-semibold">{item.data.title}</h3>
+                <div>
                   {item.data.organization_url ? (
                     <a
                       href={item.data.organization_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-sm text-purple-500 hover:underline"
+                      class="text-base text-purple-500 hover:underline"
                     >
                       {item.data.organization}
                     </a>
                   ) : (
-                    <span class="text-sm text-purple-500">{item.data.organization}</span>
+                    <span class="text-base text-purple-500">{item.data.organization}</span>
                   )}
                 </div>
-                <div class="mt-1 text-sm text-muted-foreground">
-                  {item.data.startDate} - {item.data.endDate}
+                <div class="text-base text-muted-foreground">
+                  {item.data.startDate} - {item.data.endDate} • {item.data.location}
                 </div>
-                <div class="mt-1 text-sm text-muted-foreground">{item.data.location}</div>
               </div>
 
-              {/* Content */}
-              <div class="prose prose-sm dark:prose-invert">
+              {/* Description */}
+              <div class="prose prose-sm dark:prose-invert mt-4">
                 <Content />
               </div>
 
@@ -86,7 +91,7 @@ const renderedContent = await Promise.all(
               {item.data.tags && item.data.tags.length > 0 && (
                 <div class="mt-4 flex flex-wrap gap-2">
                   {item.data.tags.map((tag: string) => (
-                    <span class="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-900/50 dark:text-purple-200">
+                    <span class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-900/30 dark:text-purple-200">
                       {tag}
                     </span>
                   ))}
