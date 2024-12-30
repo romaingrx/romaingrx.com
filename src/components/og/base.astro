@@ -1,0 +1,41 @@
+---
+import { OGImageRoute } from 'astro-og-canvas';
+
+interface Props {
+  title: string;
+  description?: string;
+  logo?: boolean;
+}
+
+const { title, description, logo = true } = Astro.props;
+
+const config = {
+  title,
+  description,
+  logo: logo ? 'https://romaingrx.dev/favicon.svg' : undefined,
+  border: { color: [55, 65, 81], width: 20 },
+  bgGradient: [
+    [15, 23, 42],
+    [30, 41, 59],
+  ],
+  font: {
+    title: {
+      size: 78,
+      families: ['Inter'],
+      weight: 800,
+    },
+    description: {
+      size: 45,
+      lineHeight: 1.25,
+      families: ['Inter'],
+      weight: 500,
+    },
+  },
+  fonts: [
+    'https://api.fontsource.org/v1/fonts/inter/latin-800-normal.ttf',
+    'https://api.fontsource.org/v1/fonts/inter/latin-500-normal.ttf',
+  ],
+};
+---
+
+<OGImageRoute {...config} />

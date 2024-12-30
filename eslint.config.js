@@ -48,6 +48,7 @@ export default [
         URL: true,
         Image: true,
         Buffer: true,
+        fetch: true,
       },
     },
   },

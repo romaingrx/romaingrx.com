@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 
 import ProfileSection from '@/components/about/ProfileSection.astro';
 import Timeline from '@/components/about/Timeline.astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import Layout from '@/layouts/BaseLayout.astro';
 
 const author = await getEntry('author', 'romaingrx');
 if (!author) {
@@ -11,28 +11,24 @@ if (!author) {
 }
 const { name, title, description, image, socialLinks } = author.data;
 
-const pageTitle = 'About Me';
-const pageDescription =
+const page_description =
   'Learn more about my background, experience, and interests in AI and software development.';
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
-  <main class="container mx-auto px-4 py-12 md:py-24">
-    <div class="grid gap-12 md:gap-24">
-      <!-- Profile Section -->
-      <ProfileSection
-        name={name}
-        title={title ?? ''}
-        description={description}
-        image={image}
-        socialLinks={socialLinks}
-      />
+<Layout title="About me" description={page_description}>
+  <div class="container mx-auto max-w-4xl px-4 py-8">
+    <ProfileSection
+      name={name}
+      title={title}
+      description={description}
+      image={image}
+      socialLinks={socialLinks}
+    />
 
-      <!-- Timeline Section -->
-      <section class="space-y-8">
-        <h2 class="text-3xl font-bold">Experience & Education</h2>
-        <Timeline items={[]} />
-      </section>
+    <div class="mt-16 space-y-16">
+      <Timeline type="project" title="Projects" />
+      <Timeline type="experience" title="Experience" />
+      <Timeline type="education" title="Education" />
     </div>
-  </main>
-</BaseLayout>
+  </div>
+</Layout>

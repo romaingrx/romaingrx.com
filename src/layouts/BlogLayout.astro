@@ -1,15 +1,20 @@
 ---
+import type { BlogPostWithAuthors } from '@/lib/collections';
+
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
-  title: string;
-  description: string;
+  post: BlogPostWithAuthors;
 }
 
-const { title, description } = Astro.props;
+const { post } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={`/og/blog.png?id=${post.id}`}
+>
   <slot />
 </BaseLayout>
 

@@ -17,6 +17,7 @@ const {
     data: { title, description, cover, published_date, updated_date, categories, tags },
     authors,
     readingTime,
+    slug,
   },
 } = Astro.props;
 
@@ -28,9 +29,11 @@ const formatDate = (date: Date) => {
     day: 'numeric',
   });
 };
+
+const ogImage = `/og/${slug}.png`;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} ogImage={ogImage}>
   <article class="container relative mx-auto px-4 py-12 md:py-24">
     {
       cover && (

@@ -32,7 +32,7 @@ Routing and Pages
 
 Content Management
 - Use Markdown (.md) or MDX (.mdx) files for content-heavy pages.
-- Leverage Astro's built-in support for frontmatter in Markdown files.
+- Leverage Astro's built-in support for frontmatter in Markdown files (using render from 'astro:content' when needed).
 - Implement content collections for organized content management.
 - When adequate, use config files for storing static data such as social links, contacts, etc.
 

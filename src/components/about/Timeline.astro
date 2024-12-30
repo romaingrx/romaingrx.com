@@ -1,64 +1,101 @@
 ---
-interface TimelineItem {
-  title: string;
-  organization: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-  type: 'education' | 'experience';
-  tags?: string[];
-}
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 interface Props {
-  items: TimelineItem[];
+  type?: 'education' | 'experience' | 'project';
+  title: string;
 }
 
-const { items } = Astro.props;
+const { type, title } = Astro.props;
+
+// Get timeline entries
+const entries = await getCollection('timeline');
+const filteredEntries = type
+  ? entries.filter((entry: CollectionEntry<'timeline'>) => entry.data.type === type)
+  : entries;
 
 // Sort items by date (most recent first)
-const sortedItems = [...items].sort((a, b) => {
-  return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+const sortedItems = [...filteredEntries].sort((a, b) => {
+  const dateA = a.data.endDate === 'present' ? new Date() : new Date(a.data.startDate);
+  const dateB = b.data.endDate === 'present' ? new Date() : new Date(b.data.startDate);
+  return dateB.getTime() - dateA.getTime();
 });
+
+// Pre-render all content
+const renderedContent = await Promise.all(
+  sortedItems.map(async (item: CollectionEntry<'timeline'>) => {
+    const rendered = await render(item);
+    return {
+      item,
+      Content: rendered.Content,
+    };
+  })
+);
 ---
 
-<div class="space-y-8">
-  {
-    sortedItems.map((item, index) => (
-      <div
-        class="relative grid gap-4 pb-8 pl-8 last:pb-0 md:grid-cols-5 md:gap-8 md:pl-0"
-        data-animate="fade-up"
-        data-animate-delay={index * 100}
-      >
-        <div class="absolute left-0 top-0 h-full w-px bg-border md:left-[50%] md:translate-x-[-50%]">
-          <div class="absolute left-[-4px] top-2 h-2 w-2 rounded-full bg-primary md:left-[50%] md:translate-x-[-50%]" />
-        </div>
+<div class="flex flex-col">
+  <h1 class="font-wise mb-12 text-center text-4xl text-purple-500">{title}</h1>
 
-        <div class="text-sm text-muted-foreground md:text-right">
-          <time>{item.startDate}</time> - <time>{item.endDate}</time>
-        </div>
+  <div class="relative">
+    {/* Vertical Line */}
+    <div
+      class="absolute left-[19px] top-0 h-full w-0.5 bg-purple-200 dark:bg-purple-900 md:left-1/2 md:-translate-x-px"
+    >
+    </div>
 
-        <div class="space-y-3 md:col-span-4">
-          <div class="space-y-1">
-            <h3 class="font-semibold leading-tight">{item.title}</h3>
-            <div class="text-sm text-muted-foreground">
-              {item.organization} • {item.location}
+    <div class="space-y-16">
+      {
+        renderedContent.map(({ item, Content }, index) => (
+          <div class="relative ml-12 md:ml-0">
+            {/* Timeline Dot */}
+            <div class="absolute -left-[25px] top-0 flex h-10 w-10 items-center justify-center md:left-1/2 md:-translate-x-1/2">
+              <div class="h-3 w-3 rounded-full bg-purple-500" />
+            </div>
+
+            {/* Content */}
+            <div class={`md:w-[calc(50%-60px)] ${index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'}`}>
+              {/* Header */}
+              <div class="mb-4">
+                <h3 class="text-xl font-semibold">{item.data.title}</h3>
+                <div class="mt-1">
+                  {item.data.organization_url ? (
+                    <a
+                      href={item.data.organization_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-sm text-purple-500 hover:underline"
+                    >
+                      {item.data.organization}
+                    </a>
+                  ) : (
+                    <span class="text-sm text-purple-500">{item.data.organization}</span>
+                  )}
+                </div>
+                <div class="mt-1 text-sm text-muted-foreground">
+                  {item.data.startDate} - {item.data.endDate}
+                </div>
+                <div class="mt-1 text-sm text-muted-foreground">{item.data.location}</div>
+              </div>
+
+              {/* Content */}
+              <div class="prose prose-sm dark:prose-invert">
+                <Content />
+              </div>
+
+              {/* Tags */}
+              {item.data.tags && item.data.tags.length > 0 && (
+                <div class="mt-4 flex flex-wrap gap-2">
+                  {item.data.tags.map((tag: string) => (
+                    <span class="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-900/50 dark:text-purple-200">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-
-          <p class="text-sm text-muted-foreground">{item.description}</p>
-
-          {item.tags && item.tags.length > 0 && (
-            <div class="flex flex-wrap gap-2">
-              {item.tags.map(tag => (
-                <span class="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    ))
-  }
+        ))
+      }
+    </div>
+  </div>
 </div>

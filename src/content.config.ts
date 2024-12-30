@@ -44,8 +44,32 @@ const blog = defineCollection({
       .strict(),
 });
 
+// Define the timeline collection schema
+export const timelineSchema = z
+  .object({
+    title: z.string(),
+    organization: z.string(),
+    organization_url: z.string().url().optional(),
+    location: z.string(),
+    startDate: z.string(), // YYYY-MM format
+    endDate: z.string(), // YYYY-MM format or "present"
+    type: z.enum(['education', 'experience', 'project']),
+    tags: z.array(z.string()).optional(),
+    order: z.number().optional(), // For manual ordering if needed
+  })
+  .strict();
+
+const timeline = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/timeline' }),
+  schema: timelineSchema,
+});
+
 // Export collections
 export const collections = {
   author,
   blog,
+  timeline,
 };
+
+// Export types
+export type TimelineSchema = z.infer<typeof timelineSchema>;
