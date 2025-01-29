@@ -134,7 +134,8 @@ const renderedContent = await Promise.all(
                     )}
                   </div>
                   <div class="text-base font-medium text-muted-foreground">
-                    {item.data.startDate} - {item.data.endDate} • {item.data.location}
+                    {item.data.startDate} {item.data.endDate ? ' - ' + item.data.endDate : ''} •{' '}
+                    {item.data.location}
                   </div>
                 </div>
 

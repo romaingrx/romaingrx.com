@@ -52,7 +52,7 @@ export const timelineSchema = z
     organization_url: z.string().url().optional(),
     location: z.string(),
     startDate: z.string(), // YYYY-MM format
-    endDate: z.string(), // YYYY-MM format or "present"
+    endDate: z.string().optional(), // YYYY-MM format or "present"
     type: z.enum(['education', 'experience', 'project']),
     tags: z.array(z.string()).optional(),
     order: z.number().optional(), // For manual ordering if needed
