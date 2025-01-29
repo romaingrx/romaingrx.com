@@ -1,11 +1,14 @@
 import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
 
+import { slugify } from './utils';
+
 export type Author = CollectionEntry<'author'>;
 export type BlogPost = CollectionEntry<'blog'>;
 
 export interface BlogPostWithAuthors extends Omit<BlogPost, 'authors'> {
   authors: Author[];
   readingTime: string;
+  slug: string;
 }
 
 export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
@@ -30,6 +33,7 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
         ...post,
         authors: postAuthors,
         readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
+        slug: slugify(post.data.title),
       };
     })
   );

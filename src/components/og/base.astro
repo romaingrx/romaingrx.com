@@ -1,5 +1,7 @@
 ---
-import { OGImageRoute } from 'astro-og-canvas';
+import { generateOpenGraphImage } from 'astro-og-canvas';
+
+import { site } from '@/configs/site';
 
 interface Props {
   title: string;
@@ -7,28 +9,27 @@ interface Props {
   logo?: boolean;
 }
 
-const { title, description, logo = true } = Astro.props;
+const { title, description = site.description, logo = true } = Astro.props;
 
 const config = {
   title,
   description,
-  logo: logo ? 'https://romaingrx.dev/favicon.svg' : undefined,
-  border: { color: [55, 65, 81], width: 20 },
+  logo: logo ? { path: `${site.url}/favicon.svg` } : undefined,
   bgGradient: [
     [15, 23, 42],
     [30, 41, 59],
   ],
   font: {
     title: {
-      size: 78,
       families: ['Inter'],
       weight: 800,
+      size: 78,
     },
     description: {
-      size: 45,
-      lineHeight: 1.25,
       families: ['Inter'],
       weight: 500,
+      size: 45,
+      lineHeight: 1.25,
     },
   },
   fonts: [
@@ -36,6 +37,9 @@ const config = {
     'https://api.fontsource.org/v1/fonts/inter/latin-500-normal.ttf',
   ],
 };
+
+// @ts-expect-error Types are not properly exported from astro-og-canvas
+const ogImage = await generateOpenGraphImage(config);
 ---
 
-<OGImageRoute {...config} />
+{ogImage}
