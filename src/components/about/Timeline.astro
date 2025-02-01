@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -31,6 +32,8 @@ const renderedContent = await Promise.all(
     };
   })
 );
+
+// Add client-side script for calculating line positions
 ---
 
 <style>
@@ -48,99 +51,118 @@ const renderedContent = await Promise.all(
   .pulse {
     animation: pulse 2s infinite;
   }
+  /* Card content */
+  .timeline-card-content {
+    @apply mt-6 max-w-none text-sm leading-relaxed text-muted-foreground;
+  }
+
+  .timeline-card-content :global(p) {
+    @apply mb-4;
+  }
+
+  .timeline-card-content :global(ul) {
+    @apply mb-4 list-disc pl-4;
+  }
+
+  .timeline-card-content :global(li) {
+    @apply mb-2;
+  }
+
+  .timeline-card-content :global(a) {
+    @apply text-primary hover:underline;
+  }
+
+  .timeline-card-content :global(strong) {
+    @apply font-semibold text-foreground;
+  }
 </style>
 
 <div class="flex flex-col">
   <h1
-    class="font-wise mb-20 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-center text-5xl font-bold text-transparent"
+    class="font-wise mb-12 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-center text-5xl font-bold text-transparent"
   >
     {title}
   </h1>
 
-  <div class="relative">
-    {/* Vertical Line */}
+  <div class="relative mx-auto max-w-5xl px-4">
     <div
-      class="absolute left-[29px] top-4 h-[calc(100%-2rem)] w-0.5 bg-gradient-to-b from-purple-400/50 to-purple-600/50 dark:from-purple-400/20 dark:to-purple-600/20"
+      class="pointer-events-none absolute left-8 h-full w-[3px] bg-gradient-to-b from-transparent via-purple-500/60 to-transparent shadow-[0_0_15px_rgba(168,85,247,0.2)] md:left-8"
     >
     </div>
-
-    <div class="space-y-20">
+    <div class="relative flex flex-col gap-16">
       {
         renderedContent.map(({ item, Content }) => {
           const isActive = item.data.endDate === 'present';
           return (
-            <div class="group relative ml-20" data-animate>
-              {/* Timeline Dot */}
-              <div class="absolute -left-[52px] top-0 flex items-center justify-center">
-                <div
-                  class:list={[
-                    'relative h-[30px] w-[30px] rounded-full shadow-lg transition-all duration-300 group-hover:scale-110',
-                    isActive
-                      ? 'pulse bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30'
-                      : 'bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30',
-                  ]}
-                >
-                  <div
-                    class:list={[
-                      'absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full',
-                      isActive
-                        ? 'bg-gradient-to-br from-emerald-400 to-emerald-600'
-                        : 'bg-gradient-to-br from-purple-400 to-purple-600',
-                    ]}
-                  />
-                </div>
-              </div>
-
-              {/* Content */}
+            <div
+              class:list={[
+                'relative w-full pl-16 transition-all duration-500 before:absolute before:left-[calc(1rem_-_8px)] before:top-1/2 before:z-20 before:h-4 before:w-4 before:-translate-y-1/2 before:rounded-full before:border-2 before:bg-background before:transition-all before:duration-300 before:content-[""] after:absolute after:left-4 after:top-1/2 after:h-[3px] after:w-6 after:-translate-y-1/2 after:bg-gradient-to-r after:from-purple-500/60 after:to-purple-500/30 after:content-[""] hover:before:scale-125 md:pl-16 md:before:left-[calc(2rem_-_8px)] md:after:left-8 md:after:w-8',
+                {
+                  'before:border-emerald-500/50 before:shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:before:border-emerald-500/80':
+                    isActive,
+                  'before:border-purple-500/50 before:shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:before:border-purple-500/80':
+                    !isActive,
+                },
+              ]}
+              data-animate
+            >
               <div
                 class:list={[
-                  'min-h-[60px] rounded-xl p-6 transition-all duration-300 hover:translate-x-1',
+                  'relative rounded-xl p-8 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300',
                   isActive
-                    ? 'bg-gradient-to-br from-emerald-50/50 to-transparent dark:from-emerald-950/30'
-                    : 'bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-950/30',
+                    ? 'bg-gradient-to-br from-emerald-50/50 via-emerald-100/30 to-transparent dark:from-emerald-950/30 dark:via-emerald-900/20'
+                    : 'bg-gradient-to-br from-purple-50/50 via-purple-100/30 to-transparent dark:from-purple-950/30 dark:via-purple-900/20',
                 ]}
               >
-                {/* Header */}
-                <div class="flex flex-col gap-1">
-                  <h3 class="text-2xl font-bold tracking-tight text-foreground">
-                    {item.data.title}
-                  </h3>
-                  <div>
-                    {item.data.organization_url ? (
-                      <a
-                        href={item.data.organization_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class:list={[
-                          'text-lg font-medium transition-colors hover:underline',
-                          isActive
-                            ? 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300'
-                            : 'text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300',
-                        ]}
-                      >
-                        {item.data.organization}
-                      </a>
-                    ) : (
-                      <span
-                        class:list={[
-                          'text-lg font-medium',
-                          isActive
-                            ? 'text-emerald-600 dark:text-emerald-400'
-                            : 'text-purple-500 dark:text-purple-400',
-                        ]}
-                      >
-                        {item.data.organization}
-                      </span>
-                    )}
+                <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+                  <div class="flex flex-col gap-0.5">
+                    <h3 class="text-2xl font-bold tracking-tight text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+                      {item.data.title}
+                    </h3>
+                    <div>
+                      {item.data.organization_url ? (
+                        <a
+                          href={item.data.organization_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class:list={[
+                            'text-lg font-medium transition-colors hover:underline',
+                            isActive
+                              ? 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300'
+                              : 'text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300',
+                          ]}
+                        >
+                          {item.data.organization}
+                        </a>
+                      ) : (
+                        <span
+                          class:list={[
+                            'text-lg font-medium',
+                            isActive
+                              ? 'text-emerald-600 dark:text-emerald-400'
+                              : 'text-purple-500 dark:text-purple-400',
+                          ]}
+                        >
+                          {item.data.organization}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div class="text-base font-medium text-muted-foreground">
-                    {item.data.startDate} {item.data.endDate ? ' - ' + item.data.endDate : ''} •{' '}
-                    {item.data.location}
+                  <div class="mt-2 flex flex-col items-end gap-0.5 md:mt-0">
+                    <div class="flex items-center gap-2 text-base font-medium text-muted-foreground">
+                      <Icon name="lucide:calendar" class="h-4 w-4" />
+                      <span>
+                        {item.data.startDate} {item.data.endDate ? ' - ' + item.data.endDate : ''}
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-2 text-base font-medium text-muted-foreground">
+                      <Icon name="lucide:map-pin" class="h-4 w-4" />
+                      <span>{item.data.location}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Description */}
-                <div class="prose prose-sm dark:prose-invert mt-4 max-w-none">
+                <div class="timeline-card-content">
                   <Content />
                 </div>
               </div>

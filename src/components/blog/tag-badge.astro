@@ -11,7 +11,7 @@ type Props = {
 const { tag, isActive = false } = Astro.props;
 ---
 
-<a href={`/blog/tag/${tag}`}>
+<a href={isActive ? `/blog` : `/blog/tag/${tag}`}>
   <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
     <Icon name="lucide:tag" class="h-3 w-3" />
     <span>{tag}</span>
