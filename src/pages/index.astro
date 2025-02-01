@@ -10,11 +10,9 @@ let posts = (await getPublishedBlogPosts())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 3);
 
-console.log(posts);
-
 const title = "Romain's Blog";
 const description =
-  'Personal blog and portfolio showcasing my work and thoughts on technology, machine learning, and software development.';
+  'Personal blog and portfolio showcasing my work and thoughts on AI safety, machine learning, and software development.';
 ---
 
 <BaseLayout title={title} description={description}>
