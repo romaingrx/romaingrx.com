@@ -116,7 +116,7 @@ const renderedContent = await Promise.all(
               >
                 <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
                   <div class="flex flex-col gap-0.5">
-                    <h3 class="text-2xl font-bold tracking-tight text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+                    <h3 class="text-2xl font-bold tracking-tight text-foreground">
                       {item.data.title}
                     </h3>
                     <div>
@@ -126,10 +126,7 @@ const renderedContent = await Promise.all(
                           target="_blank"
                           rel="noopener noreferrer"
                           class:list={[
-                            'text-lg font-medium transition-colors hover:underline',
-                            isActive
-                              ? 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300'
-                              : 'text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300',
+                            'text-lg font-medium text-muted-foreground transition-colors hover:underline',
                           ]}
                         >
                           {item.data.organization}
