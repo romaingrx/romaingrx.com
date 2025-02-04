@@ -18,7 +18,6 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
   return await Promise.all(
     posts.map(async (post: BlogPost) => {
       const { remarkPluginFrontmatter } = await render(post);
-      console.log(remarkPluginFrontmatter);
       const postAuthors = await Promise.all(
         post.data.authors.map(async (author: { id: string }) => {
           const authorData = authors.find((a: Author) => a.id === author.id);

@@ -5,7 +5,6 @@ import { generateOGImage } from '../../utils/og';
 
 export const GET: APIRoute = async ({ params }) => {
   // Get the blog post from the route
-  console.log(params.route);
   const posts = await getCollection('blog');
   const post = posts.find((post: CollectionEntry<'blog'>) => post.id === params.route);
 
