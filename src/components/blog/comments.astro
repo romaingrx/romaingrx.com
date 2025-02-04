@@ -1,0 +1,39 @@
+<script
+  is:inline
+  src="https://giscus.app/client.js"
+  data-repo="romaingrx/romaingrx.astro"
+  data-repo-id="R_kgDOM6pBlQ"
+  data-category="Comments"
+  data-category-id="DIC_kwDOM6pBlc4Cmqh8"
+  data-mapping="og:title"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="1"
+  data-input-position="bottom"
+  data-lang="en"
+  data-loading="lazy"
+  data-theme="dark"
+  crossorigin="anonymous"
+  async></script>
+
+<script is:inline>
+  function updateGiscusTheme() {
+    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const iframe = document.querySelector('iframe.giscus-frame');
+    console.log(iframe);
+    if (!iframe) return;
+    iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+  }
+
+  // Watch for theme changes
+  const observer = new MutationObserver(updateGiscusTheme);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+</script>
+
+<script is:inline>
+  // Set initial theme before loading Giscus
+  document.addEventListener('astro:page-load', () => {
+    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    document.querySelector('script[src*="giscus"]').dataset.theme = theme;
+  });
+</script>
