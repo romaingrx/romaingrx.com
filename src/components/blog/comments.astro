@@ -8,7 +8,7 @@
   data-mapping="og:title"
   data-strict="0"
   data-reactions-enabled="1"
-  data-emit-metadata="1"
+  data-emit-metadata="0"
   data-input-position="bottom"
   data-lang="en"
   data-loading="lazy"
@@ -17,23 +17,54 @@
   async></script>
 
 <script is:inline>
-  function updateGiscusTheme() {
-    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    const iframe = document.querySelector('iframe.giscus-frame');
-    console.log(iframe);
-    if (!iframe) return;
-    iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+  function getTheme() {
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   }
+
+  function updateGiscusTheme() {
+    const theme = getTheme();
+    // Update the script tag
+    const giscusScript = document.querySelector('script[src*="giscus"]');
+    if (giscusScript) {
+      giscusScript.setAttribute('data-theme', theme);
+    }
+
+    // Update the iframe if it exists
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+    }
+  }
+
+  // Set the initial theme on the script tag before Giscus loads
+  document.querySelector('script[src*="giscus"]').setAttribute('data-theme', getTheme());
 
   // Watch for theme changes
   const observer = new MutationObserver(updateGiscusTheme);
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-</script>
+  observer.observe(document.documentElement, { attributeFilter: ['class'] });
 
-<script is:inline>
-  // Set initial theme before loading Giscus
+  // Setup iframe observer when the iframe is created
+  function setupIframeObserver() {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      updateGiscusTheme(); // Ensure theme is synced when iframe appears
+      const iframeObserver = new MutationObserver(updateGiscusTheme);
+      iframeObserver.observe(iframe, { attributeFilter: ['data-theme'] });
+    }
+  }
+
+  // Watch for iframe creation
+  const iframeWatcher = new MutationObserver(mutations => {
+    if (document.querySelector('iframe.giscus-frame')) {
+      setupIframeObserver();
+      iframeWatcher.disconnect(); // Stop watching once iframe is found
+    }
+  });
+
+  iframeWatcher.observe(document.body, { childList: true, subtree: true });
+
+  // Update theme on page navigation
   document.addEventListener('astro:page-load', () => {
-    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    document.querySelector('script[src*="giscus"]').dataset.theme = theme;
+    updateGiscusTheme();
   });
 </script>
