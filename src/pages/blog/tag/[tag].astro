@@ -5,6 +5,8 @@ import TagBadge from '@/components/blog/tag-badge.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts } from '@/lib/collections';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
   const tags = [...new Set(posts.flatMap(post => post.data.tags))];

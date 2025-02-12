@@ -5,6 +5,8 @@ import TagBadge from '@/components/blog/tag-badge.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts } from '@/lib/collections';
 
+export const prerender = true;
+
 // Get all published blog posts
 const posts = (await getPublishedBlogPosts()).sort(
   (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf()

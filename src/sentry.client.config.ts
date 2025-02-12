@@ -4,8 +4,7 @@ Sentry.init({
   dsn: 'https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432',
   integrations: [
     Sentry.feedbackIntegration({
-      // Configure the feedback widget
-      colorScheme: 'system', // Use system color scheme
+      colorScheme: 'system',
       isNameRequired: true,
       isEmailRequired: true,
       showBranding: false,
@@ -13,9 +12,7 @@ Sentry.init({
       submitButtonLabel: 'Send',
       messageLabel: "What's on your mind?",
       successMessageText: 'Thank you for your feedback!',
-      // Customize the position of the feedback button
       buttonPosition: 'right',
-      // Additional styling
       themeLight: {
         background: 'white',
         text: 'black',

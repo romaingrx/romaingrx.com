@@ -8,12 +8,6 @@ import cloudflare from '@astrojs/cloudflare';
 import icon from 'astro-icon';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
-// For build-time env vars
-const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN;
-if (!SENTRY_AUTH_TOKEN) {
-  throw new Error('SENTRY_AUTH_TOKEN is not set');
-}
-
 // https://astro.build/config
 export default defineConfig({
   site: 'https://astro.romaingrx.com',
@@ -27,11 +21,18 @@ export default defineConfig({
   integrations: [
     sentry({
       dsn: "https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432",
+      clientInitPath: "src/sentry.client.config.ts",
+      serverInitPath: "src/sentry.server.config.ts",
       sourceMapsUploadOptions: {
         project: "romaingrxcom",
-        authToken: SENTRY_AUTH_TOKEN
+        authToken: process.env.SENTRY_AUTH_TOKEN,
       },
-      replaysOnErrorSampleRate: 0.0,
+      enableClientWebpackPlugin: false,
+      enableServerWebpackPlugin: false,
+      replays: {
+        enabled: false,
+      },
+      telemetry: false,
     }),
     mdx({
       shikiConfig: {
@@ -49,4 +50,17 @@ export default defineConfig({
       }
     }),
   ],
+  vite: {
+    build: {
+      sourcemap: 'inline',
+    },
+    ssr: {
+      noExternal: ['@sentry/*'],
+    },
+    resolve: {
+      alias: {
+        'node:util': 'util'
+      }
+    }
+  },
 });
