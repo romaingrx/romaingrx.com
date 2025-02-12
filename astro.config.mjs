@@ -59,7 +59,12 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        'node:util': 'util'
+        'node:util': 'util',
+        // Use react-dom/server.edge instead of react-dom/server.browser for React 19
+        // This fixes the MessageChannel not defined error in Cloudflare
+        ...(import.meta.env.PROD && {
+          'react-dom/server': 'react-dom/server.edge',
+        }),
       }
     }
   },
