@@ -6,8 +6,13 @@ import PostFooter from '@/components/blog/footer/index.astro';
 import PostHeader from '@/components/blog/post-header.astro';
 import Shell from '@/components/Shell.astro';
 import BlogLayout from '@/layouts/BlogLayout.astro';
-import { getBlogPosts } from '@/lib/collections';
+import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
 
+export const prerender = true;
+
+type Props = {
+  post: BlogPostWithAuthors;
+};
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
   return posts.map(post => ({
