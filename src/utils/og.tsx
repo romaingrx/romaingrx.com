@@ -1,6 +1,8 @@
 import satori from 'satori';
 import sharp from 'sharp';
 
+import { site } from '@/configs/site';
+
 interface OGImageProps {
   title: string;
   description?: string;
@@ -16,29 +18,77 @@ export async function generateOGImage({
   const markup = (
     <div
       style={{
-        background: 'linear-gradient(to bottom right, rgb(15, 23, 42), rgb(30, 41, 59))',
+        background: `rgb(15, 18, 25)`,
         width: '100%',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '48px',
-        border: '20px solid rgb(55, 65, 81)',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      {/* Background with gradient */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-20%',
+          left: '-20%',
+          right: '-20%',
+          bottom: '-20%',
+          background: `radial-gradient(circle at top left, rgba(255, 182, 255, 0.3), transparent 40%),
+                      radial-gradient(circle at bottom right, rgba(123, 180, 255, 0.3), transparent 40%)`,
+          transform: 'rotate(-12deg)',
+          opacity: 0.8,
+        }}
+      />
+
+      {/* Decorative border */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '24px',
+          left: '24px',
+          right: '24px',
+          bottom: '24px',
+          border: '1px solid rgba(96, 115, 159, 0.2)',
+          borderRadius: '12px',
+        }}
+      />
+
       {showLogo && (
-        <img
-          src="https://romaingrx.dev/favicon.svg"
-          width={80}
-          height={80}
+        <div
           style={{
             position: 'absolute',
             top: '48px',
             left: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
           }}
-        />
+        >
+          <img src={`${site.url}/favicon.svg`} width={40} height={40} />
+          <div
+            style={{
+              width: '1px',
+              height: '24px',
+              background: 'rgba(96, 115, 159, 0.3)',
+            }}
+          />
+          <span
+            style={{
+              color: 'rgb(229, 233, 240)',
+              fontSize: '20px',
+              fontFamily: 'Inter',
+              fontWeight: 500,
+            }}
+          >
+            {site.url.replace('http://', '').replace('https://', '')}
+          </span>
+        </div>
       )}
+
       <div
         style={{
           display: 'flex',
@@ -47,35 +97,69 @@ export async function generateOGImage({
           justifyContent: 'center',
           width: '100%',
           maxWidth: '900px',
+          padding: '0 64px',
+          zIndex: 1,
         }}
       >
         <h1
           style={{
-            fontSize: '78px',
+            fontSize: '72px',
             fontWeight: 800,
             fontFamily: 'Inter',
-            color: 'white',
             margin: 0,
             lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            background: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(156, 163, 175))',
+            backgroundClip: 'text',
+            color: 'transparent',
           }}
         >
           {title}
         </h1>
         {description && (
-          <p
+          <div
             style={{
-              fontSize: '45px',
-              fontWeight: 500,
-              fontFamily: 'Inter',
-              color: 'rgb(156, 163, 175)',
-              margin: '24px 0 0 0',
-              lineHeight: 1.25,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              marginTop: '32px',
             }}
           >
-            {description}
-          </p>
+            <div
+              style={{
+                width: '40px',
+                height: '2px',
+                background: 'rgb(96, 115, 159)',
+              }}
+            />
+            <p
+              style={{
+                fontSize: '32px',
+                fontWeight: 500,
+                fontFamily: 'Inter',
+                color: 'rgb(96, 115, 159)',
+                margin: 0,
+                lineHeight: 1.25,
+              }}
+            >
+              {description}
+            </p>
+          </div>
         )}
       </div>
+
+      {/* Bottom right decorative element */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '48px',
+          right: '48px',
+          width: '120px',
+          height: '2px',
+          background: 'rgb(96, 115, 159)',
+          transform: 'rotate(-45deg)',
+        }}
+      />
     </div>
   );
 
@@ -103,6 +187,23 @@ export async function generateOGImage({
     ],
   });
 
-  // Convert the SVG to PNG using Sharp
-  return await sharp(Buffer.from(svg)).png().toBuffer();
+  // Convert the SVG to PNG using Sharp with noise effect
+  const noiseBuffer = Buffer.from(`
+    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+      <filter id="noise">
+        <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise)" opacity="0.15"/>
+    </svg>
+  `);
+
+  return await sharp(Buffer.from(svg))
+    .composite([
+      {
+        input: noiseBuffer,
+        blend: 'overlay',
+      },
+    ])
+    .png()
+    .toBuffer();
 }

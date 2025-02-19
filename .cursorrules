@@ -1,6 +1,7 @@
 You are an expert in JavaScript, TypeScript, and Astro framework for scalable web development.
 
 Key Principles
+
 - Write concise, technical responses with accurate Astro examples.
 - Leverage Astro's partial hydration and multi-framework support effectively.
 - Prioritize static generation and minimal JavaScript for optimal performance.
@@ -8,6 +9,7 @@ Key Principles
 - Organize files using Astro's file-based routing system.
 
 Astro Project Structure
+
 - Use the recommended Astro project structure:
   - src/
     - components/
@@ -18,6 +20,7 @@ Astro Project Structure
   - astro.config.mjs
 
 Component Development
+
 - Create .astro files for Astro components.
 - Use framework-specific components (React, Vue, Svelte) when necessary.
 - Implement proper component composition and reusability.
@@ -25,18 +28,21 @@ Component Development
 - Leverage Astro's built-in components like <Markdown /> when appropriate.
 
 Routing and Pages
+
 - Utilize Astro's file-based routing system in the src/pages/ directory.
 - Implement dynamic routes using [...slug].astro syntax.
 - Use getStaticPaths() for generating static pages with dynamic routes.
 - Implement proper 404 handling with a 404.astro page.
 
 Content Management
+
 - Use Markdown (.md) or MDX (.mdx) files for content-heavy pages.
 - Leverage Astro's built-in support for frontmatter in Markdown files (using render from 'astro:content' when needed).
 - Implement content collections for organized content management.
 - When adequate, use config files for storing static data such as social links, contacts, etc.
 
 Styling
+
 - Use Astro's scoped styling with <style> tags in .astro files.
 - Leverage global styles when necessary, importing them in layouts.
 - Utilize tailwind for styling.
@@ -44,8 +50,9 @@ Styling
 - Use Shadcn components when needing basic components.
 
 Performance Optimization
+
 - Minimize use of client-side JavaScript; leverage Astro's static generation.
-- Use the client:* directives judiciously for partial hydration:
+- Use the client:\* directives judiciously for partial hydration:
   - client:load for immediately needed interactivity
   - client:idle for non-critical interactivity
   - client:visible for components that should hydrate when visible
@@ -53,22 +60,26 @@ Performance Optimization
 - Utilize Astro's built-in asset optimization features.
 
 Data Fetching
+
 - Use Astro.props for passing data to components.
 - Implement getStaticPaths() for fetching data at build time.
 - Use Astro.glob() for working with local files efficiently.
 - Implement proper error handling for data fetching operations.
 
 SEO and Meta Tags
+
 - Use Astro's <head> tag for adding meta information.
 - Implement canonical URLs for proper SEO.
 - Use the <SEO> component pattern for reusable SEO setups.
 
 Integrations and Plugins
+
 - Utilize Astro integrations for extending functionality (e.g., @astrojs/image).
 - Implement proper configuration for integrations in astro.config.mjs.
 - Use Astro's official integrations when available for better compatibility.
 
 Build and Deployment
+
 - Use pnpm for installs and building.
 - Optimize the build process using Astro's build command.
 - Implement proper environment variable handling for different environments.
@@ -76,9 +87,11 @@ Build and Deployment
 - Implement proper CI/CD pipelines for automated builds and deployments.
 
 Styling with Tailwind CSS
+
 - Integrate Tailwind CSS with Astro @astrojs/tailwind
 
 Tailwind CSS Best Practices
+
 - Use Tailwind utility classes extensively in your Astro components.
 - Leverage Tailwind's responsive design utilities (sm:, md:, lg:, etc.).
 - Utilize Tailwind's color palette and spacing scale for consistency.
@@ -86,16 +99,19 @@ Tailwind CSS Best Practices
 - Never use the @apply directive
 
 Testing
+
 - Implement unit tests for utility functions and helpers.
 - Use end-to-end testing tools like Cypress for testing the built site.
 - Implement visual regression testing if applicable.
 
 Accessibility
+
 - Ensure proper semantic HTML structure in Astro components.
 - Implement ARIA attributes where necessary.
 - Ensure keyboard navigation support for interactive elements.
 
 File structure
+
 - Use the recommended Astro project structure:
   - src/
     - components/ -- Astro components (separate the different framework at the root level)
@@ -108,6 +124,7 @@ File structure
   - astro.config.mjs
 
 Key Conventions
+
 1. Follow Astro's Style Guide for consistent code formatting.
 2. Use TypeScript for enhanced type safety and developer experience.
 3. Implement proper error handling and logging.
@@ -117,6 +134,7 @@ Key Conventions
 7. Never hardcode colors in the code, use the ones from the shadcn/ui library defined in the @/styles/globals.css file.
 
 Performance Metrics
+
 - Prioritize Core Web Vitals (LCP, FID, CLS) in development.
 - Use Lighthouse and WebPageTest for performance auditing.
 - Implement performance budgets and monitoring.

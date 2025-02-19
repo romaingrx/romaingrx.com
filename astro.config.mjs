@@ -10,14 +10,7 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://astro.romaingrx.com',
-  output: 'server',
-  adapter: cloudflare({
-    imageService: "passthrough",
-    platformProxy: {
-      enabled: true,
-    },
-  }),
+  site: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
   integrations: [
     sentry({
       dsn: "https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432",
@@ -50,22 +43,4 @@ export default defineConfig({
       }
     }),
   ],
-  vite: {
-    build: {
-      sourcemap: 'inline',
-    },
-    ssr: {
-      noExternal: ['@sentry/*'],
-    },
-    resolve: {
-      alias: {
-        'node:util': 'util',
-        // Use react-dom/server.edge instead of react-dom/server.browser for React 19
-        // This fixes the MessageChannel not defined error in Cloudflare
-        ...(import.meta.env.PROD && {
-          'react-dom/server': 'react-dom/server.edge',
-        }),
-      }
-    }
-  },
 });
