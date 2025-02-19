@@ -8,13 +8,12 @@ interface Props {
 }
 
 const { post } = Astro.props;
+
+// Create a cache-busting URL for the OG image using URLSearchParams for proper encoding
+const ogImageUrl = `/og/blog/${post.id}.png`;
 ---
 
-<BaseLayout
-  title={post.data.title}
-  description={post.data.description}
-  ogImage={`/og/blog.png?id=${post.id}`}
->
+<BaseLayout title={post.data.title} description={post.data.description} ogImage={ogImageUrl}>
   <slot />
 </BaseLayout>
 

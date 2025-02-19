@@ -147,19 +147,6 @@ export async function generateOGImage({
           </div>
         )}
       </div>
-
-      {/* Bottom right decorative element */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '48px',
-          right: '48px',
-          width: '120px',
-          height: '2px',
-          background: 'rgb(96, 115, 159)',
-          transform: 'rotate(-45deg)',
-        }}
-      />
     </div>
   );
 
