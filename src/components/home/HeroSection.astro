@@ -1,5 +1,7 @@
 ---
 import { Button } from '@/components/ui/button';
+
+import { Ripple } from '../magicui/ripple';
 ---
 
 <section class="relative h-[90vh] w-full overflow-hidden">
@@ -9,21 +11,22 @@ import { Button } from '@/components/ui/button';
       style="animation-delay: 0.2s; animation-fill-mode: forwards;"
     >
       <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-        Hi, I'm <span class="text-primary">Romain</span>
+        Hi, I'm Romain
       </h1>
       <p class="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
         I'm a software engineer and machine learning enthusiast. I write about AI safety, machine
         learning, and software development in general.
       </p>
       <div class="flex justify-center space-x-4">
-        <Button size="lg" asChild>
+        <Button size="lg" variant="outline">
           <a href="/blog">Read Blog</a>
         </Button>
-        <Button size="lg" variant="outline" asChild>
+        <Button size="lg" variant="outline">
           <a href="/about">About Me</a>
         </Button>
       </div>
     </div>
+    <Ripple />
 
     <div
       class="animate-fade-up absolute bottom-8 opacity-0"

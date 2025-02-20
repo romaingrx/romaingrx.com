@@ -43,10 +43,8 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
 
     <ViewTransitions />
   </head>
-  <body
-    class="min-h-screen w-screen overflow-x-hidden bg-purple-50 font-sans antialiased dark:bg-zinc-950"
-  >
-    <div class="flex min-h-screen flex-col">
+  <body class="relative min-h-screen w-screen overflow-x-hidden bg-background">
+    <div class="relative z-10 flex min-h-screen flex-col">
       <Header />
       <main class="flex-1">
         <slot />
