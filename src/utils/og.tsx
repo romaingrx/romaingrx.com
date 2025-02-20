@@ -3,6 +3,8 @@ import sharp from 'sharp';
 
 import { site } from '@/configs/site';
 
+import { inlineTailwind } from './tailwind';
+
 interface OGImageProps {
   title: string;
   description?: string;
@@ -17,8 +19,8 @@ export async function generateOGImage({
   // Create the markup using React
   const markup = (
     <div
+      className="bg-primary"
       style={{
-        background: `rgb(15, 18, 25)`,
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -68,17 +70,17 @@ export async function generateOGImage({
             gap: '12px',
           }}
         >
-          <img src={`${site.url}/favicon.svg`} width={40} height={40} />
+          <img src={`${site.url}/favicon.png`} width={40} height={40} />
           <div
+            className="bg-black/30"
             style={{
               width: '1px',
               height: '24px',
-              background: 'rgba(96, 115, 159, 0.3)',
             }}
           />
           <span
+            className="text-muted-foreground"
             style={{
-              color: 'rgb(229, 233, 240)',
               fontSize: '20px',
               fontFamily: 'Inter',
               fontWeight: 500,
@@ -102,6 +104,7 @@ export async function generateOGImage({
         }}
       >
         <h1
+          className="text-primary-foreground"
           style={{
             fontSize: '72px',
             fontWeight: 800,
@@ -109,9 +112,6 @@ export async function generateOGImage({
             margin: 0,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            background: 'linear-gradient(to bottom right, rgb(255, 255, 255), rgb(156, 163, 175))',
-            backgroundClip: 'text',
-            color: 'transparent',
           }}
         >
           {title}
@@ -151,7 +151,9 @@ export async function generateOGImage({
   );
 
   // Convert the markup to an SVG using Satori
-  const svg = await satori(markup, {
+  const inlineMarkup = inlineTailwind(markup);
+  console.log(inlineMarkup);
+  const svg = await satori(inlineMarkup, {
     width: 1200,
     height: 630,
     fonts: [
