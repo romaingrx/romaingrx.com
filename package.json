@@ -6,6 +6,7 @@
     "dev": "wrangler types && astro dev",
     "deploy": "pnpm run build && wrangler pages deploy",
     "start": "astro dev",
+    "prebuild": "node scripts/generate-favicon.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "format": "prettier --write .",
