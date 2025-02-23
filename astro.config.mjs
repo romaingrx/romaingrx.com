@@ -12,7 +12,12 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 export default defineConfig({
   site: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
   output: 'server',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+    },
+    imageService: 'compile',
+  }),
   integrations: [
     sentry({
       dsn: "https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432",
@@ -51,6 +56,7 @@ export default defineConfig({
       // Without this, MessageChannel from node:worker_threads needs to be polyfilled.
       alias: import.meta.env.PROD && {
         "react-dom/server": "react-dom/server.edge",
+
       },
     },
   },

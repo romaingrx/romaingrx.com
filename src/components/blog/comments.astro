@@ -1,7 +1,11 @@
+---
+import { site } from '@/configs/site';
+---
+
 <script
   is:inline
   src="https://giscus.app/client.js"
-  data-repo="romaingrx/romaingrx.astro"
+  data-repo={site.repo}
   data-repo-id="R_kgDOM6pBlQ"
   data-category="Comments"
   data-category-id="DIC_kwDOM6pBlc4Cmqh8"
@@ -9,7 +13,7 @@
   data-strict="0"
   data-reactions-enabled="1"
   data-emit-metadata="0"
-  data-input-position="bottom"
+  data-input-position="top"
   data-lang="en"
   data-loading="lazy"
   data-theme="dark"

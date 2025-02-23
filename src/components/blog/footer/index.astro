@@ -87,12 +87,6 @@ const hasRelatedContent = post.data.related_posts || post.data.tags.length > 0;
     </div>
   </div>
 
-  <!-- Comments Section -->
-  <div class="my-8">
-    <h2 class="mb-6 text-2xl font-semibold tracking-tight">Comments</h2>
-    <Comments />
-  </div>
-
   <!-- Authors Section (Hidden) -->
   {
     post.authors.length > 0 && (
@@ -116,4 +110,9 @@ const hasRelatedContent = post.data.related_posts || post.data.tags.length > 0;
       </div>
     )
   }
+
+  <!-- Comments Section -->
+  <div class="my-8">
+    <Comments />
+  </div>
 </footer>
