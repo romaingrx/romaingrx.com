@@ -11,6 +11,7 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
+  adapter: cloudflare(),
   integrations: [
     sentry({
       dsn: "https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432",

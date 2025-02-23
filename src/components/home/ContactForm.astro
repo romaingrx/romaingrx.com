@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+
+// Set to false to enable server-side form processing
+export const prerender = false;
 ---
 
 <section class="container">
@@ -14,187 +17,106 @@ import { Textarea } from '@/components/ui/textarea';
       </p>
     </div>
 
-    <form id="contact-form" class="space-y-8" data-astro-reload>
-      <div class="grid gap-4">
-        <!-- Step 1: Name -->
-        <div class="step" data-step="1">
-          <div class="grid gap-2">
-            <Label htmlFor="name">What's your name?</Label>
-            <Input id="name" name="name" placeholder="John Doe" required className="p-6 text-lg" />
-          </div>
+    <form method="POST" class="space-y-8">
+      <div class="grid gap-6">
+        <div class="grid gap-2">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            name="name"
+            placeholder="John Doe"
+            required
+            className="p-6 text-lg"
+            aria-required="true"
+            minLength={2}
+          />
         </div>
 
-        <!-- Step 2: Email -->
-        <div class="step hidden" data-step="2">
-          <div class="grid gap-2">
-            <Label htmlFor="email">What's your email?</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="john@example.com"
-              required
-              className="p-6 text-lg"
-            />
-          </div>
+        <div class="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="john@example.com"
+            required
+            className="p-6 text-lg"
+            aria-required="true"
+          />
         </div>
 
-        <!-- Step 3: Message -->
-        <div class="step hidden" data-step="3">
-          <div class="grid gap-2">
-            <Label htmlFor="message">What would you like to say?</Label>
-            <Textarea
-              id="message"
-              name="message"
-              placeholder="Your message here..."
-              required
-              className="min-h-[200px] p-6 text-lg"
-            />
-          </div>
-        </div>
-
-        <!-- Progress indicator -->
-        <div class="mt-4 flex justify-center gap-2">
-          <span class="step-dot h-2 w-2 rounded-full bg-primary"></span>
-          <span class="step-dot h-2 w-2 rounded-full bg-muted"></span>
-          <span class="step-dot h-2 w-2 rounded-full bg-muted"></span>
+        <div class="grid gap-2">
+          <Label htmlFor="message">Message</Label>
+          <Textarea
+            id="message"
+            name="message"
+            placeholder="Your message here..."
+            required
+            className="min-h-[200px] p-6 text-lg"
+            aria-required="true"
+            minLength={10}
+          />
         </div>
       </div>
 
-      <div class="flex gap-4">
-        <Button type="button" id="prev-btn" variant="outline" size="lg" className="hidden w-full">
-          Previous
-        </Button>
-        <Button type="button" id="next-btn" size="lg" className="w-full"> Next </Button>
-        <Button type="submit" id="submit-btn" size="lg" className="hidden w-full">
-          Send Message
-        </Button>
-      </div>
+      <Button type="submit" size="lg" className="w-full"> Send Message </Button>
     </form>
   </div>
 </section>
 
 <script>
-  const STORAGE_KEY = 'contact_form_data';
-  let currentStep = 1;
-  const totalSteps = 3;
+  import { actions } from 'astro:actions';
 
-  // DOM Elements
-  const form = document.getElementById('contact-form') as HTMLFormElement;
-  const steps = document.querySelectorAll('.step');
-  const dots = document.querySelectorAll('.step-dot');
-  const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
-  const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  import { emptyContactForm, type ContactFormData } from '@/schemas/contact';
+  import { $contactForm } from '@/stores/contact';
 
-  // Load saved data from localStorage
-  const loadSavedData = () => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      const data = JSON.parse(savedData);
-      Object.entries(data).forEach(([key, value]) => {
-        const input = form.elements.namedItem(key) as HTMLInputElement;
-        if (input) input.value = value as string;
-      });
-    }
-  };
+  // Get form elements
+  const form = document.querySelector('form') as HTMLFormElement;
+  const nameInput = form.querySelector('#name') as HTMLInputElement;
+  const emailInput = form.querySelector('#email') as HTMLInputElement;
+  const messageInput = form.querySelector('#message') as HTMLTextAreaElement;
 
-  // Save form data to localStorage
-  const saveFormData = () => {
+  // Subscribe to store changes and update form
+  $contactForm.subscribe(formData => {
+    nameInput.value = formData.name;
+    emailInput.value = formData.email;
+    messageInput.value = formData.message;
+  });
+
+  // Update store on input changes
+  form.addEventListener('input', () => {
+    $contactForm.set({
+      name: nameInput.value,
+      email: emailInput.value,
+      message: messageInput.value,
+    });
+  });
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  };
-
-  // Update UI based on current step
-  const updateUI = () => {
-    steps.forEach((step, index) => {
-      step.classList.toggle('hidden', index + 1 !== currentStep);
-    });
-
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('bg-primary', index + 1 <= currentStep);
-      dot.classList.toggle('bg-muted', index + 1 > currentStep);
-    });
-
-    prevBtn.classList.toggle('hidden', currentStep === 1);
-    nextBtn.classList.toggle('hidden', currentStep === totalSteps);
-    submitBtn.classList.toggle('hidden', currentStep !== totalSteps);
-  };
-
-  // Validate current step
-  const validateStep = () => {
-    const currentStepEl = document.querySelector(`[data-step="${currentStep}"]`);
-    const inputs = currentStepEl?.querySelectorAll('input, textarea');
-    let isValid = true;
-
-    inputs?.forEach(input => {
-      if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
-        if (input.required && !input.value) {
-          isValid = false;
-          input.classList.add('border-destructive');
-        } else {
-          input.classList.remove('border-destructive');
-        }
-      }
-    });
-
-    return isValid;
-  };
-
-  // Event Listeners
-  prevBtn.addEventListener('click', () => {
-    if (currentStep > 1) {
-      currentStep--;
-      updateUI();
+    const result = await actions.contactFormAction(Object.fromEntries(formData) as ContactFormData);
+    if (result.error) {
+      alert('Error: ' + result.error);
+    } else {
+      alert('Message sent successfully!');
+      $contactForm.set(emptyContactForm);
     }
   });
 
-  nextBtn.addEventListener('click', () => {
-    if (validateStep() && currentStep < totalSteps) {
-      currentStep++;
-      updateUI();
-      saveFormData();
-    }
-  });
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    if (!validateStep()) return;
-
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        // Clear form and localStorage on success
-        localStorage.removeItem(STORAGE_KEY);
-        form.reset();
-        currentStep = 1;
-        updateUI();
-        alert('Message sent successfully!');
-      } else {
-        throw new Error('Failed to send message');
-      }
-    } catch (error) {
-      alert('There was an error sending your message. Please try again.');
-    }
-  });
-
-  // Initialize form
-  loadSavedData();
-  updateUI();
-
-  // Save form data when inputs change
-  form.addEventListener('input', saveFormData);
+  // Handle messages
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('success') === 'true') {
+    alert('Message sent successfully!');
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (urlParams.get('error')) {
+    alert('Error: ' + urlParams.get('error'));
+    window.history.replaceState({}, '', window.location.pathname);
+  }
 </script>
 
 <style>
-  .step {
+  form {
     animation: fadeIn 0.3s ease-in-out;
   }
 
