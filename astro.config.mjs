@@ -11,6 +11,7 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
+  output: 'server',
   adapter: cloudflare(),
   integrations: [
     sentry({
@@ -44,4 +45,13 @@ export default defineConfig({
       }
     }),
   ],
+  vite: {
+    resolve: {
+      // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
+      // Without this, MessageChannel from node:worker_threads needs to be polyfilled.
+      alias: import.meta.env.PROD && {
+        "react-dom/server": "react-dom/server.edge",
+      },
+    },
+  },
 });
