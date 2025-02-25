@@ -9,6 +9,7 @@
 - [ ] Add share buttons
 - [ ] Plug the contact form
 - [x] Add comments
+- [ ] Add `note` collection and pages
 
 # Low priority
 

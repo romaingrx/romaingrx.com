@@ -5,7 +5,7 @@ import ProfileSection from '@/components/about/ProfileSection.astro';
 import Timeline from '@/components/about/Timeline.astro';
 import Layout from '@/layouts/BaseLayout.astro';
 
-export const prerender = true;
+// export const prerender = true;
 
 const author = await getEntry('author', 'romaingrx');
 if (!author) {

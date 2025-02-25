@@ -22,6 +22,7 @@
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^6.0.0",
+    "@cloudflare/pages-plugin-vercel-og": "^0.1.2",
     "@cloudflare/workers-types": "^4.20250214.0",
     "@iconify-json/lucide": "^1.2.26",
     "@iconify-json/mdi": "^1.2.3",

@@ -5,7 +5,7 @@ import RecentPosts from '@/components/home/RecentPosts.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts } from '@/lib/collections';
 
-export const prerender = true;
+// export const prerender = true;
 
 // Get the 3 most recent published blog posts
 let posts = (await getPublishedBlogPosts())
@@ -29,7 +29,7 @@ const description =
 
     <!-- Contact Form -->
     <section class="container mx-auto px-4 py-24">
-      <ContactForm server:defer />
+      <ContactForm />
     </section>
   </main>
 </BaseLayout>

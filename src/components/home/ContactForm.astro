@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 // Set to false to enable server-side form processing
-export const prerender = false;
+// export const prerender = false;
 ---
 
 <section class="container">
@@ -65,8 +65,7 @@ export const prerender = false;
 </section>
 
 <script>
-  import { actions } from 'astro:actions';
-
+  import { send_feedback } from '@/lib/sentry';
   import { emptyContactForm, type ContactFormData } from '@/schemas/contact';
   import { $contactForm } from '@/stores/contact';
 
@@ -95,12 +94,14 @@ export const prerender = false;
   form.addEventListener('submit', async event => {
     event.preventDefault();
     const formData = new FormData(form);
-    const result = await actions.contactFormAction(Object.fromEntries(formData) as ContactFormData);
-    if (result.error) {
-      alert('Error: ' + result.error);
-    } else {
+    // TODO romaingrx: add server side later on
+    // const result = await actions.contactFormAction(Object.fromEntries(formData) as ContactFormData);
+    try {
+      await send_feedback(Object.fromEntries(formData) as ContactFormData);
       alert('Message sent successfully!');
       $contactForm.set(emptyContactForm);
+    } catch (error) {
+      alert('Error: ' + error);
     }
   });
 
