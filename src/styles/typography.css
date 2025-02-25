@@ -1,0 +1,123 @@
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-weight: 700;
+  line-height: 1.2;
+  scroll-margin-top: 100px;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+}
+
+.prose h2 {
+  font-size: 1.875rem;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose p {
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+
+.prose a {
+  @apply text-primary;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.prose a:hover {
+  @apply text-primary/80;
+  text-decoration: underline;
+}
+
+.prose code {
+  @apply bg-card text-card-foreground;
+  border-radius: 0.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  padding: 0.2em 0.4em;
+}
+
+.prose pre {
+  @apply bg-card text-card-foreground;
+  border-radius: 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  overflow-x: auto;
+  padding: 1.5rem;
+}
+
+.prose pre code {
+  background-color: transparent;
+  border-width: 0;
+  color: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+.prose blockquote {
+  border-left-width: 4px;
+  border-left-color: #e5e7eb;
+  font-style: italic;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  padding-left: 1.5rem;
+}
+
+.prose ul,
+.prose ol {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+}
+
+.prose ul {
+  list-style-type: square;
+  @apply before:text-primary;
+}
+
+.prose ol {
+  @apply before:text-primary;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose figure {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose figure > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.prose figcaption {
+  @apply text-muted-foreground;
+  font-size: 0.875em;
+  line-height: 1.4285714;
+  margin-top: 0.8571429em;
+  text-align: center;
+}
