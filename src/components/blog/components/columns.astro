@@ -1,3 +1,53 @@
-<div class="columns">
+---
+import { cn } from '@/lib/utils';
+
+interface Props {
+  space?: 'around' | 'between' | 'evenly';
+  spread?: boolean;
+  columns?: number;
+  class?: string;
+}
+
+const {
+  space = 'between',
+  spread = false,
+  columns = 2, // Default to 2 columns if not specified
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+if (columns > 4) {
+  console.warn(
+    "Columns greater than 4 won't look good on every screen size. Consider using a different number of columns."
+  );
+}
+
+const justify = {
+  around: 'md:justify-around',
+  between: 'md:justify-between',
+  evenly: 'md:justify-evenly',
+}[space];
+---
+
+<div
+  class={cn(
+    `grid grid-cols-1 md:grid-cols-${columns} md:flex md:flex-row ${justify} gap-4`,
+    spread ? 'columns-spread' : '',
+    className
+  )}
+  {...rest}
+>
   <slot />
 </div>
+
+<style>
+  /* Base styles for all children */
+  div :global(> *) {
+    display: block;
+  }
+
+  /* Apply flex-1 to direct children when spread is true */
+  .columns-spread :global(> *) {
+    flex: 1;
+  }
+</style>

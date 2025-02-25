@@ -7,22 +7,23 @@ published_date: 2024-10-16
 authors: ['romaingrx']
 tags: ['llm', 'jailbreak', 'evaluation']
 categories: ['ml']
-resources: [
-  {
-    title: 'HarmBench evaluation',
-    provider: 'github',
-    type: 'dataset',
-    value: 'https://github.com/romaingrx/llm-as-a-jailbreak-judge/blob/master/data/eval_harmbench.csv',
-    description: 'The dataset created during the HarmBench evaluation of the Red Teamer Mistral Nemo model'
-  },
-  {
-    title: 'Project Repository',
-    provider: 'github',
-    type: 'code',
-    value: 'https://github.com/romaingrx/llm-as-a-jailbreak-judge',
-    description: 'GitHub repository containing the code and data for this project'
-  }
-]
+resources:
+  [
+    {
+      title: 'HarmBench evaluation',
+      provider: 'github',
+      type: 'dataset',
+      value: 'https://github.com/romaingrx/llm-as-a-jailbreak-judge/blob/master/data/eval_harmbench.csv',
+      description: 'The dataset created during the HarmBench evaluation of the Red Teamer Mistral Nemo model',
+    },
+    {
+      title: 'Project Repository',
+      provider: 'github',
+      type: 'code',
+      value: 'https://github.com/romaingrx/llm-as-a-jailbreak-judge',
+      description: 'GitHub repository containing the code and data for this project',
+    },
+  ]
 ---
 
 # Setup
@@ -78,8 +79,8 @@ I arbitrarily established that a score above 5 given by the model is considered 
 You can access all the results [on wandb](https://wandb.ai/romaingrx/llm-as-a-judge/reports/LLM-as-a-judge--Vmlldzo1MjYyMjYx?panelId=e5tqmx2sd).
 
 <Callout variant="info">
-  I'm currently working on better visualizations for the blog posts, I'll update
-  this section once I have a better way to display the results.
+  I'm currently working on better visualizations for the blog posts, I'll update this section once I
+  have a better way to display the results.
 </Callout>
 
 # Prompt optimization
@@ -88,16 +89,16 @@ For this technique, we'll leverage DSPy's efficiency to prompt-tune our implemen
 
 Then we optimize the program with the MIPRO compiler that will take care of including a few examples as well in the prompt. With this approach, we're able to achieve a 81.67% accuracy on the test set, which is an increase of 13% (although we just tested it on 20% of the data as we used the rest to train it).
 
-<Columns spread>
-  <div />
-  <NumberCard
-    title="Prompt Optimization"
-    value={0.8167}
-    description="Accuracy achieved using prompt optimization technique with DSPy and Mistral 13B"
-    link="https://wandb.ai/romaingrx/llm-as-a-judge/reports/LLM-as-a-judge--Vmlldzo1MjYyMjYx?panelId=e5tqmx2sd"
-  />
-  <div />
-</Columns>
+<div class="flex w-full justify-center">
+  <div class="md:w-1/2">
+    <NumberCard
+      title="Prompt Optimization"
+      value={0.8167}
+      description="Accuracy achieved using prompt optimization technique with DSPy and Mistral 13B"
+      link="https://wandb.ai/romaingrx/llm-as-a-judge/reports/LLM-as-a-judge--Vmlldzo1MjYyMjYx?panelId=e5tqmx2sd"
+    />
+  </div>
+</div>
 
 ## Detailed results
 
@@ -107,17 +108,16 @@ You can access all the results [on wandb](https://wandb.ai/romaingrx/llm-as-a-ju
 
 For the last technique, inspired by the recent papers, instead of solely relying on a single metric to assess if an answer respects or not the ethical, legal, or safety guidelines, we make sure it also provides information and addresses the initial prompt. To do so, I reimplemented the [Multifaceted Jailbreak Evaluation](https://github.com/controllability/jailbreak-evaluation) in dspy with the possibility to extract the different granularity of the texts with modules too. With this technique, we finally get an accuracy of 73.3 on the test set, which is a slight improvement and shows that it structures better the reasoning of the smaller LLM.
 
-<Columns spread>
-  <div />
-  <NumberCard 
-    title="Multifaceted Approach" 
-    value={0.733} 
-    description="Accuracy achieved using the multifaceted approach with Mistral 13B" 
-    link="https://wandb.ai/romaingrx/llm-as-a-judge/reports/LLM-as-a-judge--Vmlldzo1MjYyMjYx?panelId=e5tqmx2sd"
-  />
-  <div />
-</Columns>
-
+<div class="flex w-full justify-center">
+  <div class="md:w-1/2">
+    <NumberCard
+      title="Multifaceted Approach"
+      value={0.733}
+      description="Accuracy achieved using the multifaceted approach with Mistral 13B"
+      link="https://wandb.ai/romaingrx/llm-as-a-judge/reports/LLM-as-a-judge--Vmlldzo1MjYyMjYx?panelId=e5tqmx2sd"
+    />
+  </div>
+</div>
 
 ## Detailed results
 

@@ -1,3 +1,41 @@
-<div class="number-card">
-  <slot />
-</div>
+---
+import { ArrowUpRight } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export interface Props {
+  title: string;
+  value: number;
+  description?: string;
+  link?: string;
+  class?: string;
+}
+
+const { title, value, description, link, class: className } = Astro.props;
+---
+
+<Card className={className}>
+  <div class="flex flex-row justify-between">
+    <CardHeader className="relative">
+      <CardTitle>{title}</CardTitle>
+      {description && <CardDescription>{description}</CardDescription>}
+    </CardHeader>
+    {
+      link && (
+        <div class="mr-3 mt-3">
+          <a href={link} target="_blank">
+            <Button variant="secondary" className="group">
+              <ArrowUpRight className="size-5 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+            </Button>
+          </a>
+        </div>
+      )
+    }
+  </div>
+  <CardContent>
+    <p class="flex items-center justify-center text-4xl font-bold">
+      {value}
+    </p>
+  </CardContent>
+</Card>
