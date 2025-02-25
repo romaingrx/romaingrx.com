@@ -60,6 +60,10 @@
 @layer base {
   * {
     @apply border-border;
+    ::selection {
+      background-color: hsl(var(--primary) / 0.5);
+      color: hsl(var(--primary-foreground));
+    }
   }
   body {
     @apply bg-background text-foreground;
