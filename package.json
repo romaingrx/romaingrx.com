@@ -14,6 +14,9 @@
     "lint:fix": "eslint . --fix",
     "postinstall": "husky"
   },
+  "overrides": {
+    "react-is": "^19.0.0-rc-69d4b800-20241021"
+  },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.2.1",
@@ -37,6 +40,7 @@
     "@sentry/profiling-node": "^9.1.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@types/recharts": "^1.8.29",
     "@types/sharp": "^0.32.0",
     "astro": "^5.3.0",
     "astro-icon": "^1.1.5",
@@ -51,6 +55,7 @@
     "nanostores": "^0.11.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^2.15.1",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",

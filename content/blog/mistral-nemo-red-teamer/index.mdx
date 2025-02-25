@@ -27,6 +27,8 @@ resources:
   ]
 ---
 
+import ASRChart from './ASR.tsx';
+
 In this work, I finetuned Mistral Nemo 13B on a subset of the WildJailbreak dataset, to produce prompts that are likely to jailbreak a model based on a specified goal.
 
 # Training
@@ -85,24 +87,7 @@ And you can find some generated prompts below:
 
 I finally created a new baseline in harmbench to test how the model would perform against other models. Below you can find the different ASR regarding the models but also the functional categories. We can see that the model performs really poorly on copyright data. This could be explained by the underlying data it has been finetuned on, which didn’t focus on that aspect.
 
-<BarChart
-  title="Attack success rate"
-  description="ASR performance of the trained model across various models in HarmBench, evaluated using all functional categories"
-  data={[
-    { value: '0.3475', name: 'baichuan2_7b' },
-    { value: '0.265', name: 'koala_7b' },
-    { value: '0.0125', name: 'llama2_7b' },
-    { value: '0.3675', name: 'mistral_7b_v2' },
-    { value: '0.3825', name: 'openchat_3_5_1210' },
-    { value: '0.315', name: 'orca_2_7b' },
-    { value: '0.2325', name: 'qwen_7b_chat' },
-    { value: '0.365', name: 'solar_10_7b_instruct' },
-    { value: '0.4225', name: 'starling_7b' },
-    { value: '0.3425', name: 'vicuna_7b_v1_5' },
-    { value: '0.41', name: 'zephyr_7b' },
-  ]}
-  xAxisLabel="ASR"
-/>
+<ASRChart client:load />
 
 # Next steps
 
