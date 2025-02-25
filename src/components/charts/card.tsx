@@ -13,12 +13,19 @@ export interface ChartCardProps {
   title: string;
   description: string;
   children: React.ReactNode;
+  className?: string;
   footer?: React.ReactNode;
 }
 
-export default function ChartCard({ title, description, children, footer }: ChartCardProps) {
+export default function ChartCard({
+  title,
+  description,
+  children,
+  footer,
+  className,
+}: ChartCardProps) {
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

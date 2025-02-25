@@ -10,7 +10,10 @@ import {
 
 const chartConfig = {
   asr: {
-    color: 'hsl(var(--primary))',
+    color: 'hsl(var(--chart-1))',
+  },
+  label: {
+    color: 'hsl(var(--chart-1-foreground))',
   },
 } satisfies ChartConfig;
 
@@ -33,6 +36,7 @@ export default function ASRChart() {
     <ChartCard
       title="Attack success rate"
       description="ASR performance of the trained model across various models in HarmBench, evaluated using all functional categories"
+      className="my-4"
     >
       <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
         <BarChart
@@ -56,20 +60,8 @@ export default function ASRChart() {
           <XAxis dataKey="asr" type="number" hide />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
           <Bar dataKey="asr" layout="vertical" fill="var(--color-asr)" radius={4}>
-            <LabelList
-              dataKey="name"
-              position="insideLeft"
-              offset={8}
-              className="fill-[--color-label]"
-              fontSize={12}
-            />
-            <LabelList
-              dataKey="asr"
-              position="right"
-              offset={8}
-              className="fill-foreground"
-              fontSize={12}
-            />
+            <LabelList dataKey="name" position="insideLeft" offset={8} fontSize={12} />
+            <LabelList dataKey="asr" position="right" offset={8} fontSize={12} />
           </Bar>
         </BarChart>
       </ChartContainer>
