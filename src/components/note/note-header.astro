@@ -1,0 +1,146 @@
+---
+import ContinueReading from '@/components/animations/continue-reading.astro';
+import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import Resources from '@/components/blog/resources/index.astro';
+import Shell from '@/components/Shell.astro';
+import type { NoteWithAuthors } from '@/lib/collections';
+
+interface Props {
+  note: NoteWithAuthors;
+  class?: string;
+}
+
+const { note, class: className = '' } = Astro.props;
+---
+
+<header
+  class:list={[
+    'relative flex w-full flex-col items-center justify-center',
+    'mx-2 overflow-hidden rounded-b-xl py-16',
+    'min-h-[calc(70vh-4rem)]',
+    'transition-all duration-500 ease-out',
+    'translate-y-4 opacity-0',
+    className,
+  ]}
+  data-header
+>
+  <!-- Main Content -->
+  <Shell type="note">
+    <div class="relative z-10 mx-auto text-center">
+      <!-- Meta Information -->
+      <div
+        class="mb-8 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400"
+      >
+        <time
+          datetime={note.data.published_date.toISOString()}
+          transition:name={`${note.id}-published-date`}
+        >
+          {
+            note.data.published_date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
+        </time>
+        <span>•</span>
+        <span transition:name={`${note.id}-reading-time`}>{note.readingTime}</span>
+      </div>
+
+      <!-- Title -->
+      <h1
+        class="mb-6 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-4xl font-bold tracking-tight text-transparent dark:from-white dark:to-gray-200 md:text-5xl lg:text-6xl"
+        transition:name={`${note.id}-title`}
+      >
+        {note.data.title}
+      </h1>
+
+      <!-- Description -->
+      {
+        note.data.description && (
+          <p
+            class="mb-8 text-lg text-gray-700 dark:text-gray-300 md:text-xl"
+            transition:name={`${note.id}-description`}
+          >
+            {note.data.description}
+          </p>
+        )
+      }
+
+      <!-- Resources -->
+      {
+        note.data.resources && (
+          <div class="relative mt-4">
+            <div class="flex flex-col gap-3 text-start">
+              <span class="text-sm font-medium text-muted-foreground">Resources</span>
+              <Resources resources={note.data.resources} />
+            </div>
+          </div>
+        )
+      }
+
+      <div class="relative mt-4">
+        <div class="flex flex-col gap-3 text-start">
+          <span class="text-sm font-medium text-muted-foreground">Written by</span>
+          <StackedAuthors authors={note.authors} transition:name={`${note.id}-authors`} />
+        </div>
+      </div>
+    </div>
+  </Shell>
+
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 transform">
+    <ContinueReading />
+  </div>
+</header>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    header {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  interface IntersectionObserverEntry {
+    isIntersecting: boolean;
+  }
+
+  const setupIntersectionObserver = () => {
+    const header = document.querySelector('[data-header]') as HTMLElement;
+    if (!header) return;
+
+    // Show the header with a slight delay to ensure smooth transition
+    setTimeout(() => {
+      header.style.opacity = '1';
+      header.style.transform = 'translateY(0)';
+    }, 0);
+
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            header.style.opacity = '1';
+            header.style.transform = 'translateY(0)';
+          } else {
+            header.style.opacity = '0';
+            header.style.transform = 'translateY(-2rem)';
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '-100px 0px 0px 0px',
+      }
+    );
+
+    observer.observe(header);
+
+    return () => observer.disconnect();
+  };
+
+  // Setup on initial page load and after view transitions
+  document.addEventListener('astro:page-load', setupIntersectionObserver);
+</script>

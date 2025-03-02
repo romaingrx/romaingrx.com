@@ -1,0 +1,84 @@
+---
+import { Icon } from '@iconify/react/dist/iconify.js';
+
+import Resources from '@/components/blog/resources/index.astro';
+import TagBadge from '@/components/blog/tag-badge.astro';
+import type { NoteWithAuthors } from '@/lib/collections';
+
+import RelatedNotes from './related-notes.astro';
+
+interface Props {
+  note: NoteWithAuthors;
+}
+
+const { note } = Astro.props;
+const hasRelatedContent = note.data.tags.length > 0;
+---
+
+<footer class="mt-16 flex flex-col gap-8">
+  <hr />
+
+  <!-- Thank You Section -->
+  <div class="flex flex-col items-center justify-center space-y-2 text-center">
+    <h2 class="text-2xl font-semibold tracking-tight">Thank you for reading!</h2>
+    <p class="text-muted-foreground">
+      If you found this note helpful, feel free to share it with others.
+    </p>
+  </div>
+
+  <!-- Metadata Section -->
+  <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+    <div class="space-y-6">
+      <!-- Tags and Resources -->
+      <div class="space-y-4">
+        {
+          note.data.resources && (
+            <div class="space-y-3">
+              <h3 class="text-sm font-medium text-muted-foreground">Resources</h3>
+              <Resources resources={note.data.resources} />
+            </div>
+          )
+        }
+        {
+          note.data.tags.length > 0 && (
+            <div class="space-y-3">
+              <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
+              <div class="flex flex-wrap gap-2">
+                {note.data.tags.map(tag => (
+                  <TagBadge tag={tag} />
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Update Information -->
+      {
+        note.data.updated_date && (
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <Icon icon="mdi:calendar-clock" className="h-4 w-4" />
+            <span>
+              Last updated on{' '}
+              {note.data.updated_date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </span>
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Related Content Section -->
+  {
+    hasRelatedContent && (
+      <div class="mb-16">
+        <h2 class="mb-6 text-2xl font-semibold tracking-tight">More Notes</h2>
+        <RelatedNotes note={note} />
+      </div>
+    )
+  }
+</footer>

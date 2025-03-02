@@ -1,0 +1,131 @@
+---
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import {
+  CardContent,
+  CardDescription,
+  Card as CardPrimitive,
+  CardTitle,
+} from '@/components/ui/card';
+import type { NoteWithAuthors } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+const cardVariants = cva(
+  'group overflow-hidden transition-all rounded-xl bg-card hover:bg-accent/40 border shadow-sm',
+  {
+    variants: {
+      layout: {
+        default: 'flex flex-col',
+        horizontal: 'grid md:grid-cols-[1fr]',
+      },
+      size: {
+        default: 'max-w-2xl',
+        sm: 'max-w-xl',
+        lg: 'max-w-4xl',
+      },
+    },
+    compoundVariants: [
+      {
+        layout: 'horizontal',
+        size: 'default',
+        class: 'min-h-[120px]',
+      },
+      {
+        layout: 'horizontal',
+        size: 'sm',
+        class: 'min-h-[100px]',
+      },
+      {
+        layout: 'horizontal',
+        size: 'lg',
+        class: 'min-h-[140px]',
+      },
+      {
+        layout: 'default',
+        size: 'default',
+        class: 'min-h-[160px]',
+      },
+      {
+        layout: 'default',
+        size: 'sm',
+        class: 'min-h-[140px]',
+      },
+      {
+        layout: 'default',
+        size: 'lg',
+        class: 'min-h-[180px]',
+      },
+    ],
+    defaultVariants: {
+      layout: 'default',
+      size: 'default',
+    },
+  }
+);
+
+type CardVariants = VariantProps<typeof cardVariants>;
+
+interface Props extends CardVariants {
+  note: NoteWithAuthors;
+  className?: string;
+}
+
+const { note, layout = 'default', size = 'default', className } = Astro.props;
+---
+
+<a href={`/notes/${note.id}`} class="group/card block no-underline">
+  <CardPrimitive
+    className={cn(cardVariants({ layout, size }), className, 'h-full transition-all duration-300')}
+  >
+    <div class="flex h-full flex-col text-left">
+      <CardContent className="flex-1 space-y-2.5 p-4">
+        <div class="space-y-2">
+          <CardTitle>
+            <h2
+              class="line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary"
+              transition:name={`${note.id}-title`}
+            >
+              {note.data.title}
+            </h2>
+          </CardTitle>
+          {
+            note.data.description && (
+              <CardDescription>
+                <p class="line-clamp-2 text-sm" transition:name={`${note.id}-description`}>
+                  {note.data.description}
+                </p>
+              </CardDescription>
+            )
+          }
+        </div>
+      </CardContent>
+
+      <div class="flex items-center gap-4 px-4 pb-4">
+        <div class="flex items-center gap-2">
+          <StackedAuthors
+            authors={note.authors}
+            show_name={false}
+            transition:name={`${note.id}-authors`}
+          />
+          <span class="text-sm text-muted-foreground" transition:name={`${note.id}-reading-time`}>
+            {note.readingTime}
+          </span>
+        </div>
+        <time
+          datetime={note.data.published_date.toISOString()}
+          class="ml-auto text-sm text-muted-foreground"
+          transition:name={`${note.id}-published-date`}
+        >
+          {
+            note.data.published_date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          }
+        </time>
+      </div>
+    </div>
+  </CardPrimitive>
+</a>
