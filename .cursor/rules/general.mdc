@@ -1,0 +1,460 @@
+---
+description: General rules about this astro project
+globs: *
+alwaysApply: true
+---
+# Expert Astro Developer Guidelines
+
+Based on the analysis of a production-ready Astro project, I've created a comprehensive set of rules and best practices for developing professional Astro applications.
+
+## Core Architecture Principles
+
+- **Island Architecture**: Embrace Astro's partial hydration model, delivering minimal JavaScript only where needed
+- **Content-focused Design**: Structure applications around content-first principles, leveraging Astro's content collections
+- **Type Safety**: Utilize TypeScript throughout for enhanced developer experience and code quality
+- **Performance First**: Prioritize static generation, minimal JS, and optimized assets for exceptional page performance
+
+## Project Structure
+
+```
+project-root/
+├── content/           # Content collections (blog, authors, timeline, etc.)
+├── public/            # Static assets (fonts, images, favicons)
+├── scripts/           # Build/utility scripts
+├── src/
+│   ├── actions/       # Server actions (form handling, API functions)
+│   ├── components/    # UI components organized by domain
+│   │   ├── blog/      # Blog-specific components
+│   │   ├── home/      # Homepage components
+│   │   ├── ui/        # Shadcn UI components
+│   │   └── ...        # Other domain-specific components
+│   ├── configs/       # Configuration objects (site, platform info, etc.)
+│   ├── layouts/       # Page layouts and templates
+│   ├── lib/           # Core utilities and collection helpers
+│   ├── pages/         # File-based routing
+│   │   ├── api/       # API endpoints
+│   │   └── ...        # Page routes
+│   ├── schemas/       # Zod validation schemas
+│   ├── stores/        # State management (nanostores)
+│   ├── styles/        # Global styles and typography
+│   └── utils/         # Helper functions
+├── astro.config.mjs   # Astro configuration
+├── tailwind.config.mjs # Tailwind configuration
+└── tsconfig.json      # TypeScript configuration
+```
+
+## Component Development
+
+### Astro Components
+
+- Create `.astro` files for UI components without client-side interactivity
+- Adopt clear naming conventions: domain-first organization (`blog/card/index.astro`)
+- Use TypeScript for props definition with clear interfaces
+- Implement proper component composition with slots for flexible content insertion
+
+```astro
+---
+// src/components/blog/card/index.astro
+import { Image } from 'astro:assets';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/lib/utils';
+
+interface Props extends SomeVariants {
+  post: BlogPostWithAuthors;
+  className?: string;
+}
+
+const { post, variant = 'default', className } = Astro.props;
+---
+
+<article class={cn(someVariants({ variant }), className)}>
+  <!-- Component content -->
+  <slot />
+</article>
+```
+
+### UI Components with React
+
+- Use React (`.tsx`) for interactive components requiring client-side hydration
+- Implement Shadcn/UI patterns with proper TypeScript interfaces
+- Use client hydration directives judiciously (`client:visible`, `client:load`)
+- Create compound components with clear exports
+
+```tsx
+// src/components/ui/button.tsx
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/lib/utils';
+
+const buttonVariants = cva('inline-flex items-center justify-center...', {
+  variants: {
+    variant: {
+      default: 'bg-primary text-primary-foreground...',
+      outline: 'border border-input bg-background...',
+      // Additional variants
+    },
+    size: {
+      default: 'h-9 px-4 py-2',
+      sm: 'h-8 rounded-md px-3 text-xs',
+      lg: 'h-10 rounded-md px-8',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+    return (
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    );
+  }
+);
+Button.displayName = 'Button';
+
+export { Button, buttonVariants };
+```
+
+## Content Collections System
+
+- Define strongly-typed schemas for content collections with Zod
+- Organize content by domain (`blog`, `authors`, `timeline`)
+- Implement helper functions for retrieving and transforming content
+- Use frontmatter for metadata with consistent field naming
+
+```ts
+// src/content.config.ts
+import { defineCollection, z } from 'astro:content';
+
+const blog = defineCollection({
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      cover: image().optional(),
+      authors: z.array(reference('author')),
+      status: z.enum(['published', 'draft', 'archived']).default('draft'),
+      published_date: z.date(),
+      updated_date: z.date().optional(),
+      tags: z.array(z.string()),
+      categories: z.array(z.string()),
+      // Additional fields...
+    }),
+});
+
+// Export collections
+export const collections = {
+  blog,
+  author,
+  timeline,
+};
+```
+
+## Routing & Data Patterns
+
+- Implement file-based routing with the Astro Pages API
+- Use dynamic routes with proper typing (`[...slug].astro`)
+- Fetch data with `getStaticPaths()` for pre-rendering
+- Handle API routes in `src/pages/api/` with proper response typing
+
+```astro
+---
+// src/pages/blog/[...slug].astro
+import { getCollection } from 'astro:content';
+
+import BlogLayout from '@/layouts/BlogLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<BlogLayout post={post}>
+  <Content />
+</BlogLayout>
+```
+
+## Styling & Design System
+
+- Use Tailwind CSS as the primary styling solution
+- Leverage the `cn()` utility for conditional className merging
+- Define design tokens as CSS variables in `globals.css`
+- Use `cva()` for component variants with proper TypeScript support
+- Implement responsive design with Tailwind's breakpoint utilities
+
+```css
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    /* Additional design tokens... */
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    /* Dark theme tokens... */
+  }
+}
+```
+
+## Utilities & Helper Functions
+
+- Create reusable utility functions in the `src/lib/utils.ts` file
+- Use TypeScript for type safety and better code assistance
+- Export named functions with clear, descriptive names
+- Implement proper error handling with informative messages
+
+```ts
+// src/lib/utils.ts
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+/**
+ * Combines and merges class names with Tailwind classes
+ */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+/**
+ * Formats a date consistently across the application
+ */
+export function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+}
+
+/**
+ * Generates a URL-friendly slug from a string
+ */
+export function slugify(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+}
+```
+
+## State Management
+
+- Use nanostores for client-side state management
+- Implement persistent stores for data that needs to survive page refreshes
+- Follow proper TypeScript typing for store values
+- Organize stores by domain in `src/stores/`
+
+```ts
+// src/stores/contact.ts
+import { persistentAtom } from '@nanostores/persistent';
+
+import type { ContactFormData } from '../schemas/contact';
+
+// Default empty state
+const emptyContactForm: ContactFormData = {
+  name: '',
+  email: '',
+  message: '',
+};
+
+// Create a persistent store
+export const $contactForm = persistentAtom<ContactFormData>(
+  'contactFormData:', // Storage key prefix
+  emptyContactForm,
+  {
+    encode: JSON.stringify,
+    decode: JSON.parse,
+  }
+);
+```
+
+## Performance Optimization
+
+- Use Astro's Image component for optimized images
+- Implement View Transitions for smooth page navigation
+- Utilize partial hydration with client directives
+- Properly defer non-critical JavaScript with `client:visible`
+- Implement code splitting with dynamic imports where appropriate
+
+```astro
+<!-- Example of optimized image and deferred hydration -->
+<Image
+  src={post.data.cover}
+  alt={post.data.title}
+  width={800}
+  height={400}
+  class="h-full w-full object-cover"
+/>
+
+<CommentSection client:visible />
+```
+
+## SEO & Metadata
+
+- Create reusable head components with proper meta tags
+- Implement Open Graph images with dynamic generation
+- Use canonical URLs for all pages
+- Add structured data (JSON-LD) for rich search results
+
+```astro
+---
+// src/components/BaseHead.astro
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { title, description, image = '/og-image.png' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!-- SEO Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.site)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.site)} />
+```
+
+## Error Handling & Monitoring
+
+- Implement Sentry for error tracking and monitoring
+- Create custom error boundaries and fallback UI
+- Use TypeScript to prevent type-related errors
+- Add proper error handling for data fetching
+
+```ts
+// src/lib/sentry.ts
+import * as Sentry from '@sentry/astro';
+
+import type { ContactFormData } from '@/schemas/contact';
+
+export async function send_feedback(data: ContactFormData) {
+  try {
+    const result = Sentry.captureFeedback({
+      name: data.name,
+      email: data.email,
+      message: data.message,
+    });
+    return result;
+  } catch (error) {
+    console.error('Error sending feedback:', error);
+    throw new Error('Failed to send feedback');
+  }
+}
+```
+
+## Build & Deployment
+
+- Optimize builds with proper configuration in `astro.config.mjs`
+- Implement environment variables for different deployment environments
+- Configure output mode appropriately (static, server, hybrid)
+- Set up proper caching strategies with cache headers
+
+```js
+// astro.config.mjs
+import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+import sentry from '@sentry/astro';
+
+export default defineConfig({
+  site: import.meta.env.PROD ? 'https://yoursite.com' : 'http://localhost:4321',
+  integrations: [
+    sentry({
+      dsn: process.env.SENTRY_DSN,
+      clientInitPath: 'src/sentry.client.config.ts',
+      serverInitPath: 'src/sentry.server.config.ts',
+    }),
+    mdx({
+      remarkPlugins: [remarkReadingTime],
+    }),
+    react(),
+    tailwind({ applyBaseStyles: false }),
+  ],
+  vite: {
+    build: {
+      sourcemap: true,
+    },
+    ssr: {
+      noExternal: ['@radix-ui/*'],
+    },
+  },
+});
+```
+
+## Accessibility Best Practices
+
+- Ensure proper semantic HTML structure
+- Implement ARIA attributes where necessary
+- Support keyboard navigation for interactive elements
+- Provide proper color contrast ratios (using design tokens)
+- Test with screen readers and accessibility tools
+
+## Dev Tooling & Quality Assurance
+
+- Set up ESLint with proper TypeScript rules
+- Configure Prettier for consistent code formatting
+- Implement Husky for git hooks (pre-commit linting)
+- Use lint-staged for efficient pre-commit checks
+
+```js
+// .lintstagedrc.js
+export default {
+  '*.{js,jsx,ts,tsx,astro}': ['prettier --write', 'eslint --fix'],
+  '*.{css,scss,md,json}': ['prettier --write'],
+};
+```
+
+## Key Conventions
+
+1. Use kebab-case for file names, PascalCase for component names
+2. Follow a domain-driven component organization
+3. Leverage CSS variables for theming and design tokens
+4. Use TypeScript interfaces/types for all component props
+5. Implement proper lazy loading for non-critical components
+6. Write descriptive JSDocs for utility functions
+
+By adhering to these guidelines, you'll create production-ready Astro applications that are performant, maintainable, and scalable.

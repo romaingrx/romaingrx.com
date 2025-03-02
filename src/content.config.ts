@@ -64,12 +64,33 @@ const timeline = defineCollection({
   schema: timelineSchema,
 });
 
+// Define the note collection schema
+const noteSchema = z
+  .object({
+    title: z.string(),
+    description: z.string().optional(),
+    authors: z.array(reference('author')),
+    status: z.enum(['published', 'draft', 'archived']).default('draft'),
+    published_date: z.date(),
+    updated_date: z.date().optional(),
+    tags: z.array(z.string()),
+    resources: z.array(resource_schema).optional(),
+  })
+  .strict();
+
+const note = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/note' }),
+  schema: noteSchema,
+});
+
 // Export collections
 export const collections = {
   author,
   blog,
   timeline,
+  note,
 };
 
 // Export types
 export type TimelineSchema = z.infer<typeof timelineSchema>;
+export type NoteSchema = z.infer<typeof noteSchema>;
