@@ -1,0 +1,20 @@
+---
+import '@/styles/globals.css';
+
+import type { NoteWithAuthors } from '@/lib/collections';
+
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  note: NoteWithAuthors;
+}
+
+const { note } = Astro.props;
+
+// Create a cache-busting URL for the OG image
+const ogImageUrl = `/og/note/${note.id}.png`;
+---
+
+<BaseLayout title={note.data.title} description={note.data.description || ''} ogImage={ogImageUrl}>
+  <slot />
+</BaseLayout>
