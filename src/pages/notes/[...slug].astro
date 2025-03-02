@@ -1,0 +1,31 @@
+---
+import { render } from 'astro:content';
+
+import NoteFooter from '@/components/note/footer/index.astro';
+import NoteHeader from '@/components/note/note-header.astro';
+import NoteLayout from '@/layouts/NoteLayout.astro';
+import { getPublishedNotes } from '@/lib/collections';
+
+export async function getStaticPaths() {
+  const notes = await getPublishedNotes();
+  return notes.map(note => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+
+<NoteLayout note={note}>
+  <article class="relative">
+    <NoteHeader note={note} />
+
+    <div class="prose prose-lg dark:prose-invert mx-auto mt-8 max-w-4xl px-4">
+      <Content />
+    </div>
+
+    <NoteFooter note={note} />
+  </article>
+</NoteLayout>

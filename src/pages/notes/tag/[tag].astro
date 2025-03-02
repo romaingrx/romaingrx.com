@@ -1,0 +1,69 @@
+---
+import NoteHoverCard from '@/components/note/hover-card';
+import Shell from '@/components/Shell.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedNotes } from '@/lib/collections';
+
+export async function getStaticPaths() {
+  const notes = await getPublishedNotes();
+  const tags = [...new Set(notes.flatMap(note => note.data.tags))];
+
+  return tags.map(tag => ({
+    params: { tag },
+    props: {
+      tag,
+      notes: notes.filter(note => note.data.tags.includes(tag)),
+    },
+  }));
+}
+
+const { tag, notes } = Astro.props;
+
+const title = `Notes tagged "${tag}"`;
+const description = `Collection of notes tagged with "${tag}".`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Shell type="note">
+    <div class="space-y-12">
+      <div class="space-y-4">
+        <h1 class="text-4xl font-bold tracking-tight">
+          Notes tagged "{tag}"
+        </h1>
+        <p class="text-xl text-muted-foreground">
+          {description}
+        </p>
+      </div>
+
+      {
+        notes.length > 0 ? (
+          <ul class="space-y-2">
+            {notes.map(note => (
+              <li class="group rounded-lg border bg-card transition-colors hover:bg-accent/40">
+                <NoteHoverCard note={note} client:load>
+                  <a href={`/notes/${note.id}`} class="flex items-center justify-between px-4 py-3">
+                    <span class="font-medium transition-colors group-hover:text-primary">
+                      {note.data.title}
+                    </span>
+                    <time
+                      datetime={note.data.published_date.toISOString()}
+                      class="text-sm text-muted-foreground"
+                    >
+                      {note.data.published_date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </time>
+                  </a>
+                </NoteHoverCard>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-center text-muted-foreground">No notes found with this tag.</p>
+        )
+      }
+    </div>
+  </Shell>
+</BaseLayout>
