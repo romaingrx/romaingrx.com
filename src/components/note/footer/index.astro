@@ -45,7 +45,7 @@ const hasRelatedContent = note.data.tags.length > 0;
               <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
               <div class="flex flex-wrap gap-2">
                 {note.data.tags.map(tag => (
-                  <TagBadge tag={tag} />
+                  <TagBadge tag={tag} basePath="/notes" />
                 ))}
               </div>
             </div>

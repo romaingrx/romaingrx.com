@@ -6,12 +6,13 @@ import { Badge } from '@/components/ui/badge';
 type Props = {
   tag: string;
   isActive?: boolean;
+  basePath?: string;
 };
 
-const { tag, isActive = false } = Astro.props;
+const { tag, isActive = false, basePath = '/blog' } = Astro.props;
 ---
 
-<a href={isActive ? `/blog` : `/blog/tag/${tag}`}>
+<a href={isActive ? `${basePath}` : `${basePath}/tag/${tag}`}>
   <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
     <Icon name="lucide:tag" class="h-3 w-3" />
     <span>{tag}</span>
