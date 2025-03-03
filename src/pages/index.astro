@@ -1,14 +1,18 @@
 ---
+import BlogCard from '@/components/blog/card/index.astro';
 import ContactForm from '@/components/home/ContactForm.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
-import RecentPosts from '@/components/home/RecentPosts.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPublishedBlogPosts } from '@/lib/collections';
+import { getPublishedBlogPosts, getPublishedNotes } from '@/lib/collections';
 
 // export const prerender = true;
 
-// Get the 3 most recent published blog posts
+// Get the recent published content
 let posts = (await getPublishedBlogPosts())
+  .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
+  .slice(0, 2);
+
+let notes = (await getPublishedNotes())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 3);
 
@@ -22,14 +26,118 @@ const description =
     <!-- Hero Section with Scroll Animation -->
     <HeroSection />
 
-    <!-- Recent Blog Posts -->
+    <!-- Recent Content Bento Grid -->
     <section class="container mx-auto px-4 py-24">
-      <RecentPosts posts={posts} />
+      <div class="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div>
+          <h2 class="text-3xl font-bold tracking-tight">Recent Content</h2>
+          <p class="text-muted-foreground">
+            Check out my latest blog posts and notes on AI, ML, and software development.
+          </p>
+        </div>
+      </div>
+
+      <!-- Bento Grid -->
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <!-- Featured Blog Post -->
+        {
+          posts[0] && (
+            <div class="relative col-span-full md:col-span-2">
+              <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+                blog
+              </div>
+              <BlogCard post={posts[0]} className="h-full" layout="horizontal" size="lg" />
+            </div>
+          )
+        }
+
+        <!-- First Note - Small Card -->
+        {
+          notes[0] && (
+            <div class="relative">
+              <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-secondary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground shadow-sm">
+                note
+              </div>
+              <a
+                href={`/notes/${notes[0].slug}`}
+                class="group flex h-full flex-col justify-between rounded-xl border border-border/40 bg-card p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
+              >
+                <div class="flex items-center justify-between">
+                  <time
+                    datetime={notes[0].data.published_date.toISOString()}
+                    class="text-xs text-muted-foreground"
+                  >
+                    {new Date(notes[0].data.published_date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </time>
+                </div>
+                <div class="transition duration-200 group-hover:translate-x-2">
+                  <h3 class="mb-2 font-medium tracking-tight text-foreground">
+                    {notes[0].data.title}
+                  </h3>
+                  {notes[0].data.description && (
+                    <p class="line-clamp-2 text-sm text-muted-foreground">
+                      {notes[0].data.description}
+                    </p>
+                  )}
+                </div>
+              </a>
+            </div>
+          )
+        }
+
+        <!-- Second Blog Post -->
+        {
+          posts[1] && (
+            <div class="relative col-span-full md:col-span-2">
+              <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+                blog
+              </div>
+              <BlogCard post={posts[1]} className="h-full" layout="horizontal" size="lg" />
+            </div>
+          )
+        }
+
+        <!-- Second and Third Notes -->
+        {
+          notes.slice(1).map(note => (
+            <div class="relative">
+              <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-secondary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground shadow-sm">
+                note
+              </div>
+              <a
+                href={`/notes/${note.slug}`}
+                class="group flex h-full flex-col justify-between rounded-xl border border-border/40 bg-card p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
+              >
+                <div class="flex items-center justify-between">
+                  <time
+                    datetime={note.data.published_date.toISOString()}
+                    class="text-xs text-muted-foreground"
+                  >
+                    {new Date(note.data.published_date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </time>
+                </div>
+                <div class="transition duration-200 group-hover:translate-x-2">
+                  <h3 class="mb-2 font-medium tracking-tight text-foreground">{note.data.title}</h3>
+                  {note.data.description && (
+                    <p class="line-clamp-2 text-sm text-muted-foreground">
+                      {note.data.description}
+                    </p>
+                  )}
+                </div>
+              </a>
+            </div>
+          ))
+        }
+      </div>
     </section>
 
     <!-- Contact Form -->
-    <section class="container mx-auto px-4 py-24">
-      <ContactForm />
-    </section>
+    <ContactForm />
   </main>
 </BaseLayout>
