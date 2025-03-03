@@ -4,6 +4,7 @@ import ContactForm from '@/components/home/ContactForm.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts, getPublishedNotes } from '@/lib/collections';
+import { routes } from '@/configs/routes';
 
 // export const prerender = true;
 
@@ -59,7 +60,7 @@ const description =
                 note
               </div>
               <a
-                href={`/notes/${notes[0].slug}`}
+                href={routes.note(notes[0])}
                 class="group flex h-full flex-col justify-between rounded-xl border border-border/40 bg-card p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
               >
                 <div class="flex items-center justify-between">
@@ -108,7 +109,7 @@ const description =
                 note
               </div>
               <a
-                href={`/notes/${note.slug}`}
+                href={routes.note(note)}
                 class="group flex h-full flex-col justify-between rounded-xl border border-border/40 bg-card p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
               >
                 <div class="flex items-center justify-between">

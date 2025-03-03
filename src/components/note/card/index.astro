@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import type { NoteWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
+import { routes } from '@/configs/routes';
 
 const cardVariants = cva(
   'group overflow-hidden transition-all rounded-xl bg-card hover:bg-accent/40 border shadow-sm',
@@ -74,7 +75,7 @@ interface Props extends CardVariants {
 const { note, layout = 'default', size = 'default', className } = Astro.props;
 ---
 
-<a href={`/notes/${note.id}`} class="group/card block no-underline">
+<a href={routes.note(note)} class="group/card block no-underline">
   <CardPrimitive
     className={cn(cardVariants({ layout, size }), className, 'h-full transition-all duration-300')}
   >

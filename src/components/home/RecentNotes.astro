@@ -1,5 +1,6 @@
 ---
 import type { NoteWithAuthors } from '@/lib/collections';
+import { routes } from '@/configs/routes';
 
 interface Props {
   notes: NoteWithAuthors[];
@@ -12,7 +13,7 @@ const { notes } = Astro.props;
   <div class="flex items-center justify-between">
     <h3 class="text-2xl font-semibold tracking-tight">Notes</h3>
     <a
-      href="/notes"
+      href={routes.notes}
       class="group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
     >
       View all
@@ -25,7 +26,7 @@ const { notes } = Astro.props;
     {
       notes.map(note => (
         <a
-          href={`/notes/${note.slug}`}
+          href={routes.note({ slug: note.slug })}
           class="group flex flex-col gap-2 rounded-lg border border-border/40 bg-card/50 p-4 transition-all hover:bg-accent hover:shadow-md"
         >
           <h4 class="line-clamp-1 font-medium tracking-tight group-hover:text-accent-foreground">

@@ -3,6 +3,7 @@ import NoteHoverCard from '@/components/note/hover-card';
 import Shell from '@/components/Shell.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedNotes } from '@/lib/collections';
+import { routes } from '@/configs/routes';
 
 const notes = await getPublishedNotes();
 const title = 'Notes';
@@ -25,7 +26,7 @@ const description = 'Collection of notes, thoughts, and documentation on various
             {notes.map(note => (
               <li class="group rounded-lg border bg-card transition-colors hover:bg-accent/40">
                 <NoteHoverCard note={note} client:visible>
-                  <a href={`/notes/${note.id}`} class="flex items-center justify-between px-4 py-3">
+                  <a href={routes.note(note)} class="flex items-center justify-between px-4 py-3">
                     <span class="font-medium transition-colors group-hover:text-primary">
                       {note.data.title}
                     </span>

@@ -2,16 +2,17 @@
 import { Icon } from 'astro-icon/components';
 
 import Logo from '@/components/logo/logo';
+import { routes } from '@/configs/routes';
 
 import ThemeToggle from './ThemeToggle.astro';
 
 const { pathname } = Astro.url;
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Notes', href: '/notes' },
-  { name: 'About', href: '/about' },
+  { name: 'Home', href: routes.home },
+  { name: 'Blog', href: routes.blogs },
+  { name: 'Notes', href: routes.notes },
+  { name: 'About', href: routes.about },
 ];
 
 // Function to check if a nav item is active

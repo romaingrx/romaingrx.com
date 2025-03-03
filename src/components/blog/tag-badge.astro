@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 
 import { Badge } from '@/components/ui/badge';
+import { routes } from '@/configs/routes';
 
 type Props = {
   tag: string;
@@ -9,7 +10,7 @@ type Props = {
   basePath?: string;
 };
 
-const { tag, isActive = false, basePath = '/blog' } = Astro.props;
+const { tag, isActive = false, basePath = routes.blogs } = Astro.props;
 ---
 
 <a href={isActive ? `${basePath}` : `${basePath}/tag/${tag}`}>

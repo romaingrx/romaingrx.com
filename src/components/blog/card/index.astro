@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
+import { routes } from '@/configs/routes';
 
 import BlogPostBackground from './background';
 
@@ -92,7 +93,7 @@ interface Props extends CardVariants {
 const { post, layout = 'default', size = 'default', className } = Astro.props;
 ---
 
-<a href={`/blog/${post.id}`} class="group/card block no-underline">
+<a href={routes.blog(post)} class="group/card block no-underline">
   <CardPrimitive
     className={cn(cardVariants({ layout, size }), className, 'h-full transition-all duration-300')}
   >

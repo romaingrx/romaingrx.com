@@ -11,7 +11,7 @@ import { getPublishedNotes } from '@/lib/collections';
 export async function getStaticPaths() {
   const notes = await getPublishedNotes();
   return notes.map(note => ({
-    params: { slug: note.id },
+    params: { slug: note.slug },
     props: { note },
   }));
 }
