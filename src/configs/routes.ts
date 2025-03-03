@@ -17,6 +17,7 @@ export const routes = {
   // Main pages
   home: '/',
   about: '/about',
+  contact: '/contact',
 
   // Collection pages
   blogs: '/blog',
