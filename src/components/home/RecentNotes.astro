@@ -1,19 +1,19 @@
 ---
-import type { BlogPostWithAuthors } from '@/lib/collections';
+import type { NoteWithAuthors } from '@/lib/collections';
 import { routes } from '@/configs/routes';
 
 interface Props {
-  posts: BlogPostWithAuthors[];
+  notes: NoteWithAuthors[];
 }
 
-const { posts } = Astro.props;
+const { notes } = Astro.props;
 ---
 
 <div class="flex flex-col gap-6">
   <div class="flex items-center justify-between">
-    <h3 class="text-2xl font-semibold tracking-tight">Blog Posts</h3>
+    <h3 class="text-2xl font-semibold tracking-tight">Notes</h3>
     <a
-      href="/blog"
+      href={routes.notes}
       class="group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
     >
       View all
@@ -24,21 +24,21 @@ const { posts } = Astro.props;
   </div>
   <div class="grid gap-4">
     {
-      posts.map(post => (
+      notes.map(note => (
         <a
-          href={routes.blog(post)}
+          href={routes.note({ slug: note.slug })}
           class="group flex flex-col gap-2 rounded-lg border border-border/40 bg-card/50 p-4 transition-all hover:bg-accent hover:shadow-md"
         >
           <h4 class="line-clamp-1 font-medium tracking-tight group-hover:text-accent-foreground">
-            {post.data.title}
+            {note.data.title}
           </h4>
-          {post.data.description && (
-            <p class="line-clamp-2 text-sm text-muted-foreground">{post.data.description}</p>
+          {note.data.description && (
+            <p class="line-clamp-2 text-sm text-muted-foreground">{note.data.description}</p>
           )}
           <div class="mt-auto flex items-center justify-between text-xs text-muted-foreground">
-            <span>{post.readingTime}</span>
-            <time datetime={post.data.published_date.toISOString()}>
-              {new Date(post.data.published_date).toLocaleDateString('en-US', {
+            <span>{note.readingTime}</span>
+            <time datetime={note.data.published_date.toISOString()}>
+              {new Date(note.data.published_date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric',

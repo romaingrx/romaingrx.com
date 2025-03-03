@@ -1,0 +1,126 @@
+---
+import BlogCard from '@/components/blog/card/index.astro';
+import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
+import { routes } from '@/configs/routes';
+
+interface Props {
+  posts?: BlogPostWithAuthors[];
+  notes?: NoteWithAuthors[];
+  className?: string;
+}
+
+const { posts = [], notes = [], className = '' } = Astro.props;
+---
+
+<!-- Bento Grid -->
+<div class={`grid grid-cols-1 gap-6 md:grid-cols-3 ${className}`}>
+  {/* Blog Posts - First two posts get larger cards */}
+  {
+    posts.length > 0 && (
+      <div class="relative col-span-full md:col-span-2">
+        <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+          blog
+        </div>
+        <BlogCard post={posts[0]!} className="h-full" layout="horizontal" size="lg" />
+      </div>
+    )
+  }
+
+  {/* Notes - First note gets a small card */}
+  {
+    notes.length > 0 && (
+      <div class="relative">
+        <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-secondary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground shadow-sm">
+          note
+        </div>
+        <a
+          href={routes.note({ slug: notes[0]!.slug })}
+          class="group flex h-full flex-col justify-between rounded-xl border border-border/40 bg-card p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
+        >
+          <div class="flex items-center justify-between">
+            <time
+              datetime={notes[0]!.data.published_date.toISOString()}
+              class="text-xs text-muted-foreground"
+            >
+              {new Date(notes[0]!.data.published_date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+              })}
+            </time>
+          </div>
+          <div class="transition duration-200 group-hover:translate-x-2">
+            <h3 class="mb-2 font-medium tracking-tight text-foreground">{notes[0]!.data.title}</h3>
+            {notes[0]!.data.description && (
+              <p class="line-clamp-2 text-sm text-muted-foreground">{notes[0]!.data.description}</p>
+            )}
+          </div>
+        </a>
+      </div>
+    )
+  }
+
+  {/* Second blog post if available */}
+  {
+    posts.length > 1 && (
+      <div class="relative col-span-full md:col-span-2">
+        <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+          blog
+        </div>
+        <BlogCard post={posts[1]!} className="h-full" layout="horizontal" size="lg" />
+      </div>
+    )
+  }
+
+  {/* Remaining notes */}
+  {
+    notes.length > 1 && (
+      <>
+        {notes.slice(1).map(note => (
+          <div class="relative">
+            <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-secondary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground shadow-sm">
+              note
+            </div>
+            <a
+              href={routes.note({ slug: note.slug })}
+              class="group flex h-full flex-col justify-between rounded-xl border border-border/40 bg-card p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
+            >
+              <div class="flex items-center justify-between">
+                <time
+                  datetime={note.data.published_date.toISOString()}
+                  class="text-xs text-muted-foreground"
+                >
+                  {new Date(note.data.published_date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+              <div class="transition duration-200 group-hover:translate-x-2">
+                <h3 class="mb-2 font-medium tracking-tight text-foreground">{note.data.title}</h3>
+                {note.data.description && (
+                  <p class="line-clamp-2 text-sm text-muted-foreground">{note.data.description}</p>
+                )}
+              </div>
+            </a>
+          </div>
+        ))}
+      </>
+    )
+  }
+
+  {/* Additional blog posts */}
+  {
+    posts.length > 2 && (
+      <>
+        {posts.slice(2, 4).map(post => (
+          <div class="relative col-span-full md:col-span-1">
+            <div class="absolute right-0 top-0 z-10 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+              blog
+            </div>
+            <BlogCard post={post} className="h-full" layout="horizontal" size="sm" />
+          </div>
+        ))}
+      </>
+    )
+  }
+</div>

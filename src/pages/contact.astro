@@ -1,0 +1,23 @@
+---
+import ContactForm from '@/components/home/ContactForm.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const title = "Let's Collaborate";
+const description =
+  "Have an idea, project, or question? Reach out and let's create something amazing together.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-16">
+    <div class="w-full max-w-2xl">
+      <h1 class="mb-6 text-center text-4xl font-bold tracking-tight">{title}</h1>
+      <p class="mb-12 text-center text-lg text-muted-foreground">
+        {description}
+      </p>
+
+      <div class="w-full">
+        <ContactForm hideTitle={true} />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

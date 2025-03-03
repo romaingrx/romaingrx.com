@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
@@ -9,11 +8,9 @@ import {
   Card as CardPrimitive,
   CardTitle,
 } from '@/components/ui/card';
-import type { BlogPostWithAuthors } from '@/lib/collections';
+import type { NoteWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
 import { routes } from '@/configs/routes';
-
-import BlogPostBackground from './background';
 
 const cardVariants = cva(
   'group overflow-hidden transition-all rounded-xl bg-card hover:bg-accent/40 border shadow-sm',
@@ -21,7 +18,7 @@ const cardVariants = cva(
     variants: {
       layout: {
         default: 'flex flex-col',
-        horizontal: 'grid md:grid-cols-[45%_1fr]',
+        horizontal: 'grid md:grid-cols-[1fr]',
       },
       size: {
         default: 'max-w-2xl',
@@ -33,32 +30,32 @@ const cardVariants = cva(
       {
         layout: 'horizontal',
         size: 'default',
-        class: 'min-h-[160px]',
+        class: 'min-h-[120px]',
       },
       {
         layout: 'horizontal',
         size: 'sm',
-        class: 'min-h-[140px]',
+        class: 'min-h-[100px]',
       },
       {
         layout: 'horizontal',
         size: 'lg',
-        class: 'min-h-[180px]',
+        class: 'min-h-[140px]',
       },
       {
         layout: 'default',
         size: 'default',
-        class: 'min-h-[240px]',
+        class: 'min-h-[160px]',
       },
       {
         layout: 'default',
         size: 'sm',
-        class: 'min-h-[220px]',
+        class: 'min-h-[140px]',
       },
       {
         layout: 'default',
         size: 'lg',
-        class: 'min-h-[280px]',
+        class: 'min-h-[180px]',
       },
     ],
     defaultVariants: {
@@ -68,88 +65,61 @@ const cardVariants = cva(
   }
 );
 
-const imageContainerVariants = cva(
-  'relative overflow-hidden flex items-center justify-center bg-muted/50',
-  {
-    variants: {
-      layout: {
-        default: 'h-[180px] w-full rounded-t-xl',
-        horizontal: 'h-full w-full rounded-l-xl',
-      },
-    },
-    defaultVariants: {
-      layout: 'default',
-    },
-  }
-);
-
 type CardVariants = VariantProps<typeof cardVariants>;
 
 interface Props extends CardVariants {
-  post: BlogPostWithAuthors;
+  note: NoteWithAuthors;
   className?: string;
 }
 
-const { post, layout = 'default', size = 'default', className } = Astro.props;
+const { note, layout = 'default', size = 'default', className } = Astro.props;
 ---
 
-<a href={routes.blog(post)} class="group/card block no-underline">
+<a href={routes.note(note)} class="group/card block no-underline">
   <CardPrimitive
     className={cn(cardVariants({ layout, size }), className, 'h-full transition-all duration-300')}
   >
-    {
-      post.data.cover && (
-        <div class={cn(imageContainerVariants({ layout }))}>
-          <div class="absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
-            <BlogPostBackground value={post.id} />
-          </div>
-          <Image
-            src={post.data.cover}
-            alt={post.data.title}
-            class="relative z-10 h-auto w-auto max-w-[65%] object-contain transition-all duration-500 group-hover/card:scale-110"
-            width={300}
-            height={200}
-          />
-        </div>
-      )
-    }
     <div class="flex h-full flex-col text-left">
       <CardContent className="flex-1 space-y-2.5 p-4">
         <div class="space-y-2">
           <CardTitle>
             <h2
               class="line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary"
-              transition:name={`${post.id}-title`}
+              transition:name={`${note.id}-title`}
             >
-              {post.data.title}
+              {note.data.title}
             </h2>
           </CardTitle>
-          <CardDescription>
-            <p class="line-clamp-2 text-sm" transition:name={`${post.id}-description`}>
-              {post.data.description}
-            </p>
-          </CardDescription>
+          {
+            note.data.description && (
+              <CardDescription>
+                <p class="line-clamp-2 text-sm" transition:name={`${note.id}-description`}>
+                  {note.data.description}
+                </p>
+              </CardDescription>
+            )
+          }
         </div>
       </CardContent>
 
-      <div class="flex items-center gap-4 px-4">
+      <div class="flex items-center gap-4 px-4 pb-4">
         <div class="flex items-center gap-2">
           <StackedAuthors
-            authors={post.authors}
+            authors={note.authors}
             show_name={false}
-            transition:name={`${post.id}-authors`}
+            transition:name={`${note.id}-authors`}
           />
-          <span class="text-sm text-muted-foreground" transition:name={`${post.id}-reading-time`}>
-            {post.readingTime}
+          <span class="text-sm text-muted-foreground" transition:name={`${note.id}-reading-time`}>
+            {note.readingTime}
           </span>
         </div>
         <time
-          datetime={post.data.published_date.toISOString()}
+          datetime={note.data.published_date.toISOString()}
           class="ml-auto text-sm text-muted-foreground"
-          transition:name={`${post.id}-published-date`}
+          transition:name={`${note.id}-published-date`}
         >
           {
-            post.data.published_date.toLocaleDateString('en-US', {
+            note.data.published_date.toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',

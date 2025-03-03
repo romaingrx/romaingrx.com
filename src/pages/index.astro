@@ -1,14 +1,19 @@
 ---
-import ContactForm from '@/components/home/ContactForm.astro';
+import ContactCTA from '@/components/home/ContactCTA.astro';
+import ContentGrid from '@/components/home/ContentGrid.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
-import RecentPosts from '@/components/home/RecentPosts.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPublishedBlogPosts } from '@/lib/collections';
+import { getPublishedBlogPosts, getPublishedNotes } from '@/lib/collections';
+import { routes } from '@/configs/routes';
 
 // export const prerender = true;
 
-// Get the 3 most recent published blog posts
+// Get the recent published content
 let posts = (await getPublishedBlogPosts())
+  .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
+  .slice(0, 4);
+
+let notes = (await getPublishedNotes())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 3);
 
@@ -22,14 +27,36 @@ const description =
     <!-- Hero Section with Scroll Animation -->
     <HeroSection />
 
-    <!-- Recent Blog Posts -->
+    <!-- Recent Content Bento Grid -->
     <section class="container mx-auto px-4 py-24">
-      <RecentPosts posts={posts} />
+      <div class="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div>
+          <h2 class="text-3xl font-bold tracking-tight">Recent Content</h2>
+          <p class="text-muted-foreground">
+            Check out my latest blog posts and notes on AI, ML, and software development.
+          </p>
+        </div>
+        <div class="flex gap-4">
+          <a
+            href={routes.blogs}
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            View All Posts
+          </a>
+          <a
+            href={routes.notes}
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            View All Notes
+          </a>
+        </div>
+      </div>
+
+      <!-- Content Grid Component -->
+      <ContentGrid posts={posts} notes={notes} />
     </section>
 
-    <!-- Contact Form -->
-    <section class="container mx-auto px-4 py-24">
-      <ContactForm />
-    </section>
+    <!-- Contact CTA -->
+    <ContactCTA />
   </main>
 </BaseLayout>

@@ -2,16 +2,18 @@
 import { Icon } from 'astro-icon/components';
 
 import { Badge } from '@/components/ui/badge';
+import { routes } from '@/configs/routes';
 
 type Props = {
   category: string;
   isActive?: boolean;
+  basePath?: string;
 };
 
-const { category, isActive = false } = Astro.props;
+const { category, isActive = false, basePath = routes.blogs } = Astro.props;
 ---
 
-<a href={isActive ? '/blog' : `/blog/category/${category}`}>
+<a href={isActive ? basePath : `${basePath}/category/${category}`}>
   <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
     <Icon name="lucide:folder" class="h-3 w-3" />
     <span>{category}</span>

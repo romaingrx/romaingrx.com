@@ -1,0 +1,54 @@
+---
+import NoteHoverCard from '@/components/note/hover-card';
+import Shell from '@/components/Shell.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedNotes } from '@/lib/collections';
+import { routes } from '@/configs/routes';
+
+const notes = await getPublishedNotes();
+const title = 'Notes';
+const description = 'Collection of notes, thoughts, and documentation on various topics.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Shell type="article">
+    <div class="space-y-12 py-8">
+      <div class="space-y-4">
+        <h1 class="text-4xl font-bold tracking-tight">Notes</h1>
+        <p class="text-xl text-muted-foreground">
+          {description}
+        </p>
+      </div>
+
+      {
+        notes.length > 0 ? (
+          <ul class="space-y-2">
+            {notes.map(note => (
+              <li class="group rounded-lg border bg-card transition-colors hover:bg-accent/40">
+                <NoteHoverCard note={note} client:visible>
+                  <a href={routes.note(note)} class="flex items-center justify-between px-4 py-3">
+                    <span class="font-medium transition-colors group-hover:text-primary">
+                      {note.data.title}
+                    </span>
+                    <time
+                      datetime={note.data.published_date.toISOString()}
+                      class="text-sm text-muted-foreground"
+                    >
+                      {note.data.published_date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </time>
+                  </a>
+                </NoteHoverCard>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-center text-muted-foreground">No notes found.</p>
+        )
+      }
+    </div>
+  </Shell>
+</BaseLayout>
