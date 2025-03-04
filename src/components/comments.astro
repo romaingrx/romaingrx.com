@@ -1,5 +1,35 @@
 ---
 import { site } from '@/configs/site';
+
+interface Props {
+  /**
+   * Optional category name to use for the comments.
+   * Defaults to "Comments" if not provided.
+   */
+  category?: string;
+
+  /**
+   * Optional category ID to use for the comments.
+   * Defaults to the main comments category ID if not provided.
+   */
+  categoryId?: string;
+
+  /**
+   * Optional content type label (e.g., "blog", "note").
+   * Used to distinguish between different content types in GitHub Discussions.
+   */
+  contentType?: string;
+}
+
+const {
+  category = 'Comments',
+  categoryId = 'DIC_kwDOM6pBlc4Cmqh8',
+  contentType = '',
+} = Astro.props;
+
+// If a content type is provided, we'll use it to create a discussion term
+// that includes the content type as a prefix to the page title
+const useCustomMapping = contentType !== '';
 ---
 
 <script
@@ -7,9 +37,9 @@ import { site } from '@/configs/site';
   src="https://giscus.app/client.js"
   data-repo={site.repo}
   data-repo-id="R_kgDOM6pBlQ"
-  data-category="Comments"
-  data-category-id="DIC_kwDOM6pBlc4Cmqh8"
-  data-mapping="og:title"
+  data-category={category}
+  data-category-id={categoryId}
+  data-mapping={useCustomMapping ? 'specific' : 'og:title'}
   data-strict="0"
   data-reactions-enabled="1"
   data-emit-metadata="0"
@@ -19,6 +49,27 @@ import { site } from '@/configs/site';
   data-theme="dark"
   crossorigin="anonymous"
   async></script>
+
+{
+  useCustomMapping && (
+    <script is:inline define:vars={{ contentType }}>
+      {`
+    // Get the page title from the og:title meta tag or document title
+    function getPageTitle() {
+      const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+      const ogTitle = ogTitleMeta ? ogTitleMeta.content : null;
+      return ogTitle || document.title;
+    }
+    
+    // Create a discussion term that includes the content type
+    const discussionTerm = \`[\${contentType}] \${getPageTitle()}\`;
+    
+    // Set the discussion term for the specific mapping
+    document.querySelector('script[src*="giscus"]').setAttribute('data-term', discussionTerm);
+    `}
+    </script>
+  )
+}
 
 <script is:inline>
   function getTheme() {

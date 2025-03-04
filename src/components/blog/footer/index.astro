@@ -1,10 +1,10 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
 
+import Comments from '@/components/comments.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 
 import CategoryBadge from '../category-badge.astro';
-import Comments from '../comments.astro';
 import ResourceBadges from '../resources/index.astro';
 import TagBadge from '../tag-badge.astro';
 import AuthorCards from './author-cards.astro';
@@ -113,6 +113,6 @@ const hasRelatedContent = post.data.related_posts || post.data.tags.length > 0;
 
   <!-- Comments Section -->
   <div class="my-8">
-    <Comments />
+    <Comments contentType="blog" />
   </div>
 </footer>
