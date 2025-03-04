@@ -12,8 +12,8 @@ interface ResourceBadgeProps {
   provider: ResourceProvider;
   title: string;
   value: string;
-  description?: string;
-  className?: string;
+  description: string | undefined;
+  className: string | undefined;
 }
 
 const badgeVariants = cva('transition-all duration-300 cursor-pointer font-medium', {

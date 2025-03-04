@@ -33,7 +33,7 @@ const groupedResources = resources.reduce(
         .map(resource => (
           // @ts-ignore
           <ResourceBadge
-            client:visible
+            client:load
             type={resource.type}
             provider={resource.provider}
             title={resource.title}
