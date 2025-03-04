@@ -2,6 +2,7 @@
 import ContactCTA from '@/components/home/ContactCTA.astro';
 import ContentGrid from '@/components/home/ContentGrid.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
+import Shell from '@/components/Shell.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPublishedBlogPosts, getPublishedNotes } from '@/lib/collections';
 import { routes } from '@/configs/routes';
@@ -28,33 +29,35 @@ const description =
     <HeroSection />
 
     <!-- Recent Content Bento Grid -->
-    <section class="container mx-auto px-4 py-24">
-      <div class="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
-        <div>
-          <h2 class="text-3xl font-bold tracking-tight">Recent Content</h2>
-          <p class="text-muted-foreground">
-            Check out my latest blog posts and notes on AI, ML, and software development.
-          </p>
+    <Shell>
+      <section class="container mx-auto px-4 py-24">
+        <div class="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Recent Content</h2>
+            <p class="text-muted-foreground">
+              Check out my latest blog posts and notes on AI, ML, and software development.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <a
+              href={routes.blogs}
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              View All Posts
+            </a>
+            <a
+              href={routes.notes}
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              View All Notes
+            </a>
+          </div>
         </div>
-        <div class="flex gap-4">
-          <a
-            href={routes.blogs}
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            View All Posts
-          </a>
-          <a
-            href={routes.notes}
-            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            View All Notes
-          </a>
-        </div>
-      </div>
 
-      <!-- Content Grid Component -->
-      <ContentGrid posts={posts} notes={notes} />
-    </section>
+        <!-- Content Grid Component -->
+        <ContentGrid posts={posts} notes={notes} />
+      </section>
+    </Shell>
 
     <!-- Contact CTA -->
     <ContactCTA />
