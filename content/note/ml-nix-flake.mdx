@@ -1,0 +1,182 @@
+---
+title: 'Hassle-Free ML Environment with Nix Flakes'
+description: 'Setting up a machine learning environment with CUDA support using Nix Flakes'
+authors: ['romaingrx']
+status: 'published'
+published_date: 2025-03-04
+tags: ['nix', 'flake', 'machine-learning', 'cuda', 'python']
+resources:
+  - title: 'ML Nix Flake Repository'
+    type: 'code'
+    provider: 'github'
+    value: 'https://github.com/romaingrx/ml-nix-flake'
+    description: 'Source code for the ML Nix Flake'
+---
+
+Setting up a machine learning environment with proper CUDA support can be a frustrating experience. Dependency conflicts, version mismatches, and driver compatibility issues often turn what should be a simple setup into hours of troubleshooting. This is where Nix Flakes come to the rescue.
+
+Here's the complete Nix flake that solves these problems:
+
+```nix
+{
+  description = "dev shell with uv and cuda out of the box";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nix-gl-host.url = "github:numtide/nix-gl-host";
+  };
+
+  outputs = { self, nixpkgs, nix-gl-host }:
+    let
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        config.cudaSupport = true;
+      };
+    in
+    {
+      devShells.x86_64-linux.default = with pkgs; mkShell rec {
+
+        packages = [
+          cmake
+          ninja
+          cudaPackages.cudatoolkit
+          cudaPackages.cuda_cudart
+          cudaPackages.cuda_cupti
+          cudaPackages.cuda_nvrtc
+          cudaPackages.cuda_nvtx
+          cudaPackages.cudnn
+          cudaPackages.libcublas
+          cudaPackages.libcufft
+          cudaPackages.libcurand
+          cudaPackages.libcusolver
+          cudaPackages.libcusparse
+          cudaPackages.libnvjitlink
+          cudaPackages.nccl
+          nix-gl-host.defaultPackage.x86_64-linux
+          uv
+          python312
+          zlib
+        ];
+
+        shellHook = ''
+          if [ ! -f pyproject.toml ]; then
+            uv sync
+            . .venv/bin/activate
+          fi
+          export LD_LIBRARY_PATH=$(nixglhost -p):$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH="${lib.makeLibraryPath packages}:$LD_LIBRARY_PATH"
+          export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+        '';
+      };
+    };
+}
+```
+
+This flake creates a development environment with everything you need for machine learning with CUDA support. Let's break down what it does:
+
+1. It uses the stable Nixpkgs channel (24.11) and the nix-gl-host package for OpenGL/CUDA compatibility
+2. It enables unfree packages and CUDA support in the configuration
+3. It includes a comprehensive set of CUDA libraries and tools (cudatoolkit, cudnn, etc.)
+4. It provides Python 3.12 with the uv package manager for fast dependency management
+5. The shell hook automatically sets up a Python virtual environment and configures all the necessary library paths
+
+The beauty of this flake is its simplicity - with just one command, you get a fully configured environment that would normally take hours to set up manually.
+
+## What is this Flake?
+
+This Nix Flake provides a ready-to-use development environment for machine learning projects with:
+
+- CUDA toolkit and libraries pre-configured
+- Python 3.12 with uv package manager
+- Automatic virtual environment setup
+- Proper library path configuration
+
+## Key Benefits
+
+1. **Reproducible environments** - Same setup works consistently across machines
+2. **Zero configuration CUDA** - All CUDA libraries and paths set up automatically
+3. **Modern Python tooling** - Uses uv for faster dependency management
+4. **Declarative approach** - Environment defined as code, easy to modify
+
+## Getting Started
+
+Using this flake is incredibly simple, just run:
+
+```bash
+nix develop --no-write-lock-file github:romaingrx/ml-nix-flake
+```
+
+or copy the flake to your project and run:
+
+```bash
+nix develop
+```
+
+That's it! You now have a fully configured ML environment with CUDA support.
+
+## Understanding the Flake
+
+Let's examine the key components of the flake in more detail:
+
+### Inputs
+
+The flake has two main inputs:
+
+- `nixpkgs` - Points to the stable Nixos-24.11 channel for consistent package versions
+- `nix-gl-host` - A utility that helps with OpenGL/CUDA compatibility across different environments
+
+### Configuration
+
+The configuration enables:
+
+- `allowUnfree = true` - Required for CUDA packages which are not open source
+- `cudaSupport = true` - Ensures packages are built with CUDA support where applicable
+
+### CUDA Packages
+
+The flake includes a comprehensive set of CUDA libraries:
+
+- Core CUDA toolkit and runtime libraries
+- cuDNN for deep learning acceleration
+- Math libraries (cuBLAS, cuFFT, cuRAND, cuSOLVER, cuSPARSE)
+- NCCL for multi-GPU communication
+- Various CUDA utilities and development tools
+
+### Python Environment
+
+The Python setup includes:
+
+- Python 3.12 - A modern Python version
+- uv - A fast, reliable Python package installer and resolver
+- Automatic virtual environment creation and activation
+
+### Shell Hook
+
+The shell hook performs three critical functions:
+
+1. Creates and activates a Python virtual environment if one doesn't exist
+2. Sets up the OpenGL library path using nixglhost
+3. Configures the LD_LIBRARY_PATH to include all necessary CUDA libraries
+
+This careful configuration of library paths is what makes the CUDA setup work seamlessly without manual intervention.
+
+## Customizing for Your Project
+
+To adapt this flake for your specific ML project:
+
+1. Fork the repository
+2. Modify the `packages` list to add or remove dependencies
+3. Adjust the Python version if needed
+4. Add project-specific setup to the `shellHook`
+
+## Troubleshooting
+
+If you encounter issues:
+
+- Ensure you have a compatible NVIDIA GPU and drivers installed
+- Check that virtualization features are enabled if using in a container
+- Verify that your system architecture matches (x86_64-linux)
+- Be aware that existing `LD_LIBRARY_PATH` settings in your environment might interfere with the flake's configuration. If you experience library-related errors, try starting with a clean environment or temporarily unset conflicting paths.
+
+By using this Nix Flake, you can focus on your machine learning work rather than fighting with environment setup.
