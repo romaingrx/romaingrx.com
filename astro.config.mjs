@@ -6,6 +6,7 @@ import tailwind from '@astrojs/tailwind';
 import sentry from "@sentry/astro";
 import icon from 'astro-icon';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
+import { transformerCompactLineOptions, transformerMetaHighlight, transformerMetaWordHighlight, transformerNotationHighlight, transformerStyleToClass } from '@shikijs/transformers';
 
 // https://astro.build/config
 export default defineConfig({
@@ -35,7 +36,72 @@ export default defineConfig({
     }),
     mdx({
       shikiConfig: {
-        theme: 'one-dark-pro',
+        themes: {
+          light: 'github-dark',
+          dark: 'github-dark',
+        },
+        transformers: [
+          transformerMetaHighlight({
+            // Custom CSS class for highlighted lines
+            highlightClassName: 'highlighted',
+            // Custom CSS class for focused lines
+            focusClassName: 'focused',
+            // Add a class to the pre element
+            preClassName: ({ lines = [] }) => {
+              if (lines.some(line => line.classes?.includes('highlighted'))) {
+                return 'has-highlighted';
+              }
+              if (lines.some(line => line.classes?.includes('focused'))) {
+                return 'has-focused';
+              }
+              return '';
+            },
+          }),
+          transformerMetaWordHighlight({
+            // Custom CSS class for highlighted words
+            highlightClassName: 'highlighted-word',
+          }),
+          transformerNotationHighlight({
+            // Custom CSS classes for different notation types
+            classMap: {
+              // For error underlines
+              err: 'error',
+              // For warning underlines
+              warn: 'warning',
+              // For info underlines
+              info: 'info',
+              // For success underlines
+              success: 'success',
+              // For highlight
+              highlight: 'highlighted',
+              // For focus
+              focus: 'focused',
+            },
+            // Use v3 matching algorithm for better notation matching
+            matchAlgorithm: 'v3',
+            // Enable inline annotations
+            inlineAnnotations: true,
+            // Add a class to the pre element for notation types
+            preClassName: ({ lines = [] }) => {
+              if (lines.some(line => line.classes?.includes('error'))) {
+                return 'has-error';
+              }
+              if (lines.some(line => line.classes?.includes('warning'))) {
+                return 'has-warning';
+              }
+              if (lines.some(line => line.classes?.includes('info'))) {
+                return 'has-info';
+              }
+              if (lines.some(line => line.classes?.includes('success'))) {
+                return 'has-success';
+              }
+              return '';
+            },
+          }),
+          // Add transformerCompactLineOptions to ensure proper line options handling
+          transformerCompactLineOptions(),
+        ],
+        wrap: true,
       },
       remarkPlugins: [remarkReadingTime],
     }),

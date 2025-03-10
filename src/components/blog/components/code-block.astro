@@ -1,0 +1,129 @@
+---
+import { cn } from '@/lib/utils';
+
+import '@/styles/shiki.css';
+
+interface Props {
+  /**
+   * The title of the code block
+   */
+  title?: string;
+
+  /**
+   * The language of the code
+   */
+  lang?: string;
+
+  /**
+   * Additional class names
+   */
+  class?: string;
+}
+
+const { title, lang, class: className } = Astro.props;
+---
+
+<div class={cn('code-block relative my-6 overflow-hidden rounded-lg', className)}>
+  {
+    title && (
+      <div class="code-title flex items-center justify-between bg-card/80 px-4 py-2 text-sm font-medium text-card-foreground">
+        <span>{title}</span>
+        {lang && <span class="text-xs text-muted-foreground">{lang}</span>}
+      </div>
+    )
+  }
+  <div class="code-content relative">
+    <slot />
+    <button
+      class="copy-button absolute right-2 top-2 rounded-md bg-card/80 p-2 text-xs text-card-foreground opacity-0 transition-opacity hover:bg-card/60 focus:opacity-100"
+      aria-label="Copy code to clipboard"
+      title="Copy code to clipboard"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="copy-icon"
+      >
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="check-icon hidden"
+      >
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .code-block:hover .copy-button {
+    opacity: 1;
+  }
+
+  /* Shiki base styling */
+  :global(.shiki) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875em;
+    line-height: 1.7142857;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+  }
+
+  :global(.shiki .line) {
+    padding: 0 1.5rem;
+  }
+</style>
+
+<script>
+  // Initialize copy buttons
+  document.addEventListener('astro:page-load', () => {
+    const codeBlocks = document.querySelectorAll('.code-block');
+
+    codeBlocks.forEach(block => {
+      const copyButton = block.querySelector('.copy-button');
+      const codeContent = block.querySelector('pre')?.textContent || '';
+
+      if (copyButton) {
+        copyButton.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(codeContent.trim());
+
+            // Show success state
+            const copyIcon = copyButton.querySelector('.copy-icon');
+            const checkIcon = copyButton.querySelector('.check-icon');
+
+            if (copyIcon && checkIcon) {
+              copyIcon.classList.add('hidden');
+              checkIcon.classList.remove('hidden');
+
+              // Reset after 2 seconds
+              setTimeout(() => {
+                copyIcon.classList.remove('hidden');
+                checkIcon.classList.add('hidden');
+              }, 2000);
+            }
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      }
+    });
+  });
+</script>

@@ -1,0 +1,201 @@
+pre .shiki {
+  counter-reset: codeblock-line;
+
+  .line {
+    counter-increment: codeblock-line;
+
+    &::before {
+      content: counter(codeblock-line);
+    }
+  }
+}
+
+/* Highlighted line */
+.astro-code .line.highlighted {
+  background-color: hsl(var(--primary) / 0.15);
+  border-left: 3px solid hsl(var(--primary));
+  margin-left: -1.25rem;
+  margin-right: -0rem;
+  padding-left: calc(1.5rem - 3px);
+  padding-right: 0.25rem;
+  border-radius: calc(var(--radius) / 4);
+}
+
+/* Focused line */
+.astro-code .line.focused {
+  background-color: hsl(var(--accent) / 0.1);
+  border-left: 3px solid hsl(var(--accent));
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding-left: calc(1.5rem - 3px);
+  padding-right: 1.5rem;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--accent), 0.05),
+    inset 0 -1px 0 rgba(var(--accent), 0.05);
+}
+
+/* Diff additions and deletions */
+.astro-code .line.diff.add {
+  background-color: hsl(142.1 76.2% 36.3% / 0.1);
+  border-left: 3px solid hsl(142.1 76.2% 36.3%);
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding-left: calc(1.5rem - 3px);
+  padding-right: 1.5rem;
+  box-shadow:
+    inset 0 1px 0 rgba(16, 185, 129, 0.05),
+    inset 0 -1px 0 rgba(16, 185, 129, 0.05);
+}
+
+.astro-code .line.diff.remove {
+  background-color: hsl(var(--destructive) / 0.1);
+  border-left: 3px solid hsl(var(--destructive));
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding-left: calc(1.5rem - 3px);
+  padding-right: 1.5rem;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--destructive), 0.05),
+    inset 0 -1px 0 rgba(var(--destructive), 0.05);
+}
+
+/* Word highlighting */
+.astro-code .highlighted-word {
+  background-color: hsl(var(--primary) / 0.2);
+  border-radius: calc(var(--radius) / 4);
+  padding: 0.1rem 0.2rem;
+  margin: -0.1rem 0;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* Common styles for all notation types */
+.astro-code .error,
+.astro-code .warning,
+.astro-code .info,
+.astro-code .success {
+  position: relative;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* Notation highlighting */
+.astro-code .error {
+  border-bottom: 2px wavy hsl(var(--destructive));
+}
+
+.astro-code .warning {
+  border-bottom: 2px wavy hsl(38 92% 50%);
+}
+
+.astro-code .info {
+  border-bottom: 2px wavy hsl(221 83% 53%);
+}
+
+.astro-code .success {
+  border-bottom: 2px wavy hsl(142.1 76.2% 36.3%);
+}
+
+/* Inline annotations */
+.astro-code [data-annotation]::after {
+  content: attr(data-annotation);
+  position: absolute;
+  right: 1rem;
+  top: -1.4rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  opacity: 0;
+  pointer-events: none;
+  background-color: hsl(var(--card) / 0.8);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s ease;
+  max-width: 20rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Show annotations on hover */
+.astro-code [data-annotation]:hover::after {
+  opacity: 1;
+}
+
+.astro-code .error[data-annotation]::after {
+  color: hsl(var(--destructive));
+  border-left: 2px solid hsl(var(--destructive));
+}
+
+.astro-code .warning[data-annotation]::after {
+  color: hsl(38 92% 50%);
+  border-left: 2px solid hsl(38 92% 50%);
+}
+
+.astro-code .info[data-annotation]::after {
+  color: hsl(221 83% 53%);
+  border-left: 2px solid hsl(221 83% 53%);
+}
+
+.astro-code .success[data-annotation]::after {
+  color: hsl(142.1 76.2% 36.3%);
+  border-left: 2px solid hsl(142.1 76.2% 36.3%);
+}
+
+/* Code block container */
+.astro-code {
+  position: relative;
+  padding: 1rem 0;
+  border-radius: var(--radius);
+  background-color: hsl(var(--card));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+/* Add a has-highlighted class to the pre element */
+.astro-code.has-highlighted,
+.astro-code.has-focused,
+.astro-code.has-diff {
+  padding-top: 1.5rem;
+}
+
+/* Syntax highlighting variables */
+:root {
+  --astro-code-color-text: hsl(var(--foreground));
+  --astro-code-color-background: hsl(var(--card));
+  --astro-code-token-constant: hsl(var(--primary));
+  --astro-code-token-string: hsl(var(--accent));
+  --astro-code-token-comment: hsl(var(--muted-foreground));
+  --astro-code-token-keyword: hsl(var(--primary));
+  --astro-code-token-parameter: hsl(var(--secondary-foreground));
+  --astro-code-token-function: hsl(var(--accent));
+  --astro-code-token-string-expression: hsl(var(--accent));
+  --astro-code-token-punctuation: hsl(var(--foreground) / 0.7);
+  --astro-code-token-link: hsl(var(--primary));
+
+  /* Define variables for transformers */
+  --warning: 38 92% 50%;
+  --info: 221 83% 53%;
+  --success: 142.1 76.2% 36.3%;
+}
+
+.dark {
+  --astro-code-color-text: hsl(var(--foreground));
+  --astro-code-color-background: hsl(var(--card));
+  --astro-code-token-constant: hsl(var(--primary));
+  --astro-code-token-string: hsl(var(--accent-foreground));
+  --astro-code-token-comment: hsl(var(--muted-foreground));
+  --astro-code-token-keyword: hsl(var(--primary));
+  --astro-code-token-parameter: hsl(var(--secondary-foreground));
+  --astro-code-token-function: hsl(var(--primary));
+  --astro-code-token-string-expression: hsl(var(--accent-foreground));
+  --astro-code-token-punctuation: hsl(var(--foreground) / 0.7);
+  --astro-code-token-link: hsl(var(--primary));
+
+  /* Define variables for transformers in dark mode */
+  --warning: 38 92% 50%;
+  --info: 221 83% 53%;
+  --success: 142.1 76.2% 36.3%;
+}
