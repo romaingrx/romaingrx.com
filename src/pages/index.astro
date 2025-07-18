@@ -10,11 +10,11 @@ import { routes } from '@/configs/routes';
 // export const prerender = true;
 
 // Get the recent published content
-let posts = (await getPublishedBlogPosts())
+const posts = (await getPublishedBlogPosts())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 4);
 
-let notes = (await getPublishedNotes())
+const notes = (await getPublishedNotes())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 3);
 
