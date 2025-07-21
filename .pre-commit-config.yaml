@@ -1,0 +1,44 @@
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+
+  # Conventional commits
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.0.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
+  # ESLint and Prettier (using local versions)
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Prettier
+        entry: pnpm prettier --write
+        language: system
+        files: \.(js|jsx|ts|tsx|astro|json|md|yaml|yml)$
+
+      - id: eslint
+        name: ESLint
+        entry: pnpm eslint --fix
+        language: system
+        files: \.(js|jsx|ts|tsx|astro)$
+
+      # Astro check (type checking)
+      - id: astro-check
+        name: Astro Check
+        entry: pnpm astro check
+        language: system
+        files: \.(astro|ts|tsx)$
+        pass_filenames: false

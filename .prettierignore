@@ -11,4 +11,4 @@ dist/
 wrangler.toml
 
 # Public assets
-public/ 
+public/
