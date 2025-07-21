@@ -4,7 +4,6 @@ import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import Resources from '@/components/blog/resources/index.astro';
 import Shell from '@/components/Shell.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
-
 import BlogPostBackground from './card/background';
 
 interface Props {
@@ -123,7 +122,7 @@ const { post, class: className = '' } = Astro.props;
 
     const observer = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             header.style.opacity = '1';
             header.style.transform = 'translateY(0)';

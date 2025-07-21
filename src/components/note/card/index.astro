@@ -1,6 +1,5 @@
 ---
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import {
   CardContent,
@@ -8,9 +7,9 @@ import {
   Card as CardPrimitive,
   CardTitle,
 } from '@/components/ui/card';
+import { routes } from '@/configs/routes';
 import type { NoteWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
-import { routes } from '@/configs/routes';
 
 const cardVariants = cva(
   'group overflow-hidden transition-all rounded-xl bg-card hover:bg-accent/40 border shadow-sm',

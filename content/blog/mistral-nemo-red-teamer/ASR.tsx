@@ -1,5 +1,4 @@
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
-
 import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
@@ -54,7 +53,7 @@ export default function ASRChart() {
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={value => value.slice(0, 3)}
+            tickFormatter={(value) => value.slice(0, 3)}
             hide
           />
           <XAxis dataKey="asr" type="number" hide />

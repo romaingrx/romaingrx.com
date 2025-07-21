@@ -1,6 +1,5 @@
 ---
 import { render } from 'astro:content';
-
 import Prose from '@/components/blog/prose.astro';
 import NoteFooter from '@/components/note/footer/index.astro';
 import NoteHeader from '@/components/note/note-header.astro';
@@ -10,7 +9,7 @@ import { getPublishedNotes } from '@/lib/collections';
 
 export async function getStaticPaths() {
   const notes = await getPublishedNotes();
-  return notes.map(note => ({
+  return notes.map((note) => ({
     params: { slug: note.slug },
     props: { note },
   }));

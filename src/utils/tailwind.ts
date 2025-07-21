@@ -12,7 +12,7 @@ export function inlineTailwind(el: React.JSX.Element): React.JSX.Element {
   // Merge original and generated styles
   const mergedStyle = { ...originalStyle, ...twStyle };
   // Recursively process children
-  const processedChildren = Children.map(children, child =>
+  const processedChildren = Children.map(children, (child) =>
     isValidElement(child) ? inlineTailwind(child as React.JSX.Element) : child
   );
   // Return cloned element with updated props

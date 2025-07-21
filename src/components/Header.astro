@@ -1,9 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
-
 import Logo from '@/components/logo/logo';
 import { routes } from '@/configs/routes';
-
 import ThemeToggle from './ThemeToggle.astro';
 
 const { pathname } = Astro.url;
@@ -44,7 +42,7 @@ const isActive = (href: string) => {
         <div class="relative">
           <div class="flex items-center gap-x-8">
             {
-              navigation.map(item => (
+              navigation.map((item) => (
                 <a
                   href={item.href}
                   class:list={[
@@ -128,7 +126,7 @@ const isActive = (href: string) => {
         <div class="-my-6 divide-y divide-border">
           <div class="space-y-2 py-6">
             {
-              navigation.map(item => (
+              navigation.map((item) => (
                 <a
                   href={item.href}
                   class:list={[
@@ -187,7 +185,7 @@ const isActive = (href: string) => {
     // Close mobile menu on navigation
     const mobileLinks = mobileMenu?.getElementsByTagName('a');
     if (mobileLinks) {
-      Array.from(mobileLinks).forEach(link => {
+      Array.from(mobileLinks).forEach((link) => {
         link.addEventListener('click', () => {
           toggleMenu();
         });

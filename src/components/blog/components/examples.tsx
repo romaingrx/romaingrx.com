@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,

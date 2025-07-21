@@ -1,10 +1,10 @@
+import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
-import sentry from "@sentry/astro";
-import icon from 'astro-icon';
+import sentry from '@sentry/astro';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
 // https://astro.build/config
@@ -19,11 +19,11 @@ export default defineConfig({
   // }),
   integrations: [
     sentry({
-      dsn: "https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432",
-      clientInitPath: "src/sentry.client.config.ts",
-      serverInitPath: "src/sentry.server.config.ts",
+      dsn: 'https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432',
+      clientInitPath: 'src/sentry.client.config.ts',
+      serverInitPath: 'src/sentry.server.config.ts',
       sourceMapsUploadOptions: {
-        project: "romaingrxcom",
+        project: 'romaingrxcom',
         authToken: process.env.SENTRY_AUTH_TOKEN,
       },
       enableClientWebpackPlugin: false,
@@ -45,8 +45,8 @@ export default defineConfig({
     icon({
       include: {
         mdi: ['*'],
-        'simple-icons': ['*']
-      }
+        'simple-icons': ['*'],
+      },
     }),
   ],
   // vite: {

@@ -1,6 +1,5 @@
 ---
 import { Icon } from 'astro-icon/components';
-
 import { platforms_info } from '@/configs/platforms';
 import { socialLinks } from '@/configs/social';
 
@@ -12,7 +11,7 @@ const currentYear = new Date().getFullYear();
     <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
       <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 md:order-2">
         {
-          socialLinks.map(link => (
+          socialLinks.map((link) => (
             <a
               href={link.url}
               class="text-muted-foreground transition-colors hover:text-foreground"

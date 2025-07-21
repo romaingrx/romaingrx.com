@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-
 import { getPublishedNotes } from '@/lib/collections';
 import { generateOGImage } from '@/utils/og';
 
@@ -15,7 +14,7 @@ export const GET: APIRoute = async ({ props, params }) => {
 
   // Get the note data
   const notes = await getCollection('note');
-  const note = notes.find(note => note.id === noteId);
+  const note = notes.find((note) => note.id === noteId);
 
   if (!note) {
     return new Response('Note not found', { status: 404 });
@@ -40,7 +39,7 @@ export const GET: APIRoute = async ({ props, params }) => {
 
 export async function getStaticPaths() {
   const notes = await getPublishedNotes();
-  return notes.map(note => ({
+  return notes.map((note) => ({
     params: { id: note.id },
     props: { note },
   }));

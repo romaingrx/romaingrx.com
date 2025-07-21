@@ -1,8 +1,6 @@
 ---
 import type { z } from 'astro/zod';
-
 import type { resource_schema } from '@/configs/resources';
-
 import { ResourceBadge } from './resource-badge';
 
 interface Props {
@@ -30,7 +28,7 @@ const groupedResources = resources.reduce(
     <div class="flex flex-wrap items-start justify-start gap-3">
       {Object.values(groupedResources)
         .flat()
-        .map(resource => (
+        .map((resource) => (
           // @ts-ignore
           <ResourceBadge
             client:load

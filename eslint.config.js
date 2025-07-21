@@ -1,55 +1,58 @@
 import eslint from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsparser from '@typescript-eslint/parser';
-import astroParser from 'astro-eslint-parser';
 import astroPlugin from 'eslint-plugin-astro';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default [
+  // Base ESLint recommended rules
   eslint.configs.recommended,
-  {
-    files: ['**/*.{ts,tsx}'],
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
-    languageOptions: {
-      parser: tsparser,
-      parserOptions: {
-        project: './tsconfig.json',
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    },
-  },
-  {
-    files: ['**/*.astro'],
-    plugins: {
-      astro: astroPlugin,
-    },
-    languageOptions: {
-      parser: astroParser,
-      parserOptions: {
-        parser: tsparser,
-        extraFileExtensions: ['.astro'],
-      },
-    },
-  },
+
+  // TypeScript rules for TS/TSX files
+  ...tseslint.configs.recommended,
+
+  // Astro recommended rules
+  ...astroPlugin.configs.recommended,
+
   {
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
-        window: true,
-        document: true,
-        console: true,
-        module: true,
-        require: true,
-        process: true,
-        URL: true,
-        Image: true,
-        Buffer: true,
-        fetch: true,
+        ...globals.browser,
+        ...globals.node,
       },
     },
+    rules: {
+      // TypeScript specific rules
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'off', // Allow ts-ignore and ts-expect-error
+
+      // General rules
+      'no-unused-vars': 'off', // Use TypeScript version instead
+      'no-console': 'off', // Allow console statements for development
+    },
+  },
+
+  // Specific config for JavaScript files
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+
+  {
+    ignores: [
+      'dist/**',
+      '.astro/**',
+      'node_modules/**',
+      'public/**',
+      '*.d.ts',
+      'wrangler.toml',
+      'worker-configuration.d.ts',
+    ],
   },
 ];

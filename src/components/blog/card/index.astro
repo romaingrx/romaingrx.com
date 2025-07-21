@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import {
   CardContent,
@@ -9,10 +8,9 @@ import {
   Card as CardPrimitive,
   CardTitle,
 } from '@/components/ui/card';
+import { routes } from '@/configs/routes';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
-import { routes } from '@/configs/routes';
-
 import BlogPostBackground from './background';
 
 const cardVariants = cva(

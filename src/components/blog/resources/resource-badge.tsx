@@ -1,11 +1,10 @@
 import { Icon } from '@iconify/react';
 import { cva } from 'class-variance-authority';
-
 import { Badge } from '@/components/ui/badge';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import { cn } from '@/lib/utils';
 import { platforms_info } from '@/configs/platforms';
 import type { ResourceProvider, ResourceType } from '@/configs/resources';
+import { cn } from '@/lib/utils';
 
 interface ResourceBadgeProps {
   type: ResourceType;

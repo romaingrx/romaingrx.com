@@ -2,7 +2,6 @@
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { platforms_info } from '@/configs/platforms';
 
@@ -15,7 +14,7 @@ const { authors } = Astro.props;
 
 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
   {
-    authors.map(author => (
+    authors.map((author) => (
       <Card className="border-none bg-muted/50">
         <CardHeader>
           <div class="flex items-center gap-4">
@@ -39,7 +38,7 @@ const { authors } = Astro.props;
             {author.data.description}
           </p>
           <div class="flex gap-3">
-            {author.data.socialLinks.map(link => (
+            {author.data.socialLinks.map((link) => (
               <a
                 href={link.url}
                 target="_blank"

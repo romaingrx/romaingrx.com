@@ -1,9 +1,7 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import Comments from '@/components/comments.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
-
 import CategoryBadge from '../category-badge.astro';
 import ResourceBadges from '../resources/index.astro';
 import TagBadge from '../tag-badge.astro';
@@ -47,7 +45,7 @@ const hasRelatedContent = post.data.related_posts || post.data.tags.length > 0;
             <div class="space-y-3">
               <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
               <div class="flex flex-wrap gap-2">
-                {post.data.tags.map(tag => (
+                {post.data.tags.map((tag) => (
                   <TagBadge tag={tag} />
                 ))}
               </div>
@@ -59,7 +57,7 @@ const hasRelatedContent = post.data.related_posts || post.data.tags.length > 0;
             <div class="space-y-3">
               <h3 class="text-sm font-medium text-muted-foreground">Categories</h3>
               <div class="flex flex-wrap gap-2">
-                {post.data.categories.map(category => (
+                {post.data.categories.map((category) => (
                   <CategoryBadge category={category} />
                 ))}
               </div>

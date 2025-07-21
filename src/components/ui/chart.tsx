@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
-
 import { cn } from '@/lib/utils';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -261,7 +260,7 @@ const ChartLegendContent = React.forwardRef<
         className
       )}
     >
-      {payload.map(item => {
+      {payload.map((item) => {
         const key = `${nameKey || item.dataKey || 'value'}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
 

@@ -1,8 +1,6 @@
 import satori from 'satori';
 import sharp from 'sharp';
-
 import { site } from '@/configs/site';
-
 import { inlineTailwind } from './tailwind';
 
 interface OGImageProps {
@@ -160,7 +158,7 @@ export async function generateOGImage({
       {
         name: 'Inter',
         data: await fetch('https://api.fontsource.org/v1/fonts/inter/latin-800-normal.ttf').then(
-          res => res.arrayBuffer()
+          (res) => res.arrayBuffer()
         ),
         weight: 800,
         style: 'normal',
@@ -168,7 +166,7 @@ export async function generateOGImage({
       {
         name: 'Inter',
         data: await fetch('https://api.fontsource.org/v1/fonts/inter/latin-500-normal.ttf').then(
-          res => res.arrayBuffer()
+          (res) => res.arrayBuffer()
         ),
         weight: 500,
         style: 'normal',

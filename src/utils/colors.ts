@@ -9,7 +9,7 @@ export async function getDominantColor(image: ImageMetadata): Promise<string> {
 
     const colorThief = new ColorThief();
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       img.onload = () => {
         const color = colorThief.getColor(img);
         // Convert RGB to hex with opacity

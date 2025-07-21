@@ -1,6 +1,5 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import BlogCard from '@/components/blog/card/index.astro';
 import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
 
@@ -18,19 +17,19 @@ const allPosts = (await getBlogPosts()).sort(
 // Get related posts from the post data
 const relatedFromData = post.data.related_posts
   ? await Promise.all(
-      post.data.related_posts.map(async ref => {
+      post.data.related_posts.map(async (ref) => {
         const posts = await getBlogPosts();
-        return posts.find(p => p.id === ref.id);
+        return posts.find((p) => p.id === ref.id);
       })
-    ).then(posts => posts.filter((p): p is BlogPostWithAuthors => p !== undefined))
+    ).then((posts) => posts.filter((p): p is BlogPostWithAuthors => p !== undefined))
   : [];
 
 // Find posts with matching tags (excluding the current post and already included related posts)
 const relatedByTags = allPosts
-  .filter(p => {
+  .filter((p) => {
     if (p.id === post.id) return false;
-    if (relatedFromData.some(r => r.id === p.id)) return false;
-    return p.data.tags.some(tag => post.data.tags.includes(tag));
+    if (relatedFromData.some((r) => r.id === p.id)) return false;
+    return p.data.tags.some((tag) => post.data.tags.includes(tag));
   })
   .slice(0, 3 - relatedFromData.length);
 
@@ -38,7 +37,7 @@ const relatedByTags = allPosts
 const relatedPosts = [...relatedFromData, ...relatedByTags];
 
 // If no related posts, get previous and next posts
-const currentIndex = allPosts.findIndex(p => p.id === post.id);
+const currentIndex = allPosts.findIndex((p) => p.id === post.id);
 const previousPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 
@@ -49,7 +48,7 @@ const showRelated = relatedPosts.length > 0;
 {
   showRelated ? (
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {relatedPosts.map(related => (
+      {relatedPosts.map((related) => (
         <BlogCard post={related} size="sm" />
       ))}
     </div>

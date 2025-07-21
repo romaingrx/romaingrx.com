@@ -86,7 +86,7 @@ const { hideTitle = false } = Astro.props;
   const messageInput = form.querySelector('#message') as HTMLTextAreaElement;
 
   // Subscribe to store changes and update form
-  $contactForm.subscribe(formData => {
+  $contactForm.subscribe((formData) => {
     nameInput.value = formData.name;
     emailInput.value = formData.email;
     messageInput.value = formData.message;
@@ -101,7 +101,7 @@ const { hideTitle = false } = Astro.props;
     });
   });
 
-  form.addEventListener('submit', async event => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     // TODO romaingrx: add server side later on

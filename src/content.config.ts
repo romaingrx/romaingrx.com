@@ -1,6 +1,5 @@
-import { glob } from 'astro/loaders';
 import { defineCollection, reference, z } from 'astro:content';
-
+import { glob } from 'astro/loaders';
 import { platforms_enum } from './configs/platforms';
 import { resource_schema } from './configs/resources';
 

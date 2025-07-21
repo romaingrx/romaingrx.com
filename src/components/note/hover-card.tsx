@@ -1,5 +1,4 @@
 import React from 'react';
-
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import type { NoteWithAuthors } from '@/lib/collections';

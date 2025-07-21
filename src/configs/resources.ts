@@ -1,5 +1,4 @@
 import { z } from 'astro/zod';
-
 import { platforms_enum } from './platforms';
 
 export const resourceTypeEnum = z.enum(['code', 'model', 'dataset', 'paper']);
@@ -28,7 +27,7 @@ export const resource_schema = z
     description: z.string().optional(),
     icon: z.string().optional(),
   })
-  .refine(data => VALID_PROVIDER_TYPES[data.provider].includes(data.type), {
+  .refine((data) => VALID_PROVIDER_TYPES[data.provider].includes(data.type), {
     message: 'Invalid provider and type combination',
     path: ['type', 'provider'],
   });

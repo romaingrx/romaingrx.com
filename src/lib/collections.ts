@@ -1,5 +1,4 @@
 import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
-
 import { slugify } from './utils';
 
 export type Author = CollectionEntry<'author'>;
@@ -48,7 +47,7 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
 export async function getPublishedBlogPosts(): Promise<BlogPostWithAuthors[]> {
   const posts = await getBlogPosts();
   return posts
-    .filter(post => post.data.status === 'published')
+    .filter((post) => post.data.status === 'published')
     .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime());
 }
 
@@ -86,6 +85,6 @@ export async function getNotes(): Promise<NoteWithAuthors[]> {
 export async function getPublishedNotes(): Promise<NoteWithAuthors[]> {
   const notes = await getNotes();
   return notes
-    .filter(note => note.data.status === 'published')
+    .filter((note) => note.data.status === 'published')
     .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime());
 }

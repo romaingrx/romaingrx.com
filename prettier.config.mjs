@@ -1,10 +1,21 @@
 /** @type {import("prettier").Config} */
 export default {
+  // Core formatting options
+  printWidth: 100,
+  tabWidth: 2,
+  useTabs: false,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'es5',
+
+  // Plugins
   plugins: [
     'prettier-plugin-astro',
     'prettier-plugin-tailwindcss',
     '@ianvs/prettier-plugin-sort-imports',
   ],
+
+  // Astro support
   overrides: [
     {
       files: '*.astro',
@@ -13,26 +24,7 @@ export default {
       },
     },
   ],
-  semi: true,
-  singleQuote: true,
-  tabWidth: 2,
-  trailingComma: 'es5',
-  printWidth: 100,
-  arrowParens: 'avoid',
-  importOrder: [
-    '^(react/(.*)$)|^(react$)',
-    '^(astro/(.*)$)|^(astro$)',
-    '<THIRD_PARTY_MODULES>',
-    '',
-    '^@/components/(.*)$',
-    '^@/layouts/(.*)$',
-    '^@/lib/(.*)$',
-    '^@/utils/(.*)$',
-    '^@/styles/(.*)$',
-    '^@/(.*)$',
-    '',
-    '^[./]',
-  ],
-  importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
-  importOrderTypeScriptVersion: '5.0.0',
+
+  // Import sorting
+  importOrder: ['^(react|astro)', '<THIRD_PARTY_MODULES>', '^@/', '^[./]'],
 };

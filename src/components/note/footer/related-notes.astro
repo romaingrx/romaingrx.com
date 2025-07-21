@@ -1,6 +1,5 @@
 ---
 import { getPublishedNotes, type NoteWithAuthors } from '@/lib/collections';
-
 import NoteCard from '../card/index.astro';
 
 interface Props {
@@ -14,13 +13,13 @@ const allNotes = await getPublishedNotes();
 
 // Filter out the current note and get notes with matching tags
 const relatedNotes = allNotes
-  .filter(n => n.id !== note.id)
-  .filter(n => n.data.tags.some(tag => note.data.tags.includes(tag)))
+  .filter((n) => n.id !== note.id)
+  .filter((n) => n.data.tags.some((tag) => note.data.tags.includes(tag)))
   .slice(0, 3); // Limit to 3 related notes
 ---
 
 <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {relatedNotes.map(relatedNote => <NoteCard note={relatedNote} layout="default" size="sm" />)}
+  {relatedNotes.map((relatedNote) => <NoteCard note={relatedNote} layout="default" size="sm" />)}
 </div>
 
 {

@@ -1,6 +1,5 @@
 ---
 import { render } from 'astro:content';
-
 import { components } from '@/components/blog/components/index.astro';
 import PostFooter from '@/components/blog/footer/index.astro';
 import PostHeader from '@/components/blog/post-header.astro';
@@ -17,7 +16,7 @@ type Props = {
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
   }));

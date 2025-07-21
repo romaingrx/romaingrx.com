@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
 import sharp from 'sharp';
-
 import svg_logo from '@/components/logo/logo.svg?raw';
 
 export const GET: APIRoute = async () => {

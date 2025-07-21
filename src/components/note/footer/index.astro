@@ -1,11 +1,9 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
-
 import Resources from '@/components/blog/resources/index.astro';
 import TagBadge from '@/components/blog/tag-badge.astro';
 import Comments from '@/components/comments.astro';
 import type { NoteWithAuthors } from '@/lib/collections';
-
 import RelatedNotes from './related-notes.astro';
 
 interface Props {
@@ -45,7 +43,7 @@ const hasRelatedContent = note.data.tags.length > 0;
             <div class="space-y-3">
               <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
               <div class="flex flex-wrap gap-2">
-                {note.data.tags.map(tag => (
+                {note.data.tags.map((tag) => (
                   <TagBadge tag={tag} basePath="/notes" />
                 ))}
               </div>

@@ -1,9 +1,8 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
-
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import type { Author } from '@/lib/collections';
 import { platforms_info } from '@/configs/platforms';
+import type { Author } from '@/lib/collections';
 
 type Props = {
   author: Author;

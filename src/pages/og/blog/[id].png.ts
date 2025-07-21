@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-
 import { getPublishedBlogPosts } from '@/lib/collections';
 import { generateOGImage } from '@/utils/og';
 
@@ -15,7 +14,7 @@ export const GET: APIRoute = async ({ props, params }) => {
 
   // Get the blog post data
   const posts = await getCollection('blog');
-  const post = posts.find(post => post.id === postId);
+  const post = posts.find((post) => post.id === postId);
 
   if (!post) {
     return new Response('Post not found', { status: 404 });
@@ -39,7 +38,7 @@ export const GET: APIRoute = async ({ props, params }) => {
 
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { id: post.id },
     props: { post },
   }));

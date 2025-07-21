@@ -9,9 +9,9 @@ import { getPublishedBlogPosts } from '@/lib/collections';
 
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
-  const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
 
-  return tags.map(tag => ({
+  return tags.map((tag) => ({
     params: { tag },
     props: { tag },
   }));
@@ -25,11 +25,11 @@ const allPosts = (await getPublishedBlogPosts()).sort(
 );
 
 // Filter posts by tag
-const posts = allPosts.filter(post => post.data.tags.includes(tag));
+const posts = allPosts.filter((post) => post.data.tags.includes(tag));
 
 // Get unique categories and tags for sidebar
-const categories = [...new Set(allPosts.flatMap(post => post.data.categories))];
-const tags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+const categories = [...new Set(allPosts.flatMap((post) => post.data.categories))];
+const tags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
 
 const title = `Blog - ${tag}`;
 const description = `Explore blog posts tagged with ${tag}.`;
@@ -47,7 +47,7 @@ const description = `Explore blog posts tagged with ${tag}.`;
           </p>
         </div>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
-          {posts.map(post => <BlogCard post={post} layout={'horizontal'} />)}
+          {posts.map((post) => <BlogCard post={post} layout={'horizontal'} />)}
         </div>
       </section>
 
@@ -58,7 +58,7 @@ const description = `Explore blog posts tagged with ${tag}.`;
           <h2 class="text-xl font-semibold">Categories</h2>
           <ul class="space-y-2">
             {
-              categories.map(category => (
+              categories.map((category) => (
                 <li>
                   <CategoryBadge category={category} />
                 </li>
@@ -71,7 +71,7 @@ const description = `Explore blog posts tagged with ${tag}.`;
         <div class="space-y-4">
           <h2 class="text-xl font-semibold">Tags</h2>
           <div class="flex flex-wrap gap-2">
-            {tags.map(t => <TagBadge tag={t} isActive={t === tag} />)}
+            {tags.map((t) => <TagBadge tag={t} isActive={t === tag} />)}
           </div>
         </div>
       </aside>
