@@ -1,59 +1,81 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
+import { getEntry, render } from 'astro:content';
+import CompactProse from '@/components/ui/compact-prose.astro';
 import { platforms_info } from '@/configs/platforms';
-import type { Author } from '@/lib/collections';
 
 interface Props {
-  name: string;
-  title: string;
-  description: string;
-  image: string;
-  socialLinks: Author['data']['socialLinks'];
+  author: string;
 }
 
-const { name, title, description, image, socialLinks = [] } = Astro.props;
+const author = await getEntry('author', Astro.props.author);
+if (!author) {
+  throw new Error('Author not found for owner of the website');
+}
+const { name, title, image, socialLinks } = author.data;
+const { Content } = await render(author);
 ---
 
-<section class="container mx-auto px-4 py-16 md:py-24">
-  <div class="grid gap-8 md:grid-cols-[2fr_3fr] md:items-center md:gap-12 lg:gap-16" data-animate>
-    <!-- Profile Image -->
-    <div
-      class="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-xl border-4 border-primary/10 shadow-xl"
-      data-animate="fade-right"
-    >
-      <Image src={image} alt={name} width={400} height={400} class="h-full w-full object-cover" />
-    </div>
-
-    <!-- Profile Content -->
-    <div class="space-y-6" data-animate="fade-left">
-      <div class="space-y-2">
-        <h1 class="text-4xl font-bold tracking-tight lg:text-5xl">{name}</h1>
-        <p class="text-xl text-muted-foreground">{title}</p>
-      </div>
-
-      <div class="prose prose-lg dark:prose-invert">
-        <p>{description}</p>
-      </div>
-
-      {
-        socialLinks.length > 0 && (
-          <div class="flex gap-4">
-            {socialLinks.map(({ platform, url }) => (
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                title={`Follow on ${platform}`}
-              >
-                <Icon name={platforms_info[platform].icon_name} class="h-5 w-5" />
-                <span class="sr-only">Follow on {platform}</span>
-              </a>
-            ))}
+<section class="container mx-auto px-4 py-12">
+  <div class="mx-auto max-w-6xl">
+    <!-- Single clean card -->
+    <div class="rounded-2xl border border-border/20 bg-card/30 p-8 backdrop-blur-sm">
+      <div class="space-y-8">
+        <!-- Top section: Image + Basic Info -->
+        <div class="flex flex-col gap-6 sm:flex-row sm:gap-8">
+          <!-- Profile Image -->
+          <div class="flex-shrink-0">
+            <div class="relative h-32 w-32 overflow-hidden rounded-2xl shadow-md sm:h-40 sm:w-40">
+              <Image
+                src={image}
+                alt={name}
+                width={160}
+                height={160}
+                class="h-full w-full object-cover"
+              />
+            </div>
           </div>
-        )
-      }
+
+          <!-- Name, Title, and Social Links -->
+          <div class="flex flex-1 flex-col justify-center space-y-4">
+            <!-- Name and Title -->
+            <div class="space-y-2">
+              <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                {name}
+              </h1>
+              <p class="text-xl font-medium text-muted-foreground">
+                {title}
+              </p>
+            </div>
+
+            <!-- Social Links -->
+            {
+              socialLinks.length > 0 && (
+                <div class="flex flex-wrap gap-3">
+                  {socialLinks.map(({ platform, url }) => (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border/50 bg-background/80 text-muted-foreground transition-all hover:border-border hover:bg-muted hover:text-foreground"
+                      title={`Follow on ${platform}`}
+                    >
+                      <Icon name={platforms_info[platform].icon_name} class="h-4 w-4" />
+                      <span class="sr-only">Follow on {platform}</span>
+                    </a>
+                  ))}
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        <!-- Description spanning full width -->
+        <CompactProse>
+          <Content />
+        </CompactProse>
+      </div>
     </div>
   </div>
 </section>

@@ -1,6 +1,6 @@
 ---
 import '@/styles/globals.css';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
 
@@ -39,7 +39,7 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImageURL} />
 
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class="relative min-h-screen w-screen overflow-x-hidden bg-background">
     <div class="relative z-10 flex min-h-screen flex-col">

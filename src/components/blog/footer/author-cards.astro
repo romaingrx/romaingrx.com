@@ -34,9 +34,6 @@ const { authors } = Astro.props;
           </div>
         </CardHeader>
         <CardContent>
-          <p class="mb-4 text-sm leading-relaxed text-muted-foreground">
-            {author.data.description}
-          </p>
           <div class="flex gap-3">
             {author.data.socialLinks.map((link) => (
               <a

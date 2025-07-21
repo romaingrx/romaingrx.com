@@ -5,12 +5,11 @@ import { resource_schema } from './configs/resources';
 
 // Define the author collection schema
 const author = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './content/author' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/author' }),
   schema: z
     .object({
       name: z.string(),
       title: z.string().optional(),
-      description: z.string(),
       image: z.string(),
       socialLinks: z.array(
         z.object({

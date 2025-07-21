@@ -18,7 +18,7 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
         <div className="flex justify-start space-x-4">
           <div className="space-y-1 text-left">
             <h4 className="text-sm font-semibold">{author.data.name}</h4>
-            <p className="text-sm text-muted-foreground">{author.data.description}</p>
+            <p className="text-sm text-muted-foreground">{author.data.title}</p>
             <div className="flex items-center gap-2 pt-2">
               {author.data.socialLinks?.map((social, index) => (
                 <a
