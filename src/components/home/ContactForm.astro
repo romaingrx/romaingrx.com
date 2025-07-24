@@ -104,8 +104,6 @@ const { hideTitle = false } = Astro.props;
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
-    // TODO romaingrx: add server side later on
-    // const result = await actions.contactFormAction(Object.fromEntries(formData) as ContactFormData);
     try {
       await send_feedback(Object.fromEntries(formData) as ContactFormData);
       alert('Message sent successfully!');
