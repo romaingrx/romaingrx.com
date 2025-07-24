@@ -21,7 +21,7 @@ export default defineConfig({
     sentry({
       dsn: 'https://a774901c0480ea866cee1018309f96a7@o4508797318004736.ingest.de.sentry.io/4508797320036432',
       clientInitPath: 'src/sentry.client.config.ts',
-      serverInitPath: 'src/sentry.server.config.ts',
+      // serverInitPath: 'src/sentry.server.config.ts',
       sourceMapsUploadOptions: {
         project: 'romaingrxcom',
         authToken: process.env.SENTRY_AUTH_TOKEN,
