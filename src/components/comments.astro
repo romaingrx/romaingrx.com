@@ -76,7 +76,7 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
   }
 
   // Watch for iframe creation
-  const iframeWatcher = new MutationObserver((mutations) => {
+  const iframeWatcher = new MutationObserver(() => {
     if (document.querySelector('iframe.giscus-frame')) {
       setupIframeObserver();
       iframeWatcher.disconnect(); // Stop watching once iframe is found

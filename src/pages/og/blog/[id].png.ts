@@ -3,9 +3,8 @@ import { getCollection } from 'astro:content';
 import { getPublishedBlogPosts } from '@/lib/collections';
 import { generateOGImage } from '@/utils/og';
 
-export const GET: APIRoute = async ({ props, params }) => {
+export const GET: APIRoute = async ({ params }) => {
   // Extract the post ID from the URL, handling potential URL encoding
-  console.log({ params, props });
   const postId = params.id?.split('?')[0]; // Get the ID and remove any trailing parameters
 
   if (!postId) {

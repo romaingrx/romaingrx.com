@@ -150,7 +150,6 @@ export async function generateOGImage({
 
   // Convert the markup to an SVG using Satori
   const inlineMarkup = inlineTailwind(markup);
-  console.log(inlineMarkup);
   const svg = await satori(inlineMarkup, {
     width: 1200,
     height: 630,

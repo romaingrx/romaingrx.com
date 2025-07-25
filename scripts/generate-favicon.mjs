@@ -29,8 +29,6 @@ async function generateFavicon() {
 
     // Write the favicon
     await fs.writeFile(path.join(__dirname, '../public/favicon.ico'), icoBuffer);
-
-    console.log('✓ Favicon generated successfully');
   } catch (error) {
     console.error('Error generating favicon:', error);
     process.exit(1);

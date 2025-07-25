@@ -45,14 +45,6 @@ export default [
   },
 
   {
-    ignores: [
-      'dist/**',
-      '.astro/**',
-      'node_modules/**',
-      'public/**',
-      '*.d.ts',
-      'wrangler.toml',
-      'worker-configuration.d.ts',
-    ],
+    ignores: ['dist/**', '.astro/**', 'node_modules/**', 'public/**', 'wrangler.*', '**/*.d.ts'],
   },
 ];

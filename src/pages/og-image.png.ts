@@ -7,7 +7,6 @@ export const GET: APIRoute = async () => {
       title: 'Romain Graux',
       description: 'Personal website and blog about AI, Machine Learning, and Software Engineering',
     });
-    console.log('Generated PNG');
     return new Response(png, {
       headers: {
         'Content-Type': 'image/png',
