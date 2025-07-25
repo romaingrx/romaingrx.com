@@ -1,7 +1,7 @@
 ---
-import { Icon } from 'astro-icon/components';
 import Logo from '@/components/logo/logo';
 import { routes } from '@/configs/routes';
+import { MobileNav } from './nav/header/mobile';
 import ThemeToggle from './ThemeToggle.astro';
 
 const { pathname } = Astro.url;
@@ -23,173 +23,107 @@ const isActive = (href: string) => {
 ---
 
 <header
-  class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl transition-all"
+  class="sticky top-0 z-50 w-full border-b border-transparent bg-background/95 backdrop-blur-sm transition-all duration-300 ease-in-out"
   id="header"
 >
   <nav
-    class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8"
+    class="mx-auto flex max-w-6xl items-center justify-between px-6 py-2 lg:px-8"
     aria-label="Global"
   >
-    <div class="flex items-center gap-x-12">
+    <!-- Logo -->
+    <div class="flex items-center">
       <a
         href="/"
-        class="flex items-center gap-2 transition-all duration-300 hover:opacity-80"
+        class="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80"
         aria-label="Go to homepage"
       >
-        <Logo class="h-10" with_text={true} />
+        <Logo class="h-7" with_text={false} />
       </a>
-      <div class="hidden md:flex md:gap-x-8">
-        <div class="relative">
-          <div class="flex items-center gap-x-8">
-            {
-              navigation.map((item) => (
-                <a
-                  href={item.href}
-                  class:list={[
-                    'relative px-3 py-2 text-sm font-medium tracking-wide transition-all duration-300',
-                    isActive(item.href)
-                      ? 'text-primary'
-                      : 'text-muted-foreground hover:text-primary',
-                  ]}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {/* Enhanced background indicator with better gradient */}
-                  {isActive(item.href) && (
-                    <div
-                      transition:name="active"
-                      class="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-purple-500/10 via-purple-400/20 to-purple-500/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] transition-all duration-300"
-                    />
-                  )}
-                  {/* Hover indicator */}
-                  <div
-                    class:list={[
-                      'absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-purple-500/5 via-purple-400/10 to-purple-500/5 opacity-0 transition-opacity duration-300',
-                      !isActive(item.href) && 'group-hover:opacity-100',
-                    ]}
-                  />
-
-                  {item.name}
-                </a>
-              ))
-            }
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="flex items-center gap-4">
+
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex md:items-center md:gap-1">
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'relative px-3 py-1.5 text-sm font-medium transition-colors duration-200',
+              isActive(item.href)
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.name}
+            {/* Active indicator - elegant underline */}
+            {isActive(item.href) && (
+              <div
+                transition:name="active-indicator"
+                class="absolute bottom-0 left-1/2 h-px w-6 -translate-x-1/2 bg-foreground transition-all duration-200"
+              />
+            )}
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2">
       <ThemeToggle />
-      <button
-        type="button"
-        class="group -m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-muted-foreground transition-colors hover:text-foreground md:hidden"
-        aria-expanded="false"
-        aria-label="Toggle navigation menu"
-        id="toggle-nav"
-      >
-        <div class="relative h-6 w-6">
-          <span
-            class="absolute block h-0.5 w-6 bg-current transition-all duration-300 group-aria-expanded:top-2 group-aria-expanded:rotate-45"
-            style="top: 8px;"></span>
-          <span
-            class="absolute top-2 block h-0.5 w-6 bg-current transition-all duration-300 group-aria-expanded:opacity-0"
-          ></span>
-          <span
-            class="absolute block h-0.5 w-6 bg-current transition-all duration-300 group-aria-expanded:bottom-2 group-aria-expanded:-rotate-45"
-            style="bottom: 8px;"></span>
-        </div>
-      </button>
+
+      <!-- Mobile Navigation -->
+      <MobileNav navigation={navigation} currentPath={pathname} client:load />
     </div>
   </nav>
-
-  <!-- Mobile menu with enhanced styling -->
-  <div
-    class="fixed inset-0 z-50 hidden bg-background/80 backdrop-blur-sm transition-all duration-300"
-    id="mobile-menu"
-    aria-hidden="true"
-  >
-    <div
-      class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 shadow-lg transition-transform duration-300 sm:max-w-sm sm:ring-1 sm:ring-border/10"
-    >
-      <div class="flex items-center justify-between">
-        <a href="/" class="-m-1.5 p-1.5 transition-opacity hover:opacity-80">
-          <Logo class="h-8" with_text={true} />
-        </a>
-        <button
-          type="button"
-          class="-m-2.5 rounded-md p-2.5 text-muted-foreground transition-colors hover:text-foreground"
-          aria-label="Close menu"
-          id="close-nav"
-        >
-          <Icon name="lucide:x" class="h-6 w-6" />
-        </button>
-      </div>
-      <div class="mt-6 flow-root">
-        <div class="-my-6 divide-y divide-border">
-          <div class="space-y-2 py-6">
-            {
-              navigation.map((item) => (
-                <a
-                  href={item.href}
-                  class:list={[
-                    '-mx-3 block rounded-lg px-4 py-2.5 text-base font-semibold tracking-wide transition-all duration-300',
-                    isActive(item.href)
-                      ? 'bg-gradient-to-r from-purple-500/10 via-purple-400/20 to-purple-500/10 text-primary shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-                  ]}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.name}
-                </a>
-              ))
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </header>
 
 <script>
   document.addEventListener('astro:page-load', () => {
-    // Handle scroll effects
     const header = document.getElementById('header');
+    let lastScrollY = 0;
+    let ticking = false;
 
+    // Enhanced scroll effects with hide/show functionality
     const handleScroll = () => {
-      const currentScroll = window.scrollY;
-      if (currentScroll <= 0) {
-        header?.classList.remove('border-border/40');
-        header?.classList.remove('shadow-sm');
+      if (!header) return;
+
+      const currentScrollY = window.scrollY;
+      const scrolledDown = currentScrollY > lastScrollY;
+      const scrolledUp = currentScrollY < lastScrollY;
+      const isAtTop = currentScrollY <= 10;
+
+      // Hide header when scrolling down, show when scrolling up
+      if (scrolledDown && currentScrollY > 100) {
+        header.style.transform = 'translateY(-100%)';
+      } else if (scrolledUp || isAtTop) {
+        header.style.transform = 'translateY(0)';
+      }
+
+      // Border effects
+      if (currentScrollY > 10) {
+        header.classList.add('border-border/20', 'shadow-sm');
+        header.classList.remove('border-transparent');
       } else {
-        header?.classList.add('border-border/40');
-        header?.classList.add('shadow-sm');
+        header.classList.remove('border-border/20', 'shadow-sm');
+        header.classList.add('border-transparent');
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    // Optimized scroll handler
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial scroll position
-
-    // Handle mobile menu
-    const toggleNav = document.getElementById('toggle-nav');
-    const closeNav = document.getElementById('close-nav');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    const toggleMenu = () => {
-      const isExpanded = toggleNav?.getAttribute('aria-expanded') === 'true';
-      toggleNav?.setAttribute('aria-expanded', (!isExpanded).toString());
-      mobileMenu?.classList.toggle('hidden');
-      document.body.classList.toggle('overflow-hidden');
-    };
-
-    toggleNav?.addEventListener('click', toggleMenu);
-    closeNav?.addEventListener('click', toggleMenu);
-
-    // Close mobile menu on navigation
-    const mobileLinks = mobileMenu?.getElementsByTagName('a');
-    if (mobileLinks) {
-      Array.from(mobileLinks).forEach((link) => {
-        link.addEventListener('click', () => {
-          toggleMenu();
-        });
-      });
-    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    handleScroll(); // Initial check
   });
 </script>
