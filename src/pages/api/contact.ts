@@ -1,19 +1,18 @@
 import type { APIRoute } from 'astro';
-import * as Sentry from '@sentry/astro';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async () => {
   try {
-    const formData = await request.formData();
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const message = formData.get('message');
+    // const formData = await request.formData();
+    // const name = formData.get('name');
+    // const email = formData.get('email');
+    // const message = formData.get('message');
 
     // Submit user feedback using the feedback API
-    Sentry.captureFeedback({
-      name: name?.toString() || 'Anonymous',
-      email: email?.toString() || 'no-email@provided.com',
-      message: message?.toString() || '',
-    });
+    // captureFeedback({
+    //   name: name?.toString() || 'Anonymous',
+    //   email: email?.toString() || 'no-email@provided.com',
+    //   message: message?.toString() || '',
+    // });
 
     return new Response(JSON.stringify({ message: 'Message sent successfully' }), {
       status: 200,
@@ -23,7 +22,6 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (error) {
     console.error('Error submitting form:', error);
-    Sentry.captureException(error);
     return new Response(JSON.stringify({ message: 'Error sending message' }), {
       status: 500,
       headers: {

@@ -36,6 +36,7 @@ const { hideTitle = false } = Astro.props;
             name="name"
             placeholder="John Doe"
             required
+            disabled
             className="p-6 text-lg"
             aria-required="true"
             minLength={2}
@@ -48,6 +49,7 @@ const { hideTitle = false } = Astro.props;
             id="email"
             name="email"
             type="email"
+            disabled
             placeholder="john@example.com"
             required
             className="p-6 text-lg"
@@ -61,6 +63,7 @@ const { hideTitle = false } = Astro.props;
             id="message"
             name="message"
             placeholder="Your message here..."
+            disabled
             required
             className="min-h-[200px] p-6 text-lg"
             aria-required="true"
@@ -69,14 +72,13 @@ const { hideTitle = false } = Astro.props;
         </div>
       </div>
 
-      <Button type="submit" size="lg" className="w-full"> Send Message </Button>
+      <Button type="submit" size="lg" className="w-full" disabled>Send Message</Button>
     </form>
   </div>
 </section>
 
 <script>
-  import { send_feedback } from '@/lib/sentry';
-  import { emptyContactForm, type ContactFormData } from '@/schemas/contact';
+  // import { emptyContactForm, type ContactFormData } from '@/schemas/contact';
   import { $contactForm } from '@/stores/contact';
 
   // Get form elements
@@ -103,11 +105,11 @@ const { hideTitle = false } = Astro.props;
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const formData = new FormData(form);
+    // const formData = new FormData(form);
     try {
-      await send_feedback(Object.fromEntries(formData) as ContactFormData);
-      alert('Message sent successfully!');
-      $contactForm.set(emptyContactForm);
+      // TODO romaingrx: implement this
+      // alert('Message sent successfully!');
+      // $contactForm.set(emptyContactForm);
     } catch (error) {
       alert('Error: ' + error);
     }

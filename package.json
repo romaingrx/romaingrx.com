@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "wrangler types && astro dev",
-    "deploy": "pnpm run build && wrangler pages deploy",
+    "deploy": "pnpm run build && wrangler deploy",
     "start": "astro dev",
     "prebuild": "node scripts/generate-favicon.mjs",
     "check": "astro check",
@@ -40,8 +40,6 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
-    "@sentry/astro": "^9.41.0",
-    "@sentry/profiling-node": "^9.41.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/recharts": "^1.8.29",

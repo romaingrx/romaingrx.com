@@ -3,6 +3,7 @@ description: General rules about this astro project
 globs: *
 alwaysApply: true
 ---
+
 # Expert Astro Developer Guidelines
 
 Based on the analysis of a production-ready Astro project, I've created a comprehensive set of rules and best practices for developing professional Astro applications.
@@ -57,7 +58,6 @@ project-root/
 // src/components/blog/card/index.astro
 import { Image } from 'astro:assets';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@/lib/utils';
 
 interface Props extends SomeVariants {
@@ -85,7 +85,6 @@ const { post, variant = 'default', className } = Astro.props;
 // src/components/ui/button.tsx
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva('inline-flex items-center justify-center...', {
@@ -172,12 +171,11 @@ export const collections = {
 ---
 // src/pages/blog/[...slug].astro
 import { getCollection } from 'astro:content';
-
 import BlogLayout from '@/layouts/BlogLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
@@ -275,7 +273,6 @@ export function slugify(str: string): string {
 ```ts
 // src/stores/contact.ts
 import { persistentAtom } from '@nanostores/persistent';
-
 import type { ContactFormData } from '../schemas/contact';
 
 // Default empty state
@@ -359,31 +356,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 ## Error Handling & Monitoring
 
-- Implement Sentry for error tracking and monitoring
 - Create custom error boundaries and fallback UI
 - Use TypeScript to prevent type-related errors
 - Add proper error handling for data fetching
-
-```ts
-// src/lib/sentry.ts
-import * as Sentry from '@sentry/astro';
-
-import type { ContactFormData } from '@/schemas/contact';
-
-export async function send_feedback(data: ContactFormData) {
-  try {
-    const result = Sentry.captureFeedback({
-      name: data.name,
-      email: data.email,
-      message: data.message,
-    });
-    return result;
-  } catch (error) {
-    console.error('Error sending feedback:', error);
-    throw new Error('Failed to send feedback');
-  }
-}
-```
 
 ## Build & Deployment
 
@@ -398,16 +373,10 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import sentry from '@sentry/astro';
 
 export default defineConfig({
   site: import.meta.env.PROD ? 'https://yoursite.com' : 'http://localhost:4321',
   integrations: [
-    sentry({
-      dsn: process.env.SENTRY_DSN,
-      clientInitPath: 'src/sentry.client.config.ts',
-      serverInitPath: 'src/sentry.server.config.ts',
-    }),
     mdx({
       remarkPlugins: [remarkReadingTime],
     }),
