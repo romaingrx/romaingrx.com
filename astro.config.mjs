@@ -5,6 +5,7 @@ import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
+import { rehypeCitationRelative } from './src/lib/rehype-citation-wrapper.mjs';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
 // https://astro.build/config
@@ -16,12 +17,17 @@ export default defineConfig({
     },
     imageService: 'passthrough',
   }),
+  markdown: {
+    remarkPlugins: [remarkReadingTime],
+    rehypePlugins: [rehypeCitationRelative],
+  },
   integrations: [
     mdx({
       shikiConfig: {
         theme: 'one-dark-pro',
       },
       remarkPlugins: [remarkReadingTime],
+      rehypePlugins: [rehypeCitationRelative],
     }),
     sitemap(),
     react(),

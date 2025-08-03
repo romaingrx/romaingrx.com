@@ -38,6 +38,11 @@ const blog = defineCollection({
         categories: z.array(z.string()),
         related_posts: z.array(reference('blog')).optional(),
         resources: z.array(resource_schema).optional(),
+        // Citation fields for rehype-citation
+        bibliography: z.union([z.string(), z.array(z.string())]).optional(),
+        csl: z.string().optional(),
+        lang: z.string().optional(),
+        noCite: z.array(z.string()).optional(),
       })
       .strict(),
 });
