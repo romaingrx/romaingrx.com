@@ -17,6 +17,7 @@ export const rehypeCitationRelative =
       path: fileDirectory,
       linkCitations: true,
       csl: 'apa',
+      showTooltips: true,
       ...options,
     })(tree, file);
   };
