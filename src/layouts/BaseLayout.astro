@@ -1,5 +1,6 @@
 ---
 import '@/styles/globals.css';
+import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
@@ -38,10 +39,15 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImageURL} />
+    <Font cssVariable="--font-fira-code" preload />
+    <Font cssVariable="--font-fira-sans" preload />
 
     <ClientRouter />
   </head>
-  <body class="relative min-h-screen w-screen overflow-x-hidden bg-background">
+  <body
+    class="relative min-h-screen w-screen overflow-x-hidden bg-background"
+    style="font-family: var(--font-fira-code)"
+  >
     <div class="relative z-10 flex min-h-screen flex-col">
       <Header />
       <main class="flex-1">

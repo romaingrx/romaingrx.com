@@ -34,13 +34,13 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
   data-input-position="top"
   data-lang="en"
   data-loading="lazy"
-  data-theme="dark"
+  data-theme="gruvbox"
   crossorigin="anonymous"
   async></script>
 
 <script is:inline>
   function getTheme() {
-    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    return document.documentElement.classList.contains('dark') ? 'gruvbox' : 'gruvbox';
   }
 
   function updateGiscusTheme() {
