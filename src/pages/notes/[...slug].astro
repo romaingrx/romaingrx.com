@@ -1,14 +1,15 @@
 ---
 import { render } from 'astro:content';
+import { components } from '@/components/blog/components/index.astro';
 import Prose from '@/components/blog/prose.astro';
 import NoteFooter from '@/components/note/footer/index.astro';
 import NoteHeader from '@/components/note/note-header.astro';
 import Shell from '@/components/Shell.astro';
 import NoteLayout from '@/layouts/NoteLayout.astro';
-import { getPublishedNotes } from '@/lib/collections';
+import { getNotes } from '@/lib/collections';
 
 export async function getStaticPaths() {
-  const notes = await getPublishedNotes();
+  const notes = await getNotes();
   return notes.map((note) => ({
     params: { slug: note.slug },
     props: { note },
@@ -23,7 +24,7 @@ const { Content } = await render(note);
   <NoteHeader note={note} />
   <Shell type="article">
     <Prose Element="article">
-      <Content />
+      <Content components={components} />
     </Prose>
     <NoteFooter note={note} />
   </Shell>

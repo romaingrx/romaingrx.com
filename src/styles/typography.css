@@ -77,25 +77,39 @@
 	padding-left: 1.5rem;
 }
 
+/* CSS Custom Properties for consistent list styling */
+.prose {
+	--list-margin-y: 1.25em;
+	--list-padding-left: 1.625em;
+	--list-item-margin-y: 0.5em;
+}
+
 .prose ul,
 .prose ol {
-	margin-top: 1.25em;
-	margin-bottom: 1.25em;
-	padding-left: 1.625em;
+	margin-top: var(--list-margin-y);
+	margin-bottom: var(--list-margin-y);
+	padding-left: var(--list-padding-left);
 }
 
 .prose ul {
-	list-style-type: square;
-	@apply before:text-primary;
+	list-style-type: disc;
 }
 
 .prose ol {
-	@apply before:text-primary;
+	list-style-type: decimal;
 }
 
 .prose li {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
+	margin-top: var(--list-item-margin-y);
+	margin-bottom: var(--list-item-margin-y);
+	line-height: 1.75;
+}
+
+/* Unified marker styling for both ul and ol */
+.prose ul > li::marker,
+.prose ol > li::marker {
+	@apply text-primary;
+	font-weight: 500;
 }
 
 .prose img {
@@ -126,6 +140,11 @@
 .prose-compact {
 	@apply text-muted-foreground;
 	line-height: 1.6;
+
+	/* Compact version of list variables */
+	--list-margin-y: 0.5rem;
+	--list-padding-left: 1.25rem;
+	--list-item-margin-y: 0.25rem;
 }
 
 .prose-compact h1,
@@ -230,9 +249,9 @@
 
 .prose-compact ul,
 .prose-compact ol {
-	margin-top: 0.5rem;
-	margin-bottom: 0.75rem;
-	padding-left: 1.25rem;
+	margin-top: var(--list-margin-y);
+	margin-bottom: var(--list-margin-y);
+	padding-left: var(--list-padding-left);
 }
 
 .prose-compact ul {
@@ -244,8 +263,8 @@
 }
 
 .prose-compact li {
-	margin-top: 0.25rem;
-	margin-bottom: 0.25rem;
+	margin-top: var(--list-item-margin-y);
+	margin-bottom: var(--list-item-margin-y);
 	line-height: 1.6;
 }
 
