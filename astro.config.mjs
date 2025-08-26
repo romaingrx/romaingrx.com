@@ -1,5 +1,5 @@
 import icon from "astro-icon";
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, envField, fontProviders } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
@@ -19,6 +19,17 @@ export default defineConfig({
 		},
 		imageService: "passthrough",
 	}),
+	env: {
+		schema: {
+			NODE_ENV: envField.enum({
+				required: true,
+				values: ["development", "production"],
+				context: "client",
+				access: "public",
+				default: "development",
+			}),
+		},
+	},
 	markdown: {
 		remarkPlugins: [remarkReadingTime],
 		rehypePlugins: [rehypeCitationRelative],
