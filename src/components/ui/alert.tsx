@@ -16,8 +16,8 @@ const alertVariants = cva(
           'border-purple-500/50 bg-purple-50/50 text-purple-900 dark:border-purple-400/50 dark:bg-purple-950/50 dark:text-purple-100 [&>svg]:text-purple-600 dark:[&>svg]:text-purple-400',
         warning:
           'border-yellow-500/50 bg-yellow-50/50 text-yellow-900 dark:border-yellow-400/50 dark:bg-yellow-950/50 dark:text-yellow-100 [&>svg]:text-yellow-600 dark:[&>svg]:text-yellow-400',
-        caution:
-          'border-red-500/50 bg-red-50/50 text-red-900 dark:border-red-400/50 dark:bg-red-950/50 dark:text-red-100 [&>svg]:text-red-600 dark:[&>svg]:text-red-400',
+        question:
+          'border-blue-500/50 bg-blue-50/50 text-blue-900 dark:border-blue-400/50 dark:bg-blue-950/50 dark:text-blue-100 [&>svg]:text-blue-600 dark:[&>svg]:text-blue-400',
       },
     },
     defaultVariants: {
@@ -54,3 +54,4 @@ const AlertDescription = React.forwardRef<
 AlertDescription.displayName = 'AlertDescription';
 
 export { Alert, AlertTitle, AlertDescription };
+export type AlertVariant = NonNullable<VariantProps<typeof alertVariants>['variant']>;

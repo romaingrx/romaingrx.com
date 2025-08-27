@@ -1,15 +1,17 @@
 ---
+import type { LucideIcon } from 'lucide-react';
 import CalloutComponent, { type CalloutVariant } from './callout.tsx';
 
 interface Props {
   variant?: CalloutVariant;
   title?: string;
   class?: string;
+  icon?: LucideIcon;
 }
 
-const { variant = 'note', title, class: className } = Astro.props;
+const { variant = 'note', title, class: className, icon } = Astro.props;
 ---
 
-<CalloutComponent variant={variant} title={title} class={className} client:load>
+<CalloutComponent variant={variant} title={title} class={className} icon={icon} client:load>
   <slot />
 </CalloutComponent>

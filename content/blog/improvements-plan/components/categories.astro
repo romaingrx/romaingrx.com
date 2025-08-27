@@ -1,0 +1,75 @@
+---
+import {
+  BrainIcon,
+  ClockIcon,
+  HeartIcon,
+  NetworkIcon,
+  TrainIcon,
+  type LucideIcon,
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+
+type CategoryConfig = {
+  name: string;
+  icon: LucideIcon;
+  backgroundColor: string;
+  textColor: string;
+};
+
+const categories = {
+  skills: {
+    name: 'Skills',
+    icon: TrainIcon,
+    backgroundColor: 'hsl(var(--chart-1))',
+    textColor: 'hsl(var(--chart-1-foreground))',
+  },
+  brain: {
+    name: 'Brain clarity',
+    icon: BrainIcon,
+    backgroundColor: 'hsl(var(--chart-2))',
+    textColor: 'hsl(var(--chart-2-foreground))',
+  },
+  health: {
+    name: 'Health',
+    icon: HeartIcon,
+    backgroundColor: 'hsl(var(--chart-3))',
+    textColor: 'hsl(var(--chart-3-foreground))',
+  },
+  time: {
+    name: 'Time management',
+    icon: ClockIcon,
+    backgroundColor: 'hsl(var(--chart-4))',
+    textColor: 'hsl(var(--chart-4-foreground))',
+  },
+  social: {
+    name: 'Social',
+    icon: NetworkIcon,
+    backgroundColor: 'hsl(var(--chart-5))',
+    textColor: 'hsl(var(--chart-5-foreground))',
+  },
+} as const satisfies Record<string, CategoryConfig>;
+const categoriesKeys = Object.keys(categories);
+
+export type Category = keyof typeof categories;
+
+export type Props = {
+  category: Category;
+};
+
+const { category } = Astro.props;
+
+if (!categoriesKeys.includes(category)) {
+  throw new Error(`Category ${category} not found, please choose in ${categoriesKeys}`);
+}
+
+const { icon: Icon, backgroundColor, textColor } = categories[category];
+---
+
+<Badge
+  style={{ backgroundColor: backgroundColor, color: textColor }}
+  className="flex items-center gap-1 text-xs"
+  client:load
+>
+  <Icon className="h-4 w-4" />
+  <span class="text-xs font-medium">{categories[category].name}</span>
+</Badge>

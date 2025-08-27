@@ -14,17 +14,26 @@
  */
 
 import type { ReactNode } from 'react';
-import { AlertCircle, AlertTriangle, Info, Lightbulb, Star, type LucideIcon } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  AlertCircle,
+  AlertTriangle,
+  HelpCircle,
+  Info,
+  Lightbulb,
+  Star,
+  type LucideIcon,
+} from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle, type AlertVariant } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 
-export type CalloutVariant = 'note' | 'tip' | 'important' | 'warning' | 'caution';
+export type CalloutVariant = Exclude<AlertVariant, 'default'>;
 
 interface CalloutProps {
   variant?: CalloutVariant;
   title?: string;
   className?: string;
   class?: string;
+  icon?: LucideIcon;
   children: ReactNode;
 }
 
@@ -32,6 +41,10 @@ const calloutConfig: Record<CalloutVariant, { icon: LucideIcon; defaultTitle: st
   note: {
     icon: Info,
     defaultTitle: 'Note',
+  },
+  destructive: {
+    icon: AlertCircle,
+    defaultTitle: 'Alert',
   },
   tip: {
     icon: Lightbulb,
@@ -45,9 +58,9 @@ const calloutConfig: Record<CalloutVariant, { icon: LucideIcon; defaultTitle: st
     icon: AlertTriangle,
     defaultTitle: 'Warning',
   },
-  caution: {
-    icon: AlertCircle,
-    defaultTitle: 'Caution',
+  question: {
+    icon: HelpCircle,
+    defaultTitle: 'Question',
   },
 };
 
@@ -56,6 +69,7 @@ export function Callout({
   title,
   className,
   class: astroClass,
+  icon,
   children,
 }: CalloutProps) {
   if (!Object.keys(calloutConfig).includes(variant)) {
@@ -63,7 +77,7 @@ export function Callout({
     variant = 'note';
   }
   const config = calloutConfig[variant];
-  const Icon = config.icon;
+  const Icon = icon ?? config.icon;
   const displayTitle = title || config.defaultTitle;
 
   return (

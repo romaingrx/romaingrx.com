@@ -1,0 +1,161 @@
+---
+title: 'Improvement plan'
+description: 'Becoming a better human at human things'
+authors: ['romaingrx']
+status: 'draft'
+published_date: 2025-08-26
+tags: ['improvements', 'personal']
+bibliography: './references.bib'
+---
+
+import { CategoryBadge, Goal } from "./components";
+
+<TODO>
+
+- Explain the areas of improvements, what I mean exactly
+- Make the long term plan based on these areas
+- Make the short term plan generic
+- Make the current short term plan specific
+
+</TODO>
+
+I currently feel that I'm not the most effective at getting things done, consistently getting better at what I want and care about so I'd like to make a plan to methodically improve with 2 horizons/frequencies:
+- *short term* / *high frequency*: A plan based on daily, weekly an monthly base habits; easy to assess how well I execute it.
+- *long term* / *low frequency*: Long term goals that will dictate the direction to readjust the *high frequency* plan.
+
+
+The goal is to have a support that doesn't take too much brain power, is easy to follow, assess and readjust as I go.
+
+## Areas of improvement
+
+I would like to improve in the following areas:
+
+0. **Raw skills**: anything I would like to improve in terms of skills, knowledge, etc.
+1. **Brain clarity / problem solving**: how to get the bigger picture more easily, how to
+2. **Health**: mostly food, physical condition and sleep
+3. **Time management**: being better at predicting how much time a task will take (ultimately will help packing more efficiently things in day)
+4. **Social**: get better at making contacts and maintaining them
+
+## Long term plan
+
+<Callout>
+The long term plan should be reassessed every X month (TBD) by seeing how well I'm doing in the short term plan.
+</Callout>
+
+### 0. Raw skills
+
+<Goal>
+- Will help grasp the world dynamics better (if I had infinite knowledge and skills I could have a crisper internal representation of how the world moves and changes)
+- Personal satisfaction
+- Improve in learning to learn
+</Goal>
+
+The following are my areas of intereset where I would like to improve
+
+#### Hardware
+
+I want to get a very clear understanding of how CPUs work, capable of writing assembly and reproduce a fully working CPU from scratch if needed. I believe it will help understand the accelerator and data types way better and will just help get a very clear intuition of how cycles work.
+A good resource is [Digital Design and Computer Architecture](https://www.goodreads.com/book/show/25691979-digital-design-and-computer-architecture-arm-edition) by Sarah L. Harris and David Money Harris. I started reading it but didn't go further than the `ALU` chapter.
+
+Once I have a solid understanding of the good old von Neuman architecture, learn about accelerators (FPGA, GPU and TPU) and understand how they interact with the rest of the system. Explore [SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data) in the case of GPUs and [systolic arrays](https://en.wikipedia.org/wiki/Systolic_array) for TPUs.
+
+Then explore the software stack, what makes them good, their limitations and they work under the hood (big picture). Need to at leat explore [CUDA](https://docs.nvidia.com/cuda/), [PTX](https://docs.nvidia.com/cuda/parallel-thread-execution/index.html), [XLA](https://openxla.org/xla), [Triton](https://triton-lang.org/) and [Pallas](https://docs.jax.dev/en/latest/pallas/index.html) (if I have a lot of energy, I can dig in [MLIR](https://mlir.llvm.org/)).
+
+#### ML
+
+There's a few things I would like to get more knowledgeable about:
+- All ML architecures / approaches such as diffusion, all attention flavours, ...
+- Distributed training and inference (clearly with a good intuition of how the hardware deals with it)
+- End-to-end training with all the tips and tricks
+- RL with a focus on [LLM based env]() and reward-model free approach
+- Prob / stats with a focus on bayesian inference, markov chains, monte carlo, ...
+
+
+### 1. Brain clarity / problem solving
+<TODO>
+    - find clear ways to get better
+    - creatine
+</TODO>
+
+<Goal>
+- Faster cycle from problem statetement to hypothesis and problem solving
+- Time saving by pruning unecessaery hypothesis or non promising paths to explore
+- Train System 1 [@Kahneman2011] to get better at quick inference and intuition
+</Goal>
+
+### 2. Health
+
+<TODO>
+    - Healthy food
+    - Consistent sport with desired intensity distribution
+    - Sleep schedule
+</TODO>
+
+<Goal>
+- Long term preservation
+- Increase cognitive and physical capacities
+- ...
+</Goal>
+
+### 3. Time management
+
+<TODO>
+    - Logging everything I do to reflect on it
+    - Give prediction before doing something
+    - Some limitations on phone? (Not sure I need)
+</TODO>
+
+<Goal>
+- Better spent time in regards to the greater goals; less small compounding distractions.
+- ...
+</Goal>
+
+#### Logging everything I do to reflect on it
+
+<Callout variant="question" title="How to do it properly?">
+    Still have to figure out what's the best way to log everything easily. I have 2 ideas in mind:
+    - Either aggregate data from different sources (phone, computer, wakatime, kindle, etc.) but we need to find a way to extract the data easily.
+    - Alternatively, I actively log everything in a well-structured manner and develop the habit to do so.
+</Callout>
+
+It seems very important to have some data on how I spend my time to be able to reflect on it and improve. I don't need a very fine grained detail of what I do but at least the big categories and how they're linked to the greater goals (sport, reading, writing, social medias, ...)
+
+#### Getting better at predictions
+
+Once I determine precisely how my time is allocated, a natural way to accomplish more in a day is to predict how long a certain task will take. Coupled with the previous section, this allows me to have an overview of my day and be quite accurate about what I can achieve in a day, a week, ...
+
+#### Hard constraints?
+
+<Callout variant="question">
+Do I need hard constraints on my time allocation/management?
+</Callout>
+
+### 4. Social
+
+<TODO>
+    - Participate to all the events possible
+    - Call people
+    - Cold messaging
+    - Online presence
+</TODO>
+
+<Goal>
+- More visibility and bigger network that will help in general [@Shirado2019]
+- ...
+</Goal>
+
+## Short term plan
+
+Based on the long term goals, I'll setup a daily, weekly and monthly habit based plan.
+
+
+| Name                        | Category                  | Notes                                                                 | Frequency  |
+|-----------------------------|---------------------------|----------------------------------------------------------------------|------------|
+| Read **1** book per month | <CategoryBadge category={"brain"} />                       | with at least 10 minutes a day | monthly |
+| Write **2** blog post per month | <CategoryBadge category={"social"} />                       | | monthly |
+| Write **2** notes per week | <CategoryBadge category={"social"} />                       | | weekly |
+| Do **3h** of sport per week | <CategoryBadge category={"health"} />                       | with at least 25% in high intensity (>150bpm) | weekly |
+
+**→ Will start this plan on September 1, 2025**
+
+# References
