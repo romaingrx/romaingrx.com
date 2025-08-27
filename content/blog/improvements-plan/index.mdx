@@ -6,6 +6,7 @@ status: 'draft'
 published_date: 2025-08-26
 tags: ['improvements', 'personal']
 bibliography: './references.bib'
+# cover: './images/cover.webp'
 ---
 
 import { CategoryBadge, Goal } from "./components";
@@ -31,10 +32,10 @@ The goal is to have a support that doesn't take too much brain power, is easy to
 I would like to improve in the following areas:
 
 0. **Raw skills**: anything I would like to improve in terms of skills, knowledge, etc.
-1. **Brain clarity / problem solving**: how to get the bigger picture more easily, how to
+1. **Brain clarity / problem solving**: less brain fog and a crisper mental view
 2. **Health**: mostly food, physical condition and sleep
 3. **Time management**: being better at predicting how much time a task will take (ultimately will help packing more efficiently things in day)
-4. **Social**: get better at making contacts and maintaining them
+4. **Social**: get better at making contacts, maintaining them and building a network
 
 ## Long term plan
 
@@ -78,7 +79,7 @@ There's a few things I would like to get more knowledgeable about:
 </TODO>
 
 <Goal>
-- Faster cycle from problem statetement to hypothesis and problem solving
+- Faster cycle from problem statement to hypothesis and problem solving
 - Time saving by pruning unecessaery hypothesis or non promising paths to explore
 - Train System 1 [@Kahneman2011] to get better at quick inference and intuition
 </Goal>
@@ -106,16 +107,29 @@ There's a few things I would like to get more knowledgeable about:
 </TODO>
 
 <Goal>
-- Better spent time in regards to the greater goals; less small compounding distractions.
+- Spend time more effectively regarding the greater goals; reduce small compounding distractions.
 - ...
 </Goal>
 
 #### Logging everything I do to reflect on it
 
 <Callout variant="question" title="How to do it properly?">
-    Still have to figure out what's the best way to log everything easily. I have 2 ideas in mind:
-    - Either aggregate data from different sources (phone, computer, wakatime, kindle, etc.) but we need to find a way to extract the data easily.
-    - Alternatively, I actively log everything in a well-structured manner and develop the habit to do so.
+    Still have to figure out what's the best way to log everything easily. I have 2 approaches in mind.
+
+    **0. Aggregate**
+
+    Either aggregate data from different sources (phone, computer, wakatime, kindle, sport, etc.) but we need to find a way to extract the data easily.
+    Sources:
+    - **Screen time**: [Seems possible somehow to extract](https://gist.github.com/0xdevalias/38cfc92278f85ae89a46f0c156208fd5) everything
+    - **Wakatime**: They have an [API](https://wakatime.com/developers)
+    - **Kindle**: We have access to [a summary](https://www.amazon.com/kindle/reading/insights) of our reading so I guess it might be doable, the best would be to mount the Kindle and directly access the data but I couldn't manage to do so
+    - **Sport**: At the moment I have a [WHOOP 5.0](https://www.whoop.com) and there's [a client in Go to interact with the API](https://github.com/karl-cardenas-coding/mywhoop) so I can access heart beats, stress, activities, ...
+
+    The best would be to drop everything in a S3 bucket and build a visualization tool on top of it (most likely [Grafana](https://grafana.com))
+
+    **1. Manual**
+
+    Alternatively, I actively log everything in a well-structured manner and develop the habit to do so.
 </Callout>
 
 It seems very important to have some data on how I spend my time to be able to reflect on it and improve. I don't need a very fine grained detail of what I do but at least the big categories and how they're linked to the greater goals (sport, reading, writing, social medias, ...)
@@ -149,12 +163,13 @@ Do I need hard constraints on my time allocation/management?
 Based on the long term goals, I'll setup a daily, weekly and monthly habit based plan.
 
 
-| Name                        | Category                  | Notes                                                                 | Frequency  |
+| Habit                        | Category                  | Notes                                                                 | Frequency  |
 |-----------------------------|---------------------------|----------------------------------------------------------------------|------------|
-| Read **1** book per month | <CategoryBadge category={"brain"} />                       | with at least 10 minutes a day | monthly |
-| Write **2** blog post per month | <CategoryBadge category={"social"} />                       | | monthly |
-| Write **2** notes per week | <CategoryBadge category={"social"} />                       | | weekly |
-| Do **3h** of sport per week | <CategoryBadge category={"health"} />                       | with at least 25% in high intensity (>150bpm) | weekly |
+| Read **1** book | <CategoryBadge category={"brain"} />                       | with at least 10 minutes a day | monthly |
+| Read **>10** minutes | <CategoryBadge category={"brain"} />                       | with at least 10 minutes a day | daily |
+| Write **2** blog post | <CategoryBadge category={"social"} />                       | One blog post is at least 500 words | monthly |
+| Write **2** notes | <CategoryBadge category={"social"} />                       | One note is at least 100 words | weekly |
+| Do **3h** of sport | <CategoryBadge category={"health"} />                       | with at least 25% in high intensity (>150bpm) | weekly |
 
 **→ Will start this plan on September 1, 2025**
 
