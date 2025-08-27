@@ -58,6 +58,10 @@ export function Callout({
   class: astroClass,
   children,
 }: CalloutProps) {
+  if (!Object.keys(calloutConfig).includes(variant)) {
+    console.warn(`Unknown callout variant: ${variant}, defaulting to "note"`);
+    variant = 'note';
+  }
   const config = calloutConfig[variant];
   const Icon = config.icon;
   const displayTitle = title || config.defaultTitle;

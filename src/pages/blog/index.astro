@@ -3,12 +3,12 @@ import BlogCard from '@/components/blog/card/index.astro';
 import CategoryBadge from '@/components/blog/category-badge.astro';
 import TagBadge from '@/components/blog/tag-badge.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPublishedBlogPosts } from '@/lib/collections';
+import { getBlogPosts } from '@/lib/collections';
 
 // export const prerender = true;
 
 // Get all published blog posts
-const posts = (await getPublishedBlogPosts()).sort(
+const posts = (await getBlogPosts()).sort(
   (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf()
 );
 
