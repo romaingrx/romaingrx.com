@@ -14,54 +14,70 @@ import { cn } from '@/lib/utils';
 import BlogPostBackground from './background';
 
 const cardVariants = cva(
-  'group overflow-hidden transition-all rounded-xl bg-card hover:bg-accent/40 border shadow-sm',
+  'group overflow-hidden transition-all duration-300 rounded-xl bg-card hover:bg-accent/40 border shadow-sm hover:shadow-md',
   {
     variants: {
       layout: {
         default: 'flex flex-col',
-        horizontal: 'grid md:grid-cols-[45%_1fr]',
+        horizontal: 'grid grid-cols-1 sm:grid-cols-[40%_1fr] lg:grid-cols-[45%_1fr]',
       },
       size: {
-        default: 'max-w-2xl',
-        sm: 'max-w-xl',
-        lg: 'max-w-4xl',
+        default: 'w-full max-w-2xl',
+        sm: 'w-full max-w-xl',
+        lg: 'w-full max-w-4xl',
+        full: 'w-full',
+      },
+      hasCover: {
+        true: '',
+        false: 'bg-gradient-to-br from-muted/30 to-muted/60',
       },
     },
     compoundVariants: [
       {
         layout: 'horizontal',
         size: 'default',
-        class: 'min-h-[160px]',
+        class: 'min-h-[160px] sm:min-h-[180px]',
       },
       {
         layout: 'horizontal',
         size: 'sm',
-        class: 'min-h-[140px]',
+        class: 'min-h-[140px] sm:min-h-[160px]',
       },
       {
         layout: 'horizontal',
         size: 'lg',
-        class: 'min-h-[180px]',
+        class: 'min-h-[180px] sm:min-h-[200px]',
       },
       {
         layout: 'default',
         size: 'default',
-        class: 'min-h-[240px]',
+        class: 'min-h-[280px] sm:min-h-[320px]',
       },
       {
         layout: 'default',
         size: 'sm',
-        class: 'min-h-[220px]',
+        class: 'min-h-[240px] sm:min-h-[280px]',
       },
       {
         layout: 'default',
         size: 'lg',
-        class: 'min-h-[280px]',
+        class: 'min-h-[320px] sm:min-h-[360px]',
+      },
+      {
+        layout: 'default',
+        hasCover: false,
+        class: 'min-h-[200px] sm:min-h-[240px]',
+      },
+      {
+        layout: 'horizontal',
+        hasCover: false,
+        class: 'min-h-[120px] sm:min-h-[140px]',
       },
     ],
     defaultVariants: {
       layout: 'default',
       size: 'default',
+      hasCover: true,
     },
   }
 );
@@ -71,8 +87,8 @@ const imageContainerVariants = cva(
   {
     variants: {
       layout: {
-        default: 'h-[180px] w-full rounded-t-xl',
-        horizontal: 'h-full w-full rounded-l-xl',
+        default: 'h-[160px] sm:h-[180px] lg:h-[200px] w-full rounded-t-xl',
+        horizontal: 'h-full w-full rounded-l-xl sm:rounded-l-xl rounded-t-xl sm:rounded-tr-none',
       },
     },
     defaultVariants: {
@@ -80,6 +96,18 @@ const imageContainerVariants = cva(
     },
   }
 );
+
+const fallbackContainerVariants = cva('relative overflow-hidden flex items-center justify-center', {
+  variants: {
+    layout: {
+      default: 'h-[120px] sm:h-[140px] w-full rounded-t-xl',
+      horizontal: 'h-full w-full rounded-l-xl sm:rounded-l-xl rounded-t-xl sm:rounded-tr-none',
+    },
+  },
+  defaultVariants: {
+    layout: 'default',
+  },
+});
 
 type CardVariants = VariantProps<typeof cardVariants>;
 
@@ -89,61 +117,90 @@ interface Props extends CardVariants {
 }
 
 const { post, layout = 'default', size = 'default', className } = Astro.props;
+const hasCover = !!post.data.cover;
 ---
 
 <a href={routes.blog(post)} class="group/card block no-underline">
   <CardPrimitive
-    className={cn(cardVariants({ layout, size }), className, 'h-full transition-all duration-300')}
+    className={cn(
+      cardVariants({ layout, size, hasCover }),
+      className,
+      'h-full transition-all duration-300'
+    )}
   >
     {
-      post.data.cover && (
+      hasCover ? (
         <div class={cn(imageContainerVariants({ layout }))}>
           <div class="absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
             <BlogPostBackground value={post.id} />
           </div>
           <Image
-            src={post.data.cover}
+            src={post.data.cover!}
             alt={post.data.title}
             class="relative z-10 h-auto w-auto max-w-[65%] object-contain transition-all duration-500 group-hover/card:scale-110"
             width={300}
             height={200}
           />
         </div>
+      ) : (
+        <div class={cn(fallbackContainerVariants({ layout }))}>
+          <div class="absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
+            <BlogPostBackground value={post.id} />
+          </div>
+          <div class="relative z-10 flex items-center justify-center">
+            <div class="rounded-lg border bg-card/80 px-4 py-2 shadow-sm backdrop-blur-sm">
+              <h3 class="line-clamp-2 max-w-[280px] text-center text-lg font-semibold text-foreground/90">
+                {post.data.title}
+              </h3>
+            </div>
+          </div>
+        </div>
       )
     }
     <div class="flex h-full flex-col text-left">
-      <CardContent className="flex-1 space-y-2.5 p-4">
+      <CardContent className="flex-1 space-y-2.5 p-4 sm:p-5 lg:p-6">
         <div class="space-y-2">
           <CardTitle>
             <h2
-              class="line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary"
+              class={cn(
+                'line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary',
+                !hasCover && 'line-clamp-1'
+              )}
               transition:name={`${post.id}-title`}
             >
               {post.data.title}
             </h2>
           </CardTitle>
           <CardDescription>
-            <p class="line-clamp-2 text-sm" transition:name={`${post.id}-description`}>
+            <p
+              class="line-clamp-2 text-sm leading-relaxed text-muted-foreground"
+              transition:name={`${post.id}-description`}
+            >
               {post.data.description}
             </p>
           </CardDescription>
         </div>
       </CardContent>
 
-      <div class="flex items-center gap-4 px-4">
-        <div class="flex items-center gap-2">
+      <div
+        class="mt-auto flex items-center gap-3 px-4 pb-4 sm:gap-4 sm:px-5 sm:pb-5 lg:px-6 lg:pb-6"
+      >
+        <div class="flex min-w-0 flex-1 items-center gap-2">
           <StackedAuthors
             authors={post.authors}
             show_name={false}
             transition:name={`${post.id}-authors`}
           />
-          <span class="text-sm text-muted-foreground" transition:name={`${post.id}-reading-time`}>
+          <span
+            class="whitespace-nowrap text-xs text-muted-foreground sm:text-sm"
+            transition:name={`${post.id}-reading-time`}
+          >
             {post.readingTime}
           </span>
         </div>
         <time
           datetime={post.data.published_date.toISOString()}
-          class="ml-auto text-sm text-muted-foreground"
+          class="whitespace-nowrap text-xs text-muted-foreground sm:text-sm"
           transition:name={`${post.id}-published-date`}
         >
           {
