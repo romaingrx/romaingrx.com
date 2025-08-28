@@ -82,8 +82,10 @@ export function Callout({
 
   return (
     <Alert variant={variant} className={cn('my-6', className, astroClass)}>
-      <Icon className="h-4 w-4" />
-      <AlertTitle className="mb-2 font-semibold">{displayTitle}</AlertTitle>
+      <AlertTitle className="mb-4 flex gap-2 items-end">
+        <Icon className="h-4 w-4" />
+        <span className="font-semibold text-md">{displayTitle}</span>
+      </AlertTitle>
       <AlertDescription className="[&_p]:mb-0 [&_p:not(:last-child)]:mb-3">
         {children}
       </AlertDescription>

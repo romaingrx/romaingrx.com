@@ -43,7 +43,6 @@ export default defineConfig({
 			rehypePlugins: [rehypeCitationRelative],
 			gfm: true,
 			optimize: true,
-			syntaxHighlight: true,
 			smartypants: true,
 		}),
 		sitemap(),

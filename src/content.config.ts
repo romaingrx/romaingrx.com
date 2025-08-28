@@ -36,8 +36,8 @@ const blog = defineCollection({
         updated_date: z.date().optional(),
         tags: z.array(z.string()).default([]),
         categories: z.array(z.string()).default([]),
-        related_posts: z.array(reference('blog')).optional(),
-        resources: z.array(resource_schema).optional(),
+        related_posts: z.array(reference('blog')).default([]),
+        resources: z.array(resource_schema).default([]),
         bibliography: z.union([z.string(), z.array(z.string())]).optional(),
       })
       .strict(),
@@ -72,8 +72,8 @@ const noteSchema = z
     status: z.enum(['published', 'draft', 'archived']).default('draft'),
     published_date: z.date(),
     updated_date: z.date().optional(),
-    tags: z.array(z.string()),
-    resources: z.array(resource_schema).optional(),
+    tags: z.array(z.string()).default([]),
+    resources: z.array(resource_schema).default([]),
   })
   .strict();
 

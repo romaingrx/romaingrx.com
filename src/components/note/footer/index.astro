@@ -4,6 +4,8 @@ import Resources from '@/components/blog/resources/index.astro';
 import TagBadge from '@/components/blog/tag-badge.astro';
 import Comments from '@/components/comments.astro';
 import type { NoteWithAuthors } from '@/lib/collections';
+import { formatDate } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import RelatedNotes from './related-notes.astro';
 
 interface Props {
@@ -11,7 +13,7 @@ interface Props {
 }
 
 const { note } = Astro.props;
-const hasRelatedContent = note.data.tags.length > 0;
+const { resources, tags, updated_date } = note.data;
 ---
 
 <footer class="mt-16 flex flex-col gap-8">
@@ -24,14 +26,17 @@ const hasRelatedContent = note.data.tags.length > 0;
       If you found this note helpful, feel free to share it with others.
     </p>
   </div>
-
-  <!-- Metadata Section -->
-  <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+  <div
+    class={cn(
+      'rounded-lg border bg-card p-6 text-card-foreground shadow-sm',
+      resources.length + tags.length == 0 && 'hidden'
+    )}
+  >
     <div class="space-y-6">
       <!-- Tags and Resources -->
       <div class="space-y-4">
         {
-          note.data.resources && (
+          resources.length > 0 && (
             <div class="space-y-3">
               <h3 class="text-sm font-medium text-muted-foreground">Resources</h3>
               <Resources resources={note.data.resources} />
@@ -39,7 +44,7 @@ const hasRelatedContent = note.data.tags.length > 0;
           )
         }
         {
-          note.data.tags.length > 0 && (
+          tags.length > 0 && (
             <div class="space-y-3">
               <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
               <div class="flex flex-wrap gap-2">
@@ -54,17 +59,10 @@ const hasRelatedContent = note.data.tags.length > 0;
 
       <!-- Update Information -->
       {
-        note.data.updated_date && (
+        updated_date && (
           <div class="flex items-center gap-2 text-sm text-muted-foreground">
             <Icon icon="mdi:calendar-clock" className="h-4 w-4" />
-            <span>
-              Last updated on{' '}
-              {note.data.updated_date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </span>
+            <span>Last updated on {formatDate(updated_date)}</span>
           </div>
         )
       }
@@ -72,14 +70,10 @@ const hasRelatedContent = note.data.tags.length > 0;
   </div>
 
   <!-- Related Content Section -->
-  {
-    hasRelatedContent && (
-      <div class="mb-16">
-        <h2 class="mb-6 text-2xl font-semibold tracking-tight">More Notes</h2>
-        <RelatedNotes note={note} />
-      </div>
-    )
-  }
+  <div class="mb-16">
+    <h2 class="mb-6 text-2xl font-semibold tracking-tight">More Notes</h2>
+    <RelatedNotes note={note} />
+  </div>
 
   <!-- Comments Section -->
   <div class="my-8">

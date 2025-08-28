@@ -1,5 +1,5 @@
 ---
-import { getPublishedNotes, type NoteWithAuthors } from '@/lib/collections';
+import { getNotes, getPublishedNotes, type NoteWithAuthors } from '@/lib/collections';
 import NoteCard from '../card/index.astro';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 const { note } = Astro.props;
 
 // Get all published notes
-const allNotes = await getPublishedNotes();
+const allNotes = await getNotes();
 
 // Filter out the current note and get notes with matching tags
 const relatedNotes = allNotes
