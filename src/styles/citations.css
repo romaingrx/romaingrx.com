@@ -35,8 +35,7 @@
 	@apply text-sm leading-relaxed text-muted-foreground;
 	@apply py-3 px-4 border-l-2 border-l-border/30;
 	@apply transition-all duration-200 ease-out;
-	@apply hover:border-l-accent/60 hover:bg-muted/20;
-	@apply relative pl-12; /* Increased left padding for more space */
+	@apply relative pl-12;
 	counter-increment: citation-counter;
 }
 

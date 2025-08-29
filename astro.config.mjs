@@ -8,6 +8,13 @@ import tailwind from "@astrojs/tailwind";
 import rehypeExternalLinks from "rehype-external-links";
 import { rehypeCitationRelative } from "./src/lib/rehype-citation-wrapper.mjs";
 import { remarkReadingTime } from "./src/lib/remark-reading-time.mjs";
+import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
+import {
+	transformerMetaHighlight,
+	transformerNotationDiff,
+	transformerNotationErrorLevel,
+	transformerRenderWhitespace,
+} from "@shikijs/transformers";
 
 // https://astro.build/config
 export default defineConfig({
@@ -32,6 +39,20 @@ export default defineConfig({
 		},
 	},
 	markdown: {
+		shikiConfig: {
+			wrap: true,
+			transformers: [
+				transformerColorizedBrackets(),
+				transformerNotationDiff(),
+				transformerNotationErrorLevel(),
+				transformerRenderWhitespace(),
+				transformerMetaHighlight(),
+			],
+			themes: {
+				light: "solarized-light",
+				dark: "one-dark-pro",
+			},
+		},
 		remarkPlugins: [remarkReadingTime],
 		rehypePlugins: [
 			rehypeCitationRelative,
@@ -46,20 +67,6 @@ export default defineConfig({
 	},
 	integrations: [
 		mdx({
-			shikiConfig: {
-				theme: "one-dark-pro",
-			},
-			remarkPlugins: [remarkReadingTime],
-			rehypePlugins: [
-				rehypeCitationRelative,
-				[
-					rehypeExternalLinks,
-					{
-						target: "_blank",
-						rel: ["noopener", "noreferrer"],
-					},
-				],
-			],
 			gfm: true,
 			optimize: true,
 			smartypants: true,
