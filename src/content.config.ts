@@ -39,6 +39,8 @@ const blog = defineCollection({
         related_posts: z.array(reference('blog')).default([]),
         resources: z.array(resource_schema).default([]),
         bibliography: z.union([z.string(), z.array(z.string())]).optional(),
+        csl: z.enum(['apa', 'chicago', 'mla', 'vancouver', 'harvard1']).optional(),
+        citationStyle: z.enum(['default', 'minimal', 'academic']).optional(),
       })
       .strict(),
 });

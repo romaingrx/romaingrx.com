@@ -111,3 +111,129 @@
 		text-decoration: var(--shiki-dark-text-decoration) !important;
 	}
 }
+
+/* Citation and Bibliography Styling */
+@layer components {
+	/* Inline citation styling */
+	.citation-inline {
+		@apply font-medium transition-all duration-200 text-primary/80 hover:text-primary;
+		@apply relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-200;
+		@apply hover:after:w-full;
+	}
+
+	.citation-inline:hover {
+		@apply transform scale-105;
+	}
+
+	/* Bibliography section styling */
+	.references-section {
+		@apply mt-16 relative;
+	}
+
+	.references-section::before {
+		@apply absolute -top-8 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
+		content: "";
+	}
+
+	.references-section h1,
+	.references-section h2 {
+		@apply text-3xl font-bold text-foreground mb-8 tracking-tight;
+		@apply relative after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-accent after:rounded-full;
+		@apply pb-3;
+	}
+
+	/* CSL bibliography styling */
+	.csl-bib-body {
+		@apply space-y-6 mt-8;
+	}
+
+	.csl-entry {
+		@apply text-sm leading-relaxed text-muted-foreground;
+		@apply p-6 rounded-xl bg-gradient-to-r from-muted/20 to-muted/10;
+		@apply border border-border/30 hover:border-border/60;
+		@apply transition-all duration-300 ease-out;
+		@apply hover:shadow-lg hover:shadow-muted/20;
+		@apply hover:transform hover:scale-[1.02];
+		@apply relative overflow-hidden;
+	}
+
+	.csl-entry::before {
+		@apply absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent/50 to-primary/50;
+		content: "";
+	}
+
+	.csl-entry:target {
+		@apply bg-accent/10 border-accent/50 shadow-lg shadow-accent/20;
+		@apply transform scale-[1.02];
+	}
+
+	/* Citation links within bibliography entries */
+	.csl-entry a {
+		@apply text-primary hover:text-accent transition-colors duration-200;
+		@apply underline decoration-dotted underline-offset-2 hover:decoration-solid;
+	}
+
+	/* DOI and URL styling in bibliography */
+	.csl-entry .doi,
+	.csl-entry [href^="https://doi.org"] {
+		@apply inline-flex items-center gap-1 text-xs font-mono;
+		@apply bg-secondary/60 hover:bg-secondary/80;
+		@apply px-3 py-1.5 rounded-full transition-all duration-200;
+		@apply border border-secondary-foreground/10;
+		@apply hover:transform hover:scale-105;
+	}
+
+	/* Author names in bibliography */
+	.csl-entry .author {
+		@apply font-semibold text-foreground;
+	}
+
+	/* Journal/publication names */
+	.csl-entry em,
+	.csl-entry i {
+		@apply text-accent font-medium not-italic;
+		@apply bg-accent/10 px-2 py-0.5 rounded-md;
+	}
+
+	/* Year styling */
+	.csl-entry .year {
+		@apply font-bold text-primary;
+	}
+
+	/* Custom styling for different citation elements */
+	.csl-entry .csl-title {
+		@apply font-medium text-base text-foreground mb-2;
+	}
+
+	/* Add subtle animation for bibliography entries */
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.csl-entry {
+		animation: fadeInUp 0.5s ease-out forwards;
+	}
+
+	.csl-entry:nth-child(1) {
+		animation-delay: 0.1s;
+	}
+	.csl-entry:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+	.csl-entry:nth-child(3) {
+		animation-delay: 0.3s;
+	}
+	.csl-entry:nth-child(4) {
+		animation-delay: 0.4s;
+	}
+	.csl-entry:nth-child(5) {
+		animation-delay: 0.5s;
+	}
+}
