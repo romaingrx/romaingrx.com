@@ -3,12 +3,6 @@
 /* Inline citation styling */
 .citation-inline {
 	@apply font-medium transition-all duration-200 text-primary/80 hover:text-primary;
-	@apply relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-200;
-	@apply hover:after:w-full;
-}
-
-.citation-inline:hover {
-	@apply transform scale-105;
 }
 
 /* Bibliography section styling */

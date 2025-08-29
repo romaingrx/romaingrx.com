@@ -5,6 +5,7 @@ import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
+import rehypeExternalLinks from "rehype-external-links";
 import { rehypeCitationRelative } from "./src/lib/rehype-citation-wrapper.mjs";
 import { remarkReadingTime } from "./src/lib/remark-reading-time.mjs";
 
@@ -32,7 +33,16 @@ export default defineConfig({
 	},
 	markdown: {
 		remarkPlugins: [remarkReadingTime],
-		rehypePlugins: [rehypeCitationRelative],
+		rehypePlugins: [
+			rehypeCitationRelative,
+			[
+				rehypeExternalLinks,
+				{
+					target: "_blank",
+					rel: ["noopener", "noreferrer"],
+				},
+			],
+		],
 	},
 	integrations: [
 		mdx({
@@ -40,7 +50,16 @@ export default defineConfig({
 				theme: "one-dark-pro",
 			},
 			remarkPlugins: [remarkReadingTime],
-			rehypePlugins: [rehypeCitationRelative],
+			rehypePlugins: [
+				rehypeCitationRelative,
+				[
+					rehypeExternalLinks,
+					{
+						target: "_blank",
+						rel: ["noopener", "noreferrer"],
+					},
+				],
+			],
 			gfm: true,
 			optimize: true,
 			smartypants: true,
