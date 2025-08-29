@@ -2,28 +2,36 @@ import path from "node:path";
 import rehypeCitation from "rehype-citation";
 
 /**
- * Wrapper for rehype-citation that resolves bibliography paths relative to the markdown file
- * instead of the project root. This allows using './references.bib' in frontmatter.
+ * Enhanced rehype-citation wrapper with automatic References heading generation
+ * and improved styling integration with the design system.
  *
- * Provides enhanced styling options and better visual integration with the design system.
- * Supports reading citation style preferences from frontmatter.
+ * Features:
+ * - Resolves bibliography paths relative to markdown file
+ * - Automatically adds "References" heading when bibliography is present
+ * - Supports multiple citation styles via frontmatter
+ * - Clean, compact bibliography styling
  */
 export const rehypeCitationRelative =
 	(options = {}) =>
 	async (tree, file) => {
-		// Get the directory of the current markdown file
 		const filePath = file.history[file.history.length - 1];
 		const fileDirectory = path.dirname(filePath);
-
-		// Extract frontmatter data if available
 		const frontmatter = file.data.astro?.frontmatter || {};
 
-		// Allow frontmatter to override citation style
+		// Skip if no bibliography is specified
+		if (!frontmatter.bibliography) {
+			return;
+		}
+
+		// Add References heading to the tree before processing citations
+		addReferencesHeading(tree);
+
+		// Citation style configuration
 		const cslStyle = frontmatter.csl || options.csl || "apa";
 		const citationStyle =
 			frontmatter.citationStyle || options.citationStyle || "default";
 
-		// Style variants
+		// Predefined style variants
 		const styleVariants = {
 			default: {
 				inlineClass: [
@@ -34,7 +42,6 @@ export const rehypeCitationRelative =
 					"transition-all",
 					"duration-200",
 				],
-				inlineBibClass: ["citation-bibliography", "references-section"],
 			},
 			minimal: {
 				inlineClass: [
@@ -42,14 +49,6 @@ export const rehypeCitationRelative =
 					"text-muted-foreground",
 					"hover:text-foreground",
 					"transition-colors",
-				],
-				inlineBibClass: [
-					"text-sm",
-					"space-y-2",
-					"mt-8",
-					"border-t",
-					"border-border",
-					"pt-6",
 				],
 			},
 			academic: {
@@ -60,56 +59,42 @@ export const rehypeCitationRelative =
 					"font-mono",
 					"hover:text-foreground",
 				],
-				inlineBibClass: [
-					"text-xs",
-					"font-mono",
-					"space-y-3",
-					"mt-10",
-					"border-t-2",
-					"border-border",
-					"pt-8",
-				],
 			},
 		};
 
-		// Default configuration with custom styling
-		const defaultConfig = {
+		// Configure rehype-citation
+		const config = {
 			path: fileDirectory,
 			linkCitations: true,
 			csl: cslStyle,
 			showTooltips: true,
 			tooltipAttribute: "title",
+			inlineBibClass: [], // Disable inline bibliography
 			...(styleVariants[citationStyle] || styleVariants.default),
+			...options,
 		};
 
-		// Use the file's directory as the base path for resolving bibliography files
-		await rehypeCitation({
-			...defaultConfig,
-			...options,
-		})(tree, file);
+		await rehypeCitation(config)(tree, file);
 	};
 
 /**
- * Alternative citation wrapper with different styling options
- * for more minimal or academic styling
+ * Adds a "References" heading to the end of the document tree
  */
-export const rehypeCitationMinimal =
-	(options = {}) =>
-	async (tree, file) => {
-		const filePath = file.history[file.history.length - 1];
-		const fileDirectory = path.dirname(filePath);
-
-		await rehypeCitation({
-			path: fileDirectory,
-			linkCitations: true,
-			csl: "chicago", // Different default style
-			showTooltips: false,
-			inlineClass: [
-				"text-sm",
-				"text-muted-foreground",
-				"hover:text-foreground",
-			],
-			inlineBibClass: ["text-sm", "space-y-2", "mt-8"],
-			...options,
-		})(tree, file);
+function addReferencesHeading(tree) {
+	const referencesHeading = {
+		type: "element",
+		tagName: "h1",
+		properties: {
+			id: "references",
+			className: ["references-heading"],
+		},
+		children: [
+			{
+				type: "text",
+				value: "References",
+			},
+		],
 	};
+
+	tree.children.push(referencesHeading);
+}
