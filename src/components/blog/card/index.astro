@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 import { cva, type VariantProps } from 'class-variance-authority';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
@@ -26,7 +27,6 @@ const cardVariants = cva(
         default: 'w-full max-w-2xl',
         sm: 'w-full max-w-xl',
         lg: 'w-full max-w-3xl',
-        full: 'w-full',
       },
       hasCover: {
         true: '',
@@ -36,43 +36,33 @@ const cardVariants = cva(
     compoundVariants: [
       {
         layout: 'horizontal',
-        size: 'default',
-        class: 'min-h-[140px] sm:min-h-[160px]',
+        size: 'sm',
+        class: 'h-[100px]',
       },
       {
         layout: 'horizontal',
-        size: 'sm',
-        class: 'min-h-[120px] sm:min-h-[140px]',
+        size: 'default',
+        class: 'h-[160px]',
       },
       {
         layout: 'horizontal',
         size: 'lg',
-        class: 'min-h-[180px] sm:min-h-[200px]',
+        class: 'h-[160px]',
       },
       {
         layout: 'default',
         size: 'default',
-        class: 'min-h-[240px] sm:min-h-[260px]',
+        class: 'h-[220px] sm:h-[240px]',
       },
       {
         layout: 'default',
         size: 'sm',
-        class: 'min-h-[200px] sm:min-h-[220px]',
+        class: 'h-[180px] sm:h-[200px]',
       },
       {
         layout: 'default',
         size: 'lg',
-        class: 'min-h-[260px] sm:min-h-[280px]',
-      },
-      {
-        layout: 'default',
-        hasCover: false,
-        class: 'min-h-[180px] sm:min-h-[200px]',
-      },
-      {
-        layout: 'horizontal',
-        hasCover: false,
-        class: 'min-h-[120px] sm:min-h-[140px]',
+        class: 'h-[260px] sm:h-[280px]',
       },
     ],
     defaultVariants: {
@@ -84,18 +74,29 @@ const cardVariants = cva(
 );
 
 const imageContainerVariants = cva(
-  'relative overflow-hidden flex items-center justify-center bg-muted/50',
+  'relative overflow-hidden flex items-center justify-center bg-muted/50 h-full w-full',
   {
     variants: {
       layout: {
-        default: 'h-[120px] sm:h-[140px] w-full rounded-t-lg',
-        horizontal:
-          'h-full w-full max-h-[160px] sm:max-h-[180px] rounded-l-lg sm:rounded-l-lg rounded-t-lg sm:rounded-tr-none',
+        default: 'rounded-t-lg',
+        horizontal: 'rounded-l-lg sm:rounded-l-lg rounded-t-lg sm:rounded-tr-none',
+      },
+      size: {
+        default: '',
+        sm: '',
+        lg: '',
       },
     },
     defaultVariants: {
       layout: 'default',
     },
+    compoundVariants: [
+      {
+        layout: 'default',
+        size: 'sm',
+        class: 'hidden',
+      },
+    ],
   }
 );
 
@@ -127,12 +128,12 @@ const hasCover = !!post.data.cover;
     className={cn(
       cardVariants({ layout, size, hasCover }),
       className,
-      'relative h-full transition-all duration-300'
+      'relative transition-all duration-300'
     )}
   >
     {
       hasCover ? (
-        <div class={cn(imageContainerVariants({ layout }), 'relative')}>
+        <div class={cn(imageContainerVariants({ layout, size }), 'relative')}>
           <div class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
             <BlogPostBackground value={post.id} />
           </div>
@@ -154,21 +155,7 @@ const hasCover = !!post.data.cover;
               <div class="relative mx-auto">
                 <div class="absolute inset-0 h-14 w-14 rounded-2xl bg-primary/10 blur-xl" />
                 <div class="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-border/60 bg-card/90 shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover/card:scale-110">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="text-primary"
-                  >
-                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                    <polyline points="14,2 14,8 20,8" />
-                  </svg>
+                  <Icon name="lucide:book-open" class="text-primary" />
                 </div>
               </div>
               <div class="space-y-1.5">
@@ -185,14 +172,11 @@ const hasCover = !!post.data.cover;
       )
     }
     <div class="flex h-full flex-col text-left">
-      <CardContent className="flex flex-1 flex-col p-3 sm:p-4">
+      <CardContent className="flex flex-1 flex-col justify-between p-3 sm:p-4">
         <div class="flex-1 space-y-1.5">
           <CardTitle>
             <h2
-              class={cn(
-                'line-clamp-2 text-base font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary',
-                !hasCover && 'line-clamp-1'
-              )}
+              class="line-clamp-2 text-base font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary"
               transition:name={`${post.id}-title`}
             >
               {post.data.title}
