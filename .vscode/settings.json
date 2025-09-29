@@ -17,6 +17,6 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[mdx]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

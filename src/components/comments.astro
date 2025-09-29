@@ -1,4 +1,5 @@
 ---
+import { COMMENTS_SECTION_ID } from '@/configs/constants';
 import { site } from '@/configs/site';
 
 interface Props {
@@ -20,23 +21,25 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
 // We're no longer using custom mapping, always using og:title directly
 ---
 
-<script
-  is:inline
-  src="https://giscus.app/client.js"
-  data-repo={site.repo}
-  data-repo-id="R_kgDOM6pBlQ"
-  data-category={category}
-  data-category-id={categoryId}
-  data-mapping="og:title"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="top"
-  data-lang="en"
-  data-loading="lazy"
-  data-theme="gruvbox"
-  crossorigin="anonymous"
-  async></script>
+<div id={COMMENTS_SECTION_ID}>
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={site.repo}
+    data-repo-id="R_kgDOM6pBlQ"
+    data-category={category}
+    data-category-id={categoryId}
+    data-mapping="og:title"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-lang="en"
+    data-loading="eager"
+    data-theme="gruvbox"
+    crossorigin="anonymous"
+    async></script>
+</div>
 
 <script is:inline>
   function getTheme() {

@@ -16,6 +16,8 @@ import {
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
 
+import expressiveCode from "astro-expressive-code";
+
 // https://astro.build/config
 export default defineConfig({
 	site: import.meta.env.PROD
@@ -66,6 +68,16 @@ export default defineConfig({
 		],
 	},
 	integrations: [
+		expressiveCode({
+			themes: {
+				light: "solarized-light",
+				dark: "one-dark-pro",
+			},
+			wrap: true,
+			shiki: {
+				injectLangsIntoNestedCodeBlocks: true,
+			},
+		}),
 		mdx({
 			gfm: true,
 			optimize: true,

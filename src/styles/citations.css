@@ -32,53 +32,15 @@
 }
 
 .csl-entry {
-	@apply text-sm leading-relaxed text-muted-foreground;
+	@apply text-sm leading-relaxed text-foreground;
 	@apply py-3 px-4 border-l-2 border-l-border/30;
 	@apply transition-all duration-200 ease-out;
 	@apply relative pl-12;
 	counter-increment: citation-counter;
 }
 
-.csl-entry:target {
-	@apply border-l-accent bg-accent/5;
-}
-
 /* Numbering for bibliography entries with more space */
 .csl-entry::before {
 	content: counter(citation-counter) ".";
-	@apply absolute left-4 top-4 text-xs font-bold text-muted-foreground; /* Moved further right */
-}
-
-/* Citation links within bibliography entries */
-.csl-entry a {
-	@apply text-primary hover:text-accent transition-colors duration-200;
-	@apply underline decoration-dotted underline-offset-2 hover:decoration-solid;
-}
-
-/* DOI and URL styling in bibliography */
-.csl-entry .doi,
-.csl-entry [href^="https://doi.org"] {
-	@apply text-xs font-mono text-muted-foreground;
-	@apply hover:text-primary transition-colors duration-200;
-}
-
-/* Author names in bibliography */
-.csl-entry .author {
-	@apply font-semibold text-foreground;
-}
-
-/* Journal/publication names */
-.csl-entry em,
-.csl-entry i {
-	@apply text-accent font-medium;
-}
-
-/* Year styling */
-.csl-entry .year {
-	@apply font-bold text-primary;
-}
-
-/* Custom styling for different citation elements */
-.csl-entry .csl-title {
-	@apply font-medium text-base text-foreground mb-2;
+	@apply absolute left-4 top-4 text-xs font-bold text-primary; /* Moved further right */
 }
