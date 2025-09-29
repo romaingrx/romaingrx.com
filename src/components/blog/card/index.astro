@@ -86,6 +86,10 @@ const imageContainerVariants = cva(
         sm: '',
         lg: '',
       },
+      hasCover: {
+        true: '',
+        false: '',
+      },
     },
     defaultVariants: {
       layout: 'default',
@@ -94,6 +98,11 @@ const imageContainerVariants = cva(
       {
         layout: 'default',
         size: 'sm',
+        class: 'hidden',
+      },
+      {
+        layout: 'default',
+        hasCover: false,
         class: 'hidden',
       },
     ],
@@ -131,12 +140,15 @@ const hasCover = !!post.data.cover;
       'relative transition-all duration-300'
     )}
   >
-    {
-      hasCover ? (
-        <div class={cn(imageContainerVariants({ layout, size }), 'relative')}>
-          <div class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
-            <BlogPostBackground value={post.id} />
-          </div>
+    <div class={cn(imageContainerVariants({ layout, size, hasCover }), 'relative')}>
+      <div
+        class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover/card:scale-105"
+      >
+        <BlogPostBackground value={post.id} />
+      </div>
+
+      {
+        hasCover ? (
           <Image
             src={post.data.cover!}
             alt={post.data.title}
@@ -144,12 +156,7 @@ const hasCover = !!post.data.cover;
             width={300}
             height={200}
           />
-        </div>
-      ) : (
-        <div class={cn(fallbackContainerVariants({ layout }), 'relative')}>
-          <div class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover/card:scale-105">
-            <BlogPostBackground value={post.id} />
-          </div>
+        ) : (
           <div class="pointer-events-none relative z-10 flex h-full items-center justify-center p-6">
             <div class="space-y-3 text-center">
               <div class="relative mx-auto">
@@ -168,9 +175,9 @@ const hasCover = !!post.data.cover;
               </div>
             </div>
           </div>
-        </div>
-      )
-    }
+        )
+      }
+    </div>
     <div class="flex h-full flex-col text-left">
       <CardContent className="flex flex-1 flex-col justify-between p-3 sm:p-4">
         <div class="flex-1 space-y-1.5">
