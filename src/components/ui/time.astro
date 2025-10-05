@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from 'react';
+import DynamicTime from './DynamicTime.tsx';
+
+interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
+  date: Date;
+}
+
+const { date, ...props } = Astro.props;
+---
+
+<DynamicTime client:load date={date} {...props} />

@@ -4,6 +4,7 @@ import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import Resources from '@/components/blog/resources/index.astro';
 import Shell from '@/components/Shell.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
+import Time from '../ui/time.astro';
 import BlogPostBackground from './card/background';
 
 interface Props {
@@ -37,18 +38,7 @@ const { post, class: className = '' } = Astro.props;
       <div
         class="mb-8 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400"
       >
-        <time
-          datetime={post.data.published_date.toISOString()}
-          transition:name={`${post.id}-published-date`}
-        >
-          {
-            post.data.published_date.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          }
-        </time>
+        <Time date={post.data.published_date} transition:name={`${post.id}-published-date`} />
         <span>•</span>
         <span transition:name={`${post.id}-reading-time`}>{post.readingTime}</span>
       </div>

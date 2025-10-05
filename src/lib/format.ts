@@ -35,7 +35,7 @@ export function formatCompactDate(date: Date | string): string {
     return 'Yesterday';
   }
 
-  return format(dateObj, 'MMM d');
+  return format(dateObj, 'MMMM d ');
 }
 
 /**

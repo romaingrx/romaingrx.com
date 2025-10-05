@@ -2,6 +2,7 @@
 import Resources from '@/components/blog/resources/index.astro';
 import Shell from '@/components/Shell.astro';
 import type { NoteWithAuthors } from '@/lib/collections';
+import Time from '../ui/time.astro';
 
 interface Props {
   note: NoteWithAuthors;
@@ -26,15 +27,7 @@ const { note, class: className = '' } = Astro.props;
 
         <div class="flex items-center gap-4 text-sm text-muted-foreground">
           <div class="flex items-center gap-2">
-            <time datetime={note.data.published_date.toISOString()}>
-              {
-                note.data.published_date.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })
-              }
-            </time>
+            <Time date={note.data.published_date} />
             <span>•</span>
             <span>{note.readingTime}</span>
           </div>

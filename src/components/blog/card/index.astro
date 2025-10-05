@@ -9,9 +9,9 @@ import {
   Card as CardPrimitive,
   CardTitle,
 } from '@/components/ui/card';
+import Time from '@/components/ui/time.astro';
 import { routes } from '@/configs/routes';
 import type { BlogPostWithAuthors } from '@/lib/collections';
-import { formatCompactDate, formatISO } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import BlogPostBackground from './background';
 
@@ -213,13 +213,7 @@ const hasCover = !!post.data.cover;
               {post.readingTime}
             </span>
           </div>
-          <time
-            datetime={formatISO(post.data.published_date)}
-            class="whitespace-nowrap text-xs text-muted-foreground"
-            transition:name={`${post.id}-published-date`}
-          >
-            {formatCompactDate(post.data.published_date)}
-          </time>
+          <Time date={post.data.published_date} transition:name={`${post.id}-published-date`} />
         </div>
       </CardContent>
     </div>

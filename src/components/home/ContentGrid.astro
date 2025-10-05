@@ -2,7 +2,7 @@
 import BlogCard from '@/components/blog/card/index.astro';
 import { routes } from '@/configs/routes';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
-import { formatCompactDate, formatISO } from '@/lib/format';
+import Time from '../ui/time.astro';
 
 interface Props {
   posts?: BlogPostWithAuthors[];
@@ -36,12 +36,7 @@ const { posts = [], notes = [], className = '' } = Astro.props;
           class="group flex h-full min-h-[180px] flex-col justify-between rounded-lg border border-border/40 bg-card p-4 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
         >
           <div class="flex items-center justify-between">
-            <time
-              datetime={formatISO(notes[0]!.data.published_date)}
-              class="text-xs text-muted-foreground"
-            >
-              {formatCompactDate(notes[0]!.data.published_date)}
-            </time>
+            <Time date={notes[0]!.data.published_date} className="text-xs text-muted-foreground" />
           </div>
           <div class="transition duration-200 group-hover:translate-x-2">
             <h3 class="mb-2 line-clamp-2 font-medium tracking-tight text-foreground">
@@ -92,18 +87,13 @@ const { posts = [], notes = [], className = '' } = Astro.props;
           class="group flex h-full min-h-[180px] flex-col justify-between rounded-lg border border-border/40 bg-card p-4 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
         >
           <div class="flex items-center justify-between">
-            <time
-              datetime={formatISO(notes[1]!.data.published_date)}
-              class="text-xs text-muted-foreground"
-            >
-              {formatCompactDate(notes[1]!.data.published_date)}
-            </time>
+            <Time date={notes[1].data.published_date} className="text-xs text-muted-foreground" />
           </div>
           <div class="transition duration-200 group-hover:translate-x-2">
             <h3 class="mb-2 line-clamp-2 font-medium tracking-tight text-foreground">
-              {notes[1]!.data.title}
+              {notes[1].data.title}
             </h3>
-            {notes[1]!.data.description && (
+            {notes[1].data.description && (
               <p class="line-clamp-3 text-sm text-muted-foreground">{notes[1]!.data.description}</p>
             )}
           </div>
