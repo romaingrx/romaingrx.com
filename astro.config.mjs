@@ -15,8 +15,8 @@ import {
 	transformerNotationErrorLevel,
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
-
 import expressiveCode from "astro-expressive-code";
+import cudaLanguageConfig from './src/assets/shiki-lang/cuda-cpp.json' assert { type: 'json' };
 
 // https://astro.build/config
 export default defineConfig({
@@ -76,6 +76,18 @@ export default defineConfig({
 			wrap: true,
 			shiki: {
 				injectLangsIntoNestedCodeBlocks: true,
+				langs: [
+					{
+						id: 'cuda',
+						scopeName: 'source.cuda-c++',
+						aliases: ['cu', 'cuh', 'cuda'],
+						...cudaLanguageConfig
+					}
+				]
+			},
+			frames: {
+				showCopyToClipboardButton: true,
+				extractFileNameFromCode: true,
 			},
 		}),
 		mdx({
