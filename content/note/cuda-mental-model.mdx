@@ -13,25 +13,25 @@ resources:
     description: 'The full code snippet for the code example'
 ---
 
-When I coded a CUDA kernel for the first time, I remember being a bit confused with the hierarchy and different levels (grid, blocks, ...). The goal of this note is to give a few helper functions and the overall mental model over the many dimensions.
+When I coded a CUDA kernel for the first time, I remember being a bit confused with the hierarchy and different levels (grid, blocks, ...). The goal of this note is to give a few helper functions and the overall mental model for the many dimensions.
 
 # Grid, blocks, warps, threads, ...?
 
-The goal of the [Single instruction, multiple threads (SIMT)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads) model is to expose the same instruction, parallelize it as much as possible on the different part of the data. CUDA uses a hierarchical structure where threads are organized into blocks, and blocks are organized into a grid. The configuration of this structure is left to developper to make effective use of the hardware for the specific data shape and type of algorithm to run.
+The goal of the [Single instruction, multiple threads (SIMT)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads) model is to expose the same instruction, parallelize it as much as possible on the different parts of the data. CUDA uses a hierarchical structure where threads are organized into blocks, and blocks are organized into a grid. The configuration of this structure is left to the developer to make effective use of the hardware for the specific data shape and type of algorithm to run.
 
 ## Grid
 
-A grid is the entire collection of parallel work for your kernel to do the work
+A grid is the entire collection of parallel work for your kernel.
 
-- It's composed of independant blocks that execute concurrently with indeterminated order
-- A grid can be 1, 2 or 3 dimensionnal
+- It's composed of independent blocks that execute concurrently with indeterminate order
+- A grid can be 1, 2 or 3 dimensional
 
 ## Block (thread block)
 A block is a group of threads that executes on the same [streaming multiprocessor (SM)](https://modal.com/gpu-glossary/device-hardware/streaming-multiprocessor).
 
 - Threads in a block can communicate via [shared memory](https://modal.com/gpu-glossary/device-software/shared-memory) and synchronize using barriers
-- A block contains one or more warps, where a warp is a constant number of threads (`32` for all Nvidia gpus so far) that run at once
-- A block can be as well 1, 2 or 3 dimensionnal
+- A block contains one or more warps, where a warp is a constant number of threads (`32` for all Nvidia GPUs so far) that run at once
+- A block can also be 1, 2 or 3 dimensional
 
 ## Thread
 
@@ -42,17 +42,17 @@ This is the individual unit of execution.
 
 # Code example
 
-The easiest to explore this is to actually log the index of each thread. To determine the final index of the thread, we need to get:
+The easiest way to explore this is to actually log the index of each thread. To determine the final index of the thread, we need to get:
 
 1. The offset of the current block in the grid
 2. The offset of the current thread in the current block
-3. The sum of all the offsets to obtain the global thread id
+3. The sum of all the offsets to obtain the global thread ID
 
 To do so, I've implemented some easy helper functions to unroll all these indices in a comprehensive way.
 
 ## `get_offset`
 
-The first function `get_offset` simply gets the flattened index of the `coordinates` variable in a 3 dimensionnal cube of dimensions `dim`. Effectively if we're at the coordinates `dim3(2, 2, 2)` in a cube of dimension `dim3(8, 8, 8)`, we need to effectively sum all the individual units that came before our current `coordinates` in the following way:
+The first function `get_offset` simply gets the flattened index of the `coordinates` variable in a 3 dimensional cube of dimensions `dim`. For example, if we're at the coordinates `dim3(2, 2, 2)` in a cube of dimension `dim3(8, 8, 8)`, we need to sum all the individual units that came before our current `coordinates` in the following way:
 1. The current index in the x direction which is simply `coordinates.x`
 2. The current index in the y direction, which means that we need to take into account all the `coordinates.y` number of "rows" of dimensions `dim.x`
 3. And finally sum all the "rows" and "cols" of dimensions `dim.x` and `dim.y` times our coordinate in direction z `coordinates.z`
@@ -71,14 +71,14 @@ So in our cube example of dimensions `dim3(8, 8, 8)`, we'll have a flattened ind
 ## Main function `whoami`
 
 In CUDA, we define our kernel with a `__global__` keyword and in our kernel we have access to the following variables:
-- `gridDim` which defines the 3d dimensions of our grid
+- `gridDim` which defines the 3D dimensions of our grid
 - `blockDim` which also defines the dimensions of our blocks within the grid
 - `blockIdx` is the coordinate of the current block we're in
 - `threadIdx` is the coordinate of the current thread within the current block
 
 All these variables are 3 dimensional (`dim3`).
 
-So if we decide on our grid dimension and block dimensions, we'll be able to observe all our threads indexes within the blocks and grid.
+So if we decide on our grid dimension and block dimensions, we'll be able to observe all our thread indexes within the blocks and grid.
 
 
 ```cu title=01_indexing.cu
@@ -98,7 +98,7 @@ __global__ void whoami() {
 
   // We got the offset in block units, now we need to account for all the threads that were in the previous blocks to have the offset in thread units
   int thread_block_offset =
-    block_id
+    block_offset
     * blockDim.x * blockDim.y * blockDim.z;
 
   // Defines the offset of the thread inside the current block
@@ -109,7 +109,7 @@ __global__ void whoami() {
 
   printf("%04d | Block(%d %d %d) = %3d | Thread(%d %d %d) = %3d\n",
         id,
-        blockIdx.x, blockIdx.y, blockIdx.z, block_id,
+        blockIdx.x, blockIdx.y, blockIdx.z, block_offset,
         threadIdx.x, threadIdx.y, threadIdx.z, thread_offset);
 }
 
@@ -130,7 +130,7 @@ int main() {
 }
 ```
 
-This code will give us a result similar to the following (although the order of the threads execution is not guaranteed)
+This code will give us a result similar to the following (although the order of the thread execution is not guaranteed)
 
 ```zsh
 ❯ nvcc 01_indexing.cu && ./a.out
