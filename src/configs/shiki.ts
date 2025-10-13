@@ -1,18 +1,17 @@
+import type { ShikiConfig } from 'astro';
 import { transformerColorizedBrackets } from '@shikijs/colorized-brackets';
-import {
-  transformerMetaHighlight,
-  transformerNotationDiff,
-  transformerNotationErrorLevel,
-  transformerRenderWhitespace,
-} from '@shikijs/transformers';
-import cudaLanguageConfig from '../assets/shiki-lang/cuda-cpp.json';
-import nixLanguageConfig from '../assets/shiki-lang/nix.json';
+import cudaLanguageConfig from '../assets/shiki-lang/cuda-cpp.json' with { type: 'json' };
+import nixLanguageConfig from '../assets/shiki-lang/nix.json' with { type: 'json' };
 
-export const shikiConfig = {
+// Start of Selection
+export const shikiConfig: ShikiConfig = {
+  langs: [
+    nixLanguageConfig,
+    // @ts-expect-error
+    {
+      ...cudaLanguageConfig,
+      aliases: ['cu', 'cuh', 'cuda'],
+    },
+  ],
   transformers: [transformerColorizedBrackets()],
 };
-
-export const themes = {
-  light: 'solarized-light',
-  dark: 'one-dark-pro',
-} as const;
