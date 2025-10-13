@@ -1,22 +1,18 @@
-import icon from "astro-icon";
 import { defineConfig, envField, fontProviders } from "astro/config";
+
+// Astro integrations
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
+import icon from "astro-icon";
+
+// Rehype/Remark plugins
 import rehypeExternalLinks from "rehype-external-links";
 import { rehypeCitationRelative } from "./src/lib/rehype-citation-wrapper.mjs";
 import { remarkReadingTime } from "./src/lib/remark-reading-time.mjs";
-import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
-import {
-	transformerMetaHighlight,
-	transformerNotationDiff,
-	transformerNotationErrorLevel,
-	transformerRenderWhitespace,
-} from "@shikijs/transformers";
-import expressiveCode from "astro-expressive-code";
-import cudaLanguageConfig from './src/assets/shiki-lang/cuda-cpp.json' assert { type: 'json' };
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -42,14 +38,6 @@ export default defineConfig({
 	},
 	markdown: {
 		shikiConfig: {
-			wrap: true,
-			transformers: [
-				transformerColorizedBrackets(),
-				transformerNotationDiff(),
-				transformerNotationErrorLevel(),
-				transformerRenderWhitespace(),
-				transformerMetaHighlight(),
-			],
 			themes: {
 				light: "solarized-light",
 				dark: "one-dark-pro",
@@ -68,28 +56,6 @@ export default defineConfig({
 		],
 	},
 	integrations: [
-		expressiveCode({
-			themes: {
-				light: "solarized-light",
-				dark: "one-dark-pro",
-			},
-			wrap: true,
-			shiki: {
-				injectLangsIntoNestedCodeBlocks: true,
-				langs: [
-					{
-						id: 'cuda',
-						scopeName: 'source.cuda-c++',
-						aliases: ['cu', 'cuh', 'cuda'],
-						...cudaLanguageConfig
-					}
-				]
-			},
-			frames: {
-				showCopyToClipboardButton: true,
-				extractFileNameFromCode: true,
-			},
-		}),
 		mdx({
 			gfm: true,
 			optimize: true,

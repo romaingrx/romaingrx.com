@@ -82,7 +82,7 @@
 
 @layer base {
 	* {
-		@apply border-border;
+		@apply border-border outline-ring/50;
 		::selection {
 			background-color: hsl(var(--primary) / 0.5);
 			color: hsl(var(--primary-foreground));
@@ -90,34 +90,5 @@
 	}
 	body {
 		@apply bg-background text-foreground;
-	}
-}
-
-@layer base {
-	* {
-		@apply border-border outline-ring/50;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
-
-	/* Default light theme styles for code blocks */
-	.astro-code,
-	.astro-code span {
-		color: var(--shiki-light) !important;
-		background-color: var(--shiki-light-bg) !important;
-		font-style: var(--shiki-light-font-style) !important;
-		font-weight: var(--shiki-light-font-weight) !important;
-		text-decoration: var(--shiki-light-text-decoration) !important;
-	}
-
-	/* Dark theme styles for code blocks */
-	.dark .astro-code,
-	.dark .astro-code span {
-		color: var(--shiki-dark) !important;
-		background-color: var(--shiki-dark-bg) !important;
-		font-style: var(--shiki-dark-font-style) !important;
-		font-weight: var(--shiki-dark-font-weight) !important;
-		text-decoration: var(--shiki-dark-text-decoration) !important;
 	}
 }

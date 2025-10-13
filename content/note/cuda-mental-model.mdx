@@ -57,7 +57,7 @@ The first function `get_id` simply gets the flattened index of the `coordinates`
 2. The current index in the y direction, which means that we need to take into account all the `coordinates.y` number of "rows" of dimensions `dim.x`
 3. And finally sum all the "rows" and "cols" of dimensions `dim.x` and `dim.y` times our coordinate in direction z `coordinates.z`
 
-```cuda
+```cpp
 __device__ int get_id(dim3 coordinates, dim3 dim){
   return
     coordinates.x +
@@ -81,7 +81,7 @@ All these variables are 3 dimensional (`dim3`).
 So if we decide on our grid dimension and block dimensions, we'll be able to observe all our threads indexes within the blocks and grid.
 
 
-```cu title=01_indexing.cu
+```cpp title=01_indexing.cu
 #include <stdio.h>
 
 // Simple helper function that linearizes the id
@@ -97,7 +97,7 @@ __global__ void whoami() {
   int block_id = get_id(blockIdx, gridDim);
 
   // Defines how many thread came before that block
-  int block_offset = 
+  int block_offset =
     block_id
     * blockDim.x * blockDim.y * blockDim.z;
 
@@ -113,7 +113,7 @@ __global__ void whoami() {
         threadIdx.x, threadIdx.y, threadIdx.z, thread_offset);
 }
 
-int main() { 
+int main() {
   dim3 blocksPerGrid(2, 2, 2);
   dim3 threadsPerBlock(2, 1, 1);
 
@@ -155,3 +155,48 @@ This code will give us a result similar to the following (although the order of 
 0015 | Block(1 1 1) =   7 | Thread(1 0 0) =   1
 ```
 
+
+```js
+// Complex JavaScript example to test syntax highlighting
+const fetchUserData = async (userId) => {
+  try {
+    const response = await fetch(`/api/users/${userId}`);
+    const userData = await response.json();
+
+    if (userData.status === 'active') {
+      return {
+        id: userData.id,
+        name: userData.name,
+        preferences: userData.preferences || {},
+        lastLogin: new Date(userData.lastLogin)
+      };
+    }
+
+    throw new Error(`User ${userId} is not active`);
+  } catch (error) {
+    console.error('Failed to fetch user data:', error);
+    return null;
+  }
+};
+
+// Class example with modern JavaScript features
+class DataProcessor {
+  #privateField = 'secret';
+
+  constructor(config = {}) {
+    this.config = { ...config };
+    this.results = [];
+  }
+
+  processData(data) {
+    return data
+      .filter(item => item.isValid)
+      .map(item => ({
+        ...item,
+        processed: true,
+        timestamp: Date.now()
+      }))
+      .sort((a, b) => b.timestamp - a.timestamp);
+  }
+}
+```
