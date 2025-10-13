@@ -2,8 +2,8 @@
 title: 'CUDA mental model'
 description: 'Quick mental model explanation for programming a GPU'
 authors: ['romaingrx']
-status: 'draft'
-published_date: 2025-10-12
+status: 'published'
+published_date: 2025-10-13
 tags: ['machine-learning', 'cuda']
 resources:
   - title: 'Code snippet'
@@ -44,21 +44,21 @@ This is the individual unit of execution.
 
 The easiest to explore this is to actually log the index of each thread. To determine the final index of the thread, we need to get:
 
-1. The index of the current block in the grid
-2. The index of the current thread in the current block
+1. The offset of the current block in the grid
+2. The offset of the current thread in the current block
 3. The sum of all the offsets to obtain the global thread id
 
 To do so, I've implemented some easy helper functions to unroll all these indices in a comprehensive way.
 
-## `get_id`
+## `get_offset`
 
-The first function `get_id` simply gets the flattened index of the `coordinates` variable in a 3 dimensionnal cube of dimensions `dim`. Effectively if we're at the coordinates `dim3(2, 2, 2)` in a cube of dimension `dim3(8, 8, 8)`, we need to effectively sum all the individual units that came before our current `coordinates` in the following way:
+The first function `get_offset` simply gets the flattened index of the `coordinates` variable in a 3 dimensionnal cube of dimensions `dim`. Effectively if we're at the coordinates `dim3(2, 2, 2)` in a cube of dimension `dim3(8, 8, 8)`, we need to effectively sum all the individual units that came before our current `coordinates` in the following way:
 1. The current index in the x direction which is simply `coordinates.x`
 2. The current index in the y direction, which means that we need to take into account all the `coordinates.y` number of "rows" of dimensions `dim.x`
 3. And finally sum all the "rows" and "cols" of dimensions `dim.x` and `dim.y` times our coordinate in direction z `coordinates.z`
 
 ```cu
-__device__ int get_id(dim3 coordinates, dim3 dim){
+__device__ int get_offset(dim3 coordinates, dim3 dim){
   return
     coordinates.x +
     coordinates.y * dim.x +
@@ -85,7 +85,7 @@ So if we decide on our grid dimension and block dimensions, we'll be able to obs
 #include <stdio.h>
 
 // Simple helper function that linearizes the id
-__device__ int get_id(dim3 idx, dim3 dim){
+__device__ int get_offset(dim3 idx, dim3 dim){
   return
     idx.x +
     idx.y * dim.x +
@@ -94,18 +94,18 @@ __device__ int get_id(dim3 idx, dim3 dim){
 
 __global__ void whoami() {
   // Defines the flattened id of the block inside the grid
-  int block_id = get_id(blockIdx, gridDim);
+  int block_offset = get_offset(blockIdx, gridDim);
 
-  // Defines how many thread came before that block
-  int block_offset =
+  // We got the offset in block units, now we need to account for all the threads that were in the previous blocks to have the offset in thread units
+  int thread_block_offset =
     block_id
     * blockDim.x * blockDim.y * blockDim.z;
 
-  // Defines the id of the thread inside the block
-  int thread_offset = get_id(threadIdx, blockDim);
+  // Defines the offset of the thread inside the current block
+  int thread_offset = get_offset(threadIdx, blockDim);
 
   // Final id is the sum of how many threads came before + the thread offset inside the current block
-  int id = block_offset + thread_offset;
+  int id = thread_block_offset + thread_offset;
 
   printf("%04d | Block(%d %d %d) = %3d | Thread(%d %d %d) = %3d\n",
         id,
