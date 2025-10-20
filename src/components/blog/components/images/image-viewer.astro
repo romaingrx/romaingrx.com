@@ -1,0 +1,106 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  src: ImageMetadata;
+  alt?: string;
+  caption?: string;
+  className?: string;
+  width?: number;
+  height?: number;
+}
+
+const { src, alt = 'Image', caption, className, width, height } = Astro.props;
+---
+
+<div class={cn('my-4', className)}>
+  <!-- Original image -->
+  <div class="group relative">
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      class="h-auto w-full cursor-pointer object-contain transition-all duration-300 hover:shadow-lg"
+      onclick="openModal(this)"
+    />
+    )
+
+    <!-- Zoom button -->
+    <button
+      class="absolute right-2 top-2 rounded-full bg-background p-2 text-foreground opacity-0 shadow-lg transition-all duration-200 hover:bg-muted group-hover:opacity-100"
+      aria-label="View larger image"
+      onclick="openModal(this)"
+    >
+      <Icon name="lucide:zoom-in" class="h-4 w-4" />
+    </button>
+  </div>
+
+  <!-- Caption -->
+  {caption && <p class="mt-2 text-center text-sm text-muted-foreground">{caption}</p>}
+
+  <!-- Modal overlay -->
+  <div
+    id="image-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center backdrop-blur-sm"
+  >
+    <div class="relative h-full max-h-[90vh] w-full max-w-[90vw] p-4">
+      <!-- Close button -->
+      <button
+        class="absolute right-0 top-0 text-foreground transition-colors hover:text-muted-foreground"
+        onclick="closeModal()"
+        aria-label="Close modal"
+      >
+        <Icon name="lucide:x" class="h-6 w-6" />
+      </button>
+
+      <!-- Modal image -->
+      <Image src={src} alt={alt} class="h-full w-full object-contain" />
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal(button: HTMLElement) {
+    const modal = document.getElementById('image-modal') as HTMLElement;
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+
+      // Handle escape key
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          closeModal();
+          document.removeEventListener('keydown', handleEscape);
+        }
+      };
+      document.addEventListener('keydown', handleEscape);
+
+      // Handle click outside
+      const handleClickOutside = (e: MouseEvent) => {
+        if (e.target === modal) {
+          closeModal();
+          modal.removeEventListener('click', handleClickOutside);
+        }
+      };
+      modal.addEventListener('click', handleClickOutside);
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('image-modal') as HTMLElement;
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Make functions globally available
+  (window as any).openModal = openModal;
+  (window as any).closeModal = closeModal;
+</script>

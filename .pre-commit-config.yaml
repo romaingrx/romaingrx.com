@@ -27,12 +27,16 @@ repos:
         name: Prettier
         entry: pnpm prettier --write
         language: system
+        stages: [commit]
+        pass_filenames: true
         files: \.(js|jsx|ts|tsx|astro|json|md|yaml|yml)$
 
       - id: eslint
         name: ESLint
         entry: pnpm eslint --fix
         language: system
+        stages: [commit]
+        pass_filenames: true
         files: \.(js|jsx|ts|tsx|astro)$
 
       # Astro check (type checking)
@@ -40,5 +44,6 @@ repos:
         name: Astro Check
         entry: pnpm astro check
         language: system
+        stages: [commit]
         files: \.(astro|ts|tsx)$
         pass_filenames: false
