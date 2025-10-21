@@ -21,8 +21,7 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
             <h4 className="text-sm font-semibold">{author.data.name}</h4>
             <p className="text-sm text-muted-foreground">{author.data.title}</p>
             <div className="flex items-center gap-2 pt-2">
-              {Object.entries(author.data.socialLinks)?.map(([raw_platform, social]) => {
-                const platform = raw_platform as Platform;
+              {Object.entries(author.data.socialLinks)?.map(([platform, social]) => {
                 return (
                   <a
                     key={`${platform}-${social.handle}`}
@@ -31,7 +30,10 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
                     rel="noopener noreferrer"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    <Icon icon={platforms_info[platform].icon_name} className="w-4 h-4" />
+                    <Icon
+                      icon={platforms_info[platform as Platform].icon_name}
+                      className="w-4 h-4"
+                    />
                   </a>
                 );
               })}
