@@ -14,13 +14,13 @@ const headingStyle = cva('', {
     divDepth: {
       1: '',
       2: '',
-      3: 'bg-muted',
-      4: 'bg-muted',
-      5: 'bg-muted',
+      3: '',
+      4: '',
+      5: '',
     },
     textDepth: {
-      1: 'font-semibold',
-      2: '',
+      1: 'text-muted-foreground',
+      2: 'text-muted-foreground',
       3: 'text-muted-foreground',
       4: 'text-muted-foreground',
       5: 'text-muted-foreground',
@@ -38,10 +38,10 @@ function getDepthVariant({ heading: { depth } }: { heading: Heading }): Depth {
 }
 ---
 
-<li class="my-1 text-sm">
+<li class="my-1 text-sm [&.active>div:first-child]:bg-foreground">
   <div
     class={cn(
-      'my-2 h-0.5 rounded-md bg-primary bg-gradient-to-r group-hover/toc:hidden',
+      'my-2 h-0.5 rounded-md bg-muted group-hover/toc:hidden',
       headingStyle({ divDepth: getDepthVariant({ heading }) })
     )}
   >
@@ -49,7 +49,8 @@ function getDepthVariant({ heading: { depth } }: { heading: Heading }): Depth {
   <a
     href={'#' + heading.slug}
     class={cn(
-      'hidden hover:underline group-hover/toc:flex',
+      'toc-link hidden hover:underline group-hover/toc:flex transition-colors peer',
+      '[&.active]:text-foreground [&.active]:font-semibold',
       headingStyle({ textDepth: getDepthVariant({ heading }) })
     )}
   >

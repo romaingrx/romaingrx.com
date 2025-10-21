@@ -9,6 +9,8 @@ type Props = {
 };
 
 const { headings } = Astro.props;
+
+const tocSlugs = headings.map((h) => h.slug).filter(Boolean);
 ---
 
 <nav aria-label="Table of contents" class="sticky top-24 hidden lg:block">
@@ -16,13 +18,84 @@ const { headings } = Astro.props;
     <div
       class={cn(
         'absolute inset-0 ml-auto mr-6 transition-all duration-300',
-        'w-12',
+        'w-16',
         'group-hover/toc:w-64'
       )}
     >
-      <ul class={cn('rounded-md p-2', 'group-hover/toc:bg-card group-hover/toc:border-border')}>
-        {buildToc(headings).map((heading) => <TocHeading heading={heading} />)}
-      </ul>
+      <div class={cn('rounded-md p-4', 'group-hover/toc:bg-card group-hover/toc:border-border')}>
+        <ul>
+          {buildToc(headings).map((heading) => <TocHeading heading={heading} client:visible />)}
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
+
+<script is:inline define:vars={{ tocSlugs }}>
+  // Throttle function to limit scroll event calls
+  function throttle(func, limit) {
+    let inThrottle;
+    return function (...args) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
+      }
+    };
+  }
+
+  // Compute active heading based on scroll position
+  function updateActiveToc() {
+    const scrollY = window.scrollY;
+    const threshold = 50;
+
+    // Find all headings in content (adjust selector to match your blog layout, e.g., 'main h1[id], main h2[id]')
+    const contentHeadings = document.querySelectorAll(
+      'article h1[id], article h2[id], article h3[id], article h4[id], article h5[id]'
+    );
+
+    if (contentHeadings.length === 0) return; // No headings, bail
+
+    let activeIndex = -1;
+    for (let i = 0; i < contentHeadings.length; i++) {
+      const heading = contentHeadings[i];
+      const offsetTop = heading.offsetTop;
+      if (offsetTop > scrollY + threshold) {
+        activeIndex = i;
+        break;
+      }
+    }
+    // If scrolled past all, use the last one
+    if (activeIndex === -1) activeIndex = contentHeadings.length - 1;
+
+    // Match to TOC slugs (filter to top-level only if needed; extend for nested)
+    const activeSlug = contentHeadings[activeIndex]?.id || '';
+    if (!activeSlug || !tocSlugs.includes(activeSlug)) return;
+
+    // Remove active from all TOC links
+    document.querySelectorAll('.toc-link').forEach((link) => {
+      link.classList.remove('active');
+      link.closest('li').classList.remove('active');
+    });
+
+    // Add active to matching link (and propagate to nested if needed)
+    const activeLink = document.querySelector(`.toc-link[href="#${activeSlug}"]`);
+    if (activeLink) {
+      activeLink.classList.add('active');
+      activeLink.closest('li').classList.add('active');
+    }
+  }
+
+  // Initial computation on load (handles midway scroll)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateActiveToc);
+  } else {
+    updateActiveToc();
+  }
+
+  // Update on scroll (throttled)
+  window.addEventListener('scroll', throttle(updateActiveToc, 16), { passive: true });
+
+  // Optional: Recompute on resize (e.g., if layout changes)
+  window.addEventListener('resize', throttle(updateActiveToc, 150));
+</script>
