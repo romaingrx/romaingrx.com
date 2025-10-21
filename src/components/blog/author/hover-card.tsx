@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import { platforms_info } from '@/configs/platforms';
+import { platforms_info, type Platform } from '@/configs/platforms';
 import type { Author } from '@/lib/collections';
 
 type Props = {
@@ -20,17 +20,20 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
             <h4 className="text-sm font-semibold">{author.data.name}</h4>
             <p className="text-sm text-muted-foreground">{author.data.title}</p>
             <div className="flex items-center gap-2 pt-2">
-              {author.data.socialLinks?.map((social, index) => (
-                <a
-                  key={`${social.platform}-${index}`}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  <Icon icon={platforms_info[social.platform].icon_name} className="w-4 h-4" />
-                </a>
-              ))}
+              {Object.entries(author.data.socialLinks)?.map(([raw_platform, social]) => {
+                const platform = raw_platform as Platform;
+                return (
+                  <a
+                    key={`${platform}-${social.handle}`}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <Icon icon={platforms_info[platform].icon_name} className="w-4 h-4" />
+                  </a>
+                );
+              })}
             </div>
           </div>
           {with_image && (

@@ -11,10 +11,11 @@ const author = defineCollection({
       name: z.string(),
       title: z.string().optional(),
       image: z.string(),
-      socialLinks: z.array(
+      socialLinks: z.record(
+        platforms_enum,
         z.object({
-          platform: platforms_enum,
           url: z.string().url(),
+          handle: z.string().optional(),
         })
       ),
     })
@@ -41,6 +42,7 @@ const blog = defineCollection({
         bibliography: z.union([z.string(), z.array(z.string())]).optional(),
         csl: z.enum(['apa', 'chicago', 'mla', 'vancouver', 'harvard1']).optional(),
         citationStyle: z.enum(['default', 'minimal', 'academic']).optional(),
+        x_thread_id: z.string().url().optional(),
       })
       .strict(),
 });
@@ -76,6 +78,7 @@ const noteSchema = z
     updated_date: z.date().optional(),
     tags: z.array(z.string()).default([]),
     resources: z.array(resource_schema).default([]),
+    x_thread_id: z.string().url().optional(),
   })
   .strict();
 

@@ -1,4 +1,5 @@
 import { z } from 'astro/zod';
+import { site } from './site';
 
 export const platforms_enum = z.enum([
   'website',
@@ -13,12 +14,13 @@ export type Platform = z.infer<typeof platforms_enum>;
 
 interface PlatformInfo {
   icon_name: string;
-  base_url?: string;
+  base_url: string;
 }
 
 export const platforms_info: Record<Platform, PlatformInfo> = {
   website: {
     icon_name: 'mdi:globe',
+    base_url: site.url,
   },
   github: {
     icon_name: 'mdi:github',
@@ -29,7 +31,7 @@ export const platforms_info: Record<Platform, PlatformInfo> = {
     base_url: 'https://x.com',
   },
   linkedin: {
-    icon_name: 'mdi:linkedin',
+    icon_name: 'simple-icons:linkedin',
     base_url: 'https://linkedin.com',
   },
   huggingface: {

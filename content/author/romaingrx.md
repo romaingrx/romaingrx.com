@@ -3,16 +3,20 @@ name: 'Romain Graux'
 title: 'ML Engineer'
 image: '/images/authors/romaingrx.jpeg'
 socialLinks:
-  - platform: 'github'
+  github:
     url: 'https://go.romaingrx.com/github'
-  - platform: 'twitter'
+    handle: 'romaingrx'
+  twitter:
     url: 'https://go.romaingrx.com/x'
-  - platform: 'linkedin'
+    handle: '_romaingrx'
+  linkedin:
     url: 'https://go.romaingrx.com/linkedin'
-  - platform: 'website'
+    handle: 'romaingrx'
+  website:
     url: 'https://go.romaingrx.com/website'
-  - platform: 'huggingface'
+  huggingface:
     url: 'https://go.romaingrx.com/huggingface'
+    handle: 'romaingrx'
 ---
 
 ML Engineer and Software Engineer interested in **AI safety**, **machine learning**, and **computers in general**.

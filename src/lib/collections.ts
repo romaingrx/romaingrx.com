@@ -1,6 +1,7 @@
 import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
 import { NODE_ENV } from 'astro:env/client';
-import { slugify } from './utils';
+import { site } from '@/configs/site';
+import { getAbsoluteUrl, slugify } from './utils';
 
 export type Author = CollectionEntry<'author'>;
 export type BlogPost = CollectionEntry<'blog'>;
@@ -10,12 +11,14 @@ export interface BlogPostWithAuthors extends Omit<BlogPost, 'authors'> {
   authors: Author[];
   readingTime: string;
   slug: string;
+  url: string;
 }
 
 export interface NoteWithAuthors extends Omit<Note, 'authors'> {
   authors: Author[];
   readingTime: string;
   slug: string;
+  url: string;
 }
 
 export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
@@ -42,11 +45,13 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
           })
         );
 
+        const slug = slugify(post.data.title);
         return {
           ...post,
           authors: postAuthors,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
-          slug: slugify(post.data.title),
+          slug,
+          url: getAbsoluteUrl(`/blog/${slug}`, new URL(site.url)),
         };
       })
   );
@@ -86,11 +91,13 @@ export async function getNotes(): Promise<NoteWithAuthors[]> {
           })
         );
 
+        const slug = slugify(note.data.title);
         return {
           ...note,
           authors: noteAuthors,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
-          slug: slugify(note.data.title),
+          slug,
+          url: getAbsoluteUrl(`/note/${slug}`, new URL(site.url)),
         };
       })
   );

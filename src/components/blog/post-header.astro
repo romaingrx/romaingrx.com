@@ -6,6 +6,7 @@ import Shell from '@/components/Shell.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import Time from '../ui/time.astro';
 import BlogPostBackground from './card/background';
+import SharingBadges from './sharing-badges.astro';
 
 interface Props {
   post: BlogPostWithAuthors;
@@ -53,7 +54,7 @@ const { post, class: className = '' } = Astro.props;
 
       <!-- Description -->
       <p
-        class="mb-8 text-lg text-gray-700 dark:text-gray-300 md:text-xl"
+        class="mb-8 text-lg text-muted-foreground md:text-xl"
         transition:name={`${post.id}-description`}
       >
         {post.data.description}
@@ -71,10 +72,14 @@ const { post, class: className = '' } = Astro.props;
         )
       }
 
-      <div class="relative mt-4">
+      <div class="relative mt-4 flex flex-row justify-between">
         <div class="flex flex-col gap-3 text-start">
           <span class="text-sm font-medium text-muted-foreground">Written by</span>
           <StackedAuthors authors={post.authors} transition:name={`${post.id}-authors`} />
+        </div>
+        <div class="flex flex-col gap-3 text-start">
+          <span class="text-sm font-medium text-muted-foreground">Share on</span>
+          <SharingBadges post={post} />
         </div>
       </div>
     </div>

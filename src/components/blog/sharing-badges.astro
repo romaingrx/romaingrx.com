@@ -1,0 +1,82 @@
+---
+import type { Params } from 'astro';
+import { Icon } from 'astro-icon/components';
+import { platforms_info, type Platform } from '@/configs/platforms';
+import { getAuthorsWithSocialLinks } from '@/lib/authors';
+import type { BlogPostWithAuthors } from '@/lib/collections';
+import { getAbsoluteUrl } from '@/lib/utils';
+
+interface Props {
+  post: BlogPostWithAuthors;
+}
+
+const { post } = Astro.props;
+
+interface LinkProps {
+  title: string;
+  pathname: string;
+  params?: Params;
+}
+
+function getAuthorsWithSocialLinksAndWarn({ platform }: { platform: Platform }) {
+  const authors = getAuthorsWithSocialLinks({ authors: post.authors, platform });
+  if (authors.length > 1) {
+    console.warn(
+      `Found ${authors.length} authors with a ${platform} handle but will pick the first one only to share`
+    );
+  }
+  return authors;
+}
+
+const authors_x_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'twitter' });
+const authors_linkedin_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'linkedin' });
+
+const links = {
+  twitter: {
+    title: `Share ${post.data.title} on X`,
+    pathname: '/intent/post',
+    params: {
+      url: post.url,
+      via: authors_x_handle[0]?.data.socialLinks.twitter?.handle,
+      related: authors_x_handle
+        .map(
+          (author) =>
+            `${author.data.socialLinks.twitter?.handle}:${author.data.title ?? author.data.name}`
+        )
+        .join(','),
+      in_reply_to: post.data.x_thread_id,
+      hashtags: post.data.tags.join(','),
+    },
+  },
+  linkedin: {
+    title: `Share ${post.data.title} on LinkedIn`,
+    pathname: '/sharing/share-offsite',
+    params: {
+      text: `${post.data.title} from @${authors_linkedin_handle[0].data.socialLinks.linkedin?.handle}
+${post.data.tags.map((t) => `#${t}`).join(' ')}`,
+      url: post.url,
+    },
+  },
+} as const satisfies Partial<Record<Platform, LinkProps>>;
+---
+
+<div class="flex flex-row gap-2">
+  {
+    Object.entries(links).map(([platform_name, props]) => {
+      const platform = platforms_info[platform_name as Platform];
+      const anchor_url = getAbsoluteUrl(props.pathname, new URL(platform.base_url), props.params);
+      return (
+        <a
+          href={anchor_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-muted-foreground transition-colors hover:text-foreground"
+          aria-label={props.title}
+        >
+          <Icon name={platform.icon_name} class="h-5 w-5" />
+          <span class="sr-only">{props.title}</span>
+        </a>
+      );
+    })
+  }
+</div>

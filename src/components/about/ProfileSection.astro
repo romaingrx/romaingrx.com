@@ -3,7 +3,7 @@ import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
 import CompactProse from '@/components/ui/compact-prose.astro';
-import { platforms_info } from '@/configs/platforms';
+import { platforms_info, type Platform } from '@/configs/platforms';
 
 interface Props {
   author: string;
@@ -51,9 +51,9 @@ const { Content } = await render(author);
 
             <!-- Social Links -->
             {
-              socialLinks.length > 0 && (
+              Object.entries(socialLinks).length > 0 && (
                 <div class="flex flex-wrap gap-3">
-                  {socialLinks.map(({ platform, url }) => (
+                  {Object.entries(socialLinks).map(([platform, { url }]) => (
                     <a
                       href={url}
                       target="_blank"
@@ -61,7 +61,7 @@ const { Content } = await render(author);
                       class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border/50 bg-background/80 text-muted-foreground transition-all hover:border-border hover:bg-muted hover:text-foreground"
                       title={`Follow on ${platform}`}
                     >
-                      <Icon name={platforms_info[platform].icon_name} class="h-4 w-4" />
+                      <Icon name={platforms_info[platform as Platform].icon_name} class="h-4 w-4" />
                       <span class="sr-only">Follow on {platform}</span>
                     </a>
                   ))}

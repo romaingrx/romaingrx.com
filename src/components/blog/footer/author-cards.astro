@@ -1,12 +1,12 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { platforms_info } from '@/configs/platforms';
+import { platforms_info, type Platform } from '@/configs/platforms';
+import type { Author } from '@/lib/collections';
 
 interface Props {
-  authors: CollectionEntry<'author'>[];
+  authors: Author[];
 }
 
 const { authors } = Astro.props;
@@ -35,16 +35,16 @@ const { authors } = Astro.props;
         </CardHeader>
         <CardContent>
           <div class="flex gap-3">
-            {author.data.socialLinks.map((link) => (
+            {Object.entries(author.data.socialLinks).map(([platform, link]) => (
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-muted-foreground transition-colors hover:text-foreground"
               >
-                <Icon name={platforms_info[link.platform].icon_name} class="h-5 w-5" />
+                <Icon name={platforms_info[platform as Platform].icon_name} class="h-5 w-5" />
                 <span class="sr-only">
-                  {author.data.name} on {link.platform}
+                  {author.data.name} on {platform}
                 </span>
               </a>
             ))}
