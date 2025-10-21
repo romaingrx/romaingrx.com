@@ -1,0 +1,28 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { buildToc } from '@/lib/toc';
+import { cn } from '@/lib/utils';
+import TocHeading from './heading.astro';
+
+type Props = {
+  headings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+---
+
+<nav aria-label="Table of contents" class="sticky top-24">
+  <div class="group/toc relative">
+    <div
+      class={cn(
+        'absolute inset-0 ml-auto mr-6 transition-all duration-300',
+        'w-12',
+        'group-hover/toc:w-64'
+      )}
+    >
+      <ul class={cn('rounded-md p-2', 'group-hover/toc:bg-card group-hover/toc:border-border')}>
+        {buildToc(headings).map((heading) => <TocHeading heading={heading} />)}
+      </ul>
+    </div>
+  </div>
+</nav>

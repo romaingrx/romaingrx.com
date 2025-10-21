@@ -1,0 +1,67 @@
+---
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { Heading } from '@/lib/toc';
+import { cn } from '@/lib/utils';
+
+type Props = {
+  heading: Heading;
+};
+
+const { heading } = Astro.props;
+
+const headingStyle = cva('', {
+  variants: {
+    divDepth: {
+      1: '',
+      2: '',
+      3: 'bg-muted',
+      4: 'bg-muted',
+      5: 'bg-muted',
+    },
+    textDepth: {
+      1: 'font-semibold',
+      2: '',
+      3: 'text-muted-foreground',
+      4: 'text-muted-foreground',
+      5: 'text-muted-foreground',
+    },
+  },
+});
+
+type Depth = VariantProps<typeof headingStyle>['textDepth'];
+
+function getDepthVariant({ heading: { depth } }: { heading: Heading }): Depth {
+  if ([1, 2, 3, 4, 5].includes(depth)) {
+    return depth as Depth;
+  }
+  return undefined;
+}
+---
+
+<li class="my-1 text-sm">
+  <div
+    class={cn(
+      'my-2 h-0.5 rounded-md bg-primary bg-gradient-to-r group-hover/toc:hidden',
+      headingStyle({ divDepth: getDepthVariant({ heading }) })
+    )}
+  >
+  </div>
+  <a
+    href={'#' + heading.slug}
+    class={cn(
+      'hidden hover:underline group-hover/toc:flex',
+      headingStyle({ textDepth: getDepthVariant({ heading }) })
+    )}
+  >
+    {heading.text}
+  </a>
+  {
+    heading.subheadings.length > 0 && (
+      <ul class="ml-2 group-hover/toc:ml-4">
+        {heading.subheadings.map((subheading) => (
+          <Astro.self heading={subheading} />
+        ))}
+      </ul>
+    )
+  }
+</li>

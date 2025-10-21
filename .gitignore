@@ -1,3 +1,6 @@
+# Obsidian files
+.obsidian/
+
 # build output
 dist/
 
