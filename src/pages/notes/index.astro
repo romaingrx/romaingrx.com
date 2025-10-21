@@ -6,7 +6,9 @@ import { routes } from '@/configs/routes';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getNotes } from '@/lib/collections';
 
-const notes = await getNotes();
+const notes = (await getNotes()).sort(
+  (a, b) => b.data.published_date.getUTCDate() - a.data.published_date.getUTCDate()
+);
 const title = 'Notes';
 const description =
   'Collection of notes, thoughts, and documentation on various topics. Notes are usually short thoughts, ideas, tricks, or documentation on a specific topic.';

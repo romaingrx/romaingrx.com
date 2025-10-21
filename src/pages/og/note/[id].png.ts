@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ params }) => {
     description: note.data.description || '',
   });
 
-  return new Response(png, {
+  return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',
       'Cache-Control': 'public, max-age=0, s-maxage=86400, must-revalidate',

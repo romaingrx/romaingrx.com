@@ -6,7 +6,7 @@ export const GET: APIRoute = async () => {
   // Convert SVG to PNG using sharp
   const buffer = await sharp(Buffer.from(svg_logo)).resize(128, 128).png().toBuffer();
 
-  return new Response(buffer, {
+  return new Response(new Uint8Array(buffer), {
     headers: { 'Content-Type': 'image/png' },
   });
 };

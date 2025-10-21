@@ -7,7 +7,7 @@ export const GET: APIRoute = async () => {
       title: 'Romain Graux',
       description: 'Personal website and blog about AI, Machine Learning, and Software Engineering',
     });
-    return new Response(png, {
+    return new Response(new Uint8Array(png), {
       headers: {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=0, s-maxage=86400, must-revalidate',
