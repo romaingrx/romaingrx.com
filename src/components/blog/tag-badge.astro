@@ -14,7 +14,7 @@ const { tag, isActive = false, basePath = routes.blogs } = Astro.props;
 
 <a href={isActive ? `${basePath}` : `${basePath}/tag/${tag}`}>
   <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
-    <Icon name="lucide:tag" class="h-3 w-3" />
+    <Icon name="lucide:tag" class="size-3" />
     <span>{tag}</span>
   </Badge>
 </a>

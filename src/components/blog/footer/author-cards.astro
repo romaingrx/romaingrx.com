@@ -23,12 +23,12 @@ const { authors } = Astro.props;
               alt={author.data.name}
               width={56}
               height={56}
-              class="rounded-lg ring-2 ring-border"
+              class="ring-border rounded-lg ring-2"
             />
             <div>
               <h3 class="text-lg font-semibold">{author.data.name}</h3>
               {author.data.title && (
-                <p class="text-sm text-muted-foreground">{author.data.title}</p>
+                <p class="text-muted-foreground text-sm">{author.data.title}</p>
               )}
             </div>
           </div>
@@ -40,9 +40,9 @@ const { authors } = Astro.props;
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-muted-foreground transition-colors hover:text-foreground"
+                class="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Icon name={platforms_info[platform as Platform].icon_name} class="h-5 w-5" />
+                <Icon name={platforms_info[platform as Platform].icon_name} class="size-5" />
                 <span class="sr-only">
                   {author.data.name} on {platform}
                 </span>

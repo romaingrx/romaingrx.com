@@ -45,7 +45,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         {
           resources.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-sm font-medium text-muted-foreground">Resources</h3>
+              <h3 class="text-muted-foreground text-sm font-medium">Resources</h3>
               <ResourceBadges resources={post.data.resources} />
             </div>
           )
@@ -53,7 +53,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         {
           tags.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-sm font-medium text-muted-foreground">Tags</h3>
+              <h3 class="text-muted-foreground text-sm font-medium">Tags</h3>
               <div class="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <TagBadge tag={tag} />
@@ -65,7 +65,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         {
           categories.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-sm font-medium text-muted-foreground">Categories</h3>
+              <h3 class="text-muted-foreground text-sm font-medium">Categories</h3>
               <div class="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <CategoryBadge category={category} />
@@ -79,8 +79,8 @@ const hasRelatedContent = related_posts || tags.length > 0;
       <!-- Update Information -->
       {
         updated_date && (
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <Icon icon="mdi:calendar-clock" className="h-4 w-4" />
+          <div class="text-muted-foreground flex items-center gap-2 text-sm">
+            <Icon icon="mdi:calendar-clock" className="size-4" />
             <span>Last updated on {formatDate(updated_date)}</span>
           </div>
         )

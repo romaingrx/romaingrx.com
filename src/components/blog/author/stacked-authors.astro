@@ -24,7 +24,7 @@ if (!authors.length) return null;
           <div class="flex items-center justify-center gap-2">
             <div
               class={cn(
-                'relative overflow-hidden rounded-full border-background',
+                'border-background relative overflow-hidden rounded-full',
                 'flex items-center justify-center transition-all duration-200 hover:z-10'
               )}
               style={{
@@ -42,7 +42,7 @@ if (!authors.length) return null;
             {authors.length === 1 && show_name && (
               <div class="flex flex-col items-start justify-start">
                 <span class="text-sm font-semibold">{authors[0]?.data?.name}</span>
-                <span class="text-sm text-muted-foreground">{authors[0]?.data?.title}</span>
+                <span class="text-muted-foreground text-sm">{authors[0]?.data?.title}</span>
               </div>
             )}
           </div>
@@ -54,7 +54,7 @@ if (!authors.length) return null;
   <div class="ml-3 hidden">
     {
       authors.length > 1 && (
-        <span class="text-sm text-muted-foreground">{authors.length} authors</span>
+        <span class="text-muted-foreground text-sm">{authors.length} authors</span>
       )
     }
   </div>

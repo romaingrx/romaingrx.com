@@ -1,25 +1,27 @@
+@reference "./globals.css";
+
 /* Citation and Bibliography Styling */
 
 /* Inline citation styling */
 .citation-inline {
-	@apply font-medium transition-all duration-200 text-primary/80 hover:text-primary;
+  @apply text-primary/80 hover:text-primary font-medium transition-all duration-200;
 }
 
 /* Bibliography section styling */
 .references-section {
-	@apply mt-16 relative;
+  @apply relative mt-16;
 }
 
 .references-section::before {
-	@apply absolute -top-8 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
-	content: "";
+  @apply via-border absolute -top-8 left-0 h-px w-full bg-gradient-to-r from-transparent to-transparent;
+  content: '';
 }
 
 .references-section h1,
 .references-section h2 {
-	@apply text-3xl font-bold text-foreground mb-8 tracking-tight;
-	@apply relative after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-accent after:rounded-full;
-	@apply pb-3;
+  @apply text-foreground mb-8 text-3xl font-bold tracking-tight;
+  @apply after:bg-accent relative after:absolute after:bottom-0 after:left-0 after:h-1 after:w-12 after:rounded-full;
+  @apply pb-3;
 }
 
 /* Auto-generated references heading */
@@ -27,20 +29,20 @@
 
 /* CSL bibliography styling */
 .csl-bib-body {
-	@apply space-y-0 mt-8;
-	counter-reset: citation-counter;
+  @apply mt-8 space-y-0;
+  counter-reset: citation-counter;
 }
 
 .csl-entry {
-	@apply text-sm leading-relaxed text-foreground;
-	@apply py-3 px-4 border-l-2 border-l-border/30;
-	@apply transition-all duration-200 ease-out;
-	@apply relative pl-12;
-	counter-increment: citation-counter;
+  @apply text-foreground text-sm leading-relaxed;
+  @apply border-l-border/30 border-l-2 px-4 py-3;
+  @apply transition-all duration-200 ease-out;
+  @apply relative pl-12;
+  counter-increment: citation-counter;
 }
 
 /* Numbering for bibliography entries with more space */
 .csl-entry::before {
-	content: counter(citation-counter) ".";
-	@apply absolute left-4 top-4 text-xs font-bold text-primary; /* Moved further right */
+  content: counter(citation-counter) '.';
+  @apply text-primary absolute top-4 left-4 text-xs font-bold; /* Moved further right */
 }

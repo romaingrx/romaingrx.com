@@ -56,8 +56,8 @@ const showRelated = relatedPosts.length > 0;
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {previousPost && (
         <div>
-          <div class="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-            <Icon icon="mdi:arrow-left" className="h-4 w-4" />
+          <div class="text-muted-foreground mb-2 flex items-center gap-2 text-sm">
+            <Icon icon="mdi:arrow-left" className="size-4" />
             <span>Previous Post</span>
           </div>
           <BlogCard post={previousPost} size="sm" />
@@ -65,9 +65,9 @@ const showRelated = relatedPosts.length > 0;
       )}
       {nextPost && (
         <div>
-          <div class="mb-2 flex items-center justify-end gap-2 text-sm text-muted-foreground">
+          <div class="text-muted-foreground mb-2 flex items-center justify-end gap-2 text-sm">
             <span>Next Post</span>
-            <Icon icon="mdi:arrow-right" className="h-4 w-4" />
+            <Icon icon="mdi:arrow-right" className="size-4" />
           </div>
           <BlogCard post={nextPost} size="sm" />
         </div>

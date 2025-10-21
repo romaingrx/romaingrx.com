@@ -35,7 +35,7 @@ export default function Examples({ examples }: ExamplesProps) {
               key={index}
               onClick={() => api?.scrollTo(index)}
               className={clsx(
-                'h-2 w-2 rounded-full',
+                'size-2 rounded-full',
                 index === currentSlide ? 'bg-primary' : 'bg-gray-300'
               )}
             />

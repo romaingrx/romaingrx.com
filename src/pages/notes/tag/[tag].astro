@@ -32,7 +32,7 @@ const description = `Collection of notes tagged with "${tag}".`;
         <h1 class="text-4xl font-bold tracking-tight">
           Notes tagged "{tag}"
         </h1>
-        <p class="text-xl text-muted-foreground">
+        <p class="text-muted-foreground text-xl">
           {description}
         </p>
       </div>
@@ -41,10 +41,10 @@ const description = `Collection of notes tagged with "${tag}".`;
         notes.length > 0 ? (
           <ul class="space-y-2">
             {notes.map((note) => (
-              <li class="group rounded-lg border bg-card transition-colors hover:bg-accent/40">
+              <li class="group bg-card hover:bg-accent/40 rounded-lg border transition-colors">
                 <NoteHoverCard note={note} client:load>
                   <a href={routes.note(note)} class="flex items-center justify-between px-4 py-3">
-                    <span class="font-medium transition-colors group-hover:text-primary">
+                    <span class="group-hover:text-primary font-medium transition-colors">
                       {note.data.title}
                     </span>
                     <Time
@@ -57,7 +57,7 @@ const description = `Collection of notes tagged with "${tag}".`;
             ))}
           </ul>
         ) : (
-          <p class="text-center text-muted-foreground">No notes found with this tag.</p>
+          <p class="text-muted-foreground text-center">No notes found with this tag.</p>
         )
       }
     </div>

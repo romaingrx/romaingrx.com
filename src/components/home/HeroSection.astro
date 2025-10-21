@@ -4,7 +4,7 @@ import { Ripple } from '../magicui/ripple';
 ---
 
 <section class="relative h-[90vh] w-full overflow-hidden">
-  <div class="container relative mx-auto flex h-full flex-col items-center justify-center">
+  <div class="relative container mx-auto flex h-full flex-col items-center justify-center">
     <div
       class="animate-fade-up space-y-4 text-center opacity-0"
       style="animation-delay: 0.2s; animation-fill-mode: forwards;"
@@ -12,7 +12,7 @@ import { Ripple } from '../magicui/ripple';
       <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
         Hi, I'm Romain
       </h1>
-      <p class="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+      <p class="text-muted-foreground mx-auto max-w-[700px] md:text-xl">
         I'm a machine learning engineer and software engineer. I write about AI safety, machine
         learning, and computers in general.
       </p>
@@ -32,7 +32,7 @@ import { Ripple } from '../magicui/ripple';
       style="animation-delay: 0.6s; animation-fill-mode: forwards;"
     >
       <button
-        class="flex items-center justify-center rounded-full p-2 transition-colors hover:bg-muted"
+        class="hover:bg-muted flex items-center justify-center rounded-full p-2 transition-colors"
         aria-label="Scroll to content"
         onclick="document.getElementById('content').scrollIntoView({ behavior: 'smooth' })"
       >
@@ -46,7 +46,7 @@ import { Ripple } from '../magicui/ripple';
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="h-6 w-6 animate-bounce"
+          class="size-6 animate-bounce"
         >
           <path d="M12 5v14"></path>
           <path d="m19 12-7 7-7-7"></path>

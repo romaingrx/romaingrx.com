@@ -84,7 +84,7 @@ const { note, layout = 'default', size = 'default', className } = Astro.props;
         <div class="space-y-2">
           <CardTitle>
             <h2
-              class="line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300 group-hover/card:text-primary"
+              class="group-hover/card:text-primary line-clamp-2 text-lg font-semibold tracking-tight transition-colors duration-300"
               transition:name={`${note.id}-title`}
             >
               {note.data.title}
@@ -109,13 +109,13 @@ const { note, layout = 'default', size = 'default', className } = Astro.props;
             show_name={false}
             transition:name={`${note.id}-authors`}
           />
-          <span class="text-sm text-muted-foreground" transition:name={`${note.id}-reading-time`}>
+          <span class="text-muted-foreground text-sm" transition:name={`${note.id}-reading-time`}>
             {note.readingTime}
           </span>
         </div>
         <Time
           date={note.data.published_date}
-          className="ml-auto text-sm text-muted-foreground"
+          className="text-muted-foreground ml-auto text-sm"
           transition:name={`${note.id}-published-date`}
         />
       </div>

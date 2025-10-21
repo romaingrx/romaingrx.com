@@ -38,7 +38,7 @@ function getDepthVariant({ heading: { depth } }: { heading: Heading }): Depth {
 }
 ---
 
-<li class="my-1 text-sm [&.active>div:first-child]:bg-foreground">
+<li class="[&.active>div:first-child]:bg-foreground my-1 text-sm">
   <div
     class={cn(
       'my-2 h-0.5 rounded-md bg-muted group-hover/toc:hidden',
@@ -58,7 +58,7 @@ function getDepthVariant({ heading: { depth } }: { heading: Heading }): Depth {
   </a>
   {
     heading.subheadings.length > 0 && (
-      <div class="my-[0.1rem] border-l-0 border-border group-hover/toc:border-l">
+      <div class="border-border my-[0.1rem] border-l-0 group-hover/toc:border-l">
         <ul class="ml-2 group-hover/toc:ml-4">
           {heading.subheadings.map((subheading) => (
             <Astro.self heading={subheading} />

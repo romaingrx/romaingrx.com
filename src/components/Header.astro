@@ -23,7 +23,7 @@ const isActive = (href: string) => {
 ---
 
 <header
-  class="sticky top-0 z-50 w-full border-b border-transparent bg-background/95 backdrop-blur-sm transition-all duration-300 ease-in-out"
+  class="bg-background/95 sticky top-0 z-50 w-full border-b border-transparent backdrop-blur-sm transition-all duration-300 ease-in-out"
   id="header"
 >
   <nav
@@ -60,7 +60,7 @@ const isActive = (href: string) => {
             {isActive(item.href) && (
               <div
                 transition:name="active-indicator"
-                class="absolute bottom-0 left-1/2 h-px w-6 -translate-x-1/2 bg-foreground transition-all duration-200"
+                class="bg-foreground absolute bottom-0 left-1/2 h-px w-6 -translate-x-1/2 transition-all duration-200"
               />
             )}
           </a>

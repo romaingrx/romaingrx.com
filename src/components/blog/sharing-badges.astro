@@ -81,10 +81,10 @@ ${post.data.tags.map((t) => `#${t}`).join(' ')}`,
             href={anchor_url}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-muted-foreground transition-colors hover:text-foreground"
+            class="text-muted-foreground hover:text-foreground transition-colors"
             aria-label={props.title}
           >
-            <Icon name={platform.icon_name} class="h-5 w-5" />
+            <Icon name={platform.icon_name} class="size-5" />
             <span class="sr-only">{props.title}</span>
           </a>
           <div slot="content">{props.title}</div>

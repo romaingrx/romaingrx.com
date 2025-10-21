@@ -20,32 +20,32 @@ const categories = {
   skills: {
     name: 'Skills',
     icon: TrainIcon,
-    backgroundColor: 'hsl(var(--chart-1))',
-    textColor: 'hsl(var(--chart-1-foreground))',
+    backgroundColor: 'var(--chart-1)',
+    textColor: 'var(--chart-1-foreground)',
   },
   brain: {
     name: 'Brain clarity',
     icon: BrainIcon,
-    backgroundColor: 'hsl(var(--chart-2))',
-    textColor: 'hsl(var(--chart-2-foreground))',
+    backgroundColor: 'var(--chart-2)',
+    textColor: 'var(--chart-2-foreground)',
   },
   health: {
     name: 'Health',
     icon: HeartIcon,
-    backgroundColor: 'hsl(var(--chart-3))',
-    textColor: 'hsl(var(--chart-3-foreground))',
+    backgroundColor: 'var(--chart-3))',
+    textColor: 'var(--chart-3-foreground))',
   },
   time: {
     name: 'Time management',
     icon: ClockIcon,
-    backgroundColor: 'hsl(var(--chart-4))',
-    textColor: 'hsl(var(--chart-4-foreground))',
+    backgroundColor: 'var(--chart-4))',
+    textColor: 'var(--chart-4-foreground))',
   },
   social: {
     name: 'Social',
     icon: NetworkIcon,
-    backgroundColor: 'hsl(var(--chart-5))',
-    textColor: 'hsl(var(--chart-5-foreground))',
+    backgroundColor: 'var(--chart-5))',
+    textColor: 'var(--chart-5-foreground))',
   },
 } as const satisfies Record<string, CategoryConfig>;
 const categoriesKeys = Object.keys(categories);
@@ -70,6 +70,6 @@ const { icon: Icon, backgroundColor, textColor } = categories[category];
   className="flex items-center gap-1 text-xs"
   client:load
 >
-  <Icon className="h-4 w-4" />
+  <Icon className="size-4" />
   <span class="text-xs font-medium">{categories[category].name}</span>
 </Badge>

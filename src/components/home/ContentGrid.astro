@@ -20,7 +20,7 @@ const { posts = [], notes = [], className = '' } = Astro.props;
     posts.length > 0 && (
       <div class="relative col-span-full md:col-span-2 lg:col-span-2">
         <BlogCard post={posts[0]!} className="h-full" layout="horizontal" size="lg" />
-        <div class="absolute right-0 top-0 z-20 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+        <div class="bg-primary/90 text-primary-foreground absolute top-0 right-0 z-20 rounded-tr-lg rounded-bl-lg px-3 py-1 text-xs font-medium tracking-wider uppercase shadow-sm">
           blog
         </div>
       </div>
@@ -33,21 +33,21 @@ const { posts = [], notes = [], className = '' } = Astro.props;
       <div class="relative col-span-full md:col-span-1 lg:col-span-1">
         <a
           href={routes.note({ slug: notes[0]!.slug })}
-          class="group flex h-full min-h-[180px] flex-col justify-between rounded-lg border border-border/40 bg-card p-4 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
+          class="group border-border/40 bg-card flex h-full min-h-[180px] flex-col justify-between rounded-lg border p-4 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
         >
           <div class="flex items-center justify-between">
             <Time date={notes[0]!.data.published_date} className="text-xs text-muted-foreground" />
           </div>
           <div class="transition duration-200 group-hover:translate-x-2">
-            <h3 class="mb-2 line-clamp-2 font-medium tracking-tight text-foreground">
+            <h3 class="text-foreground mb-2 line-clamp-2 font-medium tracking-tight">
               {notes[0]!.data.title}
             </h3>
             {notes[0]!.data.description && (
-              <p class="line-clamp-3 text-sm text-muted-foreground">{notes[0]!.data.description}</p>
+              <p class="text-muted-foreground line-clamp-3 text-sm">{notes[0]!.data.description}</p>
             )}
           </div>
         </a>
-        <div class="absolute right-0 top-0 z-20 rounded-bl-lg rounded-tr-lg bg-secondary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground shadow-sm">
+        <div class="bg-secondary/90 text-secondary-foreground absolute top-0 right-0 z-20 rounded-tr-lg rounded-bl-lg px-3 py-1 text-xs font-medium tracking-wider uppercase shadow-sm">
           note
         </div>
       </div>
@@ -59,7 +59,7 @@ const { posts = [], notes = [], className = '' } = Astro.props;
     posts.length > 1 && (
       <div class="relative col-span-full md:col-span-1 lg:col-span-1">
         <BlogCard post={posts[1]!} className="h-full" layout="default" size="sm" />
-        <div class="absolute right-0 top-0 z-20 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+        <div class="bg-primary/90 text-primary-foreground absolute top-0 right-0 z-20 rounded-tr-lg rounded-bl-lg px-3 py-1 text-xs font-medium tracking-wider uppercase shadow-sm">
           blog
         </div>
       </div>
@@ -71,7 +71,7 @@ const { posts = [], notes = [], className = '' } = Astro.props;
     posts.length > 2 && (
       <div class="relative col-span-full md:col-span-1 lg:col-span-1">
         <BlogCard post={posts[2]!} className="h-full" layout="default" size="sm" />
-        <div class="absolute right-0 top-0 z-20 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+        <div class="bg-primary/90 text-primary-foreground absolute top-0 right-0 z-20 rounded-tr-lg rounded-bl-lg px-3 py-1 text-xs font-medium tracking-wider uppercase shadow-sm">
           blog
         </div>
       </div>
@@ -84,21 +84,21 @@ const { posts = [], notes = [], className = '' } = Astro.props;
       <div class="relative col-span-full md:col-span-1 lg:col-span-1">
         <a
           href={routes.note({ slug: notes[1]!.slug })}
-          class="group flex h-full min-h-[180px] flex-col justify-between rounded-lg border border-border/40 bg-card p-4 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
+          class="group border-border/40 bg-card flex h-full min-h-[180px] flex-col justify-between rounded-lg border p-4 shadow-sm transition duration-200 hover:shadow-md dark:border-white/[0.2]"
         >
           <div class="flex items-center justify-between">
             <Time date={notes[1].data.published_date} className="text-xs text-muted-foreground" />
           </div>
           <div class="transition duration-200 group-hover:translate-x-2">
-            <h3 class="mb-2 line-clamp-2 font-medium tracking-tight text-foreground">
+            <h3 class="text-foreground mb-2 line-clamp-2 font-medium tracking-tight">
               {notes[1].data.title}
             </h3>
             {notes[1].data.description && (
-              <p class="line-clamp-3 text-sm text-muted-foreground">{notes[1]!.data.description}</p>
+              <p class="text-muted-foreground line-clamp-3 text-sm">{notes[1]!.data.description}</p>
             )}
           </div>
         </a>
-        <div class="absolute right-0 top-0 z-20 rounded-bl-lg rounded-tr-lg bg-secondary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary-foreground shadow-sm">
+        <div class="bg-secondary/90 text-secondary-foreground absolute top-0 right-0 z-20 rounded-tr-lg rounded-bl-lg px-3 py-1 text-xs font-medium tracking-wider uppercase shadow-sm">
           note
         </div>
       </div>
@@ -110,7 +110,7 @@ const { posts = [], notes = [], className = '' } = Astro.props;
     posts.length > 3 && (
       <div class="relative col-span-full md:col-span-2 lg:col-span-2">
         <BlogCard post={posts[3]!} className="h-full" layout="horizontal" size="lg" />
-        <div class="absolute right-0 top-0 z-20 rounded-bl-lg rounded-tr-lg bg-primary/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary-foreground shadow-sm">
+        <div class="bg-primary/90 text-primary-foreground absolute top-0 right-0 z-20 rounded-tr-lg rounded-bl-lg px-3 py-1 text-xs font-medium tracking-wider uppercase shadow-sm">
           blog
         </div>
       </div>

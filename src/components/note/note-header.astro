@@ -14,18 +14,18 @@ const { note, class: className = '' } = Astro.props;
 
 <header class:list={['py-8', className]}>
   <Shell type="article">
-    <div class="rounded-xl border bg-card/40 p-6">
+    <div class="bg-card/40 rounded-xl border p-6">
       <div class="space-y-2">
         <div class="space-y-4">
           <h1 class="text-4xl font-bold tracking-tight">{note.data.title}</h1>
           {
             note.data.description && (
-              <p class="text-xl text-muted-foreground">{note.data.description}</p>
+              <p class="text-muted-foreground text-xl">{note.data.description}</p>
             )
           }
         </div>
 
-        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+        <div class="text-muted-foreground flex items-center gap-4 text-sm">
           <div class="flex items-center gap-2">
             <Time date={note.data.published_date} />
             <span>•</span>

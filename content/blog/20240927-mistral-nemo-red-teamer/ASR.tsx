@@ -9,10 +9,10 @@ import {
 
 const chartConfig = {
   asr: {
-    color: 'hsl(var(--chart-1))',
+    color: 'var(--chart-1))',
   },
   label: {
-    color: 'hsl(var(--chart-1-foreground))',
+    color: 'var(--chart-1-foreground))',
   },
 } satisfies ChartConfig;
 

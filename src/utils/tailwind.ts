@@ -1,8 +1,35 @@
 import React, { Children, cloneElement, isValidElement } from 'react';
-import { tailwindToCSS, type TailwindConfig } from 'tw-to-css';
+import { tailwindToCSS } from 'tw-to-css';
 
 const { twj } = tailwindToCSS({
-  config: (await import('../../tailwind.config.mjs')).default as TailwindConfig,
+  config: {
+    theme: {
+      extend: {
+        colors: {},
+        borderRadius: {},
+        backgroundImage: {},
+        keyframes: {
+          'pulse-slow': {
+            '0%, 100%': { opacity: '1' },
+            '50%': { opacity: '0.5' },
+          },
+          'up-down': {
+            '0%, 100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(-10px)' },
+          },
+          ripple: {
+            '0%, 100%': { transform: 'translate(-50%, -50%) scale(1)' },
+            '50%': { transform: 'translate(-50%, -50%) scale(0.9)' },
+          },
+        },
+        animation: {
+          'pulse-slow': 'pulse-slow 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+          'up-down': 'up-down 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+          ripple: 'ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite',
+        },
+      },
+    },
+  },
 });
 
 export function inlineTailwind(el: React.JSX.Element): React.JSX.Element {

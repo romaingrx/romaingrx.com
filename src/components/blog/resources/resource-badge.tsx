@@ -46,7 +46,7 @@ export function ResourceBadge({
       <HoverCardTrigger asChild>
         <a href={value} target="_blank" rel="noopener noreferrer" className="inline-block">
           <Badge variant="outline" className={cn(badgeVariants({ type }), className)}>
-            <Icon icon={typeIcons[type]} className="mr-2 h-4 w-4" />
+            <Icon icon={typeIcons[type]} className="mr-2 size-4" />
             {title}
           </Badge>
         </a>

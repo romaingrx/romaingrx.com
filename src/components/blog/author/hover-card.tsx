@@ -32,7 +32,7 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
                   >
                     <Icon
                       icon={platforms_info[platform as Platform].icon_name}
-                      className="w-4 h-4"
+                      className="size-4"
                     />
                   </a>
                 );
@@ -43,7 +43,7 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
             <Image
               src={author.data.image}
               alt={author.data.name}
-              class="h-12 w-12 rounded-lg border object-cover"
+              class="size-12 rounded-lg border object-cover"
             />
           )}
         </div>

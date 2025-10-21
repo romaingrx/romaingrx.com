@@ -12,7 +12,7 @@ export default function Logo({ class: className, with_text = false }: Props) {
         version="1.1"
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
-        className={cn('h-10 w-10 fill-current', className)}
+        className={cn('size-10 fill-current', className)}
         aria-label="Romain Graux Logo"
       >
         <title>Romain Graux Logo</title>

@@ -6,7 +6,7 @@ import { socialLinks } from '@/configs/social';
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="w-full border-t border-accent bg-primary/10 py-6">
+<footer class="border-accent bg-primary/10 w-full border-t py-6">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
       <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 md:order-2">
@@ -14,18 +14,18 @@ const currentYear = new Date().getFullYear();
           socialLinks.map((link) => (
             <a
               href={link.url}
-              class="text-muted-foreground transition-colors hover:text-foreground"
+              class="text-muted-foreground hover:text-foreground transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
               <span class="sr-only">{link.label}</span>
-              <Icon name={platforms_info[link.platform].icon_name} class="h-6 w-6" />
+              <Icon name={platforms_info[link.platform].icon_name} class="size-6" />
             </a>
           ))
         }
       </div>
       <div class="md:order-1">
-        <p class="text-center text-sm leading-5 text-muted-foreground">
+        <p class="text-muted-foreground text-center text-sm leading-5">
           Made with ❤️‍🔥 by romaingrx. &copy; {currentYear}. All rights reserved.
         </p>
       </div>

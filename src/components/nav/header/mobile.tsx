@@ -32,10 +32,10 @@ export function MobileNav({ navigation, currentPath, className }: MobileNavProps
         <Button
           variant="ghost"
           size="sm"
-          className={cn('h-8 w-8 px-0 md:hidden', className)}
+          className={cn('size-8 px-0 md:hidden', className)}
           aria-label="Toggle navigation menu"
         >
-          <Menu className="h-4 w-4" />
+          <Menu className="size-4" />
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-[280px] sm:w-[350px] p-0">
