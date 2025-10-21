@@ -1,7 +1,7 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
 import BlogCard from '@/components/blog/card/index.astro';
-import { getBlogPosts, getPublishedBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
+import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
 
 interface Props {
   post: BlogPostWithAuthors;
@@ -10,7 +10,7 @@ interface Props {
 const { post } = Astro.props;
 
 // Get all blog posts sorted by date
-const allPosts = (await getPublishedBlogPosts()).sort(
+const allPosts = (await getBlogPosts()).sort(
   (a, b) => b.data.published_date.getTime() - a.data.published_date.getTime()
 );
 
@@ -18,7 +18,7 @@ const allPosts = (await getPublishedBlogPosts()).sort(
 const relatedFromData = post.data.related_posts
   ? await Promise.all(
       post.data.related_posts.map(async (ref) => {
-        const posts = await getPublishedBlogPosts();
+        const posts = await getBlogPosts();
         return posts.find((p) => p.id === ref.id);
       })
     ).then((posts) => posts.filter((p): p is BlogPostWithAuthors => p !== undefined))

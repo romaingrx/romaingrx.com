@@ -62,7 +62,7 @@ const { src, alt = 'Image', caption, className, width, height } = Astro.props;
 </div>
 
 <script>
-  function openModal(button: HTMLElement) {
+  function openModal(_button: HTMLElement) {
     const modal = document.getElementById('image-modal') as HTMLElement;
     if (modal) {
       modal.classList.remove('hidden');

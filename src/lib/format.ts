@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow, isThisYear, isToday, isYesterday, parseISO } from 'date-fns';
+import { format, isThisYear, isToday, isYesterday, parseISO } from 'date-fns';
 
 /**
  * Format date for blog cards and posts

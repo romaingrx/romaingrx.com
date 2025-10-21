@@ -4,9 +4,9 @@ import Shell from '@/components/Shell.astro';
 import Time from '@/components/ui/time.astro';
 import { routes } from '@/configs/routes';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPublishedNotes } from '@/lib/collections';
+import { getNotes } from '@/lib/collections';
 
-const notes = await getPublishedNotes();
+const notes = await getNotes();
 const title = 'Notes';
 const description =
   'Collection of notes, thoughts, and documentation on various topics. Notes are usually short thoughts, ideas, tricks, or documentation on a specific topic.';

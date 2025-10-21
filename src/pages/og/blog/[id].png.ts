@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { getPublishedBlogPosts } from '@/lib/collections';
+import { getBlogPosts } from '@/lib/collections';
 import { generateOGImage } from '@/utils/og';
 
 export const GET: APIRoute = async ({ params }) => {
@@ -36,7 +36,7 @@ export const GET: APIRoute = async ({ params }) => {
 };
 
 export async function getStaticPaths() {
-  const posts = await getPublishedBlogPosts();
+  const posts = await getBlogPosts();
   return posts.map((post) => ({
     params: { id: post.id },
     props: { post },

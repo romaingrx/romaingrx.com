@@ -109,18 +109,6 @@ const imageContainerVariants = cva(
   }
 );
 
-const fallbackContainerVariants = cva('relative overflow-hidden flex items-center justify-center', {
-  variants: {
-    layout: {
-      default: 'h-[100px] sm:h-[120px] w-full rounded-t-lg',
-      horizontal: 'h-full w-full rounded-l-lg sm:rounded-l-lg rounded-t-lg sm:rounded-tr-none',
-    },
-  },
-  defaultVariants: {
-    layout: 'default',
-  },
-});
-
 type CardVariants = VariantProps<typeof cardVariants>;
 
 interface Props extends CardVariants {

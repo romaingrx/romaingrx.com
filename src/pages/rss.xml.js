@@ -1,13 +1,13 @@
 import rss from '@astrojs/rss';
 import { routes } from '@/configs/routes';
 import { site } from '@/configs/site';
-import { getPublishedBlogPosts, getPublishedNotes } from '@/lib/collections';
+import { getBlogPosts, getNotes } from '@/lib/collections';
 import { getAbsoluteUrl } from '@/lib/utils';
 
 export async function GET(context) {
   // Get published blog posts and notes
-  const publishedPosts = await getPublishedBlogPosts();
-  const publishedNotes = await getPublishedNotes();
+  const publishedPosts = await getBlogPosts();
+  const publishedNotes = await getNotes();
 
   // Get the site URL from context
   const siteUrl = new URL(context.site);

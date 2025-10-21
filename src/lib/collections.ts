@@ -57,12 +57,6 @@ export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
   );
 }
 
-/** @deprecated Use `getBlogPosts` and filter by status instead. */
-export async function getPublishedBlogPosts(): Promise<BlogPostWithAuthors[]> {
-  const posts = await getBlogPosts();
-  return posts.sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime());
-}
-
 export async function getAuthors(): Promise<Author[]> {
   return await astroGetCollection('author');
 }
@@ -101,10 +95,4 @@ export async function getNotes(): Promise<NoteWithAuthors[]> {
         };
       })
   );
-}
-
-/** @deprecated Use `getNotes` and filter by status instead. */
-export async function getPublishedNotes(): Promise<NoteWithAuthors[]> {
-  const notes = await getNotes();
-  return notes.sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime());
 }

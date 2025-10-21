@@ -5,16 +5,16 @@ import HeroSection from '@/components/home/HeroSection.astro';
 import Shell from '@/components/Shell.astro';
 import { routes } from '@/configs/routes';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPublishedBlogPosts, getPublishedNotes } from '@/lib/collections';
+import { getBlogPosts, getNotes } from '@/lib/collections';
 
 // export const prerender = true;
 
 // Get the recent published content
-const posts = (await getPublishedBlogPosts())
+const posts = (await getBlogPosts())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 4);
 
-const notes = (await getPublishedNotes())
+const notes = (await getNotes())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
   .slice(0, 3);
 
