@@ -9,6 +9,7 @@ export const platforms_enum = z.enum([
   'huggingface',
   'arxiv',
   'zenodo',
+  'hackernews',
 ]);
 export type Platform = z.infer<typeof platforms_enum>;
 
@@ -45,5 +46,9 @@ export const platforms_info: Record<Platform, PlatformInfo> = {
   zenodo: {
     icon_name: 'mdi:zenodo',
     base_url: 'https://zenodo.org',
+  },
+  hackernews: {
+    icon_name: 'simple-icons:ycombinator',
+    base_url: 'http://news.ycombinator.com',
   },
 } as const;

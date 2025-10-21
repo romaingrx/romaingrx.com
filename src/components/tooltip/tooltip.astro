@@ -1,0 +1,19 @@
+---
+import { cn } from '@/lib/utils';
+import { tooltipVariants, type TooltipVariants } from './tooltip-variants';
+
+interface Props extends TooltipVariants {
+  class?: string;
+}
+
+const { side = 'top', intent = 'default', class: className = '' } = Astro.props;
+
+const tooltipClass = cn(tooltipVariants({ side, intent }), className);
+---
+
+<div class="group relative inline-block">
+  <slot name="trigger" />
+  <div class={tooltipClass}>
+    <slot name="content" />
+  </div>
+</div>

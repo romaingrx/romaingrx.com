@@ -15,7 +15,8 @@ export const VALID_PROVIDER_TYPES: Record<ResourceProvider, ResourceType[]> = {
   linkedin: [],
   huggingface: ['model', 'dataset', 'paper'],
   arxiv: ['paper'],
-  zenodo: ['code', 'dataset', 'paper'],
+  zenodo: ['code', 'model', 'dataset', 'paper'],
+  hackernews: [],
 };
 
 export const resource_schema = z

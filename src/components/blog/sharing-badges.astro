@@ -1,6 +1,7 @@
 ---
 import type { Params } from 'astro';
 import { Icon } from 'astro-icon/components';
+import Tooltip from '@/components/tooltip/tooltip.astro';
 import { platforms_info, type Platform } from '@/configs/platforms';
 import { getAuthorsWithSocialLinks } from '@/lib/authors';
 import type { BlogPostWithAuthors } from '@/lib/collections';
@@ -48,6 +49,14 @@ const links = {
       hashtags: post.data.tags.join(','),
     },
   },
+  hackernews: {
+    title: `Share ${post.data.title} on HackerNews`,
+    pathname: '/submitlink',
+    params: {
+      u: post.url,
+      t: post.data.title,
+    },
+  },
   linkedin: {
     title: `Share ${post.data.title} on LinkedIn`,
     pathname: '/sharing/share-offsite',
@@ -66,16 +75,20 @@ ${post.data.tags.map((t) => `#${t}`).join(' ')}`,
       const platform = platforms_info[platform_name as Platform];
       const anchor_url = getAbsoluteUrl(props.pathname, new URL(platform.base_url), props.params);
       return (
-        <a
-          href={anchor_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-muted-foreground transition-colors hover:text-foreground"
-          aria-label={props.title}
-        >
-          <Icon name={platform.icon_name} class="h-5 w-5" />
-          <span class="sr-only">{props.title}</span>
-        </a>
+        <Tooltip side="bottom" intent="default">
+          <a
+            slot="trigger"
+            href={anchor_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted-foreground transition-colors hover:text-foreground"
+            aria-label={props.title}
+          >
+            <Icon name={platform.icon_name} class="h-5 w-5" />
+            <span class="sr-only">{props.title}</span>
+          </a>
+          <div slot="content">{props.title}</div>
+        </Tooltip>
       );
     })
   }
