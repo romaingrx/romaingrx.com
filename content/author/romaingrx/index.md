@@ -1,7 +1,7 @@
 ---
 name: 'Romain Graux'
 title: 'ML Engineer'
-image: '/images/authors/romaingrx.jpeg'
+image: './romaingrx.jpeg'
 socialLinks:
   github:
     url: 'https://go.romaingrx.com/github'

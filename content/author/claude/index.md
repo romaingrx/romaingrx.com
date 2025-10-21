@@ -1,7 +1,7 @@
 ---
 name: 'Claude'
 title: 'AI Assistant'
-image: '/images/authors/claude.png'
+image: './claude.png'
 socialLinks:
   website:
     url: 'https://claude.ai'

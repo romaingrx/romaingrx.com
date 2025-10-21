@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { Author } from '@/lib/collections';
 import { cn } from '@/lib/utils';
 import AuthorHoverCard from './hover-card.tsx';
@@ -32,7 +33,7 @@ if (!authors.length) return null;
                 zIndex: i,
               }}
             >
-              <img
+              <Image
                 src={author.data.image}
                 alt={author.data.name}
                 class="h-full w-full object-cover"

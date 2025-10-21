@@ -5,21 +5,22 @@ import { resource_schema } from './configs/resources';
 
 // Define the author collection schema
 const author = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/author' }),
-  schema: z
-    .object({
-      name: z.string(),
-      title: z.string().optional(),
-      image: z.string(),
-      socialLinks: z.record(
-        platforms_enum,
-        z.object({
-          url: z.string().url(),
-          handle: z.string().optional(),
-        })
-      ),
-    })
-    .strict(),
+  loader: glob({ pattern: '**/*/*.{md,mdx}', base: './content/author' }),
+  schema: ({ image }) =>
+    z
+      .object({
+        name: z.string(),
+        title: z.string().optional(),
+        image: image(),
+        socialLinks: z.record(
+          platforms_enum,
+          z.object({
+            url: z.string().url(),
+            handle: z.string().optional(),
+          })
+        ),
+      })
+      .strict(),
 });
 
 // Define the blog collection schema

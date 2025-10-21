@@ -1,3 +1,4 @@
+import { Image } from 'astro:assets';
 import React from 'react';
 import { Icon } from '@iconify/react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
@@ -37,10 +38,10 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
             </div>
           </div>
           {with_image && (
-            <img
+            <Image
               src={author.data.image}
               alt={author.data.name}
-              className="h-12 w-12 rounded-lg border object-cover"
+              class="h-12 w-12 rounded-lg border object-cover"
             />
           )}
         </div>
