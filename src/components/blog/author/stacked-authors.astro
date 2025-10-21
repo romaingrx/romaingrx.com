@@ -13,14 +13,12 @@ interface Props {
 const { authors, size = 32, className, show_name = true } = Astro.props;
 
 if (!authors.length) return null;
-
-const reversedAuthors = [...authors].reverse();
 ---
 
 <div class={cn('flex items-center', className)}>
   <div class="flex -space-x-4">
     {
-      reversedAuthors.map((author, i) => (
+      authors.map((author, i) => (
         <AuthorHoverCard author={author} with_image={false} client:visible>
           <div class="flex items-center justify-center gap-2">
             <div
