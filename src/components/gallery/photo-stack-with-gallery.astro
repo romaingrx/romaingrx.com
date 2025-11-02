@@ -1,0 +1,55 @@
+---
+import Dialog from '@/components/lightui/dialog.astro';
+import Gallery from './gallery.astro';
+import PhotoStack from './photostack.astro';
+import type { ImageItem } from './types';
+
+interface Props {
+  id?: string;
+  images: ImageItem[];
+  size?: 'sm' | 'md' | 'lg';
+  startIndex?: number;
+  showCaptions?: boolean;
+  className?: string;
+}
+
+const {
+  id = `gallery-${Math.random().toString(36).substr(2, 9)}`,
+  images,
+  size = 'md',
+  startIndex = 0,
+  showCaptions,
+  className,
+} = Astro.props;
+const DIALOG_ID = `${id}-dialog`;
+---
+
+<!-- Photo Stack that opens the lightbox -->
+<PhotoStack images={images} size={size} onclick={`${id}_open`} />
+
+<!-- Lightbox Gallery using Dialog -->
+<Dialog id={DIALOG_ID} className="[&>article]:h-screen [&>article]:w-screen">
+  <Gallery
+    id={id}
+    images={images}
+    startIndex={startIndex}
+    showCaptions={showCaptions}
+    className="h-full w-full"
+  />
+</Dialog>
+
+<script define:vars={{ id, startIndex, DIALOG_ID }}>
+  // Global function to open gallery
+  window[`${id}_open`] = (index = startIndex) => {
+    const dialog = document.getElementById(DIALOG_ID);
+    if (dialog) {
+      // Set the start index for the gallery
+      const gallery = dialog.querySelector('astro-gallery');
+      if (gallery) {
+        gallery.currentIndex = index;
+        gallery.updateDisplay();
+      }
+      dialog.showModal();
+    }
+  };
+</script>

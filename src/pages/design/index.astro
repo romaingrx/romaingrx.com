@@ -1,0 +1,27 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Alert, Button, Dialog, Loading } from '@/components/lightui';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Section from './section.astro';
+---
+
+<BaseLayout title="Design" description="Design">
+  <Section title="Alert">
+    <Alert icon="lucide:brain" title="My title">
+      <div>YOOOOOOOOOOOO</div>
+    </Alert>
+  </Section>
+
+  <Section title="Button and dialog">
+    <Button type="button" onclick="document.getElementById('my-modal').showModal()" variant="ghost"
+      >Edit Profile</Button
+    >
+    <Dialog id="my-modal" title="My title" description="My description">
+      <div>YOOOOOOOOOOOO</div>
+    </Dialog>
+  </Section>
+
+  <Section title="Loading state">
+    <Loading />
+  </Section>
+</BaseLayout>

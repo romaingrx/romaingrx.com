@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type { ImageItem } from './types';
+
+const MAX_IMAGES_TO_SHOW = 4;
+
+const photoStackVariants = cva('relative cursor-pointer select-none group', {
+  variants: {
+    size: {
+      sm: 'w-32 h-32',
+      md: 'w-40 h-40',
+      lg: 'w-48 h-48',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+export type PhotoStackSize = NonNullable<VariantProps<typeof photoStackVariants>['size']>;
+
+interface Props {
+  images: ImageItem[];
+  size?: PhotoStackSize;
+  className?: string;
+  onclick?: string;
+}
+
+const { images, size = 'md', className, onclick } = Astro.props;
+
+// Limit to 4 images max for better visual effect
+const displayImages = images.slice(0, MAX_IMAGES_TO_SHOW);
+
+// Generate random rotation and offset for each image
+function getStackStyles(index: number, total: number) {
+  const rotations = [1, 3, 5, 7]; // Predefined rotations for consistency
+  const offsets = [
+    { x: 0, y: 0 }, // Bottom image (no offset)
+    { x: 16, y: -12 }, // Second from bottom
+    { x: -8, y: -24 }, // Third from bottom
+    { x: 24, y: -36 }, // Top image
+  ];
+
+  const rotation = rotations[index] || 0;
+  const offset = offsets[total - 1 - index] || { x: 0, y: 0 };
+  const factor = size === 'sm' ? 0.5 : size === 'md' ? 1 : 1.5;
+
+  return {
+    transform: `rotate(${rotation}deg) translate(${offset.x * factor}px, ${offset.y * factor}px)`,
+    zIndex: total - index,
+  };
+}
+---
+
+<div
+  class:list={[photoStackVariants({ size, className })]}
+  onclick={onclick ? `if(window['${onclick}']){window['${onclick}'](0);}` : undefined}
+  role={onclick ? 'button' : undefined}
+  tabindex={onclick ? 0 : undefined}
+  aria-label={onclick ? 'View photo gallery' : undefined}
+>
+  {
+    displayImages.map((image, index) => {
+      const stackStyles = getStackStyles(index, displayImages.length);
+      const isTopImage = index === displayImages.length - 1;
+
+      return (
+        <div
+          class="absolute inset-0"
+          style={{
+            transform: stackStyles.transform,
+            zIndex: stackStyles.zIndex,
+          }}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt}
+            class="shadow-3xl relative h-full w-full overflow-hidden rounded-md object-cover"
+            loading="lazy"
+          />
+        </div>
+      );
+    })
+  }
+
+  <div class="absolute inset-0"></div>
+</div>
+
+<style>
+  /* Additional hover effects for the stack */
+  .group:hover {
+    transform: translateY(-4px);
+    transition: transform 300ms ease-out;
+  }
+</style>

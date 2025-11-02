@@ -1,0 +1,287 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import { Button, Loading } from '@/components/lightui';
+import { cn } from '@/lib/utils';
+import type { ImageItem } from './types';
+
+interface Props {
+  id: string;
+  images: ImageItem[];
+  startIndex?: number;
+  showCaptions?: boolean;
+  className?: string;
+}
+
+const { id, images, startIndex = 0, showCaptions = false, className } = Astro.props;
+---
+
+<!-- Gallery custom element -->
+<astro-gallery
+  data-id={id}
+  data-start-index={startIndex}
+  data-show-captions={showCaptions}
+  class={cn('gallery relative flex h-[1024px] items-center justify-center', className)}
+>
+  <!-- Loading indicator -->
+  <div class="gallery-loading absolute inset-0 z-50 flex items-center justify-center">
+    <Loading />
+  </div>
+
+  <!-- Main content container -->
+  <div
+    class="gallery-content relative flex h-full w-full flex-col items-center justify-center px-4 py-6"
+  >
+    <!-- Navigation buttons -->
+    <Button
+      variant="ghost"
+      size="icon"
+      className="gallery-prev text-foreground hover:bg-accent absolute top-1/2 left-4 z-10 -translate-y-1/2 disabled:opacity-30"
+      aria-label="Previous image"
+    >
+      <Icon name="lucide:chevron-left" class="size-8" />
+    </Button>
+
+    <Button
+      variant="ghost"
+      size="icon"
+      className="gallery-next text-foreground hover:bg-accent absolute top-1/2 right-4 z-10 -translate-y-1/2 disabled:opacity-30"
+      aria-label="Next image"
+    >
+      <Icon name="lucide:chevron-right" class="size-8" />
+    </Button>
+
+    <!-- Image container -->
+    <div
+      class="gallery-images relative flex w-full max-w-[85vw] flex-1 items-center justify-center pb-20"
+    >
+      {
+        images.map((image, index) => (
+          <div
+            class:list={[
+              'gallery-image absolute inset-0 flex items-center justify-center transition-opacity duration-300',
+              index === startIndex ? 'opacity-100' : 'pointer-events-none opacity-0',
+            ]}
+            data-index={index}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              class="h-full w-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Caption and Counter Container -->
+    <div class="absolute right-0 bottom-4 left-0 flex flex-col items-center gap-3">
+      <!-- Caption -->
+      {
+        showCaptions && (
+          <div class="gallery-captions relative mx-auto max-w-[85vw] px-4 text-center">
+            {images.map((image, index) => (
+              <p
+                class:list={[
+                  'gallery-caption text-foreground/90 text-sm transition-opacity duration-300',
+                  index === startIndex ? 'opacity-100' : 'pointer-events-none absolute opacity-0',
+                ]}
+                data-index={index}
+              >
+                {image.caption || image.alt}
+              </p>
+            ))}
+          </div>
+        )
+      }
+
+      <!-- Image counter -->
+      <div
+        class="gallery-counter text-foreground rounded-full bg-black/60 px-4 py-2 text-sm font-medium backdrop-blur-sm"
+      >
+        <span>1 / {images.length}</span>
+      </div>
+    </div>
+  </div>
+</astro-gallery>
+
+<script>
+  // Extend window interface for gallery functions
+  declare global {
+    interface Window {
+      [key: `${string}_next`]: () => void;
+      [key: `${string}_prev`]: () => void;
+      [key: `${string}_goTo`]: (index: number) => void;
+      [key: `${string}_open`]: (index?: number) => void;
+    }
+  }
+
+  // Custom element for gallery functionality
+  export class AstroGallery extends HTMLElement {
+    currentIndex: number;
+    images: Element[];
+    showCaptions: boolean;
+    touchStartX: number;
+    touchEndX: number;
+    loading: Element | null;
+    prevBtn: Element | null;
+    nextBtn: Element | null;
+    counter: Element | null;
+    captions: NodeListOf<Element> | null;
+
+    constructor() {
+      super();
+      this.currentIndex = 0;
+      this.images = [];
+      this.showCaptions = true;
+      this.touchStartX = 0;
+      this.touchEndX = 0;
+      this.loading = null;
+      this.prevBtn = null;
+      this.nextBtn = null;
+      this.counter = null;
+      this.captions = null;
+    }
+
+    connectedCallback() {
+      // Get data attributes
+      const id = this.dataset.id;
+      const startIndex = parseInt(this.dataset.startIndex || '0');
+      const showCaptions = this.dataset.showCaptions === 'true';
+
+      this.currentIndex = startIndex;
+      this.showCaptions = showCaptions;
+
+      // Get all images from the DOM
+      const imageElements = this.querySelectorAll('.gallery-image');
+      this.images = Array.from(imageElements);
+
+      // Get other DOM elements within this component
+      this.loading = this.querySelector('.gallery-loading');
+      this.prevBtn = this.querySelector('.gallery-prev');
+      this.nextBtn = this.querySelector('.gallery-next');
+      this.counter = this.querySelector('.gallery-counter span');
+      this.captions = this.querySelectorAll('.gallery-caption');
+
+      this.init();
+    }
+
+    init() {
+      // Bind events
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', () => this.prev());
+      }
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', () => this.next());
+      }
+
+      // Keyboard navigation - make component focusable and handle keyboard events
+      this.setAttribute('tabindex', '0');
+      this.addEventListener('keydown', (e: KeyboardEvent) => {
+        switch (e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            this.prev();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            this.next();
+            break;
+          case 'Escape':
+            e.preventDefault();
+            this.closest('dialog')?.close();
+            break;
+        }
+      });
+
+      // Touch/swipe gestures
+      this.addEventListener('touchstart', (e: TouchEvent) => {
+        this.touchStartX = e.changedTouches[0].screenX;
+      });
+
+      this.addEventListener('touchend', (e: TouchEvent) => {
+        this.touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe();
+      });
+
+      // Make globally available
+      window[`${this.dataset.id}_next`] = () => this.next();
+      window[`${this.dataset.id}_prev`] = () => this.prev();
+      window[`${this.dataset.id}_goTo`] = (index) => this.goTo(index);
+
+      // Hide loading after a brief delay
+      setTimeout(() => {
+        if (this.loading) {
+          // @ts-ignore
+          this.loading.style.display = 'none';
+        }
+      }, 100);
+
+      this.updateDisplay();
+    }
+
+    next() {
+      this.currentIndex = (this.currentIndex + 1) % this.images.length;
+      this.updateDisplay();
+    }
+
+    prev() {
+      this.currentIndex = this.currentIndex === 0 ? this.images.length - 1 : this.currentIndex - 1;
+      this.updateDisplay();
+    }
+
+    goTo(index: number) {
+      this.currentIndex = Math.max(0, Math.min(index, this.images.length - 1));
+      this.updateDisplay();
+    }
+
+    handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = this.touchStartX - this.touchEndX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          this.next(); // Swipe left
+        } else {
+          this.prev(); // Swipe right
+        }
+      }
+    }
+
+    updateDisplay() {
+      // Update image visibility
+      this.images.forEach((imageEl, index) => {
+        const isActive = index === this.currentIndex;
+        imageEl.classList.toggle('opacity-100', isActive);
+        imageEl.classList.toggle('opacity-0', !isActive);
+      });
+
+      // Update captions
+      if (this.showCaptions && this.captions) {
+        this.captions.forEach((captionEl, index) => {
+          const isActive = index === this.currentIndex;
+          captionEl.classList.toggle('opacity-100', isActive);
+          captionEl.classList.toggle('opacity-0', !isActive);
+        });
+      }
+
+      // Update counter
+      if (this.counter) {
+        this.counter.textContent = `${this.currentIndex + 1} / ${this.images.length}`;
+      }
+
+      // Update navigation buttons
+      if (this.prevBtn && this.nextBtn) {
+        const hasMultiple = this.images.length > 1;
+        // @ts-ignore
+        this.prevBtn.disabled = !hasMultiple;
+        // @ts-ignore
+        this.nextBtn.disabled = !hasMultiple;
+      }
+    }
+  }
+
+  // Register the custom element
+  customElements.define('astro-gallery', AstroGallery);
+</script>

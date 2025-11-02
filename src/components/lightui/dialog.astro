@@ -1,0 +1,72 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+import Button from '@/components/lightui/button.astro';
+import { cn } from '@/lib/utils';
+
+interface Props extends HTMLAttributes<'dialog'> {
+  id: string;
+  title?: string;
+  description?: string;
+  className?: string;
+  hideCloseButton?: true;
+  onClose?: (event: Event) => void;
+  onOpen?: (event: Event) => void;
+}
+
+const {
+  id,
+  title,
+  description,
+  className,
+  hideCloseButton = false,
+  onClose,
+  onOpen,
+  ...props
+} = Astro.props;
+---
+
+<dialog
+  id={id}
+  class={cn('dialog relative w-full', className)}
+  aria-labelledby={`${id}-title`}
+  aria-describedby={`${id}-description`}
+  onclick={`
+  if (event.target === this) {
+    ${onClose ? `onClose(event)` : 'this.close()'}
+  }
+  ${props.onclick ? `${props.onclick}` : ''}
+  `}
+  {...props}
+>
+  <article>
+    {
+      (title || description) && (
+        <header>
+          {title && <h2 id={`${id}-title`}>{title}</h2>}
+          {description && <p id={`${id}-description`}>{description}</p>}
+        </header>
+      )
+    }
+
+    <section>
+      <slot />
+    </section>
+
+    <slot name="footer" />
+    {
+      !hideCloseButton && (
+        <Button
+          variant="ghost"
+          type="button"
+          size="icon"
+          aria-label="Close dialog"
+          onclick={`${onClose ? `onClose(event)` : 'this.closest("dialog").close()'}`}
+          className="hover:bg-muted absolute top-4 right-4 rounded-full p-2 transition-colors focus:ring-2 focus:outline-none"
+        >
+          <Icon name="lucide:x" class="size-4" />
+        </Button>
+      )
+    }
+  </article>
+</dialog>

@@ -1,0 +1,16 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title: string;
+  icon: string;
+}
+
+const { icon, title } = Astro.props;
+---
+
+<div class="alert">
+  <Icon name={icon} class={'size-4'} />
+  <h2>{title}</h2>
+  <section><slot /></section>
+</div>
