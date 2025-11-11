@@ -4,11 +4,11 @@ import { Icon } from 'astro-icon/components';
 import Tooltip from '@/components/tooltip/tooltip.astro';
 import { platforms_info, type Platform } from '@/configs/platforms';
 import { getAuthorsWithSocialLinks } from '@/lib/authors';
-import type { BlogPostWithAuthors } from '@/lib/collections';
+import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
 import { getAbsoluteUrl } from '@/lib/utils';
 
 interface Props {
-  post: BlogPostWithAuthors;
+  post: BlogPostWithAuthors | NoteWithAuthors;
 }
 
 const { post } = Astro.props;

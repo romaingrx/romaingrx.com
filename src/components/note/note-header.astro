@@ -1,5 +1,6 @@
 ---
 import Resources from '@/components/blog/resources/index.astro';
+import SharingBadges from '@/components/blog/sharing-badges.astro';
 import Shell from '@/components/Shell.astro';
 import type { NoteWithAuthors } from '@/lib/collections';
 import Time from '../ui/time.astro';
@@ -33,7 +34,22 @@ const { note, class: className = '' } = Astro.props;
           </div>
         </div>
 
-        {note.data.resources && <Resources resources={note.data.resources} />}
+        <div class="flex w-full items-center gap-6">
+          <div class="flex flex-col gap-3 text-start">
+            {
+              note.data.resources && (
+                <>
+                  <span class="text-muted-foreground text-sm font-medium">Resources</span>
+                  <Resources resources={note.data.resources} />
+                </>
+              )
+            }
+          </div>
+          <div class="flex flex-col gap-3 text-start">
+            <span class="text-muted-foreground text-sm font-medium">Share on</span>
+            <SharingBadges post={note} />
+          </div>
+        </div>
       </div>
     </div>
   </Shell>
