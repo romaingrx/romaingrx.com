@@ -20,9 +20,7 @@ export async function getStaticPaths() {
 const { tag } = Astro.props;
 
 // Get all published blog posts
-const allPosts = (await getBlogPosts()).sort(
-  (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf()
-);
+const allPosts = await getBlogPosts();
 
 // Filter posts by tag
 const posts = allPosts.filter((post) => post.data.tags.includes(tag));

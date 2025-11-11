@@ -10,9 +10,7 @@ interface Props {
 const { post } = Astro.props;
 
 // Get all blog posts sorted by date
-const allPosts = (await getBlogPosts()).sort(
-  (a, b) => b.data.published_date.getTime() - a.data.published_date.getTime()
-);
+const allPosts = await getBlogPosts();
 
 // Get related posts from the post data
 const relatedFromData = post.data.related_posts

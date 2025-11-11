@@ -22,17 +22,17 @@ export interface NoteWithAuthors extends Omit<Note, 'authors'> {
 }
 
 export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
-  const posts = await astroGetCollection('blog');
+  const posts = await astroGetCollection('blog', (post) => {
+    if (NODE_ENV === 'production') {
+      return post.data.status === 'published';
+    }
+    return post.data.status !== 'archived';
+  });
   const authors = await astroGetCollection('author');
 
   return await Promise.all(
     posts
-      .filter((post) => {
-        if (NODE_ENV === 'production') {
-          return post.data.status === 'published';
-        }
-        return post.data.status !== 'archived';
-      })
+      .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
       .map(async (post: BlogPost) => {
         const { remarkPluginFrontmatter } = await render(post);
         const postAuthors = await Promise.all(
@@ -62,17 +62,17 @@ export async function getAuthors(): Promise<Author[]> {
 }
 
 export async function getNotes(): Promise<NoteWithAuthors[]> {
-  const notes = await astroGetCollection('note');
+  const notes = await astroGetCollection('note', (note) => {
+    if (NODE_ENV === 'production') {
+      return note.data.status === 'published';
+    }
+    return note.data.status !== 'archived';
+  });
   const authors = await astroGetCollection('author');
 
   return await Promise.all(
     notes
-      .filter((note) => {
-        if (NODE_ENV === 'production') {
-          return note.data.status === 'published';
-        }
-        return note.data.status !== 'archived';
-      })
+      .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
       .map(async (note: Note) => {
         const { remarkPluginFrontmatter } = await render(note);
         const noteAuthors = await Promise.all(

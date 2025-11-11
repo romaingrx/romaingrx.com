@@ -10,9 +10,7 @@ import { getBlogPosts, getNotes } from '@/lib/collections';
 // export const prerender = true;
 
 // Get the recent published content
-const posts = (await getBlogPosts())
-  .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
-  .slice(0, 4);
+const posts = (await getBlogPosts()).slice(0, 4);
 
 const notes = (await getNotes())
   .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())

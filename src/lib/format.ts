@@ -24,7 +24,7 @@ export function formatDate(date: Date | string): string {
 /**
  * Format date for compact display in cards
  */
-export function formatCompactDate(date: Date | string): string {
+export function formatCompactDate(date: Date | string, formatStr: string = 'yyyy MMMM d'): string {
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
 
   if (isToday(dateObj)) {
@@ -35,7 +35,7 @@ export function formatCompactDate(date: Date | string): string {
     return 'Yesterday';
   }
 
-  return format(dateObj, 'MMMM d ');
+  return format(dateObj, formatStr);
 }
 
 /**

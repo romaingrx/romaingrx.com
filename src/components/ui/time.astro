@@ -4,6 +4,7 @@ import DynamicTime from './DynamicTime.tsx';
 
 interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
   date: Date;
+  formatStr?: string;
 }
 
 const { date, ...props } = Astro.props;

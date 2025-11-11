@@ -3,17 +3,18 @@ import { cn } from '@/lib/utils';
 
 interface DynamicTimeProps extends Omit<React.HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
   date: Date | string;
+  formatStr?: string;
   className?: string;
 }
 
-const DynamicTime: React.FC<DynamicTimeProps> = ({ date, className, ...props }) => {
+const DynamicTime: React.FC<DynamicTimeProps> = ({ date, className, formatStr, ...props }) => {
   return (
     <time
       dateTime={formatISO(date)}
       className={cn('whitespace-nowrap text-xs text-muted-foreground', className)}
       {...props}
     >
-      {formatCompactDate(date)}
+      {formatCompactDate(date, formatStr)}
     </time>
   );
 };

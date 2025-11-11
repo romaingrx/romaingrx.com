@@ -8,9 +8,7 @@ import { getBlogPosts } from '@/lib/collections';
 // export const prerender = true;
 
 // Get all published blog posts
-const posts = (await getBlogPosts()).sort(
-  (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf()
-);
+const posts = await getBlogPosts();
 
 // Get unique categories and tags
 const categories = [...new Set(posts.flatMap((post) => post.data.categories))];
