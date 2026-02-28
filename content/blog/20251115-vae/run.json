@@ -1,0 +1,5116 @@
+{
+  "training": [
+    {
+      "epoch": 0,
+      "loss": 117.2099,
+      "recon": 117.2099,
+      "kl": 0.0709,
+      "beta": 0.0
+    },
+    {
+      "epoch": 1,
+      "loss": 107.6288,
+      "recon": 107.6139,
+      "kl": 0.746,
+      "beta": 0.02
+    },
+    {
+      "epoch": 2,
+      "loss": 97.1391,
+      "recon": 96.9312,
+      "kl": 5.1953,
+      "beta": 0.04
+    },
+    {
+      "epoch": 3,
+      "loss": 91.9265,
+      "recon": 91.2984,
+      "kl": 10.4688,
+      "beta": 0.06
+    },
+    {
+      "epoch": 4,
+      "loss": 87.9655,
+      "recon": 87.1465,
+      "kl": 10.2385,
+      "beta": 0.08
+    },
+    {
+      "epoch": 5,
+      "loss": 84.5321,
+      "recon": 83.0593,
+      "kl": 14.728,
+      "beta": 0.1
+    },
+    {
+      "epoch": 6,
+      "loss": 81.8883,
+      "recon": 80.0916,
+      "kl": 14.9731,
+      "beta": 0.12
+    },
+    {
+      "epoch": 7,
+      "loss": 80.009,
+      "recon": 77.8749,
+      "kl": 15.2441,
+      "beta": 0.14
+    },
+    {
+      "epoch": 8,
+      "loss": 78.7157,
+      "recon": 76.327,
+      "kl": 14.9295,
+      "beta": 0.16
+    },
+    {
+      "epoch": 9,
+      "loss": 77.4262,
+      "recon": 74.9918,
+      "kl": 13.5246,
+      "beta": 0.18
+    },
+    {
+      "epoch": 10,
+      "loss": 76.7662,
+      "recon": 74.0699,
+      "kl": 13.4819,
+      "beta": 0.2
+    },
+    {
+      "epoch": 11,
+      "loss": 76.1712,
+      "recon": 73.3272,
+      "kl": 12.9275,
+      "beta": 0.22
+    },
+    {
+      "epoch": 12,
+      "loss": 75.6499,
+      "recon": 72.6272,
+      "kl": 12.5945,
+      "beta": 0.24
+    },
+    {
+      "epoch": 13,
+      "loss": 74.6927,
+      "recon": 71.5929,
+      "kl": 11.9222,
+      "beta": 0.26
+    },
+    {
+      "epoch": 14,
+      "loss": 74.5356,
+      "recon": 71.2977,
+      "kl": 11.5638,
+      "beta": 0.28
+    },
+    {
+      "epoch": 15,
+      "loss": 73.8902,
+      "recon": 70.4648,
+      "kl": 11.4177,
+      "beta": 0.3
+    },
+    {
+      "epoch": 16,
+      "loss": 73.7163,
+      "recon": 70.2556,
+      "kl": 10.8146,
+      "beta": 0.32
+    },
+    {
+      "epoch": 17,
+      "loss": 73.5163,
+      "recon": 69.8058,
+      "kl": 10.913,
+      "beta": 0.34
+    },
+    {
+      "epoch": 18,
+      "loss": 73.1769,
+      "recon": 69.4808,
+      "kl": 10.2669,
+      "beta": 0.36
+    },
+    {
+      "epoch": 19,
+      "loss": 73.0349,
+      "recon": 69.1864,
+      "kl": 10.1275,
+      "beta": 0.38
+    },
+    {
+      "epoch": 20,
+      "loss": 72.7072,
+      "recon": 68.8708,
+      "kl": 9.591,
+      "beta": 0.4
+    },
+    {
+      "epoch": 21,
+      "loss": 72.3831,
+      "recon": 68.2919,
+      "kl": 9.7411,
+      "beta": 0.42
+    },
+    {
+      "epoch": 22,
+      "loss": 72.115,
+      "recon": 68.0272,
+      "kl": 9.2904,
+      "beta": 0.44
+    },
+    {
+      "epoch": 23,
+      "loss": 72.0409,
+      "recon": 67.823,
+      "kl": 9.1692,
+      "beta": 0.46
+    },
+    {
+      "epoch": 24,
+      "loss": 71.7837,
+      "recon": 67.5228,
+      "kl": 8.8771,
+      "beta": 0.48
+    },
+    {
+      "epoch": 25,
+      "loss": 71.7955,
+      "recon": 67.3954,
+      "kl": 8.8001,
+      "beta": 0.5
+    },
+    {
+      "epoch": 26,
+      "loss": 71.4403,
+      "recon": 66.9588,
+      "kl": 8.6182,
+      "beta": 0.52
+    },
+    {
+      "epoch": 27,
+      "loss": 71.347,
+      "recon": 66.8151,
+      "kl": 8.3923,
+      "beta": 0.54
+    },
+    {
+      "epoch": 28,
+      "loss": 71.1081,
+      "recon": 66.4193,
+      "kl": 8.3727,
+      "beta": 0.56
+    },
+    {
+      "epoch": 29,
+      "loss": 71.2409,
+      "recon": 66.4655,
+      "kl": 8.2335,
+      "beta": 0.58
+    },
+    {
+      "epoch": 30,
+      "loss": 70.9486,
+      "recon": 66.1505,
+      "kl": 7.9969,
+      "beta": 0.6
+    },
+    {
+      "epoch": 31,
+      "loss": 70.9022,
+      "recon": 66.0676,
+      "kl": 7.7977,
+      "beta": 0.62
+    },
+    {
+      "epoch": 32,
+      "loss": 70.7209,
+      "recon": 65.5916,
+      "kl": 8.0147,
+      "beta": 0.64
+    },
+    {
+      "epoch": 33,
+      "loss": 70.4692,
+      "recon": 65.5325,
+      "kl": 7.4798,
+      "beta": 0.66
+    },
+    {
+      "epoch": 34,
+      "loss": 70.6097,
+      "recon": 65.5181,
+      "kl": 7.4876,
+      "beta": 0.68
+    },
+    {
+      "epoch": 35,
+      "loss": 70.6647,
+      "recon": 65.3589,
+      "kl": 7.5798,
+      "beta": 0.7
+    },
+    {
+      "epoch": 36,
+      "loss": 70.2275,
+      "recon": 64.8106,
+      "kl": 7.5236,
+      "beta": 0.72
+    },
+    {
+      "epoch": 37,
+      "loss": 70.3631,
+      "recon": 65.1435,
+      "kl": 7.0535,
+      "beta": 0.74
+    },
+    {
+      "epoch": 38,
+      "loss": 69.9668,
+      "recon": 64.3804,
+      "kl": 7.3505,
+      "beta": 0.76
+    },
+    {
+      "epoch": 39,
+      "loss": 70.1607,
+      "recon": 64.5217,
+      "kl": 7.2295,
+      "beta": 0.78
+    },
+    {
+      "epoch": 40,
+      "loss": 69.8761,
+      "recon": 64.3207,
+      "kl": 6.9443,
+      "beta": 0.8
+    },
+    {
+      "epoch": 41,
+      "loss": 70.0735,
+      "recon": 64.5769,
+      "kl": 6.7031,
+      "beta": 0.82
+    },
+    {
+      "epoch": 42,
+      "loss": 69.9193,
+      "recon": 63.9654,
+      "kl": 7.0879,
+      "beta": 0.84
+    },
+    {
+      "epoch": 43,
+      "loss": 69.6614,
+      "recon": 63.9827,
+      "kl": 6.6031,
+      "beta": 0.86
+    },
+    {
+      "epoch": 44,
+      "loss": 69.9302,
+      "recon": 64.0809,
+      "kl": 6.647,
+      "beta": 0.88
+    },
+    {
+      "epoch": 45,
+      "loss": 69.5119,
+      "recon": 63.3643,
+      "kl": 6.8307,
+      "beta": 0.9
+    },
+    {
+      "epoch": 46,
+      "loss": 69.351,
+      "recon": 63.4235,
+      "kl": 6.443,
+      "beta": 0.92
+    },
+    {
+      "epoch": 47,
+      "loss": 69.3052,
+      "recon": 63.243,
+      "kl": 6.4492,
+      "beta": 0.94
+    },
+    {
+      "epoch": 48,
+      "loss": 69.7192,
+      "recon": 63.5541,
+      "kl": 6.422,
+      "beta": 0.96
+    },
+    {
+      "epoch": 49,
+      "loss": 69.5426,
+      "recon": 63.3077,
+      "kl": 6.3621,
+      "beta": 0.98
+    },
+    {
+      "epoch": 50,
+      "loss": 69.391,
+      "recon": 63.0573,
+      "kl": 6.3337,
+      "beta": 1.0
+    },
+    {
+      "epoch": 51,
+      "loss": 69.1445,
+      "recon": 62.9015,
+      "kl": 6.243,
+      "beta": 1.0
+    },
+    {
+      "epoch": 52,
+      "loss": 69.2791,
+      "recon": 63.0835,
+      "kl": 6.1956,
+      "beta": 1.0
+    },
+    {
+      "epoch": 53,
+      "loss": 68.9468,
+      "recon": 62.7781,
+      "kl": 6.1687,
+      "beta": 1.0
+    },
+    {
+      "epoch": 54,
+      "loss": 68.7186,
+      "recon": 62.4072,
+      "kl": 6.3114,
+      "beta": 1.0
+    },
+    {
+      "epoch": 55,
+      "loss": 68.6107,
+      "recon": 62.421,
+      "kl": 6.1897,
+      "beta": 1.0
+    },
+    {
+      "epoch": 56,
+      "loss": 68.4727,
+      "recon": 62.134,
+      "kl": 6.3387,
+      "beta": 1.0
+    },
+    {
+      "epoch": 57,
+      "loss": 68.3151,
+      "recon": 62.1843,
+      "kl": 6.1308,
+      "beta": 1.0
+    },
+    {
+      "epoch": 58,
+      "loss": 68.2455,
+      "recon": 61.9559,
+      "kl": 6.2895,
+      "beta": 1.0
+    },
+    {
+      "epoch": 59,
+      "loss": 67.9094,
+      "recon": 61.6203,
+      "kl": 6.2891,
+      "beta": 1.0
+    },
+    {
+      "epoch": 60,
+      "loss": 67.685,
+      "recon": 61.5344,
+      "kl": 6.1507,
+      "beta": 1.0
+    },
+    {
+      "epoch": 61,
+      "loss": 67.4632,
+      "recon": 61.5449,
+      "kl": 5.9183,
+      "beta": 1.0
+    },
+    {
+      "epoch": 62,
+      "loss": 67.2955,
+      "recon": 60.9688,
+      "kl": 6.3267,
+      "beta": 1.0
+    },
+    {
+      "epoch": 63,
+      "loss": 67.3894,
+      "recon": 61.3318,
+      "kl": 6.0576,
+      "beta": 1.0
+    },
+    {
+      "epoch": 64,
+      "loss": 67.2406,
+      "recon": 60.9948,
+      "kl": 6.2457,
+      "beta": 1.0
+    },
+    {
+      "epoch": 65,
+      "loss": 66.7418,
+      "recon": 60.6688,
+      "kl": 6.073,
+      "beta": 1.0
+    },
+    {
+      "epoch": 66,
+      "loss": 66.88,
+      "recon": 60.5862,
+      "kl": 6.2937,
+      "beta": 1.0
+    },
+    {
+      "epoch": 67,
+      "loss": 67.0297,
+      "recon": 60.7907,
+      "kl": 6.2391,
+      "beta": 1.0
+    },
+    {
+      "epoch": 68,
+      "loss": 66.7006,
+      "recon": 60.4555,
+      "kl": 6.2451,
+      "beta": 1.0
+    },
+    {
+      "epoch": 69,
+      "loss": 66.4691,
+      "recon": 60.3676,
+      "kl": 6.1016,
+      "beta": 1.0
+    },
+    {
+      "epoch": 70,
+      "loss": 66.5313,
+      "recon": 60.2105,
+      "kl": 6.3208,
+      "beta": 1.0
+    },
+    {
+      "epoch": 71,
+      "loss": 66.6374,
+      "recon": 60.4541,
+      "kl": 6.1834,
+      "beta": 1.0
+    },
+    {
+      "epoch": 72,
+      "loss": 66.526,
+      "recon": 60.219,
+      "kl": 6.3069,
+      "beta": 1.0
+    },
+    {
+      "epoch": 73,
+      "loss": 66.1758,
+      "recon": 59.9247,
+      "kl": 6.2511,
+      "beta": 1.0
+    },
+    {
+      "epoch": 74,
+      "loss": 65.8483,
+      "recon": 59.5401,
+      "kl": 6.3082,
+      "beta": 1.0
+    },
+    {
+      "epoch": 75,
+      "loss": 65.5652,
+      "recon": 59.2933,
+      "kl": 6.2719,
+      "beta": 1.0
+    },
+    {
+      "epoch": 76,
+      "loss": 65.5456,
+      "recon": 59.3748,
+      "kl": 6.1708,
+      "beta": 1.0
+    },
+    {
+      "epoch": 77,
+      "loss": 65.4749,
+      "recon": 59.2981,
+      "kl": 6.1767,
+      "beta": 1.0
+    },
+    {
+      "epoch": 78,
+      "loss": 65.502,
+      "recon": 59.2077,
+      "kl": 6.2942,
+      "beta": 1.0
+    },
+    {
+      "epoch": 79,
+      "loss": 65.1612,
+      "recon": 58.8091,
+      "kl": 6.3521,
+      "beta": 1.0
+    },
+    {
+      "epoch": 80,
+      "loss": 65.3544,
+      "recon": 59.001,
+      "kl": 6.3534,
+      "beta": 1.0
+    },
+    {
+      "epoch": 81,
+      "loss": 65.1831,
+      "recon": 58.8148,
+      "kl": 6.3684,
+      "beta": 1.0
+    },
+    {
+      "epoch": 82,
+      "loss": 65.1497,
+      "recon": 58.8654,
+      "kl": 6.2843,
+      "beta": 1.0
+    },
+    {
+      "epoch": 83,
+      "loss": 64.777,
+      "recon": 58.4476,
+      "kl": 6.3294,
+      "beta": 1.0
+    },
+    {
+      "epoch": 84,
+      "loss": 64.9546,
+      "recon": 58.6838,
+      "kl": 6.2708,
+      "beta": 1.0
+    },
+    {
+      "epoch": 85,
+      "loss": 64.7214,
+      "recon": 58.4518,
+      "kl": 6.2696,
+      "beta": 1.0
+    },
+    {
+      "epoch": 86,
+      "loss": 64.7202,
+      "recon": 58.4919,
+      "kl": 6.2283,
+      "beta": 1.0
+    },
+    {
+      "epoch": 87,
+      "loss": 64.6339,
+      "recon": 58.1102,
+      "kl": 6.5237,
+      "beta": 1.0
+    },
+    {
+      "epoch": 88,
+      "loss": 64.5196,
+      "recon": 58.2444,
+      "kl": 6.2752,
+      "beta": 1.0
+    },
+    {
+      "epoch": 89,
+      "loss": 64.2493,
+      "recon": 58.0355,
+      "kl": 6.2137,
+      "beta": 1.0
+    },
+    {
+      "epoch": 90,
+      "loss": 64.1859,
+      "recon": 57.8405,
+      "kl": 6.3455,
+      "beta": 1.0
+    },
+    {
+      "epoch": 91,
+      "loss": 64.2789,
+      "recon": 58.0088,
+      "kl": 6.2701,
+      "beta": 1.0
+    },
+    {
+      "epoch": 92,
+      "loss": 64.0875,
+      "recon": 57.8207,
+      "kl": 6.2668,
+      "beta": 1.0
+    },
+    {
+      "epoch": 93,
+      "loss": 63.8313,
+      "recon": 57.2888,
+      "kl": 6.5425,
+      "beta": 1.0
+    },
+    {
+      "epoch": 94,
+      "loss": 63.5053,
+      "recon": 57.1969,
+      "kl": 6.3084,
+      "beta": 1.0
+    },
+    {
+      "epoch": 95,
+      "loss": 63.4007,
+      "recon": 57.1324,
+      "kl": 6.2683,
+      "beta": 1.0
+    },
+    {
+      "epoch": 96,
+      "loss": 63.7027,
+      "recon": 57.2684,
+      "kl": 6.4343,
+      "beta": 1.0
+    },
+    {
+      "epoch": 97,
+      "loss": 63.5992,
+      "recon": 57.096,
+      "kl": 6.5033,
+      "beta": 1.0
+    },
+    {
+      "epoch": 98,
+      "loss": 63.1445,
+      "recon": 56.8826,
+      "kl": 6.2619,
+      "beta": 1.0
+    },
+    {
+      "epoch": 99,
+      "loss": 63.3423,
+      "recon": 56.9481,
+      "kl": 6.3942,
+      "beta": 1.0
+    },
+    {
+      "epoch": 100,
+      "loss": 63.1897,
+      "recon": 56.6978,
+      "kl": 6.4919,
+      "beta": 1.0
+    },
+    {
+      "epoch": 101,
+      "loss": 62.974,
+      "recon": 56.6049,
+      "kl": 6.3692,
+      "beta": 1.0
+    },
+    {
+      "epoch": 102,
+      "loss": 62.7917,
+      "recon": 56.4813,
+      "kl": 6.3104,
+      "beta": 1.0
+    },
+    {
+      "epoch": 103,
+      "loss": 62.7805,
+      "recon": 56.375,
+      "kl": 6.4055,
+      "beta": 1.0
+    },
+    {
+      "epoch": 104,
+      "loss": 62.8483,
+      "recon": 56.5626,
+      "kl": 6.2857,
+      "beta": 1.0
+    },
+    {
+      "epoch": 105,
+      "loss": 63.0309,
+      "recon": 56.3828,
+      "kl": 6.6481,
+      "beta": 1.0
+    },
+    {
+      "epoch": 106,
+      "loss": 62.5666,
+      "recon": 56.2219,
+      "kl": 6.3447,
+      "beta": 1.0
+    },
+    {
+      "epoch": 107,
+      "loss": 62.4054,
+      "recon": 56.1067,
+      "kl": 6.2987,
+      "beta": 1.0
+    },
+    {
+      "epoch": 108,
+      "loss": 62.581,
+      "recon": 56.059,
+      "kl": 6.522,
+      "beta": 1.0
+    },
+    {
+      "epoch": 109,
+      "loss": 62.2821,
+      "recon": 56.0137,
+      "kl": 6.2685,
+      "beta": 1.0
+    },
+    {
+      "epoch": 110,
+      "loss": 62.0745,
+      "recon": 55.7019,
+      "kl": 6.3726,
+      "beta": 1.0
+    },
+    {
+      "epoch": 111,
+      "loss": 62.1167,
+      "recon": 55.6212,
+      "kl": 6.4955,
+      "beta": 1.0
+    },
+    {
+      "epoch": 112,
+      "loss": 61.8655,
+      "recon": 55.6519,
+      "kl": 6.2136,
+      "beta": 1.0
+    },
+    {
+      "epoch": 113,
+      "loss": 61.8408,
+      "recon": 55.2904,
+      "kl": 6.5504,
+      "beta": 1.0
+    },
+    {
+      "epoch": 114,
+      "loss": 61.8846,
+      "recon": 55.4804,
+      "kl": 6.4042,
+      "beta": 1.0
+    },
+    {
+      "epoch": 115,
+      "loss": 61.8943,
+      "recon": 55.4336,
+      "kl": 6.4607,
+      "beta": 1.0
+    },
+    {
+      "epoch": 116,
+      "loss": 61.5246,
+      "recon": 55.1031,
+      "kl": 6.4215,
+      "beta": 1.0
+    },
+    {
+      "epoch": 117,
+      "loss": 61.7769,
+      "recon": 55.3004,
+      "kl": 6.4765,
+      "beta": 1.0
+    },
+    {
+      "epoch": 118,
+      "loss": 61.7149,
+      "recon": 55.3571,
+      "kl": 6.3578,
+      "beta": 1.0
+    },
+    {
+      "epoch": 119,
+      "loss": 61.7124,
+      "recon": 55.4075,
+      "kl": 6.305,
+      "beta": 1.0
+    },
+    {
+      "epoch": 120,
+      "loss": 61.4791,
+      "recon": 54.9998,
+      "kl": 6.4794,
+      "beta": 1.0
+    },
+    {
+      "epoch": 121,
+      "loss": 61.3837,
+      "recon": 55.0441,
+      "kl": 6.3396,
+      "beta": 1.0
+    },
+    {
+      "epoch": 122,
+      "loss": 61.0034,
+      "recon": 54.4404,
+      "kl": 6.563,
+      "beta": 1.0
+    },
+    {
+      "epoch": 123,
+      "loss": 61.3907,
+      "recon": 54.9747,
+      "kl": 6.416,
+      "beta": 1.0
+    },
+    {
+      "epoch": 124,
+      "loss": 61.0335,
+      "recon": 54.3099,
+      "kl": 6.7236,
+      "beta": 1.0
+    },
+    {
+      "epoch": 125,
+      "loss": 60.9593,
+      "recon": 54.7391,
+      "kl": 6.2202,
+      "beta": 1.0
+    },
+    {
+      "epoch": 126,
+      "loss": 60.9714,
+      "recon": 54.3976,
+      "kl": 6.5739,
+      "beta": 1.0
+    },
+    {
+      "epoch": 127,
+      "loss": 60.6732,
+      "recon": 54.0422,
+      "kl": 6.631,
+      "beta": 1.0
+    },
+    {
+      "epoch": 128,
+      "loss": 61.0182,
+      "recon": 54.7757,
+      "kl": 6.2425,
+      "beta": 1.0
+    },
+    {
+      "epoch": 129,
+      "loss": 61.0596,
+      "recon": 54.3615,
+      "kl": 6.6981,
+      "beta": 1.0
+    },
+    {
+      "epoch": 130,
+      "loss": 60.8179,
+      "recon": 54.3678,
+      "kl": 6.45,
+      "beta": 1.0
+    },
+    {
+      "epoch": 131,
+      "loss": 60.5317,
+      "recon": 54.0545,
+      "kl": 6.4771,
+      "beta": 1.0
+    },
+    {
+      "epoch": 132,
+      "loss": 60.7945,
+      "recon": 54.1831,
+      "kl": 6.6114,
+      "beta": 1.0
+    },
+    {
+      "epoch": 133,
+      "loss": 60.594,
+      "recon": 53.9645,
+      "kl": 6.6295,
+      "beta": 1.0
+    },
+    {
+      "epoch": 134,
+      "loss": 60.618,
+      "recon": 54.0827,
+      "kl": 6.5352,
+      "beta": 1.0
+    },
+    {
+      "epoch": 135,
+      "loss": 60.4434,
+      "recon": 53.8378,
+      "kl": 6.6056,
+      "beta": 1.0
+    },
+    {
+      "epoch": 136,
+      "loss": 60.1798,
+      "recon": 53.8234,
+      "kl": 6.3564,
+      "beta": 1.0
+    },
+    {
+      "epoch": 137,
+      "loss": 60.3458,
+      "recon": 53.8635,
+      "kl": 6.4823,
+      "beta": 1.0
+    },
+    {
+      "epoch": 138,
+      "loss": 59.7943,
+      "recon": 53.2641,
+      "kl": 6.5302,
+      "beta": 1.0
+    },
+    {
+      "epoch": 139,
+      "loss": 60.0338,
+      "recon": 53.5422,
+      "kl": 6.4916,
+      "beta": 1.0
+    },
+    {
+      "epoch": 140,
+      "loss": 59.9364,
+      "recon": 53.2565,
+      "kl": 6.6799,
+      "beta": 1.0
+    },
+    {
+      "epoch": 141,
+      "loss": 59.898,
+      "recon": 53.5111,
+      "kl": 6.3869,
+      "beta": 1.0
+    },
+    {
+      "epoch": 142,
+      "loss": 59.7852,
+      "recon": 53.1795,
+      "kl": 6.6057,
+      "beta": 1.0
+    },
+    {
+      "epoch": 143,
+      "loss": 59.7887,
+      "recon": 53.3757,
+      "kl": 6.413,
+      "beta": 1.0
+    },
+    {
+      "epoch": 144,
+      "loss": 59.702,
+      "recon": 52.9166,
+      "kl": 6.7855,
+      "beta": 1.0
+    },
+    {
+      "epoch": 145,
+      "loss": 59.4443,
+      "recon": 52.8723,
+      "kl": 6.5721,
+      "beta": 1.0
+    },
+    {
+      "epoch": 146,
+      "loss": 59.1844,
+      "recon": 52.706,
+      "kl": 6.4784,
+      "beta": 1.0
+    },
+    {
+      "epoch": 147,
+      "loss": 59.3619,
+      "recon": 52.7214,
+      "kl": 6.6404,
+      "beta": 1.0
+    },
+    {
+      "epoch": 148,
+      "loss": 59.4011,
+      "recon": 52.7247,
+      "kl": 6.6764,
+      "beta": 1.0
+    },
+    {
+      "epoch": 149,
+      "loss": 59.2828,
+      "recon": 52.7476,
+      "kl": 6.5352,
+      "beta": 1.0
+    },
+    {
+      "epoch": 150,
+      "loss": 59.0262,
+      "recon": 52.6956,
+      "kl": 6.3307,
+      "beta": 1.0
+    },
+    {
+      "epoch": 151,
+      "loss": 58.9346,
+      "recon": 52.3427,
+      "kl": 6.5919,
+      "beta": 1.0
+    },
+    {
+      "epoch": 152,
+      "loss": 58.8414,
+      "recon": 52.3595,
+      "kl": 6.4819,
+      "beta": 1.0
+    },
+    {
+      "epoch": 153,
+      "loss": 59.0516,
+      "recon": 52.3654,
+      "kl": 6.6862,
+      "beta": 1.0
+    },
+    {
+      "epoch": 154,
+      "loss": 59.3224,
+      "recon": 52.6882,
+      "kl": 6.6343,
+      "beta": 1.0
+    },
+    {
+      "epoch": 155,
+      "loss": 58.845,
+      "recon": 52.122,
+      "kl": 6.723,
+      "beta": 1.0
+    },
+    {
+      "epoch": 156,
+      "loss": 58.8786,
+      "recon": 52.3195,
+      "kl": 6.5591,
+      "beta": 1.0
+    },
+    {
+      "epoch": 157,
+      "loss": 58.6894,
+      "recon": 52.0272,
+      "kl": 6.6622,
+      "beta": 1.0
+    },
+    {
+      "epoch": 158,
+      "loss": 58.6524,
+      "recon": 52.1673,
+      "kl": 6.4851,
+      "beta": 1.0
+    },
+    {
+      "epoch": 159,
+      "loss": 58.3317,
+      "recon": 51.8391,
+      "kl": 6.4926,
+      "beta": 1.0
+    },
+    {
+      "epoch": 160,
+      "loss": 58.7945,
+      "recon": 52.2493,
+      "kl": 6.5452,
+      "beta": 1.0
+    },
+    {
+      "epoch": 161,
+      "loss": 58.352,
+      "recon": 51.6958,
+      "kl": 6.6562,
+      "beta": 1.0
+    },
+    {
+      "epoch": 162,
+      "loss": 58.2577,
+      "recon": 51.5697,
+      "kl": 6.6881,
+      "beta": 1.0
+    },
+    {
+      "epoch": 163,
+      "loss": 58.1373,
+      "recon": 51.4392,
+      "kl": 6.6981,
+      "beta": 1.0
+    },
+    {
+      "epoch": 164,
+      "loss": 58.1945,
+      "recon": 51.8746,
+      "kl": 6.3199,
+      "beta": 1.0
+    },
+    {
+      "epoch": 165,
+      "loss": 57.9499,
+      "recon": 51.5307,
+      "kl": 6.4192,
+      "beta": 1.0
+    },
+    {
+      "epoch": 166,
+      "loss": 58.2701,
+      "recon": 51.4979,
+      "kl": 6.7722,
+      "beta": 1.0
+    },
+    {
+      "epoch": 167,
+      "loss": 57.7752,
+      "recon": 51.0795,
+      "kl": 6.6957,
+      "beta": 1.0
+    },
+    {
+      "epoch": 168,
+      "loss": 57.5694,
+      "recon": 51.1487,
+      "kl": 6.4208,
+      "beta": 1.0
+    },
+    {
+      "epoch": 169,
+      "loss": 57.9482,
+      "recon": 51.3673,
+      "kl": 6.5809,
+      "beta": 1.0
+    },
+    {
+      "epoch": 170,
+      "loss": 57.9687,
+      "recon": 51.3586,
+      "kl": 6.6101,
+      "beta": 1.0
+    },
+    {
+      "epoch": 171,
+      "loss": 57.8827,
+      "recon": 51.0761,
+      "kl": 6.8066,
+      "beta": 1.0
+    },
+    {
+      "epoch": 172,
+      "loss": 57.8735,
+      "recon": 51.3118,
+      "kl": 6.5617,
+      "beta": 1.0
+    },
+    {
+      "epoch": 173,
+      "loss": 57.6952,
+      "recon": 51.1095,
+      "kl": 6.5857,
+      "beta": 1.0
+    },
+    {
+      "epoch": 174,
+      "loss": 57.8009,
+      "recon": 50.9977,
+      "kl": 6.8032,
+      "beta": 1.0
+    },
+    {
+      "epoch": 175,
+      "loss": 57.5066,
+      "recon": 50.9395,
+      "kl": 6.567,
+      "beta": 1.0
+    },
+    {
+      "epoch": 176,
+      "loss": 57.7994,
+      "recon": 51.0107,
+      "kl": 6.7887,
+      "beta": 1.0
+    },
+    {
+      "epoch": 177,
+      "loss": 57.3093,
+      "recon": 50.7559,
+      "kl": 6.5534,
+      "beta": 1.0
+    },
+    {
+      "epoch": 178,
+      "loss": 57.5294,
+      "recon": 51.0324,
+      "kl": 6.497,
+      "beta": 1.0
+    },
+    {
+      "epoch": 179,
+      "loss": 57.5759,
+      "recon": 50.861,
+      "kl": 6.715,
+      "beta": 1.0
+    },
+    {
+      "epoch": 180,
+      "loss": 57.4787,
+      "recon": 50.87,
+      "kl": 6.6087,
+      "beta": 1.0
+    },
+    {
+      "epoch": 181,
+      "loss": 57.1709,
+      "recon": 50.5659,
+      "kl": 6.605,
+      "beta": 1.0
+    },
+    {
+      "epoch": 182,
+      "loss": 57.2796,
+      "recon": 50.5603,
+      "kl": 6.7192,
+      "beta": 1.0
+    },
+    {
+      "epoch": 183,
+      "loss": 57.0978,
+      "recon": 50.4332,
+      "kl": 6.6646,
+      "beta": 1.0
+    },
+    {
+      "epoch": 184,
+      "loss": 57.1336,
+      "recon": 50.3829,
+      "kl": 6.7507,
+      "beta": 1.0
+    },
+    {
+      "epoch": 185,
+      "loss": 57.0191,
+      "recon": 50.5192,
+      "kl": 6.4999,
+      "beta": 1.0
+    },
+    {
+      "epoch": 186,
+      "loss": 56.9226,
+      "recon": 50.2722,
+      "kl": 6.6504,
+      "beta": 1.0
+    },
+    {
+      "epoch": 187,
+      "loss": 56.8845,
+      "recon": 50.2133,
+      "kl": 6.6711,
+      "beta": 1.0
+    },
+    {
+      "epoch": 188,
+      "loss": 57.1192,
+      "recon": 50.0562,
+      "kl": 7.0631,
+      "beta": 1.0
+    },
+    {
+      "epoch": 189,
+      "loss": 56.8713,
+      "recon": 50.1984,
+      "kl": 6.6729,
+      "beta": 1.0
+    },
+    {
+      "epoch": 190,
+      "loss": 56.9784,
+      "recon": 50.3666,
+      "kl": 6.6117,
+      "beta": 1.0
+    },
+    {
+      "epoch": 191,
+      "loss": 56.568,
+      "recon": 49.9674,
+      "kl": 6.6006,
+      "beta": 1.0
+    },
+    {
+      "epoch": 192,
+      "loss": 56.4997,
+      "recon": 49.8149,
+      "kl": 6.6848,
+      "beta": 1.0
+    },
+    {
+      "epoch": 193,
+      "loss": 56.5098,
+      "recon": 49.8005,
+      "kl": 6.7094,
+      "beta": 1.0
+    },
+    {
+      "epoch": 194,
+      "loss": 56.6779,
+      "recon": 50.0113,
+      "kl": 6.6666,
+      "beta": 1.0
+    },
+    {
+      "epoch": 195,
+      "loss": 56.5495,
+      "recon": 49.4686,
+      "kl": 7.0809,
+      "beta": 1.0
+    },
+    {
+      "epoch": 196,
+      "loss": 56.543,
+      "recon": 49.8597,
+      "kl": 6.6833,
+      "beta": 1.0
+    },
+    {
+      "epoch": 197,
+      "loss": 56.2984,
+      "recon": 49.7181,
+      "kl": 6.5802,
+      "beta": 1.0
+    },
+    {
+      "epoch": 198,
+      "loss": 56.4491,
+      "recon": 49.7068,
+      "kl": 6.7422,
+      "beta": 1.0
+    },
+    {
+      "epoch": 199,
+      "loss": 56.27,
+      "recon": 49.5554,
+      "kl": 6.7146,
+      "beta": 1.0
+    }
+  ],
+  "latent_space": [
+    {
+      "z": [
+        -2.8262,
+        -0.2413
+      ],
+      "sequence": "MADYWKSQPKKFCDYCKCWIADNRPSVEFHERGKNHKENV"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        -0.0327,
+        -0.515
+      ],
+      "sequence": "MAADVVGDVYVLVEHPFEYTGKDGRRVAIRPNERYRLLRR"
+    },
+    {
+      "z": [
+        0.1751,
+        -0.3737
+      ],
+      "sequence": "MKMADRSGKIIPGQVYIEVEYDYEYEAKDRKIVIKQGERY"
+    },
+    {
+      "z": [
+        -0.5182,
+        0.2327
+      ],
+      "sequence": "MATGLGEPVYGLSEDEGESRILRVKVVSGIDLAKKDIFGA"
+    },
+    {
+      "z": [
+        0.3684,
+        0.8065
+      ],
+      "sequence": "MAERGGDGGESERFNPGELRMAQQQALRFRGPAPPPNAVM"
+    },
+    {
+      "z": [
+        0.2554,
+        0.2298
+      ],
+      "sequence": "MSGARCRTLYPFSGERHGQGLRFAAGELITLLQVPDGGWW"
+    },
+    {
+      "z": [
+        -4.1769,
+        0.4519
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWVNAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        4.3191,
+        0.0069
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPSQPPQGQGPPSGPGQPAPAA"
+    },
+    {
+      "z": [
+        1.4322,
+        -4.0564
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRSSGRVYYFNHITNASQWERPSGN"
+    },
+    {
+      "z": [
+        -1.5272,
+        1.1941
+      ],
+      "sequence": "MMPPPFMPPPGIPPPFPPMGLPPMSQRPPAIPPMPPGILP"
+    },
+    {
+      "z": [
+        0.6322,
+        -2.1382
+      ],
+      "sequence": "MPRPELPLPEGWEEARDFDGKVYYIDHTNRTTSWIDPRDR"
+    },
+    {
+      "z": [
+        1.9351,
+        1.5669
+      ],
+      "sequence": "MATASPRSDTSNNHSGRLQLQVTVSSAKLKRKKNWFGTAI"
+    },
+    {
+      "z": [
+        1.3032,
+        -1.3323
+      ],
+      "sequence": "MLSRKKTKNEVSKPAEVQGKYVKKETSPLLRNLMPSFIRH"
+    },
+    {
+      "z": [
+        0.457,
+        0.1017
+      ],
+      "sequence": "MAADLNLEWISLPRSWTYGITRGGRVFFINEEAKSTTWLH"
+    },
+    {
+      "z": [
+        -0.0043,
+        0.0328
+      ],
+      "sequence": "MASSAREHLLFVRRRNPQMRYTLSPENLQSLAAQSSMPEN"
+    },
+    {
+      "z": [
+        -0.7768,
+        1.0125
+      ],
+      "sequence": "MPWLSGGRRRRRGQPREAPREPPPSAQPQREPPPAPPAAV"
+    },
+    {
+      "z": [
+        0.7214,
+        -0.4947
+      ],
+      "sequence": "MLGKDYMLAIILVNCDDDLWGDHSLEVEAGLPPGWRKIHD"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        1.5196,
+        -0.1112
+      ],
+      "sequence": "MNPASAPPPLPPPGQQVIHVTQDLDTDLEALFNSVMNPKP"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        -0.054,
+        2.3351
+      ],
+      "sequence": "MASASSSRAGVALPFEKSQLTLKVVSAKPKVHNRQPRINS"
+    },
+    {
+      "z": [
+        0.797,
+        0.3602
+      ],
+      "sequence": "MNKNTSTVVSPSLLEKDPAFQMITIAKETGLGLKVLGGIN"
+    },
+    {
+      "z": [
+        0.8339,
+        -0.7483
+      ],
+      "sequence": "MVMYARKQQRLSDGCHDRRGDSQPYQALKYSSKSHPSSGD"
+    },
+    {
+      "z": [
+        1.7013,
+        0.4339
+      ],
+      "sequence": "MSNPGGRRNGPVKLRLTVLCAKNLVKKDFFRLPDPFAKVV"
+    },
+    {
+      "z": [
+        3.2617,
+        1.3122
+      ],
+      "sequence": "MSNPGTRRNGSSIKIRLTVLCAKNLAKKDFFRLPDPFAKI"
+    },
+    {
+      "z": [
+        -0.0213,
+        0.7855
+      ],
+      "sequence": "MSVPSSLSQSAINANSHGGPALSLPLPLHAAHNQLLNAKL"
+    },
+    {
+      "z": [
+        -1.2406,
+        0.5621
+      ],
+      "sequence": "MRPGTGAERGGLMVSEMESHPPSQGPGDGERRLSGSSLCS"
+    },
+    {
+      "z": [
+        -1.6608,
+        0.6797
+      ],
+      "sequence": "MSAATHSPMMQVASGNGDRDPLPPGWEIKIDPQTGWPFFV"
+    },
+    {
+      "z": [
+        2.2733,
+        -1.2459
+      ],
+      "sequence": "MSKTLKKKKHWLSKVQECAVSWAGPPGDFGAEIRGGAERG"
+    },
+    {
+      "z": [
+        0.9785,
+        -0.2429
+      ],
+      "sequence": "MPRRAGSGQLPLPRGWEEARDYDGKVFYIDHNTRRTSWID"
+    },
+    {
+      "z": [
+        -0.6084,
+        0.2275
+      ],
+      "sequence": "MLLHLCSVKNLYQNRFLGLAAMASPSRNSQSRRRCKEPLR"
+    },
+    {
+      "z": [
+        -0.0586,
+        0.0123
+      ],
+      "sequence": "MSEVLPADSGVDTLAVFMASSGTTDVTNRNSPATPPNTLN"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        2.981,
+        -1.2519
+      ],
+      "sequence": "MSKVIQKKNHWTSRVHECTVKRGPQGELGVTVLGGAEHGE"
+    },
+    {
+      "z": [
+        -3.3435,
+        -3.2563
+      ],
+      "sequence": "MKQLQPQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTGF"
+    },
+    {
+      "z": [
+        -0.6645,
+        0.6373
+      ],
+      "sequence": "MANENHGSPREEASLLSHSPGTSNQSQPCSPKPIRLVQDL"
+    },
+    {
+      "z": [
+        -0.0817,
+        1.0866
+      ],
+      "sequence": "MANNHQYPGIQPFQHPNASSIDLPRGFAPPMNFQFLPTIQ"
+    },
+    {
+      "z": [
+        -4.1784,
+        0.4524
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWINAQFSKFGKQHIDNL"
+    },
+    {
+      "z": [
+        -2.1757,
+        2.956
+      ],
+      "sequence": "MEPAQQPPPQPAPQGPAPPSVSPAGTPAAPPAPPAGHQVV"
+    },
+    {
+      "z": [
+        0.7672,
+        -0.0454
+      ],
+      "sequence": "MSNKNPLNNSNGSNSSTIVNSDKFLVKIHSLSVSHTSKSS"
+    },
+    {
+      "z": [
+        0.9391,
+        2.9188
+      ],
+      "sequence": "MSDSGPQLDSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.054,
+        2.3351
+      ],
+      "sequence": "MASASSSRAGVALPFEKSQLTLKVVSAKPKVHNRQPRINS"
+    },
+    {
+      "z": [
+        0.2617,
+        0.5108
+      ],
+      "sequence": "MARNEPSSQQPSSSGSNGTPAQQNGSAKPSKVTVKVVNAS"
+    },
+    {
+      "z": [
+        -0.2073,
+        0.11
+      ],
+      "sequence": "MNYLTILLCNRKPTMLSRRNKEKSQHKEGVVGKYMKKDTP"
+    },
+    {
+      "z": [
+        -0.7302,
+        1.9472
+      ],
+      "sequence": "MPNLQQTASQSQHHLHPHHLRPQQQQQQHHHHHQQQQQQQ"
+    },
+    {
+      "z": [
+        0.5808,
+        -0.7275
+      ],
+      "sequence": "MVMHARKPQRMNDGYFEKHTSHTSYQSSKYSSSKRDYERD"
+    },
+    {
+      "z": [
+        0.3517,
+        0.4502
+      ],
+      "sequence": "MEESGPPSNPSPVASRGRGRGRPPKVALSALGNTPPHINP"
+    },
+    {
+      "z": [
+        -0.71,
+        0.4628
+      ],
+      "sequence": "MTSENHTTIKADSALVMSPTGSTSQAAPFSPSTSKPIQEL"
+    },
+    {
+      "z": [
+        -0.3023,
+        1.101
+      ],
+      "sequence": "MANNPPQSSGTQFRPMVPGQQGQHFVPAASQPFHPYGHVP"
+    },
+    {
+      "z": [
+        0.5641,
+        -0.1639
+      ],
+      "sequence": "MSSDMAADESEAPVLSEDEVWEFCLDKTEDGGGSPGSDVT"
+    },
+    {
+      "z": [
+        -2.1757,
+        2.956
+      ],
+      "sequence": "MEPAQQPPPQPAPQGPAPPSVSPAGTPAAPPAPPAGHQVV"
+    },
+    {
+      "z": [
+        -2.8262,
+        -0.2413
+      ],
+      "sequence": "MADYWKSQPKKFCDYCKCWIADNRPSVEFHERGKNHKENV"
+    },
+    {
+      "z": [
+        1.9739,
+        1.5945
+      ],
+      "sequence": "MATASPRSDTSDIHSGRLQLKVTVSSAKLKRKKNWFGTAI"
+    },
+    {
+      "z": [
+        1.3032,
+        -1.3323
+      ],
+      "sequence": "MLSRKKTKNEVSKPAEVQGKYVKKETSPLLRNLMPSFIRH"
+    },
+    {
+      "z": [
+        1.3032,
+        -1.3323
+      ],
+      "sequence": "MLSRKKTKNEVSKPAEVQGKYVKKETSPLLRNLMPSFIRH"
+    },
+    {
+      "z": [
+        -2.5863,
+        -1.716
+      ],
+      "sequence": "MKPLPSQQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTG"
+    },
+    {
+      "z": [
+        -0.1576,
+        -0.018
+      ],
+      "sequence": "MSIWKEAKDASGRIYYYNTLTKKSTWEKPKELISQEELLL"
+    },
+    {
+      "z": [
+        -0.0199,
+        0.7865
+      ],
+      "sequence": "MSVPSSLSQSAINANSHGGPALSFPFPLHAAHNQLLNAKL"
+    },
+    {
+      "z": [
+        -1.2434,
+        0.2212
+      ],
+      "sequence": "MQPLVMQGCPYTLPRCHEWHAADRFHHSSSLRNTCPQPQV"
+    },
+    {
+      "z": [
+        0.3957,
+        0.0398
+      ],
+      "sequence": "MLTTMSASSNTNSLIEKEIDDEDMLSPIKSNNLVVRVNQD"
+    },
+    {
+      "z": [
+        0.6388,
+        -2.1548
+      ],
+      "sequence": "MPRPELPLPEGWEEARDFDGKVYYIDHRNRTTSWIDPRDR"
+    },
+    {
+      "z": [
+        -0.0565,
+        0.4676
+      ],
+      "sequence": "MHRGGDRSTDPSSGPAPGSRGGGDGRFGRGPSRWSSGGGG"
+    },
+    {
+      "z": [
+        0.3648,
+        0.7905
+      ],
+      "sequence": "MAERGGDGGEGERFNPGELRMAQQQALRFRGPAPPPNAVM"
+    },
+    {
+      "z": [
+        -0.4706,
+        -0.4009
+      ],
+      "sequence": "MAATAAASVVRYAPEDHTLPKPWKGLIDDRTGYLYFWNPE"
+    },
+    {
+      "z": [
+        0.8532,
+        -0.7456
+      ],
+      "sequence": "MVMYARKQQRLSDGCHDRRGDSQPFQALKYSSKSHPSSGD"
+    },
+    {
+      "z": [
+        -1.2434,
+        0.2212
+      ],
+      "sequence": "MQPLVMQGCPYTLPRCHEWHAADRFHHSSSLRNTCPQPQV"
+    },
+    {
+      "z": [
+        1.5603,
+        -0.123
+      ],
+      "sequence": "MNPSSVPHPLPPPGQQVIHVTQDLDTDLEALFNSVMNPKP"
+    },
+    {
+      "z": [
+        -2.1564,
+        0.7277
+      ],
+      "sequence": "MSAATQSPMMQMASGNGASDRDPLPPGWEIKIDPQTGWPF"
+    },
+    {
+      "z": [
+        0.8467,
+        0.3702
+      ],
+      "sequence": "MSDGTASARSSSPLDRDPAFRVITVTKETGLGLKILGGIN"
+    },
+    {
+      "z": [
+        1.7013,
+        0.4339
+      ],
+      "sequence": "MSNPGGRRNGPVKLRLTVLCAKNLVKKDFFRLPDPFAKVV"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        -4.1784,
+        0.4524
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWINAQFSKFGKQHIDNL"
+    },
+    {
+      "z": [
+        -0.6598,
+        0.6577
+      ],
+      "sequence": "MANENHGSPREGASLLSHSPGTSSQSQPCSPKPVRLVQDL"
+    },
+    {
+      "z": [
+        -0.5911,
+        0.315
+      ],
+      "sequence": "MASKSIHKKHQENSQQDKNQFSVHHYLDPNQSIHALISCS"
+    },
+    {
+      "z": [
+        2.8217,
+        -3.112
+      ],
+      "sequence": "MDPNQHNPPAGHQIVHVRGDSETDLEALFNAVMNPKNTIV"
+    },
+    {
+      "z": [
+        0.3421,
+        1.0965
+      ],
+      "sequence": "MATALQKPGMVPPPPGEESQTVILPPGWHSYLSPQGRRYY"
+    },
+    {
+      "z": [
+        -0.3873,
+        -0.4611
+      ],
+      "sequence": "MAADDTEAPVLSEDEVWEFCLDKNEEGGGSPGSDVTDTCE"
+    },
+    {
+      "z": [
+        0.1694,
+        -0.7163
+      ],
+      "sequence": "MPLPVALQTRLAKRGILKHLEPEPEEEIIAEDYDDDPVDY"
+    },
+    {
+      "z": [
+        -0.0911,
+        -0.4739
+      ],
+      "sequence": "MAADVEGDVYVLVEHPFEYTGKDGRLIAIQPNERCRLLRR"
+    },
+    {
+      "z": [
+        -1.0691,
+        0.5088
+      ],
+      "sequence": "MSLCEAPVHVGDKELKYFQIPQMLSQLSLLASHHSRGLEF"
+    },
+    {
+      "z": [
+        -0.6084,
+        0.2275
+      ],
+      "sequence": "MLLHLCSVKNLYQNRFLGLAAMASPSRNSQSRRRCKEPLR"
+    },
+    {
+      "z": [
+        3.2617,
+        1.3122
+      ],
+      "sequence": "MSNPGTRRNGSSIKIRLTVLCAKNLAKKDFFRLPDPFAKI"
+    },
+    {
+      "z": [
+        1.424,
+        -3.9779
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRSSGRVYYFNHITNASQWERPSGG"
+    },
+    {
+      "z": [
+        -0.0302,
+        0.7853
+      ],
+      "sequence": "MSVPSSLSQSAINANSHGGPALSFPLPLHAAHNQLLNAKL"
+    },
+    {
+      "z": [
+        -1.206,
+        0.5296
+      ],
+      "sequence": "MRPGTGAERGGLMVSEMESQPPSRGPGDGERRLSGSNLCS"
+    },
+    {
+      "z": [
+        2.5277,
+        0.8562
+      ],
+      "sequence": "MNKLDYPRRNGTHKVRITILCARNLARKDLFRLPDPFAKV"
+    },
+    {
+      "z": [
+        0.0465,
+        0.3897
+      ],
+      "sequence": "MNGPPDRVDFKPMGPHHGGSFRPMGFAYDDGFRPMGPNGG"
+    },
+    {
+      "z": [
+        0.3796,
+        -0.5525
+      ],
+      "sequence": "MPSDVASRTGLPTPWTVRYSKSKKREYFFNPETKHSQWEE"
+    },
+    {
+      "z": [
+        -1.7264,
+        -1.8052
+      ],
+      "sequence": "MPSSISVKLVAAESLYKRDVFRSPDPFAVLTIDGYQTKST"
+    },
+    {
+      "z": [
+        2.9694,
+        -1.2085
+      ],
+      "sequence": "MSKVIQKKNHWTGRVHECTVKRGPQGELGVTVLGGAEHGE"
+    },
+    {
+      "z": [
+        2.9694,
+        -1.2085
+      ],
+      "sequence": "MSKVIQKKNHWTGRVHECTVKRGPQGELGVTVLGGAEHGE"
+    },
+    {
+      "z": [
+        0.1694,
+        -0.7163
+      ],
+      "sequence": "MPLPVALQTRLAKRGILKHLEPEPEEEIIAEDYDDDPVDY"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        -0.0183,
+        -0.0028
+      ],
+      "sequence": "MSEVLPADSGVGTLAVFMASSGSTDIANRNSPATPPNTLN"
+    },
+    {
+      "z": [
+        2.2548,
+        -1.2344
+      ],
+      "sequence": "MSKTLKKKKHWLSKVQECAVSWAGPPGDLGAEIRGGAERG"
+    },
+    {
+      "z": [
+        2.2548,
+        -1.2344
+      ],
+      "sequence": "MSKTLKKKKHWLSKVQECAVSWAGPPGDLGAEIRGGAERG"
+    },
+    {
+      "z": [
+        -1.6848,
+        4.3745
+      ],
+      "sequence": "MSARSSGLVAAAALPVPSSSSSVAGGDVPRPPPRRRAASV"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        1.5427,
+        -0.6043
+      ],
+      "sequence": "MADGNGLPAGAASGGMEAGQTVNGAGSASPTPTSSSGAGA"
+    },
+    {
+      "z": [
+        -3.0908,
+        1.9009
+      ],
+      "sequence": "MDPGPPPPAAPPQAQGPPSAPPPPGQAPPSAPGPPAPPGS"
+    },
+    {
+      "z": [
+        1.5057,
+        -0.1168
+      ],
+      "sequence": "MNPASVPPALPPPGQQVIHVTQDLDTDLEALFNSVMNPKP"
+    },
+    {
+      "z": [
+        -1.1916,
+        1.3213
+      ],
+      "sequence": "MEPGSQQQPSAPAQQPPPVGHQVVHVRTDSETDLEALFNA"
+    },
+    {
+      "z": [
+        0.0046,
+        0.0053
+      ],
+      "sequence": "MAPLSAALLPWHGVCVPVCYGESRILRVKVVSGIDLAKKD"
+    },
+    {
+      "z": [
+        0.2703,
+        0.1148
+      ],
+      "sequence": "MSNSAQSRRIRVTIVAADGLYKRDVFRFPDPFAVLTVDGE"
+    },
+    {
+      "z": [
+        0.658,
+        0.4532
+      ],
+      "sequence": "MSEVSSDEREDVQKKTFTKWINAQFSKFGKQHIENLFNDL"
+    },
+    {
+      "z": [
+        2.896,
+        1.1666
+      ],
+      "sequence": "MSNVVTRRGGSSIRVRLTVLCAKNLAKRDFFRLPDPFAKI"
+    },
+    {
+      "z": [
+        -1.0349,
+        -0.3998
+      ],
+      "sequence": "MENIRFEVQLTILHVEGLWKNGLLRSLKPYLLISVDDDQF"
+    },
+    {
+      "z": [
+        2.9139,
+        -3.0836
+      ],
+      "sequence": "MDPSQHNPPVGHQIVHVRGDSETDLEALFNAVMNPKGAVV"
+    },
+    {
+      "z": [
+        -0.1601,
+        -0.0239
+      ],
+      "sequence": "MSQPLPPGWTEHKAPSGIPYYWNAELKKSTYQRPSFIEKN"
+    },
+    {
+      "z": [
+        0.1433,
+        0.1013
+      ],
+      "sequence": "MGKKSRAVPGRRPILQLSPPGPRGSTPGRDPEPEPDTEPD"
+    },
+    {
+      "z": [
+        -1.2037,
+        0.1728
+      ],
+      "sequence": "MQPMVMQGCPYTLPRCHDWQAADQFHHSSSLRSTCPHPQV"
+    },
+    {
+      "z": [
+        0.7491,
+        -0.5417
+      ],
+      "sequence": "MLGKDYMLAIILVNCDDDLWGDQNLEGETGLPPGWRKIRD"
+    },
+    {
+      "z": [
+        1.4322,
+        -4.0564
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRSSGRVYYFNHITNASQWERPSGN"
+    },
+    {
+      "z": [
+        -0.8922,
+        0.3346
+      ],
+      "sequence": "MMGKKSRAVPGRRPILQLSPPGPRSSTPGRDPDPDPDPEA"
+    },
+    {
+      "z": [
+        0.1348,
+        -0.2968
+      ],
+      "sequence": "MAATASAIRYAPEDPNLPKPWKGLVDSRTGYLYFWNPETN"
+    },
+    {
+      "z": [
+        -0.0124,
+        0.1431
+      ],
+      "sequence": "MIALPDTDSEDELPPGWEERATDDGTVCYVNQQGKTSQWT"
+    },
+    {
+      "z": [
+        0.3421,
+        1.0965
+      ],
+      "sequence": "MATALQKPGMVPPPPGEESQTVILPPGWHSYLSPQGRRYY"
+    },
+    {
+      "z": [
+        0.5288,
+        -0.3126
+      ],
+      "sequence": "MAQSKSNPPQVPSGWKAVFDDEYQTWYYVDLSTNSSQWEP"
+    },
+    {
+      "z": [
+        0.0462,
+        -0.2751
+      ],
+      "sequence": "MDLHPPGGSKKTSVVVVTLDTGEVYVIASLLSKADTQVIY"
+    },
+    {
+      "z": [
+        -1.5192,
+        1.1815
+      ],
+      "sequence": "MMPPPFMPPPGLPPPFPPMGLPPMSQRPPAIPPMPPGILP"
+    },
+    {
+      "z": [
+        -0.0741,
+        -0.4913
+      ],
+      "sequence": "MAADVEGDVYVLVEHPFEYTGKDGRRIAIQPNERYRLLRR"
+    },
+    {
+      "z": [
+        1.7413,
+        0.4531
+      ],
+      "sequence": "MSNQGVRRNGPVKLRLTVLCAKNLVKKDFFRLPDPFAKVV"
+    },
+    {
+      "z": [
+        -0.4729,
+        0.0081
+      ],
+      "sequence": "MRGEWQEFKTPAGKKYYYNKNTKQSRWEKPNLKKGSNLES"
+    },
+    {
+      "z": [
+        -0.73,
+        -0.272
+      ],
+      "sequence": "MGDEFPFHHLGYVCLNEIYKHLTLKEIFQLSFSSNQIKRS"
+    },
+    {
+      "z": [
+        -2.8262,
+        -0.2413
+      ],
+      "sequence": "MADYWKSQPKKFCDYCKCWIADNRPSVEFHERGKNHKENV"
+    },
+    {
+      "z": [
+        -0.0386,
+        0.0303
+      ],
+      "sequence": "MASSAREHLLFVRRRNPQMRYTLSPENLQSLAAQNSMPEN"
+    },
+    {
+      "z": [
+        0.9785,
+        -0.2429
+      ],
+      "sequence": "MPRRAGSGQLPLPRGWEEARDYDGKVFYIDHNTRRTSWID"
+    },
+    {
+      "z": [
+        -0.4798,
+        0.5087
+      ],
+      "sequence": "MEGENTTDPPYTTAASSGQSIFVRPPPIAPVLATTSNFSQ"
+    },
+    {
+      "z": [
+        -0.6359,
+        1.5913
+      ],
+      "sequence": "MSNLPQTQAHHLQPHPQHPQHLLHHHQQQQQQQQQQQQQQ"
+    },
+    {
+      "z": [
+        1.2913,
+        -2.3489
+      ],
+      "sequence": "MSQPIMLPQGWEARWDPQANAYIYVDQSTGRSQWEVPLNP"
+    },
+    {
+      "z": [
+        1.7221,
+        0.4494
+      ],
+      "sequence": "MSNQGSRRNGPVKLRLTVLCAKNLVKKDFFRLPDSFAKVV"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        0.0047,
+        -0.1651
+      ],
+      "sequence": "MSDMEELDVKAKQYTPQLFLESEDKTDEARSTFNELQECT"
+    },
+    {
+      "z": [
+        -0.622,
+        1.745
+      ],
+      "sequence": "MPNLQQTASQSQSQHHLHPHHLRPHQQQHHQQQQQQQQQQ"
+    },
+    {
+      "z": [
+        0.2617,
+        0.1672
+      ],
+      "sequence": "MSNTGLPKPWIVKISRSRNRPYFFNTETHESLWEPPAATD"
+    },
+    {
+      "z": [
+        -2.6501,
+        2.3852
+      ],
+      "sequence": "MDPGQPQPQQPPQAAQPPAPQQAAPQPPGAGSGAPGGAAQ"
+    },
+    {
+      "z": [
+        -4.1947,
+        -1.5412
+      ],
+      "sequence": "MGSNLPAQPNLRVTIIAADGLYKRDVFRLPDPFAVATVGG"
+    },
+    {
+      "z": [
+        -4.1769,
+        0.4519
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWVNAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        1.2913,
+        -2.3489
+      ],
+      "sequence": "MSQPIMLPQGWEARWDPQANAYIYVDQSTGRSQWEVPLNP"
+    },
+    {
+      "z": [
+        0.0845,
+        -1.139
+      ],
+      "sequence": "MSAHVLWYEEVEDDYEREDVQKKTFTKWINAQFAKCGRRC"
+    },
+    {
+      "z": [
+        1.475,
+        -3.9697
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRSSDRVYYFNHITNASQWERPSGN"
+    },
+    {
+      "z": [
+        -0.0173,
+        0.3395
+      ],
+      "sequence": "MSNNNFQESSNNTSSPSKRSTPMLFLDAENKTQEALTTFE"
+    },
+    {
+      "z": [
+        -0.7779,
+        1.6148
+      ],
+      "sequence": "MPNQSQHHLQPHPHHLRPQQQQQQQQQQQQQQHHRQQQQQ"
+    },
+    {
+      "z": [
+        -0.0038,
+        -0.0285
+      ],
+      "sequence": "MSAPPWQTSEYDETEGFTSNQEGPSAAPSKTVASDWHEVK"
+    },
+    {
+      "z": [
+        -0.7833,
+        -1.4798
+      ],
+      "sequence": "MAALKYAGLEDTDSEEELPPGWEERTTKDGWVYYANHLEE"
+    },
+    {
+      "z": [
+        0.1212,
+        -0.1424
+      ],
+      "sequence": "MSGNNSPINAQLFPDARDVTKDALQTFVELPECTYMKGLG"
+    },
+    {
+      "z": [
+        -0.7383,
+        1.9826
+      ],
+      "sequence": "MPNLQQTASQSQHHLYPPHLRPHHHHQQQQHHQQQQQQQH"
+    },
+    {
+      "z": [
+        -0.5049,
+        -0.2536
+      ],
+      "sequence": "MSAGTAPAAPRYAPDDPSLPKPWRGLVDGTTGYLYYWNPE"
+    },
+    {
+      "z": [
+        0.1814,
+        -0.2807
+      ],
+      "sequence": "MAERSGKITAGQAYIEVEYDYEYDAKDRKIVIRQGERYLL"
+    },
+    {
+      "z": [
+        0.3963,
+        0.936
+      ],
+      "sequence": "MATTEDTPASAGPRYAPEDPTLPQPWKGLIDGSTGILYYW"
+    },
+    {
+      "z": [
+        -0.2813,
+        0.03
+      ],
+      "sequence": "MAAPLRRDTLPDNGSYGVCRDGRVFFIDDEARATTWLHPR"
+    },
+    {
+      "z": [
+        -0.788,
+        -1.4927
+      ],
+      "sequence": "MAALKYAGMEDTDSEDELPPGWEERSTKDGWVYYANHEEM"
+    },
+    {
+      "z": [
+        -0.4075,
+        0.1786
+      ],
+      "sequence": "MKRAAQASDEPLKKRKTAREESSDEDEESSQRTTSQDSSQ"
+    },
+    {
+      "z": [
+        1.064,
+        -2.6729
+      ],
+      "sequence": "MPDAEQLPDGWEKRTSRSTGMSYYLNMYTKESQWDQPTEP"
+    },
+    {
+      "z": [
+        0.6042,
+        -0.9017
+      ],
+      "sequence": "MVMYARKQPRLGDGCTDRRDSQPYQTLKYSSKSHPDHRHE"
+    },
+    {
+      "z": [
+        0.7491,
+        -0.5417
+      ],
+      "sequence": "MLGKDYMLAIILVNCDDDLWGDQNLEGETGLPPGWRKIRD"
+    },
+    {
+      "z": [
+        2.1271,
+        -1.0713
+      ],
+      "sequence": "MSKTLKKKKHWLSKVQECGLSGVGGDPCSLLEIRGGAEHG"
+    },
+    {
+      "z": [
+        0.1035,
+        0.226
+      ],
+      "sequence": "MSNNTRMDGLPAQPNLRVTIIAADGLYKRDVFRFPDPFAV"
+    },
+    {
+      "z": [
+        -1.7682,
+        -0.7507
+      ],
+      "sequence": "MEQGAKRVRFYIVAADGLSKRDLFRQPDPFAILTVDGEQT"
+    },
+    {
+      "z": [
+        0.3165,
+        0.0396
+      ],
+      "sequence": "MKRKSDSEQQPSVQCRKKKRIEELGLNLSSTSDDDTQYSN"
+    },
+    {
+      "z": [
+        0.6524,
+        0.2836
+      ],
+      "sequence": "MLRSAGRVAAVALLALFALGCVSAAAKPSTDRLVAAIKSK"
+    },
+    {
+      "z": [
+        -4.2986,
+        -1.5267
+      ],
+      "sequence": "MGSNLPAQPNLRLTIIAADGLYKRDVFRFPDPFAVATVGG"
+    },
+    {
+      "z": [
+        -4.316,
+        -1.5345
+      ],
+      "sequence": "MGSNLPAQPNLRVTIIAADGLYKRDVFRFPDPFAVATVGG"
+    },
+    {
+      "z": [
+        -0.4546,
+        0.0043
+      ],
+      "sequence": "MSNTIETGLPEDWEVRHSQSKNLPYYFNSATKTSRWEPPS"
+    },
+    {
+      "z": [
+        -0.3229,
+        -0.2307
+      ],
+      "sequence": "MDLPENWIVRHSRTYNKDYYYNTVTNESRWDAPVLKGELE"
+    },
+    {
+      "z": [
+        -0.0512,
+        0.436
+      ],
+      "sequence": "MSPDDAKSAADGTSVPENGTAPKLSRKPSQKLPRGPPPLF"
+    },
+    {
+      "z": [
+        -0.2375,
+        0.2687
+      ],
+      "sequence": "MAQPPPQLPPGWVAQWDPNAARQVFVETATGRTSWQPPTA"
+    },
+    {
+      "z": [
+        -2.7984,
+        -0.2273
+      ],
+      "sequence": "MADYWKSQPKKFCDYCKCWIADNRPSIDFHERGKNHKENV"
+    },
+    {
+      "z": [
+        0.8115,
+        -0.9084
+      ],
+      "sequence": "MVMYARKQARLSDGCHDRRDSQPYQTLKYSSKSHPSSSDH"
+    },
+    {
+      "z": [
+        -2.379,
+        -1.0424
+      ],
+      "sequence": "MGSNLPAQPNLRLTTDGLYKRDVFRFPDPFAVATVGGEQT"
+    },
+    {
+      "z": [
+        -0.4167,
+        1.3232
+      ],
+      "sequence": "MSNQQQQQLPRQLPQPHPHHHHHHHQQQPGQHSEFPLPDG"
+    },
+    {
+      "z": [
+        -0.7042,
+        1.5928
+      ],
+      "sequence": "MSNQQQQQQQQQQPRQHPQPHPHHHHHHLHHHHQQQPGQH"
+    },
+    {
+      "z": [
+        -4.316,
+        -1.5345
+      ],
+      "sequence": "MGSNLPAQPNLRVTIIAADGLYKRDVFRFPDPFAVATVGG"
+    },
+    {
+      "z": [
+        0.3775,
+        0.4706
+      ],
+      "sequence": "MEDGHHSPDSTKESKSEEHSKMNGSKLKRDGASNAGNAAT"
+    },
+    {
+      "z": [
+        -4.2507,
+        -1.4489
+      ],
+      "sequence": "MGSNLPSQPNLRLTIIAADGLYKRDVFRFPDPFAVATVGG"
+    },
+    {
+      "z": [
+        0.6685,
+        -2.0932
+      ],
+      "sequence": "MIRKELPLPEGWEEARDVDGKVYYIDHTSKTTSWIDPRDR"
+    },
+    {
+      "z": [
+        -0.7319,
+        1.9763
+      ],
+      "sequence": "MPNLQQTASQSQHHLHPHHLRPQQQQQQQQHHHQQQRQQQ"
+    },
+    {
+      "z": [
+        -0.0565,
+        0.4676
+      ],
+      "sequence": "MHRGGDRSTDPSSGPAPGSRGGGDGRFGRGPSRWSSGGGG"
+    },
+    {
+      "z": [
+        -1.7304,
+        -1.0057
+      ],
+      "sequence": "MTCSQPNLRVTIIAADGLYKRDVFRFPDPFAVATVGGEQT"
+    },
+    {
+      "z": [
+        -4.316,
+        -1.5345
+      ],
+      "sequence": "MGSNLPAQPNLRVTIIAADGLYKRDVFRFPDPFAVATVGG"
+    },
+    {
+      "z": [
+        -2.379,
+        -1.0424
+      ],
+      "sequence": "MGSNLPAQPNLRLTTDGLYKRDVFRFPDPFAVATVGGEQT"
+    },
+    {
+      "z": [
+        2.2909,
+        -1.1608
+      ],
+      "sequence": "MSKTLRKKRHWLSKVQECVVSWGGPAGPDPELLHGGAERG"
+    },
+    {
+      "z": [
+        1.215,
+        -3.8366
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRPSGRGYYFNHITNPSQWERPSGN"
+    },
+    {
+      "z": [
+        0.1728,
+        0.2747
+      ],
+      "sequence": "MLPNGFSFLNPNLVAAANIQQVLLNQRFGMPPVGSIAQVP"
+    },
+    {
+      "z": [
+        0.0568,
+        0.6359
+      ],
+      "sequence": "MTTAVQPSDTTGFGGGPAGSRASDLIQFQEIMSESAESSS"
+    },
+    {
+      "z": [
+        -0.1967,
+        0.2236
+      ],
+      "sequence": "XNGDCKPEMSEIKLNSDSEYIKLMHRTSACLPSSQNVDCQ"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.5096,
+        0.7856
+      ],
+      "sequence": "EGATSGLIIPLTISGGSGPRPLNPVTQAPLPPGWEQRVDQ"
+    },
+    {
+      "z": [
+        0.5693,
+        2.0008
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITETRFHHLDQAGLELLTS"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.1069,
+        0.3337
+      ],
+      "sequence": "MAVVTASSAGPSYAPEDPTLPKPWKGLVDGTTGFIYFWNP"
+    },
+    {
+      "z": [
+        -2.1515,
+        0.7394
+      ],
+      "sequence": "MSAATQSPVMQMASGNGASDRDPLPPGWEIKIDPQTGWPF"
+    },
+    {
+      "z": [
+        0.5225,
+        -0.4223
+      ],
+      "sequence": "MKMKKVCRITGKDGVICNDWNKVCLPVGDMSDSGSQLGSM"
+    },
+    {
+      "z": [
+        1.9473,
+        -2.346
+      ],
+      "sequence": "MSGNPLQPIPGHQVIHVAKDLDTDLEALFNSVMNPKPSSW"
+    },
+    {
+      "z": [
+        -0.5346,
+        -3.5069
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSSIHMCFTRPTR"
+    },
+    {
+      "z": [
+        -1.8947,
+        0.072
+      ],
+      "sequence": "MAVVLSTTSNMSKSLKKKSHWTNRVHEVVLSRGPSGDLGF"
+    },
+    {
+      "z": [
+        -0.1858,
+        0.1669
+      ],
+      "sequence": "MADEKLPPGWKKYMSRSSGREYYFNHITNASQWERPSEGS"
+    },
+    {
+      "z": [
+        0.8644,
+        2.7991
+      ],
+      "sequence": "MSDSAPQLDSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.5447,
+        -2.7555
+      ],
+      "sequence": "MAQSLRLHFAARRSKTYPLSEPSGDDLDNHIHTHGQRPPR"
+    },
+    {
+      "z": [
+        2.8217,
+        -3.112
+      ],
+      "sequence": "MDPNQHNPPAGHQIVHVRGDSETDLEALFNAVMNPKNTIV"
+    },
+    {
+      "z": [
+        0.5641,
+        -0.1639
+      ],
+      "sequence": "MSSDMAADESEAPVLSEDEVWEFCLDKTEDGGGSPGSDVT"
+    },
+    {
+      "z": [
+        -2.6713,
+        -1.7353
+      ],
+      "sequence": "MKQQLPPQPPPKMGDFYDPEHPTPEEEENEAKIENVPKTG"
+    },
+    {
+      "z": [
+        1.9473,
+        -2.346
+      ],
+      "sequence": "MSGNPLQPIPGHQVIHVAKDLDTDLEALFNSVMNPKPSSW"
+    },
+    {
+      "z": [
+        -2.1757,
+        2.956
+      ],
+      "sequence": "MEPAQQPPPQPAPQGPAPPSVSPAGTPAAPPAPPAGHQVV"
+    },
+    {
+      "z": [
+        0.4917,
+        -0.7208
+      ],
+      "sequence": "MPRKGNGQLPLPDGWEEARDYDGKVFYIDHNSRQTSWIDP"
+    },
+    {
+      "z": [
+        3.2617,
+        1.3122
+      ],
+      "sequence": "MSNPGTRRNGSSIKIRLTVLCAKNLAKKDFFRLPDPFAKI"
+    },
+    {
+      "z": [
+        0.8644,
+        2.7991
+      ],
+      "sequence": "MSDSAPQLDSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.255,
+        0.0987
+      ],
+      "sequence": "GLNNTKSSLPKKKEENKKRTAKIENVQKTGFIKGPIFKGV"
+    },
+    {
+      "z": [
+        0.5195,
+        0.0619
+      ],
+      "sequence": "MEQGESRILRVKVVSGIDLAKKDIFGASDPYVKLSLYVAD"
+    },
+    {
+      "z": [
+        -4.2513,
+        0.4727
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWINAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        -0.5611,
+        -0.7855
+      ],
+      "sequence": "MTDKTAELCLKIGDEEKDDFTLEIEKLQATLQEMLDCTSS"
+    },
+    {
+      "z": [
+        -4.202,
+        2.487
+      ],
+      "sequence": "MDPGPPPPQPAPQGQGPPPAQAPQGQGPPSAPGQPAPPGP"
+    },
+    {
+      "z": [
+        -0.6479,
+        0.7462
+      ],
+      "sequence": "MHNSTAPLSARLFPRGGSLQQTLFMGQSGSRGGCASLRLL"
+    },
+    {
+      "z": [
+        -0.7758,
+        1.0204
+      ],
+      "sequence": "MPSGAEGQAGPAAAAPEPRRWSLQHVPDASGSSGKRCFVF"
+    },
+    {
+      "z": [
+        0.0325,
+        -0.3403
+      ],
+      "sequence": "MQVITATHFKILTKLQFRVWDIIGTNWFGPSPYVEVTVDG"
+    },
+    {
+      "z": [
+        1.4322,
+        -4.0564
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRSSGRVYYFNHITNASQWERPSGN"
+    },
+    {
+      "z": [
+        1.3032,
+        -1.3323
+      ],
+      "sequence": "MLSRKKTKNEVSKPAEVQGKYVKKETSPLLRNLMPSFIRH"
+    },
+    {
+      "z": [
+        0.6388,
+        -2.1548
+      ],
+      "sequence": "MPRPELPLPEGWEEARDFDGKVYYIDHRNRTTSWIDPRDR"
+    },
+    {
+      "z": [
+        -2.0442,
+        0.7122
+      ],
+      "sequence": "MSAATHSPMVQMASGNGAGDRDPLPPGWEIKIDPQTGWPF"
+    },
+    {
+      "z": [
+        0.9391,
+        2.9188
+      ],
+      "sequence": "MSDSGPQLDSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -1.32,
+        1.1098
+      ],
+      "sequence": "MMGPPGIPPHFPPMGMPPMGQRPPSLAPMPPGIMPPMMPP"
+    },
+    {
+      "z": [
+        -0.4587,
+        0.5058
+      ],
+      "sequence": "MEPPAAPVPLQPLAASSACLADRSPVDPIAVRLQQEEQAE"
+    },
+    {
+      "z": [
+        -0.5666,
+        0.052
+      ],
+      "sequence": "MNPCLKNQPILGILVVGTGTFTVAVHVQSLVREARSCKSC"
+    },
+    {
+      "z": [
+        -1.0691,
+        0.5088
+      ],
+      "sequence": "MSLCEAPVHVGDKELKYFQIPQMLSQLSLLASHHSRGLEF"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        -1.8947,
+        0.072
+      ],
+      "sequence": "MAVVLSTTSNMSKSLKKKSHWTNRVHEVVLSRGPSGDLGF"
+    },
+    {
+      "z": [
+        1.5427,
+        -0.6043
+      ],
+      "sequence": "MADGNGLPAGAASGGMEAGQTVNGAGSASPTPTSSSGAGA"
+    },
+    {
+      "z": [
+        -1.6848,
+        4.3745
+      ],
+      "sequence": "MSARSSGLVAAAALPVPSSSSSVAGGDVPRPPPRRRAASV"
+    },
+    {
+      "z": [
+        -0.054,
+        2.3351
+      ],
+      "sequence": "MASASSSRAGVALPFEKSQLTLKVVSAKPKVHNRQPRINS"
+    },
+    {
+      "z": [
+        -1.6848,
+        4.3745
+      ],
+      "sequence": "MSARSSGLVAAAALPVPSSSSSVAGGDVPRPPPRRRAASV"
+    },
+    {
+      "z": [
+        1.2889,
+        -3.5238
+      ],
+      "sequence": "MSDDEKLPSGWEKRMSRSSGRVYYFNHITNASQWERPSGS"
+    },
+    {
+      "z": [
+        -1.6848,
+        4.3745
+      ],
+      "sequence": "MSARSSGLVAAAALPVPSSSSSVAGGDVPRPPPRRRAASV"
+    },
+    {
+      "z": [
+        0.7187,
+        -0.1126
+      ],
+      "sequence": "MSLPAALLQRLKKRGLVTKQSGAAPISEAIEEIIAENYDD"
+    },
+    {
+      "z": [
+        2.5277,
+        0.8562
+      ],
+      "sequence": "MNKLDYPRRNGTHKVRITILCARNLARKDLFRLPDPFAKV"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        3.2617,
+        1.3122
+      ],
+      "sequence": "MSNPGTRRNGSSIKIRLTVLCAKNLAKKDFFRLPDPFAKI"
+    },
+    {
+      "z": [
+        -1.8947,
+        0.072
+      ],
+      "sequence": "MAVVLSTTSNMSKSLKKKSHWTNRVHEVVLSRGPSGDLGF"
+    },
+    {
+      "z": [
+        -0.0429,
+        2.3297
+      ],
+      "sequence": "MASASSSRAGVALPFEKSQLTLRVVSAKPKVHNRQPRINS"
+    },
+    {
+      "z": [
+        -1.6848,
+        4.3745
+      ],
+      "sequence": "MSARSSGLVAAAALPVPSSSSSVAGGDVPRPPPRRRAASV"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.0246,
+        0.3086
+      ],
+      "sequence": "CFAVQVCCLIDGMSDSGPQLDSMGSLTMKSQLQITVISAK"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        -0.3423,
+        -2.7235
+      ],
+      "sequence": "MAQSLRLHFAARRSKTYPLSEPSGDDLDSHVDTHGQRRPR"
+    },
+    {
+      "z": [
+        -3.2563,
+        -3.1895
+      ],
+      "sequence": "MKQLPSQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTGF"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -1.3126,
+        -0.4969
+      ],
+      "sequence": "MELEKSGALLESGTYEDNFYGTPKPPAEPTPMLFNVTDQL"
+    },
+    {
+      "z": [
+        3.2617,
+        1.3122
+      ],
+      "sequence": "MSNPGTRRNGSSIKIRLTVLCAKNLAKKDFFRLPDPFAKI"
+    },
+    {
+      "z": [
+        0.2652,
+        0.1169
+      ],
+      "sequence": "MTCSEVKSTRVLLAQGLHTGKKQGKSVTNNFCSAAFKNIT"
+    },
+    {
+      "z": [
+        1.3032,
+        -1.3323
+      ],
+      "sequence": "MLSRKKTKNEVSKPAEVQGKYVKKETSPLLRNLMPSFIRH"
+    },
+    {
+      "z": [
+        -1.6848,
+        4.3745
+      ],
+      "sequence": "MSARSSGLVAAAALPVPSSSSSVAGGDVPRPPPRRRAASV"
+    },
+    {
+      "z": [
+        -0.7302,
+        1.9472
+      ],
+      "sequence": "MPNLQQTASQSQHHLHPHHLRPQQQQQQHHHHHQQQQQQQ"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.5611,
+        -0.7855
+      ],
+      "sequence": "MTDKTAELCLKIGDEEKDDFTLEIEKLQATLQEMLDCTSS"
+    },
+    {
+      "z": [
+        -0.3854,
+        0.6093
+      ],
+      "sequence": "MFFREFLFAYQKMNPASAPPPLPPPGQQVIHVTQDLDTDL"
+    },
+    {
+      "z": [
+        -2.1515,
+        0.7394
+      ],
+      "sequence": "MSAATQSPVMQMASGNGASDRDPLPPGWEIKIDPQTGWPF"
+    },
+    {
+      "z": [
+        -1.3398,
+        -0.5449
+      ],
+      "sequence": "MELEKSGALLESGTYEDNYYGTPKPPAEPAPLLLNVTDQI"
+    },
+    {
+      "z": [
+        0.2321,
+        -0.0784
+      ],
+      "sequence": "MLMLILEKLGESRILRVKVVSGIDLAKKDIFGASDPYVKL"
+    },
+    {
+      "z": [
+        1.9351,
+        1.5669
+      ],
+      "sequence": "MATASPRSDTSNNHSGRLQLQVTVSSAKLKRKKNWFGTAI"
+    },
+    {
+      "z": [
+        1.0633,
+        0.1663
+      ],
+      "sequence": "MSNPGGRRNGPVKLRLTGLPDPFAKVVVDGSGQCHSTDTV"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        0.0943,
+        -0.3868
+      ],
+      "sequence": "MSERTFARNLQNRGGRDPYVKLSLYVADENRELALVQTKT"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        1.4322,
+        -4.0564
+      ],
+      "sequence": "MADEEKLPPGWEKRMSRSSGRVYYFNHITNASQWERPSGN"
+    },
+    {
+      "z": [
+        -1.3398,
+        -0.5449
+      ],
+      "sequence": "MELEKSGALLESGTYEDNYYGTPKPPAEPAPLLLNVTDQI"
+    },
+    {
+      "z": [
+        0.5195,
+        0.0619
+      ],
+      "sequence": "MEQGESRILRVKVVSGIDLAKKDIFGASDPYVKLSLYVAD"
+    },
+    {
+      "z": [
+        -0.2927,
+        0.2942
+      ],
+      "sequence": "NVQKTGFIKGPMFKGVASSRFLPKGTKTKVNLEEQGRQKV"
+    },
+    {
+      "z": [
+        -0.0589,
+        0.5668
+      ],
+      "sequence": "MERPYTFKDFLLRPRSHKSRVRGFLRLKMAYMPKNGGQDE"
+    },
+    {
+      "z": [
+        0.8756,
+        0.4385
+      ],
+      "sequence": "MCSGSGRRRSSLSPTMRPGTGAERGGLMVSEMESHPPSQG"
+    },
+    {
+      "z": [
+        0.2139,
+        0.1951
+      ],
+      "sequence": "XAWWEAVSGSQREGLILAIGLGFAGTTRSPREGEVPGVDY"
+    },
+    {
+      "z": [
+        0.3865,
+        -0.2516
+      ],
+      "sequence": "KQSTPKRTKSYNDMQNAGIVHAENEEEDDVPEMNSSFTAD"
+    },
+    {
+      "z": [
+        0.2739,
+        0.1866
+      ],
+      "sequence": "MFKGVASSRFLPKGTKTKVNLEEQGRQKVSFSFSLTKKTL"
+    },
+    {
+      "z": [
+        -0.8233,
+        -1.5823
+      ],
+      "sequence": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.3175,
+        -2.1548
+      ],
+      "sequence": "MAHRLRFHFGSGRSNTAPESDILDQEREDDFFMAFHTLPR"
+    },
+    {
+      "z": [
+        0.6619,
+        0.4594
+      ],
+      "sequence": "MSEVSSDEREDVQKKTFTKWVNAQFSKFGKQHIENLFSDL"
+    },
+    {
+      "z": [
+        0.0933,
+        -0.0668
+      ],
+      "sequence": "MENMQLTLNLQTENKGSVVSGGELTIFLDGPTVDLGNVPN"
+    },
+    {
+      "z": [
+        -0.0444,
+        0.5141
+      ],
+      "sequence": "MERPYTFKDFLLRPRSHKSRVKGFLRLKMAYMPKNGGQDE"
+    },
+    {
+      "z": [
+        4.3064,
+        -1.9738
+      ],
+      "sequence": "MSKSLKKKSHWTSKVHESVIGRNPEGQLGFELKGGAENGQ"
+    },
+    {
+      "z": [
+        0.111,
+        0.4606
+      ],
+      "sequence": "AGGSLGTGRRRQRLPATGGTTRSPREGEVPGVDYNFLTVK"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.3017,
+        0.0764
+      ],
+      "sequence": "MSASDTRTVRITVVAADGLVKREVFRLPDPFAVITVNGEQ"
+    },
+    {
+      "z": [
+        -4.1769,
+        0.4519
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWVNAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        2.8017,
+        -0.3148
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGASTDAGTAGALTPQHVRAHSSPA"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.9771,
+        2.8236
+      ],
+      "sequence": "MSDSGSQPGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.5521,
+        1.0633
+      ],
+      "sequence": "QACNPSTLGGQGGWIMRSRDRDHPVISAKLKENRKNWFGP"
+    },
+    {
+      "z": [
+        0.524,
+        1.9944
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITETRFHHLGQADLELLTS"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.097,
+        0.4163
+      ],
+      "sequence": "GGRTSCGQGRPRSPQRPQFGPGMDPAFVVLFCSFFAPPAG"
+    },
+    {
+      "z": [
+        4.4163,
+        -0.0958
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPAQPPQGQGQPSGPGQPAPAA"
+    },
+    {
+      "z": [
+        -4.2513,
+        0.4727
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWINAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        -1.3452,
+        1.1563
+      ],
+      "sequence": "AGPGELEAPFPSSGGEGPPQGQGPPSAPGQPAPAATQAAP"
+    },
+    {
+      "z": [
+        -4.1769,
+        0.4519
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWVNAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        -0.1061,
+        0.1097
+      ],
+      "sequence": "FDPWVNLLEKEMAIHSTSLAWEIPWTEEPGGLQSMGLQRE"
+    },
+    {
+      "z": [
+        1.5428,
+        2.3642
+      ],
+      "sequence": "MSGSSSRSGSVGGLTMKSQLQIIVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        1.5835,
+        2.0991
+      ],
+      "sequence": "MAGNGSNSECISGPTMKSQLQVTVISAKLKENKNKWFGPS"
+    },
+    {
+      "z": [
+        2.8921,
+        -3.1773
+      ],
+      "sequence": "MDPSQHNPPAGHQIVHVRGDSETDLEALFNAVMNPKNTIV"
+    },
+    {
+      "z": [
+        -0.5346,
+        -3.5069
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSSIHMCFTRPTR"
+    },
+    {
+      "z": [
+        1.5428,
+        2.3642
+      ],
+      "sequence": "MSGSSSRSGSVGGLTMKSQLQIIVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.9391,
+        2.9188
+      ],
+      "sequence": "MSDSGPQLDSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.2049,
+        -0.4547
+      ],
+      "sequence": "MLSNVSEQLLIRFYEREDVQKKTFTKWINAQFVKCGRRCI"
+    },
+    {
+      "z": [
+        -0.1759,
+        0.6985
+      ],
+      "sequence": "MMWGEKTKQSDHLLSFAWHSLSLKLQKTSAEKLTFIALIQ"
+    },
+    {
+      "z": [
+        -0.2578,
+        0.0319
+      ],
+      "sequence": "MKHFLTIFSIFSVLIHKYSALDFDNYTLFINHLSSDETFL"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.5346,
+        -3.5069
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSSIHMCFTRPTR"
+    },
+    {
+      "z": [
+        0.9161,
+        0.3055
+      ],
+      "sequence": "MALCCSEMWCYCENTRIVRVKIIAGIGLAKKDILGASDPY"
+    },
+    {
+      "z": [
+        0.2997,
+        1.3021
+      ],
+      "sequence": "ASTDAGTAGALTPQHVRAHSSPASLQLGAVSPGTLTPTGV"
+    },
+    {
+      "z": [
+        -0.3494,
+        -2.3824
+      ],
+      "sequence": "MARRLRLHFATQRRNTDLLPETSEDVLNSNNQMYFKKAQN"
+    },
+    {
+      "z": [
+        -0.2235,
+        -0.2491
+      ],
+      "sequence": "MQGKDAVLHYLDLLRQPTYWRDGVTRKAAGMEDEREDVQK"
+    },
+    {
+      "z": [
+        0.3406,
+        0.0865
+      ],
+      "sequence": "ESGQVRIPGSQGRGAGAGIISAKLKENKNKWFGPSPYVEV"
+    },
+    {
+      "z": [
+        1.7038,
+        -0.2397
+      ],
+      "sequence": "MNPKGANVPHTLPMRLRKLPDSFFKPPEPKAHSRQASTDA"
+    },
+    {
+      "z": [
+        1.754,
+        2.248
+      ],
+      "sequence": "MAGSGPRSGTVSGFAMKSQLQITVISAKLKENKNKWFGPS"
+    },
+    {
+      "z": [
+        0.1462,
+        -0.1003
+      ],
+      "sequence": "ETATVINCFKSREPLKEVKVIAGIGLAKKDILGASDPYVR"
+    },
+    {
+      "z": [
+        4.6216,
+        -0.0418
+      ],
+      "sequence": "MDPGQQQPPQPAPQGQGQPPAQTPQGQGPPSGPGQPAPPA"
+    },
+    {
+      "z": [
+        -1.5213,
+        1.6434
+      ],
+      "sequence": "MDVAGQPQQAPSGAAAAPQPSSAQPQPTGQPSPPAPQPGG"
+    },
+    {
+      "z": [
+        2.325,
+        0.0505
+      ],
+      "sequence": "MAKTSSGQRYFLNHIDQTTTWQDPRKAMLSQMSVTAPTSP"
+    },
+    {
+      "z": [
+        -0.4659,
+        -3.4822
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPVSETSGDDSDSSVHMCFTRPTR"
+    },
+    {
+      "z": [
+        0.5914,
+        0.5422
+      ],
+      "sequence": "MEECGASVETPEPRLLPLLSEPVCRPVGVMSDSGSQLGSM"
+    },
+    {
+      "z": [
+        -3.729,
+        0.4551
+      ],
+      "sequence": "MLWYEEVEDDYEREDVQKKTFTKWINAQFAKFGRRHIEDL"
+    },
+    {
+      "z": [
+        -0.2866,
+        0.4548
+      ],
+      "sequence": "MAYGAEASGSHQEERHQQQIRLRDQQTQDCQVHVPSCIMA"
+    },
+    {
+      "z": [
+        -0.3019,
+        -0.0382
+      ],
+      "sequence": "MTQFSDQXSVTLVNSSTLCVLHSDPYVKVTVYDSANGILS"
+    },
+    {
+      "z": [
+        0.1574,
+        -0.0174
+      ],
+      "sequence": "VAGDGEKRKIKYSFLFLIVISAKLKENKNKWFGPSPYVEV"
+    },
+    {
+      "z": [
+        0.883,
+        3.0139
+      ],
+      "sequence": "MTDSRSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9692,
+        -3.4817
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKKPTR"
+    },
+    {
+      "z": [
+        4.2518,
+        0.0561
+      ],
+      "sequence": "MDPGQQPQPQQAPQGQGQPPAQPPQGQGPTSGPGQPAPPA"
+    },
+    {
+      "z": [
+        -0.707,
+        -3.5054
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSNVHMCFKRPTR"
+    },
+    {
+      "z": [
+        -0.4201,
+        0.0024
+      ],
+      "sequence": "MKAAMLGFCMLLVSVLDASPLRTAHDSPVSMGEYVINSGK"
+    },
+    {
+      "z": [
+        0.9771,
+        2.8236
+      ],
+      "sequence": "MSDSGSQPGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        2.8021,
+        2.5916
+      ],
+      "sequence": "MAGTGSKSGLPGGLYMKSQLQITVISAKLKEKNKWFGPSP"
+    },
+    {
+      "z": [
+        -4.1537,
+        0.525
+      ],
+      "sequence": "MLWWEEVEDHYEREDVQKKTFTKWINAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        -1.6738,
+        -0.9492
+      ],
+      "sequence": "MSARTTPINVKVVAAESLYKRDVFRQPDPFAVITVDGSQT"
+    },
+    {
+      "z": [
+        -1.3398,
+        -0.5449
+      ],
+      "sequence": "MELEKSGALLESGTYEDNYYGTPKPPAEPAPLLLNVTDQI"
+    },
+    {
+      "z": [
+        -0.1592,
+        0.4055
+      ],
+      "sequence": "MGRVVLCPPSSFRFSCACARAARLWRVAASGWTWTGCHLR"
+    },
+    {
+      "z": [
+        -0.3599,
+        -0.0411
+      ],
+      "sequence": "MEIAWLALYIFFIWDLFMFKCLFFNAQICRPVGGMSGSGS"
+    },
+    {
+      "z": [
+        2.2797,
+        0.0633
+      ],
+      "sequence": "MAKTSSGQRYFLNHIDQTTTWQDPRKTMLSQMSVTAPTSP"
+    },
+    {
+      "z": [
+        -0.4394,
+        -3.224
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSESSGDDLESNVPMCFKRPTR"
+    },
+    {
+      "z": [
+        1.697,
+        -0.2254
+      ],
+      "sequence": "MNPKTANVPQTVPMRLRKLPDSFFKPPEPKSHSRQASTDA"
+    },
+    {
+      "z": [
+        -1.6952,
+        -0.9457
+      ],
+      "sequence": "MSRNTSTITVKLVAAESLYKRDVFRQPDPFAVITVDGSQT"
+    },
+    {
+      "z": [
+        -1.7387,
+        -1.8019
+      ],
+      "sequence": "MPCSISVKLVAAESLYKRDVFRSPDPFAVLTIDGYQTKST"
+    },
+    {
+      "z": [
+        4.349,
+        -0.1287
+      ],
+      "sequence": "MDPGQQPPPQPAPPGQGQPPAQTPQGQGQPSGPGQPAPQA"
+    },
+    {
+      "z": [
+        -0.2502,
+        -0.1541
+      ],
+      "sequence": "IQVMSELKLIVLSAKLKENKKNWFGPSPYVEVTVDGQSKK"
+    },
+    {
+      "z": [
+        2.9646,
+        2.8028
+      ],
+      "sequence": "MAGSGSRSGPASGLSMKSQLQITVISAKLKEKNKWFGPSP"
+    },
+    {
+      "z": [
+        4.3191,
+        0.0069
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPSQPPQGQGPPSGPGQPAPAA"
+    },
+    {
+      "z": [
+        0.227,
+        -1.8249
+      ],
+      "sequence": "MPSISVKLVAAESLYKRDVFRSPDPFAVLTIDGFQTKSTG"
+    },
+    {
+      "z": [
+        -0.0414,
+        0.1703
+      ],
+      "sequence": "TSLSFIESAFKKFGKQHIENLFSDLQDGRRLLDLLEGLTG"
+    },
+    {
+      "z": [
+        2.325,
+        0.0505
+      ],
+      "sequence": "MAKTSSGQRYFLNHIDQTTTWQDPRKAMLSQMSVTAPTSP"
+    },
+    {
+      "z": [
+        0.071,
+        0.0139
+      ],
+      "sequence": "MKLEQVVVTLHLLGDREPAEVVGDLSVCLDGMQVDPELLT"
+    },
+    {
+      "z": [
+        2.7189,
+        -2.837
+      ],
+      "sequence": "MDPSQHNPPAGQPIVHVRGDSETDLEALFNAVMNPKSANV"
+    },
+    {
+      "z": [
+        -1.6231,
+        -0.9746
+      ],
+      "sequence": "MPSSHSVITVRLIAAESLYKRDVFRSPDPFAVLTVDGGQT"
+    },
+    {
+      "z": [
+        -3.3435,
+        -3.2563
+      ],
+      "sequence": "MKQLQPQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTGF"
+    },
+    {
+      "z": [
+        2.9139,
+        -3.0836
+      ],
+      "sequence": "MDPSQHNPPVGHQIVHVRGDSETDLEALFNAVMNPKGAVV"
+    },
+    {
+      "z": [
+        -3.47,
+        -1.363
+      ],
+      "sequence": "MSSNGLTQRPIRLTVIAADGLYKRDVFRLPDPFAVVTVDG"
+    },
+    {
+      "z": [
+        0.1726,
+        -0.4182
+      ],
+      "sequence": "MPSIKINIKVVAAESLYKRDVFRLPDPFAVLTVNGGQTHS"
+    },
+    {
+      "z": [
+        0.5099,
+        0.0722
+      ],
+      "sequence": "MVGTQTRTVRLTVIAADGLVKKDLFFKMPDPFAVVTVDGE"
+    },
+    {
+      "z": [
+        0.2997,
+        1.3021
+      ],
+      "sequence": "ASTDAGTAGALTPQHVRAHSSPASLQLGAVSPGTLTPTGV"
+    },
+    {
+      "z": [
+        -3.3835,
+        -3.2503
+      ],
+      "sequence": "MKQLPPQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTGF"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        4.3436,
+        -0.0534
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPEA"
+    },
+    {
+      "z": [
+        1.02,
+        2.874
+      ],
+      "sequence": "MSNSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        4.632,
+        0.0077
+      ],
+      "sequence": "MDPGQQQPPQPAPQGQGQQPAQTPQGQGPPSGPGQPAPPA"
+    },
+    {
+      "z": [
+        2.3202,
+        0.0518
+      ],
+      "sequence": "MAKTSSGQRYFLNHIDQTTTWQDPRKAMLSQMNVTAPTSP"
+    },
+    {
+      "z": [
+        0.9771,
+        2.8236
+      ],
+      "sequence": "MSDSGSQPGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.4857,
+        0.6154
+      ],
+      "sequence": "MGFYHISQAGRKLLTSGDPPPLASQSGGTTGGPPSGPGQP"
+    },
+    {
+      "z": [
+        0.1975,
+        -1.7318
+      ],
+      "sequence": "MTKVNVKVVAAESLYKRDVFRQPDPFAVITVDGDQTITTK"
+    },
+    {
+      "z": [
+        -2.4086,
+        1.5348
+      ],
+      "sequence": "MDPGQQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPP"
+    },
+    {
+      "z": [
+        -0.193,
+        0.3659
+      ],
+      "sequence": "MNHSEVCLPVGDMSGSGSQLGSMGSLTMKSQLQITVISAK"
+    },
+    {
+      "z": [
+        -3.9685,
+        2.4203
+      ],
+      "sequence": "MDPGPPPPQPAPQGQGPPPAQGPQGQGPPSASGQPAPPGP"
+    },
+    {
+      "z": [
+        -1.0674,
+        1.0379
+      ],
+      "sequence": "MIPESPDLPAWGSLLCGESASPSASAPSPLPSPSPHPLVS"
+    },
+    {
+      "z": [
+        0.7013,
+        -0.1864
+      ],
+      "sequence": "ALERDRNQILGLSRTAGVKEMKKGKWLAIDPYVRVTLYDP"
+    },
+    {
+      "z": [
+        2.9649,
+        -3.1863
+      ],
+      "sequence": "MDPSQHNPPAGHQIVHVRGDSETDLEALFNAVMNPKNAVV"
+    },
+    {
+      "z": [
+        -0.3633,
+        -2.5506
+      ],
+      "sequence": "MAQRLQLHLAARRSNACLLSETSGVELDNNVHMSFKRSPE"
+    },
+    {
+      "z": [
+        -0.5785,
+        -3.3563
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDSDSNVPMCFKRPTR"
+    },
+    {
+      "z": [
+        2.9746,
+        2.7078
+      ],
+      "sequence": "MAGSGSRSGPSSGFSMKSQLQITVISAKLKEKNKWFGPSP"
+    },
+    {
+      "z": [
+        -2.6303,
+        2.2805
+      ],
+      "sequence": "MDPGQPQTQQPPQAAQPPAPQQQQPPPQPPGPVSGAPAGA"
+    },
+    {
+      "z": [
+        -0.5346,
+        -3.5069
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSSIHMCFTRPTR"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.1985,
+        -2.7387
+      ],
+      "sequence": "MARRLRLHFAARRRNTDPLSESSGDDLDDNPPMCFRRPSP"
+    },
+    {
+      "z": [
+        -2.1757,
+        2.956
+      ],
+      "sequence": "MEPAQQPPPQPAPQGPAPPSVSPAGTPAAPPAPPAGHQVV"
+    },
+    {
+      "z": [
+        -4.0504,
+        0.4447
+      ],
+      "sequence": "MIWYEEVEDCYEREDVQKKTFTKWINAQFSKFGKQHIEDL"
+    },
+    {
+      "z": [
+        -0.3923,
+        0.2963
+      ],
+      "sequence": "MATGELGDVGGYYFRFLPQKTFQSLNSKEITSRLRQWSML"
+    },
+    {
+      "z": [
+        -0.4659,
+        -3.4822
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPVSETSGDDSDSSVHMCFTRPTR"
+    },
+    {
+      "z": [
+        0.0101,
+        0.0131
+      ],
+      "sequence": "MLTPSLCVFFCMFSRLDCNREEENEGKTETVQKAGFIKGP"
+    },
+    {
+      "z": [
+        1.143,
+        1.136
+      ],
+      "sequence": "MAASGAEVLGLPGPEENTRIVRVKVIAGIGLAKKDILGAS"
+    },
+    {
+      "z": [
+        -4.202,
+        2.487
+      ],
+      "sequence": "MDPGPPPPQPAPQGQGPPPAQAPQGQGPPSAPGQPAPPGP"
+    },
+    {
+      "z": [
+        1.6528,
+        -0.2305
+      ],
+      "sequence": "MNPKTANVPQTVPMRLRKLPDSFFKPPEPKAHSRQASTDA"
+    },
+    {
+      "z": [
+        -2.6371,
+        2.3845
+      ],
+      "sequence": "MDPGQPQPQQPPQAAQPPAPQQAAPQPPGNVSGAPGGAAQ"
+    },
+    {
+      "z": [
+        0.7843,
+        2.9496
+      ],
+      "sequence": "MSDSESQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -3.2676,
+        -3.2325
+      ],
+      "sequence": "MKQLPLQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTGF"
+    },
+    {
+      "z": [
+        -0.1394,
+        -0.2346
+      ],
+      "sequence": "MYLYIFLLFFMFSWLNGNREEENEAKIENVQKPGFIKGPM"
+    },
+    {
+      "z": [
+        -0.428,
+        -3.3641
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPVSETSGDDSDSSVPMCFTRPTR"
+    },
+    {
+      "z": [
+        -0.6232,
+        -3.4075
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSSIHMCFTTPTR"
+    },
+    {
+      "z": [
+        0.9391,
+        2.9188
+      ],
+      "sequence": "MSDSGPQLDSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.516,
+        -3.2317
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSESSGDDLESSVHMCFKRPSR"
+    },
+    {
+      "z": [
+        0.859,
+        2.8236
+      ],
+      "sequence": "MSDSGSQLHSVGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        1.2004,
+        2.8813
+      ],
+      "sequence": "MSGSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.7394,
+        -3.4399
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDNNVHMCFKRPTR"
+    },
+    {
+      "z": [
+        -0.4888,
+        0.8739
+      ],
+      "sequence": "PDTGSDGVQGPPGAAPHPGQRRQPGTGARSRGASAVPARG"
+    },
+    {
+      "z": [
+        -1.6196,
+        1.4854
+      ],
+      "sequence": "MDVAAGQPQQQPPPPAGAAASSQPPPPPPSGQPPPSSQPP"
+    },
+    {
+      "z": [
+        0.883,
+        3.0139
+      ],
+      "sequence": "MTDSRSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9692,
+        -3.4817
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKKPTR"
+    },
+    {
+      "z": [
+        -0.0866,
+        -0.0726
+      ],
+      "sequence": "ISAKLKENKKNWFGPSPYVEVTVDGQSKKTEKCNNTNSPK"
+    },
+    {
+      "z": [
+        -0.9454,
+        -3.3679
+      ],
+      "sequence": "MAQSLRVHFAARRSNTYPLSETSGDDLDSSVHMCFKRPTR"
+    },
+    {
+      "z": [
+        2.325,
+        0.0505
+      ],
+      "sequence": "MAKTSSGQRYFLNHIDQTTTWQDPRKAMLSQMSVTAPTSP"
+    },
+    {
+      "z": [
+        0.2261,
+        -1.7835
+      ],
+      "sequence": "MPKINIKVVAAESLYKRDVFRQPDPFAVITIDGSQTKTTK"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -1.6894,
+        -0.9396
+      ],
+      "sequence": "MTRNTSTISVKVVAAESLYKRDVFRQPDPFAVITVDGSQT"
+    },
+    {
+      "z": [
+        -1.0448,
+        1.3172
+      ],
+      "sequence": "MEASTTGQTPPQASAPESGGSGQPQQQAPPPPPPPPAGHQ"
+    },
+    {
+      "z": [
+        0.5347,
+        0.1281
+      ],
+      "sequence": "MFSRLDCNREEENESKTETVQKAGFIKGPVFKGVASSRFL"
+    },
+    {
+      "z": [
+        0.9273,
+        2.9117
+      ],
+      "sequence": "MSDGGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.5904,
+        0.039
+      ],
+      "sequence": "MSITVKLVAADSLYKRDVFRSPDPFAVLTIDGSQTKSTSA"
+    },
+    {
+      "z": [
+        -2.6094,
+        -1.7934
+      ],
+      "sequence": "MKQLPPQQPPLKMGDFYDPEHPTPEEEENEAKIESVQKTS"
+    },
+    {
+      "z": [
+        0.9771,
+        2.8236
+      ],
+      "sequence": "MSDSGSQPGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        0.0908,
+        -1.1341
+      ],
+      "sequence": "MSAHMLWYEEVEDDYEREDVQKKTFTKWINAQFAKFGRRY"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -3.3435,
+        -3.2563
+      ],
+      "sequence": "MKQLQPQPPPKMGDFYDPEHPTPEEEENEAKIENVQKTGF"
+    },
+    {
+      "z": [
+        0.356,
+        -0.1682
+      ],
+      "sequence": "MSGRKLRNLSYKKAVRRQKLLEQSIQSAQEIEKSLHLIQD"
+    },
+    {
+      "z": [
+        0.2997,
+        1.3021
+      ],
+      "sequence": "ASTDAGTAGALTPQHVRAHSSPASLQLGAVSPGTLTPTGV"
+    },
+    {
+      "z": [
+        -0.4181,
+        -2.7493
+      ],
+      "sequence": "MARRLRLHFAARRSNTDPLSETSGDGLDSNIHVYFQRPSQ"
+    },
+    {
+      "z": [
+        0.5618,
+        0.6731
+      ],
+      "sequence": "MAERGGSSPAGGSGRTWCLRRVGMSGQWLLLESGGEVTIG"
+    },
+    {
+      "z": [
+        0.7689,
+        0.5164
+      ],
+      "sequence": "MAPNISTSRSNNNTTTINVKVVAAESLYKRDVFRQPDPFA"
+    },
+    {
+      "z": [
+        0.198,
+        -1.7459
+      ],
+      "sequence": "MSKVTVKLVAAESLYKRDVFRSPDPFAVLTIDGLQTKSTA"
+    },
+    {
+      "z": [
+        1.1672,
+        1.1445
+      ],
+      "sequence": "MATCAVEVFGLLEDEENSRIVRVKVIAGIGLAKKDILGAS"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        4.4044,
+        -0.0111
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPAA"
+    },
+    {
+      "z": [
+        -4.0374,
+        0.5397
+      ],
+      "sequence": "MLWCEEVEDCYEREDVQKKTFTKWINAQFSKFGKPHIENL"
+    },
+    {
+      "z": [
+        0.1599,
+        0.2807
+      ],
+      "sequence": "MTSGPARPVKLTVLGASGLIKRDFFRSPDPFCIITIDGEQ"
+    },
+    {
+      "z": [
+        -0.6272,
+        -0.3975
+      ],
+      "sequence": "MSGTRTVRLTVIAADGLVKRDLFFKMPDPFAVVTVDNEQT"
+    },
+    {
+      "z": [
+        1.1527,
+        1.1315
+      ],
+      "sequence": "MATCAVDVFGLLEDEENSRIVRVKVIAGIGLAKKDILGAS"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        -2.3491,
+        -2.3684
+      ],
+      "sequence": "MKQLQPQPPPKMGDFYDPEHPTPDRFLPKGTKTKVNLEEQ"
+    },
+    {
+      "z": [
+        -0.5039,
+        0.0688
+      ],
+      "sequence": "MGCTLSTDDKAAQERSKMIDRNLRDDGEKAAREVKLLLLG"
+    },
+    {
+      "z": [
+        -0.4108,
+        -3.4269
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPVSEISGDDSDSSVHMCFTRPTR"
+    },
+    {
+      "z": [
+        -0.1073,
+        -0.2853
+      ],
+      "sequence": "MIYFLFFCMLSWLDDNREEENEAKIENVPKTGFIKGPMFK"
+    },
+    {
+      "z": [
+        -4.202,
+        2.487
+      ],
+      "sequence": "MDPGPPPPQPAPQGQGPPPAQAPQGQGPPSAPGQPAPPGP"
+    },
+    {
+      "z": [
+        1.0035,
+        3.0153
+      ],
+      "sequence": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -3.0259,
+        1.9856
+      ],
+      "sequence": "MDPGQQPPQPPSQGQGQPPSQPPQGQGQGPPTGPGQPAPP"
+    },
+    {
+      "z": [
+        0.0908,
+        -1.1341
+      ],
+      "sequence": "MSAHMLWYEEVEDDYEREDVQKKTFTKWINAQFAKFGRRY"
+    },
+    {
+      "z": [
+        -2.6318,
+        2.4083
+      ],
+      "sequence": "MDPGQPQPQQPPQATQPPASQQQPPPPQPPGAVSGAPAGA"
+    },
+    {
+      "z": [
+        2.8921,
+        -3.1773
+      ],
+      "sequence": "MDPSQHNPPAGHQIVHVRGDSETDLEALFNAVMNPKNTIV"
+    },
+    {
+      "z": [
+        -1.571,
+        1.3105
+      ],
+      "sequence": "MDAAGQPPQSASQQPGQQQQPPPPPNSSGQPPPQAPPPQQ"
+    },
+    {
+      "z": [
+        1.7253,
+        2.305
+      ],
+      "sequence": "MAGNGSNSEPISGLTMKSQLQITVISAKLKENKNKWFGPS"
+    },
+    {
+      "z": [
+        -2.4981,
+        2.2814
+      ],
+      "sequence": "MDPGQPQQQQPPQAAQPPASQQAPPQPPGAVSGAPSGAAQ"
+    },
+    {
+      "z": [
+        -0.373,
+        -2.5768
+      ],
+      "sequence": "MARRLRLHFATQRSNTDPLSETSEDFLDSNNCMYFKKSQS"
+    },
+    {
+      "z": [
+        0.0366,
+        -0.1545
+      ],
+      "sequence": "MKSQLQITVISAKLKENKNKWFGPSPYVEVSVDGQSKKTE"
+    },
+    {
+      "z": [
+        4.3191,
+        0.0069
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPSQPPQGQGPPSGPGQPAPAA"
+    },
+    {
+      "z": [
+        -0.3663,
+        -2.5513
+      ],
+      "sequence": "MARRLRLHFATQRSNTDPLSETSEDFLDRNNCMYFKKSQS"
+    },
+    {
+      "z": [
+        -2.8444,
+        1.8484
+      ],
+      "sequence": "MDPGQQPPQAPSQGQGQAPSQPPQGQGQGPPTGPGQQAPP"
+    },
+    {
+      "z": [
+        -0.2447,
+        0.6932
+      ],
+      "sequence": "MGTVYSPQASTDAGTAGALTPQHVRAHSSPASLQLGAVSP"
+    },
+    {
+      "z": [
+        1.5428,
+        2.3642
+      ],
+      "sequence": "MSGSSSRSGSVGGLTMKSQLQIIVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        -0.3246,
+        -0.178
+      ],
+      "sequence": "MTFFSTTFFLFILLLNKNLALNIENYTDYIEELSHNEKFL"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        2.8379,
+        2.5978
+      ],
+      "sequence": "MAGTGSKSGSSSGFSMKSQLQITVISAKLKEKNKWFGPSP"
+    },
+    {
+      "z": [
+        0.3765,
+        -0.4173
+      ],
+      "sequence": "GNRPKIIAGIGLAKKDILGASDPYVRVTLYDPMNGVFTSM"
+    },
+    {
+      "z": [
+        -1.5512,
+        1.8506
+      ],
+      "sequence": "MEPAQQPPPQPAPQGPVPPSAPAPPSGTPAAPPAPPAGHQ"
+    },
+    {
+      "z": [
+        2.8114,
+        2.6793
+      ],
+      "sequence": "MAGTGSKSGVPGGLYMKSQLQITVISAKLKEKNKWFGPSP"
+    },
+    {
+      "z": [
+        0.7843,
+        2.9496
+      ],
+      "sequence": "MSDSESQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9454,
+        -3.3679
+      ],
+      "sequence": "MAQSLRVHFAARRSNTYPLSETSGDDLDSSVHMCFKRPTR"
+    },
+    {
+      "z": [
+        0.0191,
+        -0.1946
+      ],
+      "sequence": "MSEIHPKYDLYSQKYNSAIYKSVFKVLYEISYNDTNIKIP"
+    },
+    {
+      "z": [
+        -4.2513,
+        0.4727
+      ],
+      "sequence": "MLWWEEVEDCYEREDVQKKTFTKWINAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        -2.3911,
+        1.5003
+      ],
+      "sequence": "MDPGQQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQTAPP"
+    },
+    {
+      "z": [
+        -0.2626,
+        0.2186
+      ],
+      "sequence": "GNHFWKFRPQPVVPVSLRSPVPTGSAPPLEVFGTMDPSQH"
+    },
+    {
+      "z": [
+        -1.3631,
+        0.6771
+      ],
+      "sequence": "MEPXXXSAPGPAAGTPTAPPAPPAGHQVVHVRGDSETDLE"
+    },
+    {
+      "z": [
+        1.02,
+        2.874
+      ],
+      "sequence": "MSNSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        1.2004,
+        2.8813
+      ],
+      "sequence": "MSGSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        2.9646,
+        2.8028
+      ],
+      "sequence": "MAGSGSRSGPASGLSMKSQLQITVISAKLKEKNKWFGPSP"
+    },
+    {
+      "z": [
+        -0.5457,
+        0.6888
+      ],
+      "sequence": "MPFHSTTISCVCFVFKERCPPLPAPPPPTVRGDMDPSQHN"
+    },
+    {
+      "z": [
+        2.8921,
+        -3.1773
+      ],
+      "sequence": "MDPSQHNPPAGHQIVHVRGDSETDLEALFNAVMNPKNTIV"
+    },
+    {
+      "z": [
+        -1.6952,
+        -0.9457
+      ],
+      "sequence": "MSRNTSTITVKLVAAESLYKRDVFRQPDPFAVITVDGSQT"
+    },
+    {
+      "z": [
+        -0.4015,
+        0.8448
+      ],
+      "sequence": "MDGLGSPLSSEHAQNRVCPSELRLWHRLTGLLRPRRRCGF"
+    },
+    {
+      "z": [
+        -3.4498,
+        -3.2281
+      ],
+      "sequence": "MKQLPPQPPPKMGDFYDPEHPTPEEEENEAKIENVHKTGF"
+    },
+    {
+      "z": [
+        1.2004,
+        2.8813
+      ],
+      "sequence": "MSGSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -1.6981,
+        -1.788
+      ],
+      "sequence": "MVASISVKLVAAESLYKRDVFRSPDPFAVLTIDGYQTKST"
+    },
+    {
+      "z": [
+        0.2261,
+        -1.7835
+      ],
+      "sequence": "MPKINIKVVAAESLYKRDVFRQPDPFAVITIDGSQTKTTK"
+    },
+    {
+      "z": [
+        4.2257,
+        -0.0719
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPAQAPQGQGPPSGPGQPAPPG"
+    },
+    {
+      "z": [
+        0.2904,
+        0.1887
+      ],
+      "sequence": "MEKAGIEPPEEEEEEQPVVNGNGVIVTPESSEHEDKSIGV"
+    },
+    {
+      "z": [
+        -0.7479,
+        0.7569
+      ],
+      "sequence": "MRGASSFHPDPVLSQILWGIPSQVHSPVGGMSGSSSRSGS"
+    },
+    {
+      "z": [
+        4.4044,
+        -0.0111
+      ],
+      "sequence": "MDPGQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPAA"
+    },
+    {
+      "z": [
+        -0.1722,
+        -2.5852
+      ],
+      "sequence": "MAQMLQLHVAARRRNTCLLLETSGDELNNSAHMSFKRSTE"
+    },
+    {
+      "z": [
+        -1.7264,
+        -1.8052
+      ],
+      "sequence": "MPSSISVKLVAAESLYKRDVFRSPDPFAVLTIDGYQTKST"
+    },
+    {
+      "z": [
+        0.2997,
+        1.3021
+      ],
+      "sequence": "ASTDAGTAGALTPQHVRAHSSPASLQLGAVSPGTLTPTGV"
+    },
+    {
+      "z": [
+        -0.7546,
+        -2.8817
+      ],
+      "sequence": "MAQSLRLHFAARRSNTFPLSETSGDDPDSNAHMGFQRPTR"
+    },
+    {
+      "z": [
+        -0.0846,
+        0.1488
+      ],
+      "sequence": "FADNYYGTPKPPAEPAPLLLNVTDQILPGATASAEGKRKR"
+    },
+    {
+      "z": [
+        0.9614,
+        2.8442
+      ],
+      "sequence": "MSDSGSQFGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+    },
+    {
+      "z": [
+        -0.1944,
+        0.3344
+      ],
+      "sequence": "IGGMSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWF"
+    },
+    {
+      "z": [
+        -4.1271,
+        0.4926
+      ],
+      "sequence": "MLWWEEVEDSYEREDVQKKTFTKWINAQFSKFGKQHIENL"
+    },
+    {
+      "z": [
+        -0.9159,
+        -3.5689
+      ],
+      "sequence": "MAQSLRLHFAARRSNTYPLSETSGDDLDSHVHMCFKRPTR"
+    },
+    {
+      "z": [
+        0.2036,
+        -1.8308
+      ],
+      "sequence": "MPSISVKLVAAESLYKRDVFRSPDPFAVLTIDGYQTKSTS"
+    }
+  ],
+  "reconstructions": [
+    {
+      "original": "MDPGQQPPPQPAPPGQGQPPAQTPQGQGQPSGPGQPAPQA",
+      "reconstructed": "MDPGQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPAA",
+      "accuracy": 0.9
+    },
+    {
+      "original": "MTSGPARPVKLTVLGASGLIKRDFFRSPDPFCIITIDGEQ",
+      "reconstructed": "MARGSDLSGSPGRGPSPGGRARGDGRLLRSGLAESPNNGL",
+      "accuracy": 0.125
+    },
+    {
+      "original": "MSAATQSPVMQMASGNGASDRDPLPPGWEIKIDPQTGWPF",
+      "reconstructed": "MDPATQSPMMQMASGNGASDPDPLPPGWEIKIGPQTGWPF",
+      "accuracy": 0.875
+    },
+    {
+      "original": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE",
+      "reconstructed": "MAALRYAGLDDTDSEDELPPGWEERTTKDGWVYYANHTEE",
+      "accuracy": 1.0
+    },
+    {
+      "original": "MAKTSSGQRYFLNHIDQTTTWQDPRKAMLSQMSVTAPTSP",
+      "reconstructed": "MNPGSSPQRYFLPHRDQTTTWQDPRKAMPPQMSVTAPTSA",
+      "accuracy": 0.775
+    },
+    {
+      "original": "MAADVEGDVYVLVEHPFEYTGKDGRLIAIQPNERCRLLRR",
+      "reconstructed": "MSAKVAALVLVLVLENLEYEKKEDTEIKDTPQYSYDGERE",
+      "accuracy": 0.325
+    },
+    {
+      "original": "MADGNGLPAGAASGGMEAGQTVNGAGSASPTPTSSSGAGA",
+      "reconstructed": "MSKKNAKKAQPLPGGQEKAVDVDGKTSELGLEIRGGSEDA",
+      "accuracy": 0.25
+    },
+    {
+      "original": "MVASISVKLVAAESLYKRDVFRSPDPFAVLTIDGYQTKST",
+      "reconstructed": "MAALISAKLVKAESLYKLPVFRPPRPPDVLTVDGYNTKQT",
+      "accuracy": 0.675
+    },
+    {
+      "original": "MSAATQSPVMQMASGNGASDRDPLPPGWEIKIDPQTGWPF",
+      "reconstructed": "MDPATQSPMMQMASGNGASDPTPLPPGWEIKIGPQTGWPF",
+      "accuracy": 0.85
+    },
+    {
+      "original": "MGCTLSTDDKAAQERSKMIDRNLRDDGEKAAREVKLLLLG",
+      "reconstructed": "MALELAGDKLGYAPRNLESPATLSSYESSTPRRSCPELLS",
+      "accuracy": 0.2
+    }
+  ],
+  "interpolations": [
+    {
+      "start": "MDPGQQPPPQPAPPGQGQPPAQTPQGQGQPSGPGQPAPQA",
+      "end": "MSDSGSQLGSMGSLTMKSQLQITETRFHHLDQAGLELLTS",
+      "steps": [
+        "MDPGQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPAA",
+        "MDPGQQPPPQPAPQGQGQPPAQPPQGQGPPSGPGQPAPAA",
+        "MDPGQSPPPQPAPHGQGTPPAQPPQKQGPPSGPGQPAPKA",
+        "MSNPGTRRNGSSHKIRLTVLCAKNLAKKDFFRLPDPFAKI",
+        "MANPGTRRNGSSIKIRITVLCAKNLAKKDFFRLPDPFAKI",
+        "MATAGSRSGTSNGLSGRLQLQVIVSSAKLKRKKKWFGTAP",
+        "MATSGSRSGSVGGLTMKSQLQVIVISAKLKENKKNWLGPS",
+        "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+      ],
+      "z_steps": [
+        [
+          4.349,
+          -0.1287
+        ],
+        [
+          3.809,
+          0.1755
+        ],
+        [
+          3.2691,
+          0.4797
+        ],
+        [
+          2.7291,
+          0.7839
+        ],
+        [
+          2.1892,
+          1.0882
+        ],
+        [
+          1.6492,
+          1.3924
+        ],
+        [
+          1.1093,
+          1.6966
+        ],
+        [
+          0.5693,
+          2.0008
+        ]
+      ]
+    },
+    {
+      "start": "MSGRKLRNLSYKKAVRRQKLLEQSIQSAQEIEKSLHLIQD",
+      "end": "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS",
+      "steps": [
+        "MSSRARADLILLVGLRDKLVSEDGGEKKKDSEGSSSYVSD",
+        "MSEGSSSSRSPVPGKATGLRKKAGFVKLVDLEGESLNGGL",
+        "MAENGGSSGSLPPPEGRELIVVAQVILGVGLPSEPILTAM",
+        "MATAAGTSGGLTPPTERARLVVIKVILGIGLHSTLILTYS",
+        "MATSGSSSGSVGSPTMKSQLQVTVVSAGLKENKKNWLGPS",
+        "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS",
+        "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS",
+        "MSDSGSQLGSMGSLTMKSQLQITVISAKLKENKKNWFGPS"
+      ],
+      "z_steps": [
+        [
+          0.356,
+          -0.1682
+        ],
+        [
+          0.4485,
+          0.2866
+        ],
+        [
+          0.541,
+          0.7414
+        ],
+        [
+          0.6335,
+          1.1962
+        ],
+        [
+          0.726,
+          1.651
+        ],
+        [
+          0.8185,
+          2.1058
+        ],
+        [
+          0.911,
+          2.5605
+        ],
+        [
+          1.0035,
+          3.0153
+        ]
+      ]
+    },
+    {
+      "start": "MANNPPQSSGTQFRPMVPGQQGQHFVPAASQPFHPYGHVP",
+      "end": "MGRVVLCPPSSFRFSCACARAARLWRVAASGWTWTGCHLR",
+      "steps": [
+        "MANLSQTASGPQPQHPHPGQRPQPQQQQHSQPSQQQRQGQ",
+        "MANASQTSSGPQFPPPHPGQRLQSPQQQHSQPSQQLRQGQ",
+        "MANASQTSSGPQFPPPHPGQRLLSPQQQHAQPSQFLPQGQ",
+        "MATPSGTSSGPTFAPSHAGRALLSPQQLHAGPSQFLPQGQ",
+        "MATGSGTSPGPIFAPSHGGRPLSSPQQLRAGLRQFLPQGL",
+        "MATGSDLSPSPIFAPSSGGRPLSDPRQLRAGLRQSLNQGL",
+        "MARGSDLSPSPGFAPSSGGRPLSDLRLLRSGLRQSLNQGL",
+        "MARGSDLSPSPGRSPSSGGRALSDGRTPSSGLRQSPNQGL"
+      ],
+      "z_steps": [
+        [
+          -0.3023,
+          1.101
+        ],
+        [
+          -0.2818,
+          1.0016
+        ],
+        [
+          -0.2614,
+          0.9023
+        ],
+        [
+          -0.2409,
+          0.8029
+        ],
+        [
+          -0.2205,
+          0.7036
+        ],
+        [
+          -0.2,
+          0.6042
+        ],
+        [
+          -0.1796,
+          0.5048
+        ],
+        [
+          -0.1592,
+          0.4055
+        ]
+      ]
+    }
+  ],
+  "samples": [
+    "MQLELMTVCLGSKSRKGEWKATDRPHESSLLRLTCPDLQS",
+    "MSRRAASVQSPLVGQWDKLVDVDGKVKEEDLFTSVTSWDD",
+    "MSNPGSRRRGPVNHRLTTLCAKNLRKKMDFRMLPTPPKKP",
+    "MPRINVKLVEAEDLYKRDDFKSPDPFAVITIDGAQDKRTK",
+    "MALETAEGCLEYVALELLYYGLWFKYIDPTLLLTCDGLQS",
+    "MANASQTASGPQPQHPHPGQRPQPPQQQHSQPSQQQRQGQ",
+    "MQLELMSVCNGSKSRKGESHATDRPHESSLLRLTCPDLQF",
+    "MAGGLDFSPSPDLSRSSGSRALLDSATPSSPLRSSPEQLL",
+    "MAGELCFSPGPDLSRSSGSRALLSSSQPSSPLRSSPESLL",
+    "MEPAQQPPPQPAPQGPAPPSSSQPPQPQPQPAPPAQQQVQ"
+  ]
+}
