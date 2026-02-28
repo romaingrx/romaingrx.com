@@ -31,6 +31,13 @@
   margin-bottom: 1.5rem;
 }
 
+.prose hr {
+  @apply border-border;
+  border-top-width: 1px;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
 .prose a {
   @apply text-primary;
   text-decoration: none;
