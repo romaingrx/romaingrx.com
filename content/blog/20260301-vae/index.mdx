@@ -1,18 +1,19 @@
 ---
-title: 'VAE'
-description: 'VAE from the ground up'
+title: 'Variational Autoencoders from Scratch'
+description: 'Deriving the ELBO, implementing a VAE in JAX, and applying it to protein sequences'
+cover: './images/cover.png'
 authors: ['romaingrx']
 status: 'draft'
-published_date: 2025-11-15
+published_date: 2026-03-01
 categories: ['ml']
 tags: ['from scratch']
 bibliography: './references.bib'
 resources:
-  - title: 'Code snippet'
+  - title: 'Training pipeline'
     type: 'code'
     provider: 'github'
-    value: 'https://github.com/romaingrx/ml-notebooks/tree/master/vae/main.py'
-    description: 'Source code for the whole training pipeline'
+    value: 'https://github.com/romaingrx/romaingrx.astro/tree/master/content/blog/20260301-vae/code'
+    description: 'JAX/Equinox VAE implementation for protein sequences'
 ---
 
 import { TrainingCurves, LatentSpace, SequenceDiff, InterpolationViewer } from './components';
