@@ -92,7 +92,7 @@ One common issue with VAEs is [**posterior collapse**](https://en.wikipedia.org/
 
 To avoid this, we use **KL annealing**: a coefficient $\beta$ that linearly increases from 0 to 1 over the first 50 epochs. This lets the model first focus on reconstruction, then gradually regularize.
 
-<TrainingCurves client:load />
+<TrainingCurves client:visible />
 
 You can see the reconstruction loss drops quickly in the first epochs while the KL term is suppressed. Once $\beta$ reaches 1, both terms find a balance.
 
@@ -100,7 +100,7 @@ You can see the reconstruction loss drops quickly in the first epochs while the 
 
 With a 2D latent space, we can directly visualize how the model organizes protein sequences. Each point is a sequence encoded by the model, colored by sequence content. Hover to inspect the amino acid sequence.
 
-<LatentSpace client:load />
+<LatentSpace client:visible />
 
 Ideally, the latent space should show smooth, continuous structure rather than scattered noise. This is what makes VAEs interesting as *generative* models: nearby points should decode to similar outputs.
 
@@ -108,7 +108,7 @@ Ideally, the latent space should show smooth, continuous structure rather than s
 
 The real test: can the model reconstruct input sequences from just 2 numbers? Here are some examples showing the original and reconstructed sequences side by side, with mismatches highlighted.
 
-<SequenceDiff client:load />
+<SequenceDiff client:visible />
 
 <Callout variant="note" title="About the accuracy">
 With only 2 latent dimensions, we lose a lot of information. Production protein VAEs typically use 16-64 dimensions and reach near-perfect reconstruction. Here, we're optimizing for interpretability over performance.
@@ -118,7 +118,7 @@ With only 2 latent dimensions, we lose a lot of information. Production protein 
 
 The smoothness of the latent space is what makes a VAE a *generative* model. If we linearly interpolate between two encoded proteins and decode at each step, the intermediate sequences should transition gradually. Abrupt jumps would indicate holes or discontinuities in the learned space.
 
-<InterpolationViewer client:load />
+<InterpolationViewer client:visible />
 
 # Wrapping up
 

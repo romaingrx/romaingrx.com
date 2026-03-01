@@ -36,11 +36,13 @@ const { post, class: className = '' } = Astro.props;
   <Shell type="article">
     <div class="relative z-10 mx-auto text-center">
       <!-- Meta Information -->
-      <div
-        class="mb-8 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400"
-      >
-        <Time date={post.data.published_date} transition:name={`${post.id}-published-date`} />
-        <span>•</span>
+      <div class="text-muted-foreground mb-8 flex items-center justify-center gap-2 text-sm">
+        <Time
+          date={post.data.published_date}
+          className="text-sm"
+          transition:name={`${post.id}-published-date`}
+        />
+        <span class="leading-none">·</span>
         <span transition:name={`${post.id}-reading-time`}>{post.readingTime}</span>
       </div>
 

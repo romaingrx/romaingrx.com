@@ -55,8 +55,8 @@ export default function LatentSpace() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" dataKey="x" name="z₁" tickLine={false} axisLine={false} />
           <YAxis type="number" dataKey="y" name="z₂" tickLine={false} axisLine={false} />
-          <Tooltip content={<CustomTooltip />} cursor={false} isAnimationActive={false} />
-          <Scatter data={data} isAnimationActive={false}>
+          <Tooltip content={<CustomTooltip />} cursor={false} isAnimationActive={true} />
+          <Scatter data={data} isAnimationActive={true}>
             {data.map((point, i) => (
               <Cell key={i} fill={seqColor(point.sequence)} fillOpacity={0.7} r={3} />
             ))}
