@@ -11,9 +11,9 @@ import {
 import run from '../run.json';
 
 const config = {
-  recon: { label: 'Reconstruction', color: 'var(--chart-1)' },
-  kl: { label: 'KL divergence', color: 'var(--chart-2)' },
-  loss: { label: 'Total loss', color: 'var(--chart-3)' },
+  recon: { label: 'Reconstruction', color: 'hsl(262 60% 50%)' },
+  kl: { label: 'KL divergence', color: 'hsl(280 50% 65%)' },
+  loss: { label: 'Total loss', color: 'hsl(250 40% 75%)' },
 } satisfies ChartConfig;
 
 export default function TrainingCurves() {

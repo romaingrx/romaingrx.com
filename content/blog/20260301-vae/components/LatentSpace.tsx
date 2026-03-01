@@ -13,8 +13,9 @@ function seqColor(seq: string): string {
   for (let i = 0; i < Math.min(seq.length, 10); i++) {
     hash = seq.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = ((hash % 360) + 360) % 360;
-  return `hsl(${hue}, 60%, 55%)`;
+  const hue = 240 + (((hash % 80) + 80) % 80); // 240-320: purple to magenta
+  const lightness = 40 + ((((hash >> 8) % 25) + 25) % 25); // 40-65%
+  return `hsl(${hue}, 55%, ${lightness}%)`;
 }
 
 function CustomTooltip({ active, payload }: any) {
