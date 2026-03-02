@@ -1,0 +1,155 @@
+---
+title: 'Variational Autoencoders from Scratch'
+description: 'Deriving the ELBO, implementing a VAE in JAX, and applying it to protein sequences'
+cover: './images/cover.png'
+authors: ['romaingrx']
+status: 'published'
+published_date: 2026-03-01
+categories: ['ml']
+tags: ['from scratch']
+bibliography: './references.bib'
+resources:
+  - title: 'Training pipeline'
+    type: 'code'
+    provider: 'github'
+    value: 'https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260301-vae/code'
+    description: 'JAX/Equinox VAE implementation for protein sequences'
+---
+
+import { TrainingCurves, LatentSpace, SequenceDiff, InterpolationViewer } from './components';
+
+What if you could compress a protein into just two numbers and reconstruct it? That's the promise of a **Variational Autoencoder** (VAE): learn a compact latent representation of complex data, then sample from it to generate new, plausible examples.
+
+In this post, we'll derive the VAE objective from scratch [@kingma2013auto], then apply it to protein sequences [@sinai2017variational] and see what happens.
+
+# The intuition
+
+A VAE is made of two neural networks working together:
+
+- An **encoder** $q_\theta(z|x)$ compresses an input $x$ into a distribution over a low-dimensional latent space $z$.
+- A **decoder** $p_\phi(x|z)$ takes a point in that latent space and tries to reconstruct the original input.
+
+The key insight is that we don't just encode into a single point. We encode into a *distribution* (a mean $\mu$ and variance $\sigma^2$), then sample from it. This forces the model to learn a smooth, continuous latent space where nearby points decode to similar outputs.
+
+<Callout variant="tip" title="Why not just use an autoencoder?">
+A regular autoencoder can learn to reconstruct perfectly, but its latent space has no structure. Points between two encodings might decode to garbage. The VAE trades some reconstruction accuracy for a latent space you can actually sample and interpolate from.
+</Callout>
+
+# Deriving the objective
+
+## Starting point
+
+Our goal is to maximize the log-likelihood of the data: learn a model that assigns high probability to the sequences we observe.
+
+$$\text{maximize} \quad \log p(x) = \log \int p(x|z) \, p(z) \, dz$$
+
+The problem: this integral is **intractable**. We'd need to evaluate the decoder for every possible $z$.
+
+## The ELBO
+
+Since we can't compute $p(z|x)$ directly, we introduce a learned approximation $q_\theta(z|x)$ and derive a tractable lower bound. The key move is multiplying by $\frac{q_\theta(z|x)}{q_\theta(z|x)}$ and applying [Jensen's inequality](https://en.wikipedia.org/wiki/Jensen%27s_inequality) (the full step-by-step derivation is in [Appendix A](#appendix-a-elbo-derivation)).
+
+This gives us the **Evidence Lower Bound** (ELBO):
+
+$$\mathcal{L} = \underbrace{\mathbb{E}_{z \sim q_\theta(z|x)} [\log p(x|z)]}_{\text{Reconstruction: decode well}} - \underbrace{D_\text{KL}(q_\theta(z|x) \,\|\, p(z))}_{\text{Regularization: stay close to prior}}$$
+
+Two terms pulling in opposite directions:
+- The **reconstruction term** pushes the model to encode enough information to reconstruct $x$.
+- The **[KL divergence](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence) term** pushes $q_\theta(z|x)$ towards the prior $p(z) = \mathcal{N}(0, I)$, preventing the encoder from just memorizing.
+
+## The reparameterization trick
+
+There's still a problem: we can't backpropagate through the sampling step $z \sim q_\theta(z|x)$.
+
+The fix is simple. Instead of sampling $z$ directly from the encoder's distribution, we sample noise $\epsilon \sim \mathcal{N}(0, I)$ and compute:
+
+$$z = \mu_\theta(x) + \sigma_\theta(x) \odot \epsilon$$
+
+The randomness comes from $\epsilon$, but the gradients flow through $\mu$ and $\sigma$ as usual. This is the **reparameterization trick**.
+
+The final loss over a dataset $D = \{x_1, \dots, x_N\}$:
+
+$$\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \left[ \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} [\log p(x_i | g_\theta(x_i, \epsilon))] - D_\text{KL}(q_\theta(z|x_i) \,\|\, p(z)) \right]$$
+
+# Application: protein sequences
+
+As a toy application, we'll train a VAE on protein sequences from the [**WW domain**](https://en.wikipedia.org/wiki/WW_domain) family ([Pfam PF00397](https://www.ebi.ac.uk/interpro/entry/pfam/PF00397/)), short protein domains of about 35-40 amino acids. Proteins are a nice fit for this because they're basically strings over a small alphabet, which keeps things simple while being more interesting than MNIST.
+
+Each sequence is a string over the [20 standard amino acids](https://en.wikipedia.org/wiki/Amino_acid#Table_of_standard_amino_acid_abbreviations_and_properties) (like `ALPSGWEQR...`). We [one-hot encode](https://en.wikipedia.org/wiki/One-hot) each position, giving us a binary matrix of shape `(seq_len, 20)` per protein.
+
+<Columns spread class="my-6">
+  <NumberCard title="Sequences" value={500} description="WW domain proteins" />
+  <NumberCard title="Latent dim" value={2} description="For visualization" />
+  <NumberCard title="Vocab" value={20} description="Amino acids" />
+  <NumberCard title="Epochs" value={200} description="With KL annealing" />
+</Columns>
+
+The architecture is intentionally simple: a 2-layer MLP encoder mapping to a 2D latent space (so we can plot it), and a symmetric decoder. The full training pipeline is written in [JAX](https://github.com/jax-ml/jax) with [Equinox](https://docs.kidger.site/equinox/).
+
+## Training
+
+One common issue with VAEs is [**posterior collapse**](https://en.wikipedia.org/wiki/Posterior_collapse): the KL term can dominate early in training, pushing $q(z|x)$ to match the prior before the decoder has learned anything useful. The encoder then learns to ignore the input entirely.
+
+To avoid this, we use **KL annealing**: a coefficient $\beta$ that linearly increases from 0 to 1 over the first 50 epochs. This lets the model first focus on reconstruction, then gradually regularize.
+
+<TrainingCurves client:visible />
+
+You can see the reconstruction loss drops quickly in the first epochs while the KL term is suppressed. Once $\beta$ reaches 1, both terms find a balance.
+
+## Latent space
+
+With a 2D latent space, we can directly visualize how the model organizes protein sequences. Each point is a sequence encoded by the model, colored by sequence content. Hover to inspect the amino acid sequence.
+
+<LatentSpace client:visible />
+
+Ideally, the latent space should show smooth, continuous structure rather than scattered noise. This is what makes VAEs interesting as *generative* models: nearby points should decode to similar outputs.
+
+## Reconstruction quality
+
+The real test: can the model reconstruct input sequences from just 2 numbers? Here are some examples showing the original and reconstructed sequences side by side, with mismatches highlighted.
+
+<SequenceDiff client:visible />
+
+<Callout variant="note" title="About the accuracy">
+With only 2 latent dimensions, we lose a lot of information. Production protein VAEs typically use 16-64 dimensions and reach near-perfect reconstruction. Here, we're optimizing for interpretability over performance.
+</Callout>
+
+## Latent interpolation
+
+The smoothness of the latent space is what makes a VAE a *generative* model. If we linearly interpolate between two encoded proteins and decode at each step, the intermediate sequences should transition gradually. Abrupt jumps would indicate holes or discontinuities in the learned space.
+
+<InterpolationViewer client:visible />
+
+# Wrapping up
+
+This is obviously a toy example, but it illustrates the core ideas well. Even with a minimal setup (2D latent space, simple MLP, 500 sequences), the VAE learns meaningful structure: similar sequences cluster together, interpolations produce smooth transitions, and reconstruction captures the dominant patterns.
+
+The interesting part from an ML perspective is the tension between the two loss terms. Too much reconstruction and the latent space becomes unstructured. Too much regularization and the model ignores the input. KL annealing is one simple way to navigate that trade-off, but there are many others: free bits [@kingma2016improved], cyclical annealing [@fu2019cyclical], or $\beta$-VAE [@higgins2017beta].
+
+For a deeper dive, check out the original VAE paper [@kingma2013auto] and its application to proteins [@sinai2017variational].
+
+---
+
+# Appendices
+
+## Appendix A: ELBO derivation
+
+Starting from the log-likelihood and multiplying by $\frac{q_\theta(z|x)}{q_\theta(z|x)}$:
+
+$$
+\begin{align*}
+\log p(x) &= \log \int p(x|z) \, p(z) \, dz \\
+&= \log \int q_\theta(z|x) \frac{p(x|z) \, p(z)}{q_\theta(z|x)} \, dz \\
+&= \log \mathbb{E}_{z \sim q_\theta(z|x)} \left[ \frac{p(x|z) \, p(z)}{q_\theta(z|x)} \right]
+\end{align*}
+$$
+
+Applying Jensen's inequality ($\log$ is concave, so $\log \mathbb{E}[X] \geq \mathbb{E}[\log X]$):
+
+$$
+\begin{align*}
+\log p(x) &\geq \mathbb{E}_{z \sim q_\theta(z|x)} \left[ \log \frac{p(x|z) \, p(z)}{q_\theta(z|x)} \right] \\
+&= \mathbb{E}_{z \sim q_\theta(z|x)} \left[ \log p(x|z) \right] + \mathbb{E}_{z \sim q_\theta(z|x)} \left[ \log \frac{p(z)}{q_\theta(z|x)} \right] \\
+&= \underbrace{\mathbb{E}_{z \sim q_\theta(z|x)} \left[ \log p(x|z) \right]}_{\text{Reconstruction}} - \underbrace{D_\text{KL}(q_\theta(z|x) \,\|\, p(z))}_{\text{Regularization}}
+\end{align*}
+$$

@@ -42,6 +42,7 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
     <Font cssVariable="--font-fira-code" preload />
     <Font cssVariable="--font-fira-sans" preload />
 
+    <slot name="head" />
     <ClientRouter />
   </head>
   <body

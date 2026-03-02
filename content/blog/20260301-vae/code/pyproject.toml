@@ -1,0 +1,38 @@
+[project]
+name = "vae-protein"
+version = "0.1.0"
+description = "Variational Autoencoder for protein sequences in JAX"
+requires-python = ">=3.12"
+dependencies = [
+    "jax>=0.4.35",
+    "jaxlib>=0.4.35",
+    "equinox>=0.11.10",
+    "optax>=0.2.4",
+    "jaxtyping>=0.2.34",
+    "structlog>=24.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+metal = ["jax-metal>=0.1.0"]
+dev = ["basedpyright>=1.20.0"]
+
+[project.scripts]
+vae = "vae.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["vae"]
+
+[tool.basedpyright]
+include = ["vae"]
+typeCheckingMode = "standard"
+reportMissingTypeStubs = false
+reportAny = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
+reportUnknownParameterType = false
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

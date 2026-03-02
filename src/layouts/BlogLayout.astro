@@ -13,5 +13,11 @@ const ogImageUrl = `/og/blog/${post.id}.png`;
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} ogImage={ogImageUrl}>
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+    crossorigin="anonymous"
+  />
   <slot />
 </BaseLayout>
