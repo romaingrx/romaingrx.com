@@ -7,7 +7,7 @@ import jax.random as jr
 from einops import rearrange
 from jaxtyping import Array, Float, Int, PRNGKeyArray
 
-from .types import IMG_CHANNELS
+from .config import IMG_CHANNELS
 
 
 class SinusoidalEmbedding(eqx.Module):
@@ -85,7 +85,7 @@ class SelfAttention(eqx.Module):
             heads=self.n_heads,
         )
         q, k, v = qkv_flat[0], qkv_flat[1], qkv_flat[2]
-        scale = (c // self.n_heads) ** -0.5
+        scale = q.shape[-1] ** -0.5
         attn = jax.nn.softmax(jnp.einsum("hid,hjd->hij", q, k) * scale, axis=-1)
         out = jnp.einsum("hij,hjd->hid", attn, v)
         out = rearrange(out, "heads (h w) d -> (heads d) h w", h=h, w=w)
@@ -153,14 +153,17 @@ class UNet(eqx.Module):
         self.attn_resolutions = attn_resolutions
         time_dim = base_channels * 4
 
-        k, *keys = jr.split(key, 20)
+        def next_key() -> PRNGKeyArray:
+            nonlocal key
+            key, subkey = jr.split(key)
+            return subkey
 
         self.time_embed = SinusoidalEmbedding(base_channels)
         self.time_mlp = eqx.nn.MLP(
-            base_channels, time_dim, width_size=time_dim, depth=1, key=keys[0]
+            base_channels, time_dim, width_size=time_dim, depth=1, key=next_key()
         )
         self.conv_in = eqx.nn.Conv2d(
-            img_channels, base_channels, kernel_size=3, padding=1, key=keys[1]
+            img_channels, base_channels, kernel_size=3, padding=1, key=next_key()
         )
 
         self.enc_blocks = []
@@ -168,71 +171,61 @@ class UNet(eqx.Module):
         self.downsamples = []
         in_ch = base_channels
         res = img_size
-        ki = 2
 
         for mult in channel_mults:
             out_ch = base_channels * mult
-            k1, k2, keys[ki] = jr.split(keys[ki], 3)
             level_blocks = [
-                ResNetBlock(in_ch, out_ch, time_dim, key=k1),
-                ResNetBlock(out_ch, out_ch, time_dim, key=k2),
+                ResNetBlock(in_ch, out_ch, time_dim, key=next_key()),
+                ResNetBlock(out_ch, out_ch, time_dim, key=next_key()),
             ]
             self.enc_blocks.append(level_blocks)
 
-            ki = min(ki + 1, len(keys) - 1)
-            k_attn, keys[ki] = jr.split(keys[ki])
             attn = (
-                SelfAttention(out_ch, key=k_attn) if res in attn_resolutions else None
+                SelfAttention(out_ch, key=next_key())
+                if res in attn_resolutions
+                else None
             )
             self.enc_attns.append(attn)
 
-            ki = min(ki + 1, len(keys) - 1)
-            k_down, keys[ki] = jr.split(keys[ki])
-            self.downsamples.append(Downsample(out_ch, key=k_down))
+            self.downsamples.append(Downsample(out_ch, key=next_key()))
 
             in_ch = out_ch
             res = res // 2
 
-        ki = min(ki + 1, len(keys) - 1)
-        k1, k2, k3, keys[ki] = jr.split(keys[ki], 4)
-        self.mid_block1 = ResNetBlock(in_ch, in_ch, time_dim, key=k1)
-        self.mid_attn = SelfAttention(in_ch, key=k2)
-        self.mid_block2 = ResNetBlock(in_ch, in_ch, time_dim, key=k3)
+        self.mid_block1 = ResNetBlock(in_ch, in_ch, time_dim, key=next_key())
+        self.mid_attn = SelfAttention(in_ch, key=next_key())
+        self.mid_block2 = ResNetBlock(in_ch, in_ch, time_dim, key=next_key())
 
         self.dec_blocks = []
         self.dec_attns = []
         self.upsamples = []
 
-        for i, mult in enumerate(reversed(channel_mults)):
+        for mult in reversed(channel_mults):
             out_ch = base_channels * mult
             skip_ch = out_ch
 
-            ki = min(ki + 1, len(keys) - 1)
-            k_up, keys[ki] = jr.split(keys[ki])
-            self.upsamples.append(Upsample(in_ch, key=k_up))
+            self.upsamples.append(Upsample(in_ch, key=next_key()))
             res = res * 2
 
-            ki = min(ki + 1, len(keys) - 1)
-            k1, k2, keys[ki] = jr.split(keys[ki], 3)
             level_blocks = [
-                ResNetBlock(in_ch + skip_ch, out_ch, time_dim, key=k1),
-                ResNetBlock(out_ch, out_ch, time_dim, key=k2),
+                ResNetBlock(in_ch + skip_ch, out_ch, time_dim, key=next_key()),
+                ResNetBlock(out_ch, out_ch, time_dim, key=next_key()),
             ]
             self.dec_blocks.append(level_blocks)
 
-            ki = min(ki + 1, len(keys) - 1)
-            k_attn, keys[ki] = jr.split(keys[ki])
             attn = (
-                SelfAttention(out_ch, key=k_attn) if res in attn_resolutions else None
+                SelfAttention(out_ch, key=next_key())
+                if res in attn_resolutions
+                else None
             )
             self.dec_attns.append(attn)
 
             in_ch = out_ch
 
-        ki = min(ki + 1, len(keys) - 1)
-        k_out, _ = jr.split(keys[ki])
         self.out_norm = eqx.nn.GroupNorm(min(8, in_ch), in_ch)
-        self.conv_out = eqx.nn.Conv2d(in_ch, img_channels, kernel_size=1, key=k_out)
+        self.conv_out = eqx.nn.Conv2d(
+            in_ch, img_channels, kernel_size=1, key=next_key()
+        )
 
     def __call__(
         self, x: Float[Array, "c h w"], t: Int[Array, ""]

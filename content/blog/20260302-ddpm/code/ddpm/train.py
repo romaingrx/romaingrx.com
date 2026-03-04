@@ -52,7 +52,7 @@ def train_loop(
         epoch_metrics: dict[str, float] = {"loss": 0.0, "mse": 0.0}
         n_batches = 0
 
-        for i in range(0, n, BATCH_SIZE):
+        for i in range(0, n - BATCH_SIZE + 1, BATCH_SIZE):
             batch = data[perm[i : i + BATCH_SIZE]]
             key, step_key = jr.split(key)
             model, ema_model, opt_state, metrics = step_fn(

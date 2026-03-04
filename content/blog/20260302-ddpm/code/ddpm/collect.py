@@ -25,7 +25,7 @@ from .schema import (
     Sample,
     TrainingSample,
 )
-from .types import IMG_CHANNELS, IMG_SIZE
+from .config import IMG_CHANNELS, IMG_SIZE
 
 log = structlog.get_logger()
 

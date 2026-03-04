@@ -15,7 +15,7 @@ from .model import UNet
 from .sample import sample_batch
 from .schedule import NoiseSchedule
 from .schema import EpochMetrics, TrainingSample
-from .types import IMG_CHANNELS, IMG_SIZE
+from .config import IMG_CHANNELS, IMG_SIZE
 
 log = structlog.get_logger()
 
@@ -90,13 +90,10 @@ def load_checkpoint(
     return epoch, model, ema_model, opt_state, training, key
 
 
-def load_ema_model(*, key: jax.Array) -> UNet:
-    from .config import init_model
-
+def load_ema_model(model: UNet) -> UNet:
     ema_path = CHECKPOINT_DIR / "latest" / "ema_model.eqx"
     if not ema_path.exists():
         raise FileNotFoundError(f"No checkpoint found at {ema_path}")
-    model = init_model(key=key)
     return eqx.tree_deserialise_leaves(str(ema_path), model)
 
 

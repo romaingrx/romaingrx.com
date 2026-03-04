@@ -75,11 +75,12 @@ def ddpm_sample_with_intermediates(
             sigma = jnp.sqrt(schedule.posterior_variance[t_int])
             x = mean + sigma * noise
         else:
-            x = jnp.clip(mean, -1.0, 1.0)
+            x = mean
 
         if t_int % capture_every == 0 or t_int == schedule.T - 1:
             intermediates.append((t_int, x))
 
+    x = jnp.clip(x, -1.0, 1.0)
     return x, intermediates
 
 

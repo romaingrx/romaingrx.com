@@ -1,7 +1,6 @@
 import base64
 import io
 from pathlib import Path
-from typing import Protocol
 
 import jax
 import jax.numpy as jnp
@@ -9,13 +8,7 @@ import numpy as np
 from jaxtyping import Array, Float
 from PIL import Image
 
-from .types import IMG_SIZE
-
-
-class DatasetLoader(Protocol):
-    def __call__(
-        self, cache_dir: Path, *, augment: bool
-    ) -> Float[Array, "n c h w"]: ...
+from .config import IMG_SIZE
 
 
 def load_pokemon(cache_dir: Path, *, augment: bool = True) -> Float[Array, "n c h w"]:

@@ -20,11 +20,12 @@ class NoiseSchedule:
         self.sqrt_alpha_bars = jnp.sqrt(self.alpha_bars)
         self.sqrt_one_minus_alpha_bars = jnp.sqrt(1.0 - self.alpha_bars)
         self.sqrt_recip_alphas = 1.0 / jnp.sqrt(self.alphas)
-        self.posterior_variance = (
+        posterior_variance = (
             betas
             * (1.0 - jnp.concatenate([jnp.ones(1), self.alpha_bars[:-1]]))
             / (1.0 - self.alpha_bars)
         )
+        self.posterior_variance = posterior_variance.at[0].set(0.0)
 
     @property
     def T(self) -> int:
@@ -35,15 +36,6 @@ def linear_schedule(
     T: int, beta_start: float = 1e-4, beta_end: float = 0.02
 ) -> NoiseSchedule:
     betas = jnp.linspace(beta_start, beta_end, T)
-    return NoiseSchedule(betas)
-
-
-def cosine_schedule(T: int, s: float = 0.008) -> NoiseSchedule:
-    steps = jnp.arange(T + 1)
-    f = jnp.cos((steps / T + s) / (1 + s) * jnp.pi / 2) ** 2
-    alpha_bars = f / f[0]
-    betas = 1.0 - alpha_bars[1:] / alpha_bars[:-1]
-    betas = jnp.clip(betas, 0.0001, 0.02)
     return NoiseSchedule(betas)
 
 
