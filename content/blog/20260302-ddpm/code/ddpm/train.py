@@ -103,12 +103,13 @@ def loss_fn(
     schedule: NoiseSchedule,
 ) -> tuple[Scalar, dict[str, Scalar]]:
     batch_size = x0.shape[0]
-    k1, k2 = jr.split(key)
+    k1, k2, k3 = jr.split(key, 3)
 
     t = jr.randint(k1, (batch_size,), 0, schedule.T)
     noise = jr.normal(k2, x0.shape)
     x_noisy = q_sample(x0, t, noise, schedule)
-    pred_noise = jax.vmap(model)(x_noisy, t)
+    dropout_keys = jr.split(k3, batch_size)
+    pred_noise = jax.vmap(model)(x_noisy, t, key=dropout_keys)
     mse = jnp.mean((pred_noise - noise) ** 2)
     return mse, {"mse": mse}
 

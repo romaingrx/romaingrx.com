@@ -9,6 +9,7 @@ from .config import (
     BASE_CHANNELS,
     CACHE_DIR,
     CHANNEL_MULTS,
+    DROPOUT_RATE,
     IMG_CHANNELS,
     IMG_SIZE,
     TIMESTEPS,
@@ -16,7 +17,7 @@ from .config import (
 )
 from .data import load_pokemon
 from .model import UNet
-from .schedule import linear_schedule
+from .schedule import cosine_schedule
 from .train import train_loop
 
 log = structlog.get_logger()
@@ -40,7 +41,7 @@ def train() -> None:
     data = load_pokemon(CACHE_DIR, augment=True)
     log.info("dataset_loaded", n_images=data.shape[0], shape=data.shape[1:])
 
-    schedule = linear_schedule(TIMESTEPS)
+    schedule = cosine_schedule(TIMESTEPS)
 
     key, init_key, train_key, collect_key = jr.split(key, 4)
     model = UNet(
@@ -49,6 +50,7 @@ def train() -> None:
         channel_mults=CHANNEL_MULTS,
         attn_resolutions=ATTN_RESOLUTIONS,
         img_size=IMG_SIZE,
+        dropout_rate=DROPOUT_RATE,
         key=init_key,
     )
 
@@ -65,7 +67,7 @@ def train() -> None:
 def resample() -> None:
     key = jr.PRNGKey(99)
 
-    schedule = linear_schedule(TIMESTEPS)
+    schedule = cosine_schedule(TIMESTEPS)
 
     key, init_key = jr.split(key)
     model = UNet(
@@ -74,6 +76,7 @@ def resample() -> None:
         channel_mults=CHANNEL_MULTS,
         attn_resolutions=ATTN_RESOLUTIONS,
         img_size=IMG_SIZE,
+        dropout_rate=DROPOUT_RATE,
         key=init_key,
     )
     ema_model = load_ema_model(model)

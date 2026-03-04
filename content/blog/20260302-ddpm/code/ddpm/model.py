@@ -36,15 +36,25 @@ class ResNetBlock(eqx.Module):
     norm1: eqx.nn.GroupNorm
     norm2: eqx.nn.GroupNorm
     time_mlp: TimeMLPBlock
+    dropout: eqx.nn.Dropout
     skip_conv: eqx.nn.Conv2d | None
 
-    def __init__(self, in_ch: int, out_ch: int, time_dim: int, *, key: PRNGKeyArray):
+    def __init__(
+        self,
+        in_ch: int,
+        out_ch: int,
+        time_dim: int,
+        *,
+        dropout_rate: float = 0.0,
+        key: PRNGKeyArray,
+    ):
         k1, k2, k3, k4 = jr.split(key, 4)
         self.conv1 = eqx.nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1, key=k1)
         self.conv2 = eqx.nn.Conv2d(out_ch, out_ch, kernel_size=3, padding=1, key=k2)
         self.norm1 = eqx.nn.GroupNorm(min(8, out_ch), out_ch)
         self.norm2 = eqx.nn.GroupNorm(min(8, out_ch), out_ch)
         self.time_mlp = TimeMLPBlock(time_dim, out_ch, key=k3)
+        self.dropout = eqx.nn.Dropout(p=dropout_rate)
         self.skip_conv = (
             eqx.nn.Conv2d(in_ch, out_ch, kernel_size=1, key=k4)
             if in_ch != out_ch
@@ -52,10 +62,15 @@ class ResNetBlock(eqx.Module):
         )
 
     def __call__(
-        self, x: Float[Array, "c h w"], t_emb: Float[Array, " time_dim"]
+        self,
+        x: Float[Array, "c h w"],
+        t_emb: Float[Array, " time_dim"],
+        *,
+        key: PRNGKeyArray,
     ) -> Float[Array, "out_ch h w"]:
         h = jax.nn.silu(self.norm1(self.conv1(x)))
         h = h + self.time_mlp(t_emb)[:, None, None]
+        h = self.dropout(h, key=key)
         h = jax.nn.silu(self.norm2(self.conv2(h)))
         skip = self.skip_conv(x) if self.skip_conv is not None else x
         return h + skip
@@ -146,6 +161,7 @@ class UNet(eqx.Module):
         channel_mults: tuple[int, ...] = (1, 2, 4),
         attn_resolutions: tuple[int, ...] = (16, 8),
         img_size: int = 64,
+        dropout_rate: float = 0.0,
         *,
         key: PRNGKeyArray,
     ):
@@ -175,8 +191,12 @@ class UNet(eqx.Module):
         for mult in channel_mults:
             out_ch = base_channels * mult
             level_blocks = [
-                ResNetBlock(in_ch, out_ch, time_dim, key=next_key()),
-                ResNetBlock(out_ch, out_ch, time_dim, key=next_key()),
+                ResNetBlock(
+                    in_ch, out_ch, time_dim, dropout_rate=dropout_rate, key=next_key()
+                ),
+                ResNetBlock(
+                    out_ch, out_ch, time_dim, dropout_rate=dropout_rate, key=next_key()
+                ),
             ]
             self.enc_blocks.append(level_blocks)
 
@@ -192,9 +212,13 @@ class UNet(eqx.Module):
             in_ch = out_ch
             res = res // 2
 
-        self.mid_block1 = ResNetBlock(in_ch, in_ch, time_dim, key=next_key())
+        self.mid_block1 = ResNetBlock(
+            in_ch, in_ch, time_dim, dropout_rate=dropout_rate, key=next_key()
+        )
         self.mid_attn = SelfAttention(in_ch, key=next_key())
-        self.mid_block2 = ResNetBlock(in_ch, in_ch, time_dim, key=next_key())
+        self.mid_block2 = ResNetBlock(
+            in_ch, in_ch, time_dim, dropout_rate=dropout_rate, key=next_key()
+        )
 
         self.dec_blocks = []
         self.dec_attns = []
@@ -208,8 +232,16 @@ class UNet(eqx.Module):
             res = res * 2
 
             level_blocks = [
-                ResNetBlock(in_ch + skip_ch, out_ch, time_dim, key=next_key()),
-                ResNetBlock(out_ch, out_ch, time_dim, key=next_key()),
+                ResNetBlock(
+                    in_ch + skip_ch,
+                    out_ch,
+                    time_dim,
+                    dropout_rate=dropout_rate,
+                    key=next_key(),
+                ),
+                ResNetBlock(
+                    out_ch, out_ch, time_dim, dropout_rate=dropout_rate, key=next_key()
+                ),
             ]
             self.dec_blocks.append(level_blocks)
 
@@ -228,10 +260,28 @@ class UNet(eqx.Module):
         )
 
     def __call__(
-        self, x: Float[Array, "c h w"], t: Int[Array, ""]
+        self,
+        x: Float[Array, "c h w"],
+        t: Int[Array, ""],
+        *,
+        key: PRNGKeyArray | None = None,
     ) -> Float[Array, "c h w"]:
         t_emb = self.time_embed(t)
         t_emb = self.time_mlp(t_emb)
+        inference = key is None
+
+        def next_key() -> PRNGKeyArray:
+            nonlocal key
+            assert key is not None
+            key, subkey = jr.split(key)
+            return subkey
+
+        def apply_block(
+            block: ResNetBlock, h: Float[Array, "c h w"]
+        ) -> Float[Array, "c h w"]:
+            if inference:
+                return eqx.nn.inference_mode(block)(h, t_emb, key=jr.PRNGKey(0))
+            return block(h, t_emb, key=next_key())
 
         h = self.conv_in(x)
 
@@ -240,15 +290,15 @@ class UNet(eqx.Module):
             self.enc_blocks, self.enc_attns, self.downsamples
         ):
             for block in blocks:
-                h = block(h, t_emb)
+                h = apply_block(block, h)
             if attn is not None:
                 h = attn(h)
             skips.append(h)
             h = down(h)
 
-        h = self.mid_block1(h, t_emb)
+        h = apply_block(self.mid_block1, h)
         h = self.mid_attn(h)
-        h = self.mid_block2(h, t_emb)
+        h = apply_block(self.mid_block2, h)
 
         for blocks, attn, up, skip in zip(
             self.dec_blocks, self.dec_attns, self.upsamples, reversed(skips)
@@ -256,7 +306,7 @@ class UNet(eqx.Module):
             h = up(h)
             h = jnp.concatenate([h, skip], axis=0)
             for block in blocks:
-                h = block(h, t_emb)
+                h = apply_block(block, h)
             if attn is not None:
                 h = attn(h)
 

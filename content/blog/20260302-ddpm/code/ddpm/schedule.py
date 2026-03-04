@@ -39,6 +39,15 @@ def linear_schedule(
     return NoiseSchedule(betas)
 
 
+def cosine_schedule(T: int, s: float = 0.008) -> NoiseSchedule:
+    steps = jnp.arange(T + 1)
+    f = jnp.cos((steps / T + s) / (1 + s) * jnp.pi / 2) ** 2
+    alpha_bars = f / f[0]
+    betas = 1.0 - alpha_bars[1:] / alpha_bars[:-1]
+    betas = jnp.clip(betas, 0.0001, 0.02)
+    return NoiseSchedule(betas)
+
+
 def q_sample(
     x0: ImageBatch,
     t: Int[Array, " b"],
