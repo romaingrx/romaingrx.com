@@ -9,20 +9,28 @@ from .config import (
     BASE_CHANNELS,
     CACHE_DIR,
     CHANNEL_MULTS,
+    IMG_CHANNELS,
+    IMG_SIZE,
     TIMESTEPS,
+    configure_logging,
 )
 from .data import load_pokemon
 from .model import UNet
 from .schedule import linear_schedule
 from .train import train_loop
-from .config import IMG_CHANNELS, IMG_SIZE
 
 log = structlog.get_logger()
 
 
 @click.group()
-def main() -> None:
-    pass
+@click.option(
+    "-v",
+    "--verbose",
+    is_flag=True,
+    help="Enable debug logging (incl. JAX compile logs)",
+)
+def main(verbose: bool) -> None:
+    configure_logging(verbose=verbose)
 
 
 @main.command()
