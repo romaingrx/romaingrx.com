@@ -1,0 +1,46 @@
+[project]
+name = "ddpm-pokemon"
+version = "0.1.0"
+description = "Denoising Diffusion Probabilistic Model for Pokemon sprite generation in JAX"
+requires-python = ">=3.12"
+dependencies = [
+    "jax>=0.4.35",
+    "jaxlib>=0.4.35",
+    "equinox>=0.11.10",
+    "optax>=0.2.4",
+    "jaxtyping>=0.2.34",
+    "structlog>=24.0.0",
+    "pydantic>=2.0.0",
+    "einops>=0.8.0",
+    "Pillow>=10.0.0",
+    "numpy>=1.26.0",
+    "click>=8.0.0",
+]
+
+[project.optional-dependencies]
+tpu = ["jax[tpu]", "libtpu>=0.0.35"]
+data = ["datasets>=2.0.0"]
+dev = ["basedpyright>=1.20.0", "ruff>=0.8.0"]
+
+[project.scripts]
+ddpm = "ddpm.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ddpm"]
+
+[tool.basedpyright]
+include = ["ddpm"]
+typeCheckingMode = "standard"
+reportMissingTypeStubs = false
+reportAny = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
+reportUnknownParameterType = false
+
+[tool.ruff.lint]
+ignore = ["F722"]  # jaxtyping string annotations — https://github.com/astral-sh/ruff/issues/9860
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
