@@ -1,9 +1,13 @@
+from typing import Callable
+
 import equinox as eqx
 import jax
 import jax.numpy as jnp
 import jax.random as jr
 from jaxtyping import Array, Float, PRNGKeyArray
 
+from .config import IMG_CHANNELS, IMG_SIZE, N_VALIDATION_SAMPLES
+from .data import array_to_b64
 from .model import UNet
 from .schedule import NoiseSchedule
 from .types import Image, ImageBatch
@@ -13,7 +17,7 @@ def _make_ddpm_sample_fn(
     model: UNet,
     schedule: NoiseSchedule,
     shape: tuple[int, int, int],
-):
+) -> Callable[[PRNGKeyArray], Image]:
     T = schedule.T
     sqrt_recip_alphas = schedule.sqrt_recip_alphas
     betas = schedule.betas
@@ -95,3 +99,14 @@ def sample_batch(
     fn = _make_ddpm_sample_fn(model, schedule, shape)
     keys = jr.split(key, n)
     return jax.vmap(fn)(keys)
+
+
+def generate_validation_samples(
+    ema_model: UNet,
+    schedule: NoiseSchedule,
+    *,
+    key: PRNGKeyArray,
+) -> list[str]:
+    shape = (IMG_CHANNELS, IMG_SIZE, IMG_SIZE)
+    batch = sample_batch(ema_model, schedule, N_VALIDATION_SAMPLES, shape, key=key)
+    return [array_to_b64(batch[i]) for i in range(batch.shape[0])]

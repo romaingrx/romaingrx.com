@@ -100,9 +100,7 @@ class SelfAttention(eqx.Module):
             heads=self.n_heads,
         )
         q, k, v = qkv_flat[0], qkv_flat[1], qkv_flat[2]
-        scale = q.shape[-1] ** -0.5
-        attn = jax.nn.softmax(jnp.einsum("hid,hjd->hij", q, k) * scale, axis=-1)
-        out = jnp.einsum("hij,hjd->hid", attn, v)
+        out = jax.nn.dot_product_attention(q, k, v)
         out = rearrange(out, "heads (h w) d -> (heads d) h w", h=h, w=w)
         return x + self.proj(out)
 

@@ -1,3 +1,6 @@
+import base64
+from pathlib import Path
+
 import jax
 import jax.numpy as jnp
 import jax.random as jr
@@ -5,6 +8,7 @@ import structlog
 from jaxtyping import PRNGKeyArray
 
 from .config import (
+    CHECKPOINT_DIR,
     FORWARD_STEPS,
     N_DENOISING_EXAMPLES,
     N_FORWARD_EXAMPLES,
@@ -137,3 +141,23 @@ def collect_and_save(
 
     OUTPUT_FILE.write_text(run.model_dump_json(indent=2))
     log.info("saved_run", path=str(OUTPUT_FILE))
+
+
+def load_training_samples() -> list[TrainingSample]:
+    if not CHECKPOINT_DIR.exists():
+        return []
+
+    def _read_epoch(epoch_dir: Path) -> TrainingSample | None:
+        images = [
+            base64.b64encode(p.read_bytes()).decode()
+            for p in sorted((epoch_dir / "samples").glob("sample_*.png"))
+        ]
+        if not images:
+            return None
+        return TrainingSample(epoch=int(epoch_dir.name.split("_")[1]), images=images)
+
+    return [
+        s
+        for epoch_dir in sorted(CHECKPOINT_DIR.glob("epoch_*"))
+        if (s := _read_epoch(epoch_dir)) is not None
+    ]

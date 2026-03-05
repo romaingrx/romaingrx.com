@@ -10,13 +10,9 @@ import optax
 import structlog
 from jaxtyping import PRNGKeyArray
 
-from .config import CHECKPOINT_DIR, N_VALIDATION_SAMPLES
-from .data import array_to_b64
+from .config import CHECKPOINT_DIR
 from .model import UNet
-from .sample import sample_batch
-from .schedule import NoiseSchedule
-from .schema import EpochMetrics, TrainingSample
-from .config import IMG_CHANNELS, IMG_SIZE
+from .schema import EpochMetrics
 
 log = structlog.get_logger()
 
@@ -96,34 +92,3 @@ def load_ema_model(model: UNet) -> UNet:
     if not ema_path.exists():
         raise FileNotFoundError(f"No checkpoint found at {ema_path}")
     return eqx.tree_deserialise_leaves(str(ema_path), model)
-
-
-def generate_validation_samples(
-    ema_model: UNet,
-    schedule: NoiseSchedule,
-    *,
-    key: PRNGKeyArray,
-) -> list[str]:
-    shape = (IMG_CHANNELS, IMG_SIZE, IMG_SIZE)
-    batch = sample_batch(ema_model, schedule, N_VALIDATION_SAMPLES, shape, key=key)
-    return [array_to_b64(batch[i]) for i in range(batch.shape[0])]
-
-
-def load_training_samples() -> list[TrainingSample]:
-    samples: list[TrainingSample] = []
-    if not CHECKPOINT_DIR.exists():
-        return samples
-
-    for epoch_dir in sorted(CHECKPOINT_DIR.glob("epoch_*")):
-        samples_dir = epoch_dir / "samples"
-        if not samples_dir.exists():
-            continue
-        epoch = int(epoch_dir.name.split("_")[1])
-        images: list[str] = []
-        for png_path in sorted(samples_dir.glob("sample_*.png")):
-            b64 = base64.b64encode(png_path.read_bytes()).decode()
-            images.append(b64)
-        if images:
-            samples.append(TrainingSample(epoch=epoch, images=images))
-
-    return samples

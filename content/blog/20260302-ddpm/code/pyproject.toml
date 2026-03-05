@@ -20,6 +20,7 @@ dependencies = [
 [project.optional-dependencies]
 tpu = ["jax[tpu]", "libtpu>=0.0.35"]
 data = ["datasets>=2.0.0"]
+test = ["pytest>=8.0.0"]
 dev = ["basedpyright>=1.20.0", "ruff>=0.8.0"]
 
 [project.scripts]

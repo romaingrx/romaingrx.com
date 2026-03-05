@@ -8,12 +8,9 @@ import optax
 import structlog
 from jaxtyping import Array, Float, PRNGKeyArray
 
-from .checkpoint import (
-    generate_validation_samples,
-    load_checkpoint,
-    load_training_samples,
-    save_checkpoint,
-)
+from .checkpoint import load_checkpoint, save_checkpoint
+from .collect import load_training_samples
+from .sample import generate_validation_samples
 from .config import BATCH_SIZE, CHECKPOINT_EVERY, COMPUTE_DTYPE, EMA_DECAY, EPOCHS, LR
 from .model import UNet
 from .schedule import NoiseSchedule, q_sample
@@ -119,11 +116,7 @@ def _loss_fn(
 def _ema_update(ema_model: UNet, model: UNet, decay: float) -> UNet:
     ema_arrays = eqx.filter(ema_model, eqx.is_array)
     model_arrays = eqx.filter(model, eqx.is_array)
-    new_ema = jax.tree.map(
-        lambda e, m: decay * e + (1 - decay) * m,
-        ema_arrays,
-        model_arrays,
-    )
+    new_ema = optax.incremental_update(model_arrays, ema_arrays, step_size=1 - decay)
     return eqx.combine(new_ema, ema_model)
 
 
