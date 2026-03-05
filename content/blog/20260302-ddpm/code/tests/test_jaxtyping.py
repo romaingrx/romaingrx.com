@@ -1,8 +1,9 @@
 """Verify jaxtyping + beartype runtime shape checking is active."""
-import pytest
 import jax.numpy as jnp
+import pytest
+from jaxtyping import TypeCheckError
 
-from ddpm.schedule import q_sample, cosine_schedule
+from ddpm.schedule import cosine_schedule, q_sample
 
 
 def test_q_sample_correct_shapes():
@@ -21,5 +22,5 @@ def test_q_sample_wrong_t_shape_raises():
     x0 = jnp.ones((2, 3, 8, 8))
     t = jnp.array(5)  # scalar, not (batch,)
     noise = jnp.ones((2, 3, 8, 8))
-    with pytest.raises(Exception):
+    with pytest.raises(TypeCheckError, match=r"'t': weak_i32\[\]"):
         q_sample(x0, t, noise, schedule)
