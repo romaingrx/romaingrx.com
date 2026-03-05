@@ -6,7 +6,7 @@ import jax.numpy as jnp
 import jax.random as jr
 import optax
 import structlog
-from jaxtyping import Float, PRNGKeyArray
+from jaxtyping import Array, Float, PRNGKeyArray
 
 from .checkpoint import (
     generate_validation_samples,
@@ -14,7 +14,7 @@ from .checkpoint import (
     load_training_samples,
     save_checkpoint,
 )
-from .config import BATCH_SIZE, CHECKPOINT_EVERY, EMA_DECAY, EPOCHS, LR
+from .config import BATCH_SIZE, CHECKPOINT_EVERY, COMPUTE_DTYPE, EMA_DECAY, EPOCHS, LR
 from .model import UNet
 from .schedule import NoiseSchedule, q_sample
 from .schema import EpochMetrics, TrainingSample
@@ -25,15 +25,15 @@ log = structlog.get_logger()
 
 def train_loop(
     model: UNet,
-    data: Float[jax.Array, "n c h w"],
+    data: Float[Array, "n c h w"],
     schedule: NoiseSchedule,
     *,
-    key: jax.Array,
+    key: PRNGKeyArray,
 ) -> tuple[UNet, list[EpochMetrics], list[TrainingSample]]:
     n = data.shape[0]
     opt = optax.adam(LR)
     opt_state = opt.init(eqx.filter(model, eqx.is_array))
-    step_fn = make_step_fn(opt, schedule, EMA_DECAY)
+    epoch_fn = _make_epoch_fn(opt, schedule, EMA_DECAY)
 
     ema_model = model
     start_epoch = 0
@@ -45,34 +45,35 @@ def train_loop(
         start_epoch += 1
         training_samples = load_training_samples()
 
+    n_batches = n // BATCH_SIZE
+
     for epoch in range(start_epoch, EPOCHS):
-        key, epoch_key = jr.split(key)
+        key, epoch_key, batch_key = jr.split(key, 3)
         perm = jr.permutation(epoch_key, n)
+        batches = data[perm[: n_batches * BATCH_SIZE]].reshape(
+            n_batches, BATCH_SIZE, *data.shape[1:]
+        )
+        batch_keys = jr.split(batch_key, n_batches)
 
-        epoch_metrics: dict[str, float] = {"loss": 0.0, "mse": 0.0}
-        n_batches = 0
+        model, ema_model, opt_state, avg_metrics = epoch_fn(
+            model, ema_model, opt_state, batches, batch_keys
+        )
 
-        for i in range(0, n - BATCH_SIZE + 1, BATCH_SIZE):
-            batch = data[perm[i : i + BATCH_SIZE]]
-            key, step_key = jr.split(key)
-            model, ema_model, opt_state, metrics = step_fn(
-                model, ema_model, opt_state, batch, step_key
-            )
-            for k, v in metrics.items():
-                epoch_metrics[k] += float(v)
-            n_batches += 1
-
-        avg = {k: v / n_batches for k, v in epoch_metrics.items()}
         training.append(
             EpochMetrics(
                 epoch=epoch,
-                loss=round(avg["loss"], 6),
-                mse=round(avg["mse"], 6),
+                loss=round(float(avg_metrics["loss"]), 6),
+                mse=round(float(avg_metrics["mse"]), 6),
             )
         )
 
         if epoch % 50 == 0 or epoch == EPOCHS - 1:
-            log.info("epoch", **{k: round(v, 4) for k, v in avg.items()}, epoch=epoch)
+            log.info(
+                "epoch",
+                loss=round(float(avg_metrics["loss"]), 4),
+                mse=round(float(avg_metrics["mse"]), 4),
+                epoch=epoch,
+            )
 
         if (epoch + 1) % CHECKPOINT_EVERY == 0:
             key, val_key = jr.split(key)
@@ -95,7 +96,7 @@ def train_loop(
     return ema_model, training, training_samples
 
 
-def loss_fn(
+def _loss_fn(
     model: UNet,
     x0: ImageBatch,
     *,
@@ -105,12 +106,13 @@ def loss_fn(
     batch_size = x0.shape[0]
     k1, k2, k3 = jr.split(key, 3)
 
+    dtype = jnp.dtype(COMPUTE_DTYPE)
     t = jr.randint(k1, (batch_size,), 0, schedule.T)
-    noise = jr.normal(k2, x0.shape)
-    x_noisy = q_sample(x0, t, noise, schedule)
+    noise = jr.normal(k2, x0.shape, dtype=dtype)
+    x_noisy = q_sample(x0.astype(dtype), t, noise, schedule)
     dropout_keys = jr.split(k3, batch_size)
     pred_noise = jax.vmap(model)(x_noisy, t, key=dropout_keys)
-    mse = jnp.mean((pred_noise - noise) ** 2)
+    mse = jnp.mean((pred_noise - noise) ** 2).astype(jnp.float32)
     return mse, {"mse": mse}
 
 
@@ -125,24 +127,31 @@ def _ema_update(ema_model: UNet, model: UNet, decay: float) -> UNet:
     return eqx.combine(new_ema, ema_model)
 
 
-StepFn = Callable[
+EpochFn = Callable[
     [UNet, UNet, optax.OptState, ImageBatch, PRNGKeyArray],
     tuple[UNet, UNet, optax.OptState, dict[str, Scalar]],
 ]
 
 
-def make_step_fn(
+def _make_epoch_fn(
     opt: optax.GradientTransformation, schedule: NoiseSchedule, ema_decay: float
-) -> StepFn:
-    @eqx.filter_jit
-    def step(
-        model: UNet,
-        ema_model: UNet,
-        opt_state: optax.OptState,
+) -> EpochFn:
+    # Static parts of model/ema/opt captured in closure; only arrays in scan carry.
+    model_static: UNet = None  # type: ignore[assignment]
+    opt_static: optax.OptState = None  # type: ignore[assignment]
+
+    def _step(
+        model_dyn: UNet,
+        ema_dyn: UNet,
+        opt_dyn: optax.OptState,
         batch: ImageBatch,
         key: PRNGKeyArray,
     ) -> tuple[UNet, UNet, optax.OptState, dict[str, Scalar]]:
-        (loss, metrics), grads = eqx.filter_value_and_grad(loss_fn, has_aux=True)(
+        model = eqx.combine(model_dyn, model_static)
+        ema_model = eqx.combine(ema_dyn, model_static)
+        opt_state = eqx.combine(opt_dyn, opt_static)
+
+        (loss, metrics), grads = eqx.filter_value_and_grad(_loss_fn, has_aux=True)(
             model, batch, key=key, schedule=schedule
         )
         updates, opt_state = opt.update(
@@ -150,6 +159,40 @@ def make_step_fn(
         )  # type: ignore[reportArgumentType]
         model = eqx.apply_updates(model, updates)
         ema_model = _ema_update(ema_model, model, ema_decay)
-        return model, ema_model, opt_state, {**metrics, "loss": loss}
 
-    return step
+        model_dyn = eqx.filter(model, eqx.is_array)
+        ema_dyn = eqx.filter(ema_model, eqx.is_array)
+        opt_dyn = eqx.filter(opt_state, eqx.is_array)
+        return model_dyn, ema_dyn, opt_dyn, {**metrics, "loss": loss}
+
+    @eqx.filter_jit
+    def train_epoch(
+        model: UNet,
+        ema_model: UNet,
+        opt_state: optax.OptState,
+        batches: Float[Array, "n_batches batch c h w"],
+        keys: PRNGKeyArray,
+    ) -> tuple[UNet, UNet, optax.OptState, dict[str, Scalar]]:
+        nonlocal model_static, opt_static
+        model_dyn, model_static = eqx.partition(model, eqx.is_array)
+        ema_dyn = eqx.filter(ema_model, eqx.is_array)
+        opt_dyn, opt_static = eqx.partition(opt_state, eqx.is_array)
+
+        def scan_body(carry, inputs):  # type: ignore[no-untyped-def]
+            model_dyn, ema_dyn, opt_dyn = carry
+            batch, key = inputs
+            model_dyn, ema_dyn, opt_dyn, metrics = _step(
+                model_dyn, ema_dyn, opt_dyn, batch, key
+            )
+            return (model_dyn, ema_dyn, opt_dyn), metrics
+
+        (model_dyn, ema_dyn, opt_dyn), all_metrics = jax.lax.scan(
+            scan_body, (model_dyn, ema_dyn, opt_dyn), (batches, keys)
+        )
+        avg_metrics = jax.tree.map(lambda x: x.mean(), all_metrics)
+        model = eqx.combine(model_dyn, model_static)
+        ema_model = eqx.combine(ema_dyn, model_static)
+        opt_state = eqx.combine(opt_dyn, opt_static)
+        return model, ema_model, opt_state, avg_metrics
+
+    return train_epoch

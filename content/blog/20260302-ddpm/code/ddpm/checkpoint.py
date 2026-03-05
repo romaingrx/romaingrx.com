@@ -8,6 +8,7 @@ import jax
 import jax.numpy as jnp
 import optax
 import structlog
+from jaxtyping import PRNGKeyArray
 
 from .config import CHECKPOINT_DIR, N_VALIDATION_SAMPLES
 from .data import array_to_b64
@@ -26,7 +27,7 @@ def save_checkpoint(
     ema_model: UNet,
     opt_state: optax.OptState,
     training: list[EpochMetrics],
-    key: jax.Array,
+    key: PRNGKeyArray,
     sample_pngs: list[str] | None = None,
 ) -> None:
     epoch_dir = CHECKPOINT_DIR / f"epoch_{epoch:04d}"
@@ -64,7 +65,7 @@ def save_checkpoint(
 def load_checkpoint(
     model: UNet,
     ema_model: UNet,
-) -> tuple[int, UNet, UNet, optax.OptState, list[EpochMetrics], jax.Array] | None:
+) -> tuple[int, UNet, UNet, optax.OptState, list[EpochMetrics], PRNGKeyArray] | None:
     latest = CHECKPOINT_DIR / "latest"
     if not latest.exists():
         return None
@@ -101,7 +102,7 @@ def generate_validation_samples(
     ema_model: UNet,
     schedule: NoiseSchedule,
     *,
-    key: jax.Array,
+    key: PRNGKeyArray,
 ) -> list[str]:
     shape = (IMG_CHANNELS, IMG_SIZE, IMG_SIZE)
     batch = sample_batch(ema_model, schedule, N_VALIDATION_SAMPLES, shape, key=key)

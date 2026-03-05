@@ -2,6 +2,7 @@ import jax
 import jax.numpy as jnp
 import jax.random as jr
 import structlog
+from jaxtyping import PRNGKeyArray
 
 from .config import (
     FORWARD_STEPS,
@@ -26,6 +27,7 @@ from .schema import (
     TrainingSample,
 )
 from .config import IMG_CHANNELS, IMG_SIZE
+from .types import ImageBatch
 
 log = structlog.get_logger()
 
@@ -41,10 +43,10 @@ def collect_noise_schedule(schedule: NoiseSchedule) -> NoiseScheduleData:
 
 
 def collect_forward_process(
-    data: jax.Array,
+    data: ImageBatch,
     schedule: NoiseSchedule,
     *,
-    key: jax.Array,
+    key: PRNGKeyArray,
 ) -> list[ForwardProcessExample]:
     key, choice_key = jr.split(key)
     indices = jr.choice(
@@ -72,7 +74,7 @@ def collect_denoising(
     model: UNet,
     schedule: NoiseSchedule,
     *,
-    key: jax.Array,
+    key: PRNGKeyArray,
 ) -> list[DenoisingExample]:
     results: list[DenoisingExample] = []
     for _ in range(N_DENOISING_EXAMPLES):
@@ -96,7 +98,7 @@ def collect_samples(
     model: UNet,
     schedule: NoiseSchedule,
     *,
-    key: jax.Array,
+    key: PRNGKeyArray,
 ) -> list[Sample]:
     shape = (IMG_CHANNELS, IMG_SIZE, IMG_SIZE)
     batch = sample_batch(model, schedule, N_SAMPLES, shape, key=key)
@@ -110,11 +112,11 @@ def collect_samples(
 def collect_and_save(
     ema_model: UNet,
     schedule: NoiseSchedule,
-    data: jax.Array,
+    data: ImageBatch,
     training: list[EpochMetrics],
     training_samples: list[TrainingSample],
     *,
-    key: jax.Array,
+    key: PRNGKeyArray,
 ) -> None:
     log.info("collecting_results", using="ema_model")
 
