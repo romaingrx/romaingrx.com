@@ -66,5 +66,7 @@ def q_sample(
     schedule: NoiseSchedule,
 ) -> ImageBatch:
     sqrt_alpha_bar = rearrange(schedule.sqrt_alpha_bars[t], "b -> b 1 1 1")
-    sqrt_one_minus_alpha_bar = rearrange(schedule.sqrt_one_minus_alpha_bars[t], "b -> b 1 1 1")
+    sqrt_one_minus_alpha_bar = rearrange(
+        schedule.sqrt_one_minus_alpha_bars[t], "b -> b 1 1 1"
+    )
     return sqrt_alpha_bar * x0 + sqrt_one_minus_alpha_bar * noise

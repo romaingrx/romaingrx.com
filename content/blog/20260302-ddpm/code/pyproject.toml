@@ -15,12 +15,12 @@ dependencies = [
     "Pillow>=10.0.0",
     "numpy>=1.26.0",
     "click>=8.0.0",
+    "datasets>=2.0.0",
 ]
 
 [project.optional-dependencies]
 tpu = ["jax[tpu]", "libtpu>=0.0.35"]
-data = ["datasets>=2.0.0"]
-test = ["pytest>=8.0.0"]
+test = ["pytest>=8.0.0", "beartype>=0.18.0"]
 dev = ["basedpyright>=1.20.0", "ruff>=0.8.0"]
 
 [project.scripts]
@@ -38,6 +38,12 @@ reportUnknownMemberType = false
 reportUnknownVariableType = false
 reportUnknownArgumentType = false
 reportUnknownParameterType = false
+
+[tool.pytest.ini_options]
+addopts = "--jaxtyping-packages=ddpm,beartype.beartype"
+filterwarnings = [
+    "ignore:Setting `jax_pmap_shmap_merge`:DeprecationWarning",
+]
 
 [tool.ruff.lint]
 ignore = ["F722"]  # jaxtyping string annotations — https://github.com/astral-sh/ruff/issues/9860

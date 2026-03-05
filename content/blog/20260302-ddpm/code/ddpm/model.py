@@ -275,8 +275,8 @@ class UNet(eqx.Module):
             return subkey
 
         def apply_block(
-            block: ResNetBlock, h: Float[Array, "c h w"]
-        ) -> Float[Array, "c h w"]:
+            block: ResNetBlock, h: Float[Array, "_ h w"]
+        ) -> Float[Array, "_ h w"]:
             if inference:
                 return eqx.nn.inference_mode(block)(h, t_emb, key=jr.PRNGKey(0))
             return block(h, t_emb, key=next_key())
