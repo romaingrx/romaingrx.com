@@ -1,3 +1,5 @@
+import logging
+
 import click
 import jax.random as jr
 import structlog
@@ -13,7 +15,6 @@ from .config import (
     IMG_CHANNELS,
     IMG_SIZE,
     TIMESTEPS,
-    configure_logging,
 )
 from .data import load_pokemon
 from .model import UNet
@@ -31,7 +32,30 @@ log = structlog.get_logger()
     help="Enable debug logging (incl. JAX compile logs)",
 )
 def main(verbose: bool) -> None:
-    configure_logging(verbose=verbose)
+    level = logging.DEBUG if verbose else logging.INFO
+
+    structlog.configure(
+        processors=[
+            structlog.contextvars.merge_contextvars,
+            structlog.stdlib.add_log_level,
+            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.dev.ConsoleRenderer(),
+        ],
+        wrapper_class=structlog.make_filtering_bound_logger(level),
+        logger_factory=structlog.PrintLoggerFactory(),
+    )
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(
+        structlog.stdlib.ProcessorFormatter(
+            processors=[
+                structlog.stdlib.add_log_level,
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.dev.ConsoleRenderer(),
+            ],
+        )
+    )
+    logging.basicConfig(handlers=[handler], level=level, force=True)
 
 
 @main.command()

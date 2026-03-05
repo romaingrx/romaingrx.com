@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 
 import jax.numpy as jnp
+from einops import rearrange
 from jaxtyping import Array, Float, Int
 
 from .types import ImageBatch
@@ -64,8 +65,6 @@ def q_sample(
     noise: ImageBatch,
     schedule: NoiseSchedule,
 ) -> ImageBatch:
-    sqrt_alpha_bar = schedule.sqrt_alpha_bars[t][:, None, None, None]
-    sqrt_one_minus_alpha_bar = schedule.sqrt_one_minus_alpha_bars[t][
-        :, None, None, None
-    ]
+    sqrt_alpha_bar = rearrange(schedule.sqrt_alpha_bars[t], "b -> b 1 1 1")
+    sqrt_one_minus_alpha_bar = rearrange(schedule.sqrt_one_minus_alpha_bars[t], "b -> b 1 1 1")
     return sqrt_alpha_bar * x0 + sqrt_one_minus_alpha_bar * noise
