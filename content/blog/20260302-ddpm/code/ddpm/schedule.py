@@ -1,6 +1,3 @@
-from dataclasses import dataclass
-from functools import cached_property
-
 import jax.numpy as jnp
 from einops import rearrange
 from jaxtyping import Array, Float, Int
@@ -8,39 +5,29 @@ from jaxtyping import Array, Float, Int
 from .types import ImageBatch
 
 
-@dataclass(frozen=True)
 class NoiseSchedule:
     betas: Float[Array, " T"]
+    alphas: Float[Array, " T"]
+    alpha_bars: Float[Array, " T"]
+    sqrt_alpha_bars: Float[Array, " T"]
+    sqrt_one_minus_alpha_bars: Float[Array, " T"]
+    sqrt_recip_alphas: Float[Array, " T"]
+    posterior_variance: Float[Array, " T"]
 
-    @cached_property
+    def __init__(self, betas: Float[Array, " T"]) -> None:
+        self.betas = betas
+        self.alphas = 1.0 - betas
+        self.alpha_bars = jnp.cumprod(self.alphas)
+        self.sqrt_alpha_bars = jnp.sqrt(self.alpha_bars)
+        self.sqrt_one_minus_alpha_bars = jnp.sqrt(1.0 - self.alpha_bars)
+        self.sqrt_recip_alphas = 1.0 / jnp.sqrt(self.alphas)
+        alpha_bars_prev = jnp.concatenate([jnp.ones(1), self.alpha_bars[:-1]])
+        posterior_variance = betas * (1.0 - alpha_bars_prev) / (1.0 - self.alpha_bars)
+        self.posterior_variance = posterior_variance.at[0].set(0.0)
+
+    @property
     def T(self) -> int:
         return int(self.betas.shape[0])
-
-    @cached_property
-    def alphas(self) -> Float[Array, " T"]:
-        return 1.0 - self.betas
-
-    @cached_property
-    def alpha_bars(self) -> Float[Array, " T"]:
-        return jnp.cumprod(self.alphas)
-
-    @cached_property
-    def sqrt_alpha_bars(self) -> Float[Array, " T"]:
-        return jnp.sqrt(self.alpha_bars)
-
-    @cached_property
-    def sqrt_one_minus_alpha_bars(self) -> Float[Array, " T"]:
-        return jnp.sqrt(1.0 - self.alpha_bars)
-
-    @cached_property
-    def sqrt_recip_alphas(self) -> Float[Array, " T"]:
-        return 1.0 / jnp.sqrt(self.alphas)
-
-    @cached_property
-    def posterior_variance(self) -> Float[Array, " T"]:
-        alpha_bars_prev = jnp.concatenate([jnp.ones(1), self.alpha_bars[:-1]])
-        variance = self.betas * (1.0 - alpha_bars_prev) / (1.0 - self.alpha_bars)
-        return variance.at[0].set(0.0)
 
 
 def linear_schedule(
