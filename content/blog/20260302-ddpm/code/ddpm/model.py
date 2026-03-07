@@ -132,6 +132,8 @@ class Upsample(eqx.Module):
 class UNet(eqx.Module):
     time_embed: SinusoidalEmbedding
     time_mlp: eqx.nn.MLP
+    class_embed: eqx.nn.Embedding | None
+    class_mlp: eqx.nn.MLP | None
     conv_in: eqx.nn.Conv2d
 
     enc_blocks: list[list[ResNetBlock]]
@@ -151,6 +153,7 @@ class UNet(eqx.Module):
 
     channel_mults: tuple[int, ...] = eqx.field(static=True)
     attn_resolutions: tuple[int, ...] = eqx.field(static=True)
+    num_classes: int | None = eqx.field(static=True)
 
     def __init__(
         self,
@@ -160,11 +163,13 @@ class UNet(eqx.Module):
         attn_resolutions: tuple[int, ...] = (16, 8),
         img_size: int = 64,
         dropout_rate: float = 0.0,
+        num_classes: int | None = None,
         *,
         key: PRNGKeyArray,
     ):
         self.channel_mults = channel_mults
         self.attn_resolutions = attn_resolutions
+        self.num_classes = num_classes
         time_dim = base_channels * 4
 
         def next_key() -> PRNGKeyArray:
@@ -176,6 +181,16 @@ class UNet(eqx.Module):
         self.time_mlp = eqx.nn.MLP(
             base_channels, time_dim, width_size=time_dim, depth=1, key=next_key()
         )
+
+        if num_classes is not None:
+            self.class_embed = eqx.nn.Embedding(num_classes, base_channels, key=next_key())
+            self.class_mlp = eqx.nn.MLP(
+                base_channels, time_dim, width_size=time_dim, depth=1, key=next_key()
+            )
+        else:
+            self.class_embed = None
+            self.class_mlp = None
+
         self.conv_in = eqx.nn.Conv2d(
             img_channels, base_channels, kernel_size=3, padding=1, key=next_key()
         )
@@ -262,10 +277,16 @@ class UNet(eqx.Module):
         x: Float[Array, "c h w"],
         t: Int[Array, ""],
         *,
+        label: Int[Array, ""] | None = None,
         key: PRNGKeyArray | None = None,
     ) -> Float[Array, "c h w"]:
         t_emb = self.time_embed(t)
         t_emb = self.time_mlp(t_emb)
+
+        if self.class_embed is not None and label is not None:
+            c_emb = self.class_embed(label)
+            t_emb = t_emb + self.class_mlp(c_emb)  # type: ignore[reportOptionalCall]
+
         inference = key is None
 
         def next_key() -> PRNGKeyArray:

@@ -31,10 +31,14 @@ class DenoisingStep(BaseModel):
 
 class DenoisingExample(BaseModel):
     steps: list[DenoisingStep]
+    label: int | None = None
+    letter: str | None = None
 
 
 class Sample(BaseModel):
     image: str
+    label: int | None = None
+    letter: str | None = None
 
 
 class TrainingSample(BaseModel):

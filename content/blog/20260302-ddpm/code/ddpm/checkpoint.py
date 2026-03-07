@@ -12,6 +12,7 @@ from jaxtyping import PRNGKeyArray
 from .config import CHECKPOINT_DIR
 from .model import UNet
 from .schema import EpochMetrics
+from .sdf import SDFNormalizer
 
 log = structlog.get_logger()
 
@@ -24,6 +25,7 @@ def save_checkpoint(
     training: list[EpochMetrics],
     key: PRNGKeyArray,
     sample_pngs: list[str] | None = None,
+    normalizer: SDFNormalizer | None = None,
 ) -> None:
     epoch_dir = CHECKPOINT_DIR / f"epoch_{epoch:04d}"
     epoch_dir.mkdir(parents=True, exist_ok=True)
@@ -32,15 +34,15 @@ def save_checkpoint(
     eqx.tree_serialise_leaves(str(epoch_dir / "ema_model.eqx"), ema_model)
     with open(epoch_dir / "opt_state.pkl", "wb") as f:
         pickle.dump(opt_state, f)
+    meta: dict = {
+        "epoch": epoch,
+        "training": [m.model_dump() for m in training],
+        "key": key.tolist(),
+    }
+    if normalizer is not None:
+        meta["sdf_normalizer"] = normalizer.to_dict()
     with open(epoch_dir / "meta.json", "w") as f:
-        json.dump(
-            {
-                "epoch": epoch,
-                "training": [m.model_dump() for m in training],
-                "key": key.tolist(),
-            },
-            f,
-        )
+        json.dump(meta, f)
 
     if sample_pngs:
         samples_dir = epoch_dir / "samples"

@@ -1,19 +1,25 @@
 from pathlib import Path
 
-IMG_CHANNELS: int = 3
+IMG_CHANNELS: int = 1
 IMG_SIZE: int = 64
+
+CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+NUM_CLASSES: int = len(CHARSET)
+
+SDF_CLAMP_MIN: float = -5.0
+SDF_CLAMP_MAX: float = 5.0
 
 TIMESTEPS = 1000
 BASE_CHANNELS = 48
 CHANNEL_MULTS = (1, 2, 4)
 ATTN_RESOLUTIONS = (16, 8)
 LR = 2e-4
-EPOCHS = 3000
-BATCH_SIZE = 128
+EPOCHS = 500
+BATCH_SIZE = 512
 EMA_DECAY = 0.999
 DROPOUT_RATE = 0.1
-COMPUTE_DTYPE = "bfloat16"  # bfloat16 for TPU speed, float32 for full precision
-CHECKPOINT_EVERY = 250
+COMPUTE_DTYPE = "float32"  # bfloat16 for TPU speed, float32 for full precision
+CHECKPOINT_EVERY = 50
 N_FORWARD_EXAMPLES = 3
 FORWARD_STEPS = [0, 50, 100, 250, 500, 750, 999]
 N_DENOISING_EXAMPLES = 1
