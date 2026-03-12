@@ -1,0 +1,168 @@
+---
+title: 'Denoising Diffusion from Scratch'
+description: 'Building a class-conditional DDPM in JAX to generate font glyphs from pure noise'
+authors: ['romaingrx']
+status: 'draft'
+published_date: 2026-03-02
+categories: ['ml']
+tags: ['from scratch']
+bibliography: './references.bib'
+resources:
+  - title: 'Training pipeline'
+    type: 'code'
+    provider: 'github'
+    value: 'https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code'
+    description: 'JAX/Equinox DDPM implementation for font glyph generation'
+---
+
+import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery } from './components';
+
+What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind **Denoising Diffusion Probabilistic Models** (DDPMs): learn to reverse a noise process, and you get a generative model for free.
+
+In this post, we'll build one from scratch in [JAX](https://github.com/jax-ml/jax) and train it to generate font glyphs: all 62 alphanumeric characters, conditioned on class labels.
+
+<SampleGallery client:visible />
+
+# The intuition
+
+In the [VAE post](/blog/20260301-vae), we compressed data into a bottleneck and decoded it back. That works, but there's a fundamental tension: the bottleneck must be small enough to regularize, yet large enough to not lose information.
+
+Diffusion models sidestep this entirely. There's no encoder, no bottleneck. Instead:
+
+1. **Destroy** the data by slowly adding Gaussian noise until nothing is left.
+2. **Learn to undo** each tiny step of destruction.
+
+If you can reverse one small step of noise, you can chain 1000 reversals and go from pure static to a crisp image. The key insight from Sohl-Dickstein et al. [@sohl2015deep] is that each reversal step is nearly Gaussian when the forward steps are small enough, so a neural network can learn it.
+
+# The forward process
+
+The forward process is fixed (no parameters to learn). Given a clean image $x_0$, we define a sequence $x_1, x_2, \dots, x_T$ where each step adds a little Gaussian noise controlled by a variance schedule $\beta_1, \dots, \beta_T$:
+
+$$
+q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(x_t;\; \sqrt{1-\beta_t}\, x_{t-1},\; \beta_t I\right)
+$$
+
+A nice property: we can jump to any timestep $t$ directly without iterating, thanks to the cumulative product $\bar\alpha_t = \prod_{s=1}^{t} (1-\beta_s)$ [@ho2020denoising]:
+
+$$
+q(x_t \mid x_0) = \mathcal{N}\!\left(x_t;\; \sqrt{\bar\alpha_t}\, x_0,\; (1-\bar\alpha_t)\, I\right)
+$$
+
+In code, that's one line:
+
+```python
+x_noisy = sqrt_alpha_bar * x0 + sqrt_one_minus_alpha_bar * noise
+```
+
+<ForwardProcess client:visible />
+
+At $t=0$, the image is untouched. At $t=999$, it's indistinguishable from pure Gaussian noise.
+
+## The noise schedule
+
+The choice of $\beta_t$ matters more than you'd think. A linear schedule destroys too much information in early steps, leaving the model with little to learn at low $t$. The cosine schedule [@nichol2021improved] fixes this by preserving more signal early on:
+
+$$\bar\alpha_t = \frac{f(t)}{f(0)}, \qquad f(t) = \cos\left(\frac{t/T + s}{1+s} \cdot \frac{\pi}{2}\right)^2$$
+
+<NoiseScheduleChart client:visible />
+
+Notice how $\bar\alpha_t$ (the signal-preserving factor) drops gently at first, then accelerates. This means the model gets useful gradients at every noise level, not just the extremes.
+
+# The reverse process
+
+Here's where learning happens. We want to go backwards: given a noisy $x_t$, produce a slightly less noisy $x_{t-1}$. Ho et al. [@ho2020denoising] showed that the optimal reverse step is also Gaussian:
+
+$$
+p_\theta(x_{t-1} \mid x_t) = \mathcal{N}\!\left(x_{t-1};\; \mu_\theta(x_t, t),\; \sigma_t^2 I\right)
+$$
+
+The model predicts the mean $\mu_\theta$. But instead of predicting $\mu$ directly, we predict the **noise** $\epsilon_\theta(x_t, t)$ that was added to get from $x_0$ to $x_t$.
+
+<Callout variant="tip" title="Why predict noise?">
+If the model predicted the clean image directly, gradients would be dominated by low-frequency content (the overall shape). Predicting noise puts all frequencies on equal footing, since Gaussian noise has a flat power spectrum. This simple reparameterization makes training dramatically more stable.
+</Callout>
+
+The training loss is MSE between predicted and actual noise:
+
+$$
+\mathcal{L} = \mathbb{E}_{x_0,\, \epsilon,\, t}\Big[\left\|\epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2\Big]
+$$
+
+At sampling time, we start from pure noise $x_T \sim \mathcal{N}(0, I)$ and iterate backwards:
+
+$$
+x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon_\theta(x_t, t)\right) + \sigma_t\, z
+$$
+
+where $z \sim \mathcal{N}(0, I)$ and $\sigma_t^2$ is the posterior variance. The last step ($t=1 \to 0$) is deterministic (no noise added).
+
+<DenoisingProcess client:visible />
+
+# The architecture
+
+## UNet
+
+The workhorse is a UNet [@ronneberger2015unet]: an encoder-decoder with skip connections. The encoder downsamples through ResNet blocks, the decoder upsamples and concatenates skip features from the corresponding encoder level.
+
+What makes it a *diffusion* UNet:
+- **Time conditioning**: the timestep $t$ is embedded via sinusoidal positional encoding (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
+- **Self-attention** at lower spatial resolutions (16x16 and 8x8) to capture long-range dependencies.
+
+## Class conditioning
+
+To condition on which character to generate, we add a learned embedding for each of the 62 classes. This embedding goes through the same MLP as the time embedding and adds to it:
+
+```python
+if self.class_embed is not None and label is not None:
+    c_emb = self.class_embed(label)
+    t_emb = t_emb + self.class_mlp(c_emb)
+```
+
+That's it. The class signal reaches every layer of the network through the time embedding pathway.
+
+# SDF: a better shape representation
+
+Instead of training on raw binary images (black/white pixels), we use **Signed Distance Fields** (SDFs). For each pixel, the SDF stores how far it is from the nearest edge: negative inside the glyph, positive outside.
+
+Why this helps:
+- **Smooth gradients**: binary images have a discontinuity at every edge. SDFs are smooth everywhere, giving the model useful gradient signal across the entire image.
+- **Geometric information**: an SDF encodes not just "is this pixel inside the shape?" but "how far is it from the boundary?" This richer signal helps the model learn cleaner edges.
+
+The pipeline: download 614 bold fonts from Google Fonts, render each of the 62 characters at 64x64, compute the Euclidean distance transform, clamp to $[-5, 5]$, and normalize to $[-1, 1]$. This gives us ~38k training examples.
+
+<Columns spread class="my-6">
+  <NumberCard title="Fonts" value={614} description="Google Fonts (bold)" />
+  <NumberCard title="Characters" value={62} description="A-Z, a-z, 0-9" />
+  <NumberCard title="Glyphs" value={37912} description="Training examples" />
+  <NumberCard title="Resolution" value={64} description="Pixels per glyph" />
+</Columns>
+
+# Training
+
+We train for 150 epochs on a TPU v5e with batch size 256, using Adam at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
+
+**Exponential Moving Average** (EMA) maintains a slow-moving copy of the model weights:
+
+$$
+\theta_\text{EMA} \leftarrow 0.999 \cdot \theta_\text{EMA} + 0.001 \cdot \theta
+$$
+
+This smooths out training noise and consistently produces sharper samples than the raw model weights.
+
+<TrainingCurves client:visible />
+
+The loss drops steeply in the first 30 epochs as the model learns coarse structure, then gradually refines. Here's what the validation samples look like across training:
+
+<EpochProgress client:visible />
+
+By epoch 30, the model produces recognizable glyphs. By epoch 90, most characters are crisp and well-formed. The jump in quality between epoch 10 and 60 is where the model transitions from "blobs in the right place" to "actual letterforms."
+
+# What's next
+
+This is a basic DDPM, the foundation that everything else builds on. Some natural extensions:
+
+- **DDIM sampling** [@song2020denoising]: skip steps during sampling to generate in 50 steps instead of 1000, with negligible quality loss.
+- **Classifier-free guidance**: interpolate between conditional and unconditional predictions to trade diversity for quality.
+- **Larger models**: our UNet has ~2.5M parameters. Scaling the base channels and adding more attention layers would sharpen fine details.
+
+The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/Equinox.
