@@ -13,7 +13,7 @@ export default function ForwardProcess() {
       title="Forward process"
       description="Adding noise to a font glyph"
       size={64}
-      className="my-4"
+      className="my-8"
     />
   );
 }

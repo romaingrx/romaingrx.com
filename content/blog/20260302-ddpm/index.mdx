@@ -17,7 +17,7 @@ resources:
 
 import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery } from './components';
 
-What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind **Denoising Diffusion Probabilistic Models** (DDPMs): learn to reverse a noise process, and you get a generative model for free.
+What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind [**Denoising Diffusion Probabilistic Models**](https://arxiv.org/abs/2006.11239) (DDPMs): learn to reverse a noise process, and you get a generative model for free.
 
 In this post, we'll build one from scratch in [JAX](https://github.com/jax-ml/jax) and train it to generate font glyphs: all 62 alphanumeric characters, conditioned on class labels.
 
@@ -36,7 +36,7 @@ If you can reverse one small step of noise, you can chain 1000 reversals and go 
 
 # The forward process
 
-The forward process is fixed (no parameters to learn). Given a clean image $x_0$, we define a sequence $x_1, x_2, \dots, x_T$ where each step adds a little Gaussian noise controlled by a variance schedule $\beta_1, \dots, \beta_T$:
+The forward process is fixed (no parameters to learn). Given a clean image $x_0$, we define a sequence $x_1, x_2, \dots, x_T$ where each step adds a little [Gaussian noise](https://en.wikipedia.org/wiki/Gaussian_noise) controlled by a variance schedule $\beta_1, \dots, \beta_T$:
 
 $$
 q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(x_t;\; \sqrt{1-\beta_t}\, x_{t-1},\; \beta_t I\right)
@@ -96,21 +96,44 @@ $$
 
 where $z \sim \mathcal{N}(0, I)$ and $\sigma_t^2$ is the posterior variance. The last step ($t=1 \to 0$) is deterministic (no noise added).
 
+Putting it all together, the two algorithms from Ho et al. [@ho2020denoising] are remarkably simple:
+
+<Columns spread class="my-8">
+<Callout variant="note" title="Training" class="h-full !my-0">
+
+1. Sample $x_0 \sim q(x_0)$
+2. Sample $t \sim \text{Uniform}(\{1, \dots, T\})$
+3. Sample $\epsilon \sim \mathcal{N}(0, I)$
+4. Gradient step on $\nabla_\theta \left\| \epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2$
+5. Repeat until converged
+
+</Callout>
+<Callout variant="note" title="Sampling" class="h-full !my-0">
+
+1. Sample $x_T \sim \mathcal{N}(0, I)$
+2. **for** $t = T, \dots, 1$ **do**
+3. &emsp; $z \sim \mathcal{N}(0, I)$ if $t > 1$, else $z = 0$
+4. &emsp; $x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon_\theta(x_t, t)\right) + \sigma_t z$
+5. **return** $x_0$
+
+</Callout>
+</Columns>
+
 <DenoisingProcess client:visible />
 
 # The architecture
 
 ## UNet
 
-The workhorse is a UNet [@ronneberger2015unet]: an encoder-decoder with skip connections. The encoder downsamples through ResNet blocks, the decoder upsamples and concatenates skip features from the corresponding encoder level.
+The workhorse is a [UNet](https://arxiv.org/abs/1505.04597) [@ronneberger2015unet]: an encoder-decoder with [skip connections](https://en.wikipedia.org/wiki/Residual_neural_network). The encoder downsamples through [ResNet blocks](https://arxiv.org/abs/1512.03385), the decoder upsamples and concatenates skip features from the corresponding encoder level.
 
 What makes it a *diffusion* UNet:
-- **Time conditioning**: the timestep $t$ is embedded via sinusoidal positional encoding (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
-- **Self-attention** at lower spatial resolutions (16x16 and 8x8) to capture long-range dependencies.
+- **Time conditioning**: the timestep $t$ is embedded via [sinusoidal positional encoding](https://arxiv.org/abs/1706.03762) (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
+- [**Self-attention**](https://en.wikipedia.org/wiki/Attention_(machine_learning)) at lower spatial resolutions (16x16 and 8x8) to capture long-range dependencies.
 
 ## Class conditioning
 
-To condition on which character to generate, we add a learned embedding for each of the 62 classes. This embedding goes through the same MLP as the time embedding and adds to it:
+To condition on which character to generate, we add a [learned embedding](https://en.wikipedia.org/wiki/Word_embedding) for each of the 62 classes. This embedding goes through the same MLP as the time embedding and adds to it:
 
 ```python
 if self.class_embed is not None and label is not None:
@@ -122,13 +145,13 @@ That's it. The class signal reaches every layer of the network through the time 
 
 # SDF: a better shape representation
 
-Instead of training on raw binary images (black/white pixels), we use **Signed Distance Fields** (SDFs). For each pixel, the SDF stores how far it is from the nearest edge: negative inside the glyph, positive outside.
+Instead of training on raw binary images (black/white pixels), we use [**Signed Distance Fields**](https://en.wikipedia.org/wiki/Signed_distance_function) (SDFs). For each pixel, the SDF stores how far it is from the nearest edge: negative inside the glyph, positive outside.
 
 Why this helps:
 - **Smooth gradients**: binary images have a discontinuity at every edge. SDFs are smooth everywhere, giving the model useful gradient signal across the entire image.
 - **Geometric information**: an SDF encodes not just "is this pixel inside the shape?" but "how far is it from the boundary?" This richer signal helps the model learn cleaner edges.
 
-The pipeline: download 614 bold fonts from Google Fonts, render each of the 62 characters at 64x64, compute the Euclidean distance transform, clamp to $[-5, 5]$, and normalize to $[-1, 1]$. This gives us ~38k training examples.
+The pipeline: download 614 bold fonts from [Google Fonts](https://fonts.google.com), render each of the 62 characters at 64x64, compute the [Euclidean distance transform](https://en.wikipedia.org/wiki/Distance_transform), clamp to $[-5, 5]$, and normalize to $[-1, 1]$. This gives us ~38k training examples.
 
 <Columns spread class="my-6">
   <NumberCard title="Fonts" value={614} description="Google Fonts (bold)" />
@@ -139,9 +162,9 @@ The pipeline: download 614 bold fonts from Google Fonts, render each of the 62 c
 
 # Training
 
-We train for 150 epochs on a TPU v5e with batch size 256, using Adam at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
+We train for 150 epochs on a [TPU v5e](https://cloud.google.com/tpu/docs/v5e) with batch size 256, using [Adam](https://arxiv.org/abs/1412.6980) at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
 
-**Exponential Moving Average** (EMA) maintains a slow-moving copy of the model weights:
+[**Exponential Moving Average**](https://en.wikipedia.org/wiki/Exponential_smoothing) (EMA) maintains a slow-moving copy of the model weights:
 
 $$
 \theta_\text{EMA} \leftarrow 0.999 \cdot \theta_\text{EMA} + 0.001 \cdot \theta
@@ -161,8 +184,8 @@ By epoch 30, the model produces recognizable glyphs. By epoch 90, most character
 
 This is a basic DDPM, the foundation that everything else builds on. Some natural extensions:
 
-- **DDIM sampling** [@song2020denoising]: skip steps during sampling to generate in 50 steps instead of 1000, with negligible quality loss.
-- **Classifier-free guidance**: interpolate between conditional and unconditional predictions to trade diversity for quality.
+- [**DDIM sampling**](https://arxiv.org/abs/2010.02502) [@song2020denoising]: skip steps during sampling to generate in 50 steps instead of 1000, with negligible quality loss.
+- [**Classifier-free guidance**](https://arxiv.org/abs/2207.12598): interpolate between conditional and unconditional predictions to trade diversity for quality.
 - **Larger models**: our UNet has ~2.5M parameters. Scaling the base channels and adding more attention layers would sharpen fine details.
 
-The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/Equinox.
+The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/[Equinox](https://docs.kidger.site/equinox/).

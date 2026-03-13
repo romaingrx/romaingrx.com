@@ -13,7 +13,7 @@ export default function DenoisingProcess() {
       title="Reverse process"
       description={(letter) => `Denoising "${letter}" from pure noise`}
       size={64}
-      className="my-4"
+      className="my-8"
     />
   );
 }

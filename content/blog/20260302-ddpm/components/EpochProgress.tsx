@@ -34,7 +34,7 @@ export default function EpochProgress() {
   const togglePlay = () => setPlaying((p) => !p);
 
   return (
-    <Card className="my-4">
+    <Card className="my-8">
       <CardHeader>
         <CardTitle>Learning to write</CardTitle>
         <CardDescription>Validation samples across training</CardDescription>

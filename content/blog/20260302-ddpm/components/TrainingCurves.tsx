@@ -14,7 +14,7 @@ const config = {
 
 export default function TrainingCurves() {
   return (
-    <ChartCard title="Training loss" description="MSE over 150 epochs" className="my-4">
+    <ChartCard title="Training loss" description="MSE over 150 epochs" className="my-8">
       <ChartContainer config={config} className="min-h-[300px] w-full">
         <LineChart data={run.training} margin={{ top: 5, right: 10, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />

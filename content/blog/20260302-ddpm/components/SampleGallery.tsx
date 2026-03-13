@@ -6,7 +6,7 @@ const images = run.samples.map((s) => ({ src: s.image, label: s.letter }));
 
 export default function SampleGallery() {
   return (
-    <Card className="my-4">
+    <Card className="my-8">
       <CardHeader>
         <CardTitle>Generated glyphs</CardTitle>
         <CardDescription>12 class-conditional samples from the trained model</CardDescription>

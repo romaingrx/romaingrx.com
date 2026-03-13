@@ -50,4 +50,13 @@ const justify = {
   .columns-spread :global(> *) {
     flex: 1;
   }
+
+  /* Stretch astro-island wrappers and their children to fill column height */
+  div :global(> astro-island) {
+    display: flex;
+    flex-direction: column;
+  }
+  div :global(> astro-island > *) {
+    flex: 1;
+  }
 </style>

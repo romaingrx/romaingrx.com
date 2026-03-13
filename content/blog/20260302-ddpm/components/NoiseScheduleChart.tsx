@@ -26,7 +26,7 @@ export default function NoiseScheduleChart() {
     <ChartCard
       title="Cosine noise schedule"
       description="β and cumulative ᾱ over 1000 timesteps"
-      className="my-4"
+      className="my-8"
     >
       <ChartContainer config={config} className="min-h-[300px] w-full">
         <LineChart data={data} margin={{ top: 5, right: 50, bottom: 5, left: 50 }}>
