@@ -10,16 +10,14 @@ interface Props {
   size?: 'sm' | 'md' | 'lg';
   startIndex?: number;
   showCaptions?: boolean;
-  className?: string;
 }
 
 const {
-  id = `gallery-${Math.random().toString(36).substr(2, 9)}`,
+  id = `gallery-${Math.random().toString(36).substring(2, 11)}`,
   images,
   size = 'md',
   startIndex = 0,
   showCaptions,
-  className,
 } = Astro.props;
 const DIALOG_ID = `${id}-dialog`;
 ---
@@ -38,7 +36,7 @@ const DIALOG_ID = `${id}-dialog`;
   />
 </Dialog>
 
-<script define:vars={{ id, startIndex, DIALOG_ID }}>
+<script is:inline define:vars={{ id, startIndex, DIALOG_ID }}>
   // Global function to open gallery
   window[`${id}_open`] = (index = startIndex) => {
     const dialog = document.getElementById(DIALOG_ID);
