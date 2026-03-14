@@ -16,6 +16,8 @@ resources:
 ---
 
 import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery } from './components';
+import Excalidraw from '@/components/blog/components/excalidraw.astro';
+import unetDiagram from './unet-architecture.excalidraw';
 
 What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind [**Denoising Diffusion Probabilistic Models**](https://arxiv.org/abs/2006.11239) (DDPMs): learn to reverse a noise process, and you get a generative model for free.
 
@@ -130,6 +132,8 @@ The workhorse is a [UNet](https://arxiv.org/abs/1505.04597) [@ronneberger2015une
 What makes it a *diffusion* UNet:
 - **Time conditioning**: the timestep $t$ is embedded via [sinusoidal positional encoding](https://arxiv.org/abs/1706.03762) (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
 - [**Self-attention**](https://en.wikipedia.org/wiki/Attention_(machine_learning)) at lower spatial resolutions (16x16 and 8x8) to capture long-range dependencies.
+
+<Excalidraw data={unetDiagram} alt="UNet architecture: encoder-bottleneck-decoder with skip connections and time/class conditioning" />
 
 ## Class conditioning
 
