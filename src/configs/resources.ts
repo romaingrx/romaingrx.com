@@ -23,7 +23,7 @@ export const resource_schema = z
   .object({
     type: resourceTypeEnum,
     provider: resourceProviderEnum,
-    value: z.string().url(),
+    value: z.url(),
     title: z.string(),
     description: z.string().optional(),
     icon: z.string().optional(),

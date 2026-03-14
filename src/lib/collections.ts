@@ -7,92 +7,63 @@ export type Author = CollectionEntry<'author'>;
 export type BlogPost = CollectionEntry<'blog'>;
 export type Note = CollectionEntry<'note'>;
 
-export interface BlogPostWithAuthors extends Omit<BlogPost, 'authors'> {
+export type WithAuthors<T> = Omit<T, 'authors'> & {
   authors: Author[];
   readingTime: string;
   slug: string;
   url: string;
+};
+
+export type BlogPostWithAuthors = WithAuthors<BlogPost>;
+export type NoteWithAuthors = WithAuthors<Note>;
+
+type ContentEntry = BlogPost | Note;
+
+async function resolveAuthors(entry: ContentEntry, authors: Author[]): Promise<Author[]> {
+  return Promise.all(
+    entry.data.authors.map((ref: { id: string }) => {
+      const author = authors.find((a) => a.id === ref.id);
+      if (!author) throw new Error(`Author ${ref.id} not found`);
+      return author;
+    })
+  );
 }
 
-export interface NoteWithAuthors extends Omit<Note, 'authors'> {
-  authors: Author[];
-  readingTime: string;
-  slug: string;
-  url: string;
-}
-
-export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
-  const posts = await astroGetCollection('blog', (post) => {
-    if (NODE_ENV === 'production') {
-      return post.data.status === 'published';
-    }
-    return post.data.status !== 'archived';
-  });
+async function getContentWithAuthors<T extends ContentEntry>(
+  collection: 'blog' | 'note',
+  urlPrefix: string
+): Promise<WithAuthors<T>[]> {
+  const entries = await astroGetCollection(collection, (entry) =>
+    NODE_ENV === 'production' ? entry.data.status === 'published' : entry.data.status !== 'archived'
+  );
   const authors = await astroGetCollection('author');
 
-  return await Promise.all(
-    posts
+  return Promise.all(
+    entries
       .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
-      .map(async (post: BlogPost) => {
-        const { remarkPluginFrontmatter } = await render(post);
-        const postAuthors = await Promise.all(
-          post.data.authors.map(async (author: { id: string }) => {
-            const authorData = authors.find((a: Author) => a.id === author.id);
-            if (!authorData) {
-              throw new Error(`Author ${author.id} not found`);
-            }
-            return authorData;
-          })
-        );
-
-        const slug = slugify(post.data.title);
+      .map(async (entry) => {
+        const { remarkPluginFrontmatter } = await render(entry);
+        const resolved = await resolveAuthors(entry, authors);
+        const slug = slugify(entry.data.title);
         return {
-          ...post,
-          authors: postAuthors,
+          ...entry,
+          authors: resolved,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
           slug,
-          url: getAbsoluteUrl(`/blog/${slug}`, new URL(site.url)),
-        };
+          url: getAbsoluteUrl(`/${urlPrefix}/${slug}`, new URL(site.url)),
+        } as WithAuthors<T>;
       })
   );
+}
+
+export function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
+  return getContentWithAuthors<BlogPost>('blog', 'blog');
+}
+
+export function getNotes(): Promise<NoteWithAuthors[]> {
+  return getContentWithAuthors<Note>('note', 'note');
 }
 
 export async function getAuthors(): Promise<Author[]> {
-  return await astroGetCollection('author');
-}
-
-export async function getNotes(): Promise<NoteWithAuthors[]> {
-  const notes = await astroGetCollection('note', (note) => {
-    if (NODE_ENV === 'production') {
-      return note.data.status === 'published';
-    }
-    return note.data.status !== 'archived';
-  });
-  const authors = await astroGetCollection('author');
-
-  return await Promise.all(
-    notes
-      .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
-      .map(async (note: Note) => {
-        const { remarkPluginFrontmatter } = await render(note);
-        const noteAuthors = await Promise.all(
-          note.data.authors.map(async (author: { id: string }) => {
-            const authorData = authors.find((a: Author) => a.id === author.id);
-            if (!authorData) {
-              throw new Error(`Author ${author.id} not found`);
-            }
-            return authorData;
-          })
-        );
-
-        const slug = slugify(note.data.title);
-        return {
-          ...note,
-          authors: noteAuthors,
-          readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
-          slug,
-          url: getAbsoluteUrl(`/note/${slug}`, new URL(site.url)),
-        };
-      })
-  );
+  return astroGetCollection('author');
 }

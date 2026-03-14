@@ -23,10 +23,8 @@ export default defineConfig({
     ? "https://romaingrx.com"
     : "http://localhost:4321",
   adapter: cloudflare({
-    platformProxy: {
-      enabled: true,
-    },
     imageService: "passthrough",
+    prerenderEnvironment: "node",
   }),
   env: {
     schema: {
@@ -89,18 +87,16 @@ export default defineConfig({
       },
     },
   },
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Fira Code",
-        cssVariable: "--font-fira-code",
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Fira Sans",
-        cssVariable: "--font-fira-sans",
-      },
-    ],
-  },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Fira Code",
+      cssVariable: "--font-fira-code",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Fira Sans",
+      cssVariable: "--font-fira-sans",
+    },
+  ],
 });

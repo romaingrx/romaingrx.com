@@ -53,18 +53,23 @@ const { Content } = await render(author);
             {
               Object.entries(socialLinks).length > 0 && (
                 <div class="flex flex-wrap gap-3">
-                  {Object.entries(socialLinks).map(([platform, { url }]) => (
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="border-border/50 bg-background/80 text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground inline-flex size-10 items-center justify-center rounded-lg border transition-all"
-                      title={`Follow on ${platform}`}
-                    >
-                      <Icon name={platforms_info[platform as Platform].icon_name} class="size-4" />
-                      <span class="sr-only">Follow on {platform}</span>
-                    </a>
-                  ))}
+                  {Object.entries(socialLinks)
+                    .filter(([, v]) => v)
+                    .map(([platform, link]) => (
+                      <a
+                        href={link!.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="border-border/50 bg-background/80 text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground inline-flex size-10 items-center justify-center rounded-lg border transition-all"
+                        title={`Follow on ${platform}`}
+                      >
+                        <Icon
+                          name={platforms_info[platform as Platform].icon_name}
+                          class="size-4"
+                        />
+                        <span class="sr-only">Follow on {platform}</span>
+                      </a>
+                    ))}
                 </div>
               )
             }

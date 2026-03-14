@@ -35,19 +35,21 @@ const { authors } = Astro.props;
         </CardHeader>
         <CardContent>
           <div class="flex gap-3">
-            {Object.entries(author.data.socialLinks).map(([platform, link]) => (
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Icon name={platforms_info[platform as Platform].icon_name} class="size-5" />
-                <span class="sr-only">
-                  {author.data.name} on {platform}
-                </span>
-              </a>
-            ))}
+            {Object.entries(author.data.socialLinks)
+              .filter(([, v]) => v)
+              .map(([platform, link]) => (
+                <a
+                  href={link!.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Icon name={platforms_info[platform as Platform].icon_name} class="size-5" />
+                  <span class="sr-only">
+                    {author.data.name} on {platform}
+                  </span>
+                </a>
+              ))}
           </div>
         </CardContent>
       </Card>
