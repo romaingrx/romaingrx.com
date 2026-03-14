@@ -1,5 +1,6 @@
 ---
 import { excalidrawToSvg, type ExcalidrawFile } from '@/lib/excalidraw';
+import ImageViewer from './images/image-viewer.astro';
 
 interface Props {
   data: ExcalidrawFile;
@@ -12,24 +13,4 @@ const { data, class: className, alt, showBackground = false } = Astro.props;
 const svgString = await excalidrawToSvg(data, { showBackground });
 ---
 
-<figure class:list={['excalidraw-diagram', className]}>
-  <Fragment set:html={svgString} />
-  {alt && <figcaption>{alt}</figcaption>}
-</figure>
-
-<style>
-  .excalidraw-diagram {
-    width: 100%;
-    margin: 1.5rem 0;
-  }
-  .excalidraw-diagram :global(svg) {
-    width: 100%;
-    height: auto;
-  }
-  .excalidraw-diagram figcaption {
-    text-align: center;
-    font-size: 0.875rem;
-    color: var(--color-muted-foreground, #6b7280);
-    margin-top: 0.5rem;
-  }
-</style>
+<ImageViewer html={svgString} alt={alt} caption={alt} className={className} />

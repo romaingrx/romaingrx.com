@@ -1,13 +1,6 @@
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
-import path from 'node:path';
 import type { Plugin } from 'vite';
-
-const require = createRequire(import.meta.url);
-
-// Resolve paths for @excalidraw/utils and its font assets
-const excalidrawUtilsPath = require.resolve('@excalidraw/utils');
-const excalidrawDistDir = path.dirname(excalidrawUtilsPath);
 
 export interface ExcalidrawFile {
   type: string;
@@ -22,60 +15,72 @@ export interface ExcalidrawToSvgOptions {
 }
 
 /**
+ * Set up a minimal browser-like environment using happy-dom so that
+ * @excalidraw/utils exportToSvg can run in Node.js without Playwright.
+ */
+function setupDomEnvironment(): void {
+  const require = createRequire(import.meta.url);
+  const { Window } = require('happy-dom');
+  const win = new Window({ url: 'http://localhost' });
+
+  for (const key of Object.getOwnPropertyNames(win)) {
+    if (!(key in globalThis) && key !== 'undefined') {
+      try {
+        (globalThis as any)[key] = win[key];
+      } catch {
+        // Some properties are non-configurable
+      }
+    }
+  }
+  (globalThis as any).window = win;
+  (globalThis as any).devicePixelRatio = 1;
+
+  // FontFace stub — excalidraw tries to register fonts via FontFace API
+  if (!('FontFace' in globalThis)) {
+    (globalThis as any).FontFace = class FontFace {
+      family: string;
+      status = 'loaded';
+      unicodeRange = '';
+      constructor(family: string) {
+        this.family = family;
+      }
+      async load() {
+        return this;
+      }
+    };
+  }
+
+  if (!win.document.fonts) {
+    win.document.fonts = {
+      add() {},
+      check() {
+        return true;
+      },
+      ready: Promise.resolve(),
+      *[Symbol.iterator]() {},
+    };
+  }
+}
+
+let domReady = false;
+
+/**
  * Convert an Excalidraw diagram to an SVG string at build time.
- * Serves the @excalidraw/utils bundle and font assets via a local HTTP server
- * so that Playwright can resolve fonts correctly.
+ * Uses happy-dom to provide browser APIs that @excalidraw/utils needs.
  */
 export async function excalidrawToSvg(
   diagram: ExcalidrawFile,
   options: ExcalidrawToSvgOptions = {}
 ): Promise<string> {
+  if (!domReady) {
+    setupDomEnvironment();
+    domReady = true;
+  }
+
   const { showBackground = false } = options;
-  const { chromium } = await import('playwright');
-  const http = await import('node:http');
+  const { exportToSvg } = await import('@excalidraw/utils');
 
-  // Serve the excalidraw dist directory (JS bundle + font assets) over HTTP
-  // so that Playwright has a proper origin for module imports and font loading
-  const server = http.createServer((req, res) => {
-    const url = new URL(req.url ?? '/', 'http://localhost');
-
-    if (url.pathname === '/') {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end('<html><body></body></html>');
-      return;
-    }
-
-    const filePath = path.join(excalidrawDistDir, url.pathname);
-    if (!filePath.startsWith(excalidrawDistDir)) {
-      res.writeHead(403);
-      res.end();
-      return;
-    }
-
-    try {
-      const content = fs.readFileSync(filePath);
-      const ext = path.extname(filePath).toLowerCase();
-      const mimeTypes: Record<string, string> = {
-        '.js': 'application/javascript',
-        '.ttf': 'font/ttf',
-        '.woff': 'font/woff',
-        '.woff2': 'font/woff2',
-      };
-      res.writeHead(200, {
-        'Content-Type': mimeTypes[ext] ?? 'application/octet-stream',
-      });
-      res.end(content);
-    } catch {
-      res.writeHead(404);
-      res.end();
-    }
-  });
-
-  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
-  const addr = server.address() as import('node:net').AddressInfo;
-  const baseUrl = `http://127.0.0.1:${addr.port}`;
-
-  const diagramWithOptions = {
+  const data = {
     ...diagram,
     appState: {
       ...diagram.appState,
@@ -84,28 +89,8 @@ export async function excalidrawToSvg(
     files: null,
   };
 
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
-
-  await page.goto(baseUrl);
-
-  // Use page.addScriptTag with inline content to load the module and expose
-  // exportToSvg on window. We avoid using import() in page.evaluate because
-  // Vite's SSR transform rewrites it to __vite_ssr_dynamic_import__.
-  await page.addScriptTag({
-    type: 'module',
-    content: `import { exportToSvg } from "/index.js"; window.__exportToSvg = exportToSvg;`,
-  });
-  await page.waitForFunction(() => '__exportToSvg' in window);
-
-  const svgString = await page.evaluate(async (data) => {
-    const svg = await (window as any).__exportToSvg(data);
-    return svg.outerHTML as string;
-  }, diagramWithOptions);
-
-  await browser.close();
-  server.close();
-  return svgString;
+  const svg = await exportToSvg(data as any);
+  return svg.outerHTML;
 }
 
 /**
