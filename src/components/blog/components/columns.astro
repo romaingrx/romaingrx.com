@@ -1,56 +1,42 @@
 ---
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-interface Props {
-  space?: 'around' | 'between' | 'evenly';
+const columns = cva('grid grid-cols-1 gap-4', {
+  variants: {
+    columns: {
+      1: 'md:grid-cols-1',
+      2: 'md:grid-cols-2',
+      3: 'md:grid-cols-3',
+      4: 'md:grid-cols-4',
+    },
+    space: {
+      around: 'md:justify-around',
+      between: 'md:justify-between',
+      evenly: 'md:justify-evenly',
+    },
+  },
+  defaultVariants: {
+    columns: 2,
+    space: 'between',
+  },
+});
+
+type ColumnsVariants = VariantProps<typeof columns>;
+
+interface Props extends ColumnsVariants {
   spread?: boolean;
-  columns?: number;
   class?: string;
 }
 
-const {
-  space = 'between',
-  spread = false,
-  columns = 2, // Default to 2 columns if not specified
-  class: className = '',
-  ...rest
-} = Astro.props;
-
-if (columns > 4) {
-  console.warn(
-    "Columns greater than 4 won't look good on every screen size. Consider using a different number of columns."
-  );
-}
-
-const justify = {
-  around: 'md:justify-around',
-  between: 'md:justify-between',
-  evenly: 'md:justify-evenly',
-}[space];
+const { columns: cols, space, spread = false, class: className, ...rest } = Astro.props;
 ---
 
-<div
-  class={cn(
-    `grid grid-cols-1 md:grid-cols-${columns} md:flex md:flex-row md:items-stretch ${justify} gap-4`,
-    spread ? 'columns-spread' : '',
-    className
-  )}
-  {...rest}
->
+<div class={cn(columns({ columns: cols, space }), spread && 'columns-spread', className)} {...rest}>
   <slot />
 </div>
 
 <style>
-  /* Base styles for all children */
-  div :global(> *) {
-    display: block;
-  }
-
-  /* Apply flex-1 to direct children when spread is true */
-  .columns-spread :global(> *) {
-    flex: 1;
-  }
-
   /* Stretch astro-island wrappers and their children to fill column height */
   div :global(> astro-island) {
     display: flex;

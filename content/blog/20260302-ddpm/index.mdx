@@ -15,7 +15,7 @@ resources:
     description: 'JAX/Equinox DDPM implementation for font glyph generation'
 ---
 
-import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery } from './components';
+import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery, SDFPipeline } from './components';
 import unetDiagram from './unet-architecture.excalidraw';
 
 What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind [**Denoising Diffusion Probabilistic Models**](https://arxiv.org/abs/2006.11239) (DDPMs): learn to reverse a noise process, and you get a generative model for free.
@@ -26,7 +26,7 @@ In this post, we'll build one from scratch in [JAX](https://github.com/jax-ml/ja
 
 # The intuition
 
-In the [VAE post](/blog/20260301-vae), we compressed data into a bottleneck and decoded it back. That works, but there's a fundamental tension: the bottleneck must be small enough to regularize, yet large enough to not lose information.
+In the <BlogLink post="20260301-vae">VAE post</BlogLink>, we compressed data into a bottleneck and decoded it back. That works, but there's a fundamental tension: the bottleneck must be small enough to regularize, yet large enough to not lose information.
 
 Diffusion models sidestep this entirely. There's no encoder, no bottleneck. Instead:
 
@@ -126,10 +126,10 @@ Putting it all together, the two algorithms from Ho et al. [@ho2020denoising] ar
 
 ## UNet
 
-The workhorse is a [UNet](https://arxiv.org/abs/1505.04597) [@ronneberger2015unet]: an encoder-decoder with [skip connections](https://en.wikipedia.org/wiki/Residual_neural_network). The encoder downsamples through [ResNet blocks](https://arxiv.org/abs/1512.03385), the decoder upsamples and concatenates skip features from the corresponding encoder level.
+The workhorse is a UNet [@ronneberger2015unet]: an encoder-decoder with [skip connections](https://en.wikipedia.org/wiki/Residual_neural_network). The encoder downsamples through [ResNet blocks](https://arxiv.org/abs/1512.03385), the decoder upsamples and concatenates skip features from the corresponding encoder level.
 
 What makes it a *diffusion* UNet:
-- **Time conditioning**: the timestep $t$ is embedded via [sinusoidal positional encoding](https://arxiv.org/abs/1706.03762) (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
+- **Time conditioning**: the timestep $t$ is embedded via sinusoidal positional encoding (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
 - [**Self-attention**](https://en.wikipedia.org/wiki/Attention_(machine_learning)) at lower spatial resolutions (16x16 and 8x8) to capture long-range dependencies.
 
 <Excalidraw data={unetDiagram} alt="UNet architecture: encoder-bottleneck-decoder with skip connections and time/class conditioning" />
@@ -154,18 +154,28 @@ Why this helps:
 - **Smooth gradients**: binary images have a discontinuity at every edge. SDFs are smooth everywhere, giving the model useful gradient signal across the entire image.
 - **Geometric information**: an SDF encodes not just "is this pixel inside the shape?" but "how far is it from the boundary?" This richer signal helps the model learn cleaner edges.
 
-The pipeline: download 614 bold fonts from [Google Fonts](https://fonts.google.com), render each of the 62 characters at 64x64, compute the [Euclidean distance transform](https://en.wikipedia.org/wiki/Distance_transform), clamp to $[-5, 5]$, and normalize to $[-1, 1]$. This gives us ~38k training examples.
+The pipeline: download 614 bold fonts from [Google Fonts](https://fonts.google.com), render each of the 62 characters at 64×64, compute the [Euclidean distance transform](https://en.wikipedia.org/wiki/Distance_transform), clamp to $[-5, 5]$, and normalize to $[-1, 1]$. Some fonts lack certain glyphs, so we end up with 37,912 training examples rather than the full $614 \times 62 = 38{,}068$.
 
-<Columns spread class="my-6">
+<SDFPipeline client:visible />
+
+At inference time, the model outputs a normalized SDF. We denormalize it back to $[-5, 5]$ and threshold at zero: negative values (inside the glyph) become white, positive values (outside) become black. This gives us crisp binary edges regardless of how noisy the raw field is.
+
+```python
+def to_image(self, normalized_sdf: Float[Array, "h w"]) -> UInt8[Array, "h w"]:
+    raw = self.denormalize(normalized_sdf)       # [-1, 1] → [-5, 5]
+    return (raw < 0).astype(np.uint8) * 255      # inside → white
+```
+
+<Columns spread columns={2} class="my-6">
   <NumberCard title="Fonts" value={614} description="Google Fonts (bold)" />
   <NumberCard title="Characters" value={62} description="A-Z, a-z, 0-9" />
-  <NumberCard title="Glyphs" value={37912} description="Training examples" />
+  <NumberCard title="Training glyphs" value={37912} description="After filtering missing glyphs" />
   <NumberCard title="Resolution" value={64} description="Pixels per glyph" />
 </Columns>
 
 # Training
 
-We train for 150 epochs on a [TPU v5e](https://cloud.google.com/tpu/docs/v5e) with batch size 256, using [Adam](https://arxiv.org/abs/1412.6980) at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
+We train for 150 epochs on a [TPU v5e](https://cloud.google.com/tpu/docs/v5e) with batch size 256, using Adam [@kingma2014adam] at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
 
 [**Exponential Moving Average**](https://en.wikipedia.org/wiki/Exponential_smoothing) (EMA) maintains a slow-moving copy of the model weights:
 
@@ -187,8 +197,8 @@ By epoch 30, the model produces recognizable glyphs. By epoch 90, most character
 
 This is a basic DDPM, the foundation that everything else builds on. Some natural extensions:
 
-- [**DDIM sampling**](https://arxiv.org/abs/2010.02502) [@song2020denoising]: skip steps during sampling to generate in 50 steps instead of 1000, with negligible quality loss.
-- [**Classifier-free guidance**](https://arxiv.org/abs/2207.12598): interpolate between conditional and unconditional predictions to trade diversity for quality.
+- **DDIM sampling** [@song2020denoising]: skip steps during sampling to generate in 50 steps instead of 1000, with negligible quality loss.
+- **Classifier-free guidance** [@ho2022classifier]: interpolate between conditional and unconditional predictions to trade diversity for quality.
 - **Larger models**: our UNet has ~2.5M parameters. Scaling the base channels and adding more attention layers would sharpen fine details.
 
 The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/[Equinox](https://docs.kidger.site/equinox/).

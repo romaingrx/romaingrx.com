@@ -11,7 +11,7 @@ export default function ForwardProcess() {
     <StepSlider
       examples={examples}
       title="Forward process"
-      description="Adding noise to a font glyph"
+      description="Adding noise to font glyphs"
       size={64}
       className="my-8"
     />

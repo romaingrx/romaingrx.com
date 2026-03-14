@@ -26,7 +26,13 @@ export default function EpochProgress() {
       return;
     }
     intervalRef.current = setInterval(() => {
-      setIndex((prev) => (prev + 1) % entries.length);
+      setIndex((prev) => {
+        if (prev >= entries.length - 1) {
+          setPlaying(false);
+          return prev;
+        }
+        return prev + 1;
+      });
     }, 500);
     return clearTimer;
   }, [playing, clearTimer]);
