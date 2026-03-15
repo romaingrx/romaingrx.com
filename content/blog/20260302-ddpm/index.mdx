@@ -2,6 +2,7 @@
 title: 'Denoising Diffusion from Scratch'
 description: 'Building a class-conditional DDPM in JAX to generate font glyphs from pure noise'
 authors: ['romaingrx']
+cover: './images/cover.png'
 status: 'published'
 published_date: 2026-03-15
 categories: ['ml']
@@ -16,7 +17,7 @@ resources:
 ---
 
 import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery, SDFPipeline } from './components';
-import unetDiagram from './unet-architecture.excalidraw';
+import unetDiagram from './images/unet.excalidraw';
 
 What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind [**Denoising Diffusion Probabilistic Models**](https://arxiv.org/abs/2006.11239) (DDPMs): learn to reverse a noise process, and you get a generative model for free.
 
@@ -192,7 +193,7 @@ This smooths out training noise and consistently produces sharper samples than t
 
 <TrainingCurves client:visible />
 
-The loss drops steeply in the first 30 epochs as the model learns coarse structure, then gradually refines. Here's what the validation samples look like across training:
+The loss drops steeply in the first 30 epochs as the model learns coarse structure, then gradually refines. Note that the curve hasn't fully plateaued by epoch 150, so longer training would likely improve sample quality further. For the purposes of this post, the results are more than sufficient. Here's what the validation samples look like across training:
 
 <EpochProgress client:visible />
 
