@@ -11,10 +11,16 @@ import {
 } from '@/components/ui/command';
 import { Kbd } from '@/components/ui/kbd';
 
+interface SubResult {
+  title: string;
+  url: string;
+  excerpt: string;
+}
+
 interface SearchResult {
   url: string;
   meta: { title: string };
-  excerpt: string;
+  sub_results: SubResult[];
 }
 
 let pagefindInstance: any = null;
@@ -113,7 +119,9 @@ function SearchDialog({
         return;
       }
       const search = await pf.search(query);
-      const data = await Promise.all(search.results.slice(0, 8).map((r: any) => r.data()));
+      const data: SearchResult[] = await Promise.all(
+        search.results.slice(0, 5).map((r: any) => r.data())
+      );
       setResults(data);
       setLoading(false);
     }, 100);
@@ -151,25 +159,32 @@ function SearchDialog({
         )}
         {!loading && results.length > 0 && (
           <CommandGroup heading="Results">
-            {results.map((result) => (
-              <CommandItem
-                key={result.url}
-                value={result.meta.title}
-                onSelect={() => navigate(result.url)}
-              >
-                <ResultIcon url={result.url} />
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="truncate text-sm font-medium">{result.meta.title}</span>
-                  <span
-                    className="text-muted-foreground line-clamp-1 text-xs [&_mark]:bg-transparent [&_mark]:font-semibold [&_mark]:text-foreground"
-                    dangerouslySetInnerHTML={{ __html: result.excerpt }}
-                  />
-                </div>
-                <CommandShortcut>
-                  <ResultLabel url={result.url} />
-                </CommandShortcut>
-              </CommandItem>
-            ))}
+            {results.flatMap((result) =>
+              (result.sub_results ?? []).map((sub) => (
+                <CommandItem
+                  key={sub.url}
+                  value={`${result.meta.title} ${sub.title}`}
+                  onSelect={() => navigate(sub.url)}
+                >
+                  <ResultIcon url={result.url} />
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="truncate text-sm font-medium">
+                      {result.meta.title}
+                      {sub.title !== result.meta.title && (
+                        <span className="text-muted-foreground font-normal"> — {sub.title}</span>
+                      )}
+                    </span>
+                    <span
+                      className="text-muted-foreground line-clamp-1 text-xs [&_mark]:bg-transparent [&_mark]:font-semibold [&_mark]:text-foreground"
+                      dangerouslySetInnerHTML={{ __html: sub.excerpt }}
+                    />
+                  </div>
+                  <CommandShortcut>
+                    <ResultLabel url={result.url} />
+                  </CommandShortcut>
+                </CommandItem>
+              ))
+            )}
           </CommandGroup>
         )}
         {!loading && !query.trim() && (
