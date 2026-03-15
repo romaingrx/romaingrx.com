@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField, fontProviders } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
+import pagefind from "astro-pagefind";
 // Rehype/Remark plugins
 import rehypeKatex from "rehype-katex";
 import rehypeExternalLinks from "rehype-external-links";
@@ -76,6 +77,7 @@ export default defineConfig({
         "simple-icons": ["*"],
       },
     }),
+    pagefind(),
   ],
   vite: {
     plugins: [tailwindcss(), excalidraw()],

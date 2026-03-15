@@ -1,5 +1,6 @@
 ---
 import Logo from '@/components/logo/logo';
+import { SearchTrigger } from '@/components/search/search';
 import { routes } from '@/configs/routes';
 import { MobileNav } from './nav/header/mobile';
 import ThemeToggle from './ThemeToggle.astro';
@@ -70,6 +71,7 @@ const isActive = (href: string) => {
 
     <!-- Actions -->
     <div class="flex items-center gap-2">
+      <SearchTrigger client:idle />
       <ThemeToggle />
 
       <!-- Mobile Navigation -->
