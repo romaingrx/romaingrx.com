@@ -33,7 +33,7 @@ Diffusion models sidestep this entirely. There's no encoder, no bottleneck. Inst
 1. **Destroy** the data by slowly adding Gaussian noise until nothing is left.
 2. **Learn to undo** each tiny step of destruction.
 
-If you can reverse one small step of noise, you can chain 1000 reversals and go from pure static to a crisp image. The key insight from Sohl-Dickstein et al. [@sohl2015deep] is that each reversal step is nearly Gaussian when the forward steps are small enough, so a neural network can learn it.
+If you can reverse one small step of noise, you can chain 1000 reversals and go from pure static to a crisp image. The key insight [@sohl2015deep] is that each reversal step is nearly Gaussian when the forward steps are small enough, so a neural network can learn it.
 
 <Callout variant="note" title="Want a visual walkthrough?">
 This video by Welch Labs covers the same core ideas with helpful animations and is a great companion to this post.
@@ -48,7 +48,7 @@ $$
 q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(x_t;\; \sqrt{1-\beta_t}\, x_{t-1},\; \beta_t I\right)
 $$
 
-A nice property: we can jump to any timestep $t$ directly without iterating, thanks to the cumulative product $\bar\alpha_t = \prod_{s=1}^{t} (1-\beta_s)$ [@ho2020denoising]:
+A nice property: we can jump to any timestep $t$ directly without iterating, thanks to the cumulative product $\bar\alpha_t = \prod_{s=1}^{t} (1-\beta_s)$ [@ho2020denoising] (the full derivation is in [Appendix A](#appendix-a-forward-process-closed-form)):
 
 $$
 q(x_t \mid x_0) = \mathcal{N}\!\left(x_t;\; \sqrt{\bar\alpha_t}\, x_0,\; (1-\bar\alpha_t)\, I\right)
@@ -76,7 +76,7 @@ Notice how $\bar\alpha_t$ (the signal-preserving factor) drops gently at first, 
 
 # The reverse process
 
-Here's where learning happens. We want to go backwards: given a noisy $x_t$, produce a slightly less noisy $x_{t-1}$. Ho et al. [@ho2020denoising] showed that the optimal reverse step is also Gaussian:
+Here's where learning happens. We want to go backwards: given a noisy $x_t$, produce a slightly less noisy $x_{t-1}$. It turns out [@ho2020denoising] that the optimal reverse step is also Gaussian:
 
 $$
 p_\theta(x_{t-1} \mid x_t) = \mathcal{N}\!\left(x_{t-1};\; \mu_\theta(x_t, t),\; \sigma_t^2 I\right)
@@ -88,7 +88,7 @@ The model predicts the mean $\mu_\theta$. But instead of predicting $\mu$ direct
 If the model predicted the clean image directly, gradients would be dominated by low-frequency content (the overall shape). Predicting noise puts all frequencies on equal footing, since Gaussian noise has a flat power spectrum. This simple reparameterization makes training dramatically more stable.
 </Callout>
 
-The training loss is MSE between predicted and actual noise:
+The training loss is MSE between predicted and actual noise (see [Appendix B](#appendix-b-variational-bound) and [Appendix C](#appendix-c-simplified-objective) for the full derivation):
 
 $$
 \mathcal{L} = \mathbb{E}_{x_0,\, \epsilon,\, t}\Big[\left\|\epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2\Big]
@@ -102,7 +102,7 @@ $$
 
 where $z \sim \mathcal{N}(0, I)$ and $\sigma_t^2$ is the posterior variance. The last step ($t=1 \to 0$) is deterministic (no noise added).
 
-Putting it all together, the two algorithms from Ho et al. [@ho2020denoising] are remarkably simple:
+Putting it all together, the two algorithms [@ho2020denoising] are remarkably simple:
 
 <Columns spread class="my-8">
 <Callout variant="note" title="Training" class="h-full !my-0">
@@ -207,3 +207,111 @@ This is a basic DDPM, the foundation that everything else builds on. Some natura
 - **Larger models**: our UNet has ~2.5M parameters. Scaling the base channels and adding more attention layers would sharpen fine details.
 
 The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/[Equinox](https://docs.kidger.site/equinox/).
+
+---
+
+# Appendices
+
+## Appendix A: forward process closed form
+
+We want to show that $q(x_t \mid x_0)$ has a closed form. Start from the single-step forward:
+
+$$
+x_t = \sqrt{1-\beta_t}\, x_{t-1} + \sqrt{\beta_t}\, \epsilon_t, \qquad \epsilon_t \sim \mathcal{N}(0, I)
+$$
+
+Let $\alpha_t = 1-\beta_t$. Expanding one step:
+
+$$
+x_t = \sqrt{\alpha_t}\, x_{t-1} + \sqrt{1-\alpha_t}\, \epsilon_t
+$$
+
+Substituting $x_{t-1} = \sqrt{\alpha_{t-1}}\, x_{t-2} + \sqrt{1-\alpha_{t-1}}\, \epsilon_{t-1}$:
+
+$$
+x_t = \sqrt{\alpha_t \alpha_{t-1}}\, x_{t-2} + \sqrt{\alpha_t(1-\alpha_{t-1})}\, \epsilon_{t-1} + \sqrt{1-\alpha_t}\, \epsilon_t
+$$
+
+The last two terms are independent Gaussians. Their sum is Gaussian with variance $\alpha_t(1-\alpha_{t-1}) + (1-\alpha_t) = 1 - \alpha_t \alpha_{t-1}$. Repeating this recursion down to $x_0$ and defining $\bar\alpha_t = \prod_{s=1}^t \alpha_s$:
+
+$$
+\begin{align*}
+x_t &= \sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon, \qquad \epsilon \sim \mathcal{N}(0, I) \\[6pt]
+q(x_t \mid x_0) &= \mathcal{N}\!\left(x_t;\; \sqrt{\bar\alpha_t}\, x_0,\; (1-\bar\alpha_t)\, I\right)
+\end{align*}
+$$
+
+This is what lets us sample any $x_t$ in one step during training rather than iterating through all $t$ steps.
+
+## Appendix B: variational bound
+
+The approach here follows the same variational argument we used to derive the ELBO in the <BlogLink post="20260301-vae">VAE post</BlogLink>. The difference is that our latent variables are now the full chain $x_{1:T}$ rather than a single $z$, so the bound decomposes into per-step terms.
+
+Starting from the negative log-likelihood, we add a non-negative KL term:
+
+$$
+\begin{align*}
+-\log p(x_0) &\leq -\log p(x_0) + D_\text{KL}(q(x_{1:T}|x_0) \,\|\, p_\theta(x_{1:T}|x_0)) \\
+&= \mathbb{E}_q\!\left[-\log \frac{p_\theta(x_{0:T})}{q(x_{1:T}|x_0)}\right]
+\end{align*}
+$$
+
+Expanding the joint distributions $q(x_{1:T}|x_0) = \prod_{t=1}^T q(x_t|x_{t-1})$ and $p_\theta(x_{0:T}) = p(x_T) \prod_{t=1}^T p_\theta(x_{t-1}|x_t)$, then grouping terms:
+
+$$
+L = \mathbb{E}_q\!\left[-\log p(x_T) - \sum_{t=1}^T \log \frac{p_\theta(x_{t-1}|x_t)}{q(x_t|x_{t-1})}\right]
+$$
+
+The key trick is to condition on $x_0$ in the forward steps. By Bayes' rule, the forward posterior $q(x_{t-1}|x_t, x_0)$ is tractable and Gaussian:
+
+$$
+q(x_{t-1}|x_t, x_0) = \mathcal{N}(x_{t-1};\; \tilde\mu_t(x_t, x_0),\; \tilde\beta_t I)
+$$
+
+with closed-form parameters:
+
+$$
+\tilde\mu_t(x_t, x_0) = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\, x_0 + \frac{\sqrt{\alpha_t}\,(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\, x_t, \qquad \tilde\beta_t = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\, \beta_t
+$$
+
+Using this, the bound separates cleanly into three parts:
+
+$$
+L = \underbrace{D_\text{KL}(q(x_T|x_0) \,\|\, p(x_T))}_{L_T\text{: prior matching}} + \sum_{t=2}^T \underbrace{D_\text{KL}(q(x_{t-1}|x_t,x_0) \,\|\, p_\theta(x_{t-1}|x_t))}_{L_{t-1}\text{: denoising matching}} \underbrace{- \log p_\theta(x_0|x_1)}_{L_0\text{: reconstruction}}
+$$
+
+$L_T$ has no learnable parameters (the forward process is fixed). Each $L_{t-1}$ compares two Gaussians, so the KL has a closed form. $L_0$ is the reconstruction term. All the learning happens in the $L_{t-1}$ terms: teaching the model to match the true denoising posterior at each step.
+
+## Appendix C: simplified objective
+
+Each $L_{t-1}$ term compares the learned mean $\mu_\theta(x_t, t)$ to the forward posterior mean $\tilde\mu_t$. Since the variances $\tilde\beta_t$ are fixed, the KL reduces to an MSE between means:
+
+$$
+L_{t-1} = \frac{1}{2\tilde\beta_t} \left\| \tilde\mu_t(x_t, x_0) - \mu_\theta(x_t, t) \right\|^2 + C
+$$
+
+Using $x_t = \sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon$ from Appendix A, we can express $x_0$ in terms of $x_t$ and $\epsilon$, then substitute into $\tilde\mu_t$:
+
+$$
+x_0 = \frac{1}{\sqrt{\bar\alpha_t}}\left(x_t - \sqrt{1-\bar\alpha_t}\, \epsilon\right) \qquad \Longrightarrow \qquad \tilde\mu_t = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon\right)
+$$
+
+This is revealing: the true posterior mean is a function of $x_t$ and the noise $\epsilon$ that was added. So rather than predicting $\mu$ directly, we can reparameterize the model to predict the noise $\epsilon_\theta(x_t, t)$ and recover $\mu$ from it:
+
+$$
+\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon_\theta(x_t, t)\right)
+$$
+
+Plugging this into the MSE:
+
+$$
+L_{t-1} = \frac{\beta_t^2}{2\tilde\beta_t \alpha_t (1-\bar\alpha_t)} \left\| \epsilon - \epsilon_\theta(x_t, t) \right\|^2
+$$
+
+The weighting factor varies with $t$, giving different noise levels different importance. In practice, simply dropping this factor and weighting all timesteps equally works better [@ho2020denoising]:
+
+$$
+\mathcal{L}_\text{simple} = \mathbb{E}_{x_0,\, \epsilon,\, t}\Big[\left\|\epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2\Big]
+$$
+
+This is the training objective used throughout this post. Equal weighting means the model devotes the same capacity to all noise levels, which empirically produces higher quality samples than the theoretically correct weighting.
