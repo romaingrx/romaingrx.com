@@ -3,7 +3,7 @@ title: 'Denoising Diffusion from Scratch'
 description: 'Building a class-conditional DDPM in JAX to generate font glyphs from pure noise'
 authors: ['romaingrx']
 status: 'published'
-published_date: 2026-03-02
+published_date: 2026-03-15
 categories: ['ml']
 tags: ['from scratch']
 bibliography: './references.bib'
@@ -34,6 +34,11 @@ Diffusion models sidestep this entirely. There's no encoder, no bottleneck. Inst
 2. **Learn to undo** each tiny step of destruction.
 
 If you can reverse one small step of noise, you can chain 1000 reversals and go from pure static to a crisp image. The key insight from Sohl-Dickstein et al. [@sohl2015deep] is that each reversal step is nearly Gaussian when the forward steps are small enough, so a neural network can learn it.
+
+<Callout variant="note" title="Want a visual walkthrough?">
+This video by Welch Labs covers the same core ideas with helpful animations and is a great companion to this post.
+<YouTube id="iv-5mZ_9CPY" title="But how do AI images and videos actually work? | Welch Labs" />
+</Callout>
 
 # The forward process
 
