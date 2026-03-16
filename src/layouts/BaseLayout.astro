@@ -56,15 +56,5 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
       </main>
       <Footer />
     </div>
-    <script>
-      // Scroll to top before view transition to prevent shared elements flying across the viewport
-      document.addEventListener('astro:before-preparation', (ev) => {
-        const originalLoader = ev.loader;
-        ev.loader = async () => {
-          window.scrollTo({ top: 0, behavior: 'instant' });
-          await originalLoader();
-        };
-      });
-    </script>
   </body>
 </html>
