@@ -18,7 +18,7 @@ const baseContentSchema = z.object({
 });
 
 const author = defineCollection({
-  loader: glob({ pattern: '**/*/*.{md,mdx}', base: './content/author' }),
+  loader: glob({ pattern: '**/*/*.{md,mdx}', base: './src/content/author' }),
   schema: ({ image }) =>
     z
       .object({
@@ -39,7 +39,7 @@ const author = defineCollection({
 });
 
 const blog = defineCollection({
-  loader: glob({ pattern: '*/*.{md,mdx}', base: './content/blog' }),
+  loader: glob({ pattern: '*/*.{md,mdx}', base: './src/content/blog' }),
   schema: ({ image }) =>
     baseContentSchema
       .extend({
@@ -69,12 +69,12 @@ export const timelineSchema = z
   .strict();
 
 const timeline = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/timeline' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/timeline' }),
   schema: timelineSchema,
 });
 
 const note = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/note' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/note' }),
   schema: baseContentSchema.strict(),
 });
 
