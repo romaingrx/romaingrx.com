@@ -89,6 +89,9 @@ export default defineConfig({
       },
     },
   },
+  prefetch: {
+    defaultStrategy: "viewport",
+  },
   fonts: [
     {
       provider: fontProviders.google(),

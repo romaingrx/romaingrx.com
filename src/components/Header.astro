@@ -71,7 +71,7 @@ const isActive = (href: string) => {
 
     <!-- Actions -->
     <div class="flex items-center gap-2">
-      <SearchTrigger client:idle />
+      <SearchTrigger client:idle transition:persist="search" />
       <ThemeToggle />
 
       <!-- Mobile Navigation -->
