@@ -2,6 +2,7 @@
 import Resources from '@/components/blog/resources/index.astro';
 import SharingBadges from '@/components/blog/sharing-badges.astro';
 import Shell from '@/components/Shell.astro';
+import { resolveResourceValue } from '@/configs/resources';
 import type { NoteWithAuthors } from '@/lib/collections';
 import Time from '../ui/time.astro';
 
@@ -11,6 +12,10 @@ interface Props {
 }
 
 const { note, class: className = '' } = Astro.props;
+const resources = note.data.resources.map((r) => ({
+  ...r,
+  value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }),
+}));
 ---
 
 <header class:list={['py-8', className]}>
@@ -40,7 +45,7 @@ const { note, class: className = '' } = Astro.props;
               note.data.resources && (
                 <>
                   <span class="text-muted-foreground text-sm font-medium">Resources</span>
-                  <Resources resources={note.data.resources} />
+                  <Resources resources={resources} />
                 </>
               )
             }

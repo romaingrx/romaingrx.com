@@ -1,6 +1,7 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Comments from '@/components/comments.astro';
+import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { formatDate } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -16,7 +17,11 @@ interface Props {
 
 const { post } = Astro.props;
 const { authors } = post;
-const { tags, categories, resources, updated_date, related_posts } = post.data;
+const { tags, categories, updated_date, related_posts } = post.data;
+const resources = post.data.resources.map((r) => ({
+  ...r,
+  value: resolveResourceValue(r.value, { collection: 'blog', entryId: post.id }),
+}));
 const hasRelatedContent = related_posts || tags.length > 0;
 ---
 
@@ -47,7 +52,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
           resources.length > 0 && (
             <div class="space-y-3">
               <h3 class="text-muted-foreground text-sm font-medium">Resources</h3>
-              <ResourceBadges resources={post.data.resources} />
+              <ResourceBadges resources={resources} />
             </div>
           )
         }
