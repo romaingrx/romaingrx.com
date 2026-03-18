@@ -12,7 +12,7 @@ resources:
   - title: 'Training pipeline'
     type: 'code'
     provider: 'github'
-    value: 'https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code'
+    value: './code'
     description: 'JAX/Equinox DDPM implementation for font glyph generation'
 ---
 
@@ -207,7 +207,7 @@ This is a basic DDPM, the foundation that everything else builds on. Some natura
 - **Classifier-free guidance** [@ho2022classifier]: interpolate between conditional and unconditional predictions to trade diversity for quality.
 - **Larger models**: our UNet has ~2.5M parameters. Scaling the base channels and adding more attention layers would sharpen fine details.
 
-The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/[Equinox](https://docs.kidger.site/equinox/).
+The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/src/content/blog/20260302-ddpm/code), about 500 lines of JAX/[Equinox](https://docs.kidger.site/equinox/).
 
 ---
 

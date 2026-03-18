@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import type { Plugin } from 'vite';
