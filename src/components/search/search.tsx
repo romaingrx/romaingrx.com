@@ -23,7 +23,9 @@ interface SearchResult {
   sub_results: SubResult[];
 }
 
-let pagefindInstance: any = null;
+let pagefindInstance: {
+  search: (query: string) => Promise<{ results: { data: () => Promise<SearchResult> }[] }>;
+} | null = null;
 
 async function loadPagefind() {
   if (pagefindInstance) return pagefindInstance;
@@ -120,7 +122,7 @@ function SearchDialog({
       }
       const search = await pf.search(query);
       const data: SearchResult[] = await Promise.all(
-        search.results.slice(0, 5).map((r: any) => r.data())
+        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data())
       );
       setResults(data);
       setLoading(false);

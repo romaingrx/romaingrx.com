@@ -11,7 +11,6 @@ interface Props extends HTMLAttributes<'dialog'> {
   className?: string;
   hideCloseButton?: true;
   onClose?: (event: Event) => void;
-  onOpen?: (event: Event) => void;
 }
 
 const {
@@ -21,7 +20,6 @@ const {
   className,
   hideCloseButton = false,
   onClose,
-  onOpen,
   ...props
 } = Astro.props;
 ---

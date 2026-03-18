@@ -45,6 +45,16 @@ export default [
   },
 
   {
-    ignores: ['dist/**', '.astro/**', 'node_modules/**', 'public/**', 'wrangler.*', '**/*.d.ts'],
+    ignores: [
+      'dist/**',
+      '.astro/**',
+      'node_modules/**',
+      'public/**',
+      'wrangler.*',
+      '**/*.d.ts',
+      '.worktrees/**',
+      '**/.venv/**',
+      '**/.obsidian/**',
+    ],
   },
 ];

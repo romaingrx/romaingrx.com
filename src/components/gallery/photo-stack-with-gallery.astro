@@ -36,10 +36,11 @@ const DIALOG_ID = `${id}-dialog`;
   />
 </Dialog>
 
-<script is:inline define:vars={{ id, startIndex, DIALOG_ID }}>
+<script is:inline define:vars={{ id, startIndex }}>
   // Global function to open gallery
+  const dialogId = `${id}-dialog`;
   window[`${id}_open`] = (index = startIndex) => {
-    const dialog = document.getElementById(DIALOG_ID);
+    const dialog = document.getElementById(dialogId);
     if (dialog) {
       // Set the start index for the gallery
       const gallery = dialog.querySelector('astro-gallery');

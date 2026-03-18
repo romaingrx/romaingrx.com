@@ -24,7 +24,7 @@ const tocSlugs = headings.map((h) => h.slug).filter(Boolean);
     >
       <div class={cn('rounded-md p-4', 'group-hover/toc:bg-card group-hover/toc:border-border')}>
         <ul>
-          {buildToc(headings).map((heading) => <TocHeading heading={heading} client:visible />)}
+          {buildToc(headings).map((heading) => <TocHeading heading={heading} />)}
         </ul>
       </div>
     </div>
