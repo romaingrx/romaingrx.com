@@ -35,10 +35,12 @@ def test_single_epoch_runs():
 
     batch = jr.normal(k2, (2, 3, 8, 8))  # 2 images
     batches = batch[None]  # 1 batch of 2
+    labels = jnp.zeros(2, dtype=jnp.int32)
+    label_batches = labels[None]
     keys = jr.split(k3, 1)
 
     model_out, ema_out, opt_out, loss = epoch_fn(
-        model, model, opt_state, batches, keys
+        model, model, opt_state, batches, label_batches, keys
     )
     assert loss.shape == ()
     assert jnp.isfinite(loss)
@@ -57,13 +59,15 @@ def test_loss_decreases_on_repeated_data():
 
     batch = jr.normal(k2, (4, 3, 8, 8))
     batches = jnp.stack([batch, batch])  # 2 identical batches per epoch
+    labels = jnp.zeros(4, dtype=jnp.int32)
+    label_batches = jnp.stack([labels, labels])
 
     ema_model = model
     losses = []
     for i in range(10):
         keys = jr.split(jr.PRNGKey(i), 2)
         model, ema_model, opt_state, loss = epoch_fn(
-            model, ema_model, opt_state, batches, keys
+            model, ema_model, opt_state, batches, label_batches, keys
         )
         losses.append(float(loss))
 
@@ -83,10 +87,14 @@ def test_ema_differs_from_model():
 
     batch = jr.normal(k2, (4, 3, 8, 8))
     batches = batch[None]
+    labels = jnp.zeros(4, dtype=jnp.int32)
+    label_batches = labels[None]
     keys = jr.split(jr.PRNGKey(0), 1)
 
     ema_model = model
-    model, ema_model, _, _ = epoch_fn(model, ema_model, opt_state, batches, keys)
+    model, ema_model, _, _ = epoch_fn(
+        model, ema_model, opt_state, batches, label_batches, keys
+    )
 
     model_params = eqx.filter(model, eqx.is_array)
     ema_params = eqx.filter(ema_model, eqx.is_array)
@@ -107,8 +115,9 @@ def test_deterministic():
         opt_state = opt.init(eqx.filter(model, eqx.is_array))
         epoch_fn = _make_train_epoch(opt, schedule, ema_decay=0.99)
         batches = jr.normal(k2, (1, 4, 3, 8, 8))
+        labels = jnp.zeros((1, 4), dtype=jnp.int32)
         keys = jr.split(jr.PRNGKey(0), 1)
-        _, _, _, loss = epoch_fn(model, model, opt_state, batches, keys)
+        _, _, _, loss = epoch_fn(model, model, opt_state, batches, labels, keys)
         return float(loss)
 
     assert run(0) == run(0)

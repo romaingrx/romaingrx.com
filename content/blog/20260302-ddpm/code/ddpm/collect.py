@@ -4,7 +4,7 @@ from pathlib import Path
 import jax.numpy as jnp
 import jax.random as jr
 import structlog
-from jaxtyping import Array, Int, PRNGKeyArray
+from jaxtyping import PRNGKeyArray
 
 from .config import (
     CHARSET,

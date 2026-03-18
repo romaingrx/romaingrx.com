@@ -2,6 +2,7 @@ import urllib.parse
 import urllib.request
 import json
 from pathlib import Path
+from typing import cast
 
 import jax.numpy as jnp
 import numpy as np
@@ -59,8 +60,8 @@ def render_glyph(font_path: Path, char: str, size: int = IMG_SIZE) -> np.ndarray
 
 def compute_sdf(binary: np.ndarray) -> np.ndarray:
     mask = binary > 128
-    dist_outside = distance_transform_edt(~mask)
-    dist_inside = distance_transform_edt(mask)
+    dist_outside = cast(np.ndarray, distance_transform_edt(~mask))
+    dist_inside = cast(np.ndarray, distance_transform_edt(mask))
     return dist_outside - dist_inside  # negative inside, positive outside
 
 

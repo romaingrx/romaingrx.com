@@ -1,6 +1,6 @@
-# DDPM Pokemon
+# DDPM Glyphs
 
-Denoising Diffusion Probabilistic Model for Pokemon sprite generation, implemented in JAX/Equinox.
+Denoising Diffusion Probabilistic Model for font glyph generation, implemented in JAX/Equinox.
 
 ## Setup
 

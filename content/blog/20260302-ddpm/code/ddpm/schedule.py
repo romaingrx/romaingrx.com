@@ -30,13 +30,6 @@ class NoiseSchedule:
         return int(self.betas.shape[0])
 
 
-def linear_schedule(
-    T: int, beta_start: float = 1e-4, beta_end: float = 0.02
-) -> NoiseSchedule:
-    betas = jnp.linspace(beta_start, beta_end, T)
-    return NoiseSchedule(betas)
-
-
 def cosine_schedule(T: int, s: float = 0.008) -> NoiseSchedule:
     steps = jnp.arange(T + 1)
     f = jnp.cos((steps / T + s) / (1 + s) * jnp.pi / 2) ** 2

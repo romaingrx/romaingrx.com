@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
+from jaxtyping import Array, Float
 from PIL import Image
 
 
@@ -34,10 +35,11 @@ class SDFNormalizer:
         return cls(clamp_min=d["clamp_min"], clamp_max=d["clamp_max"])
 
 
-def sdf_to_b64(img: np.ndarray, normalizer: SDFNormalizer, mode: str = "threshold") -> str:
-    if img.ndim == 3:
-        img = img[0]  # (1, H, W) -> (H, W)
-    pixels = normalizer.to_image(np.asarray(img), mode=mode)
+def sdf_to_b64(img: Float[Array, "..."], normalizer: SDFNormalizer, mode: str = "threshold") -> str:
+    arr = np.asarray(img)
+    if arr.ndim == 3:
+        arr = arr[0]  # (1, H, W) -> (H, W)
+    pixels = normalizer.to_image(arr, mode=mode)
     pil_img = Image.fromarray(pixels, mode="L")
     buf = io.BytesIO()
     pil_img.save(buf, format="PNG")

@@ -6,6 +6,8 @@ import structlog
 
 from pathlib import Path
 
+from jaxtyping import PRNGKeyArray
+
 from .checkpoint import load_ema_model
 from .collect import collect_and_save
 from .config import (
@@ -69,7 +71,7 @@ def _make_normalizer() -> SDFNormalizer:
     return SDFNormalizer(clamp_min=SDF_CLAMP_MIN, clamp_max=SDF_CLAMP_MAX)
 
 
-def _make_model(*, key: jr.PRNGKey) -> UNet:
+def _make_model(*, key: PRNGKeyArray) -> UNet:
     return UNet(
         img_channels=IMG_CHANNELS,
         base_channels=BASE_CHANNELS,
