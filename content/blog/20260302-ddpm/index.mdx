@@ -1,0 +1,318 @@
+---
+title: 'Denoising Diffusion from Scratch'
+description: 'Building a class-conditional DDPM in JAX to generate font glyphs from pure noise'
+authors: ['romaingrx']
+cover: './images/cover.png'
+status: 'published'
+published_date: 2026-03-18
+categories: ['ml']
+tags: ['from scratch']
+bibliography: './references.bib'
+resources:
+  - title: 'Training pipeline'
+    type: 'code'
+    provider: 'github'
+    value: 'https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code'
+    description: 'JAX/Equinox DDPM implementation for font glyph generation'
+---
+
+import { TrainingCurves, EpochProgress, NoiseScheduleChart, ForwardProcess, DenoisingProcess, SampleGallery, SDFPipeline } from './components';
+import unetDiagram from './images/unet.excalidraw';
+
+What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind [**Denoising Diffusion Probabilistic Models**](https://arxiv.org/abs/2006.11239) (DDPMs): learn to reverse a noise process, and you get a generative model for free.
+
+In this post, we'll build one from scratch in [JAX](https://github.com/jax-ml/jax) and train it to generate font glyphs: all 62 alphanumeric characters, conditioned on class labels.
+
+<SampleGallery client:visible />
+
+# The intuition
+
+In the <BlogLink post="20260301-vae">VAE post</BlogLink>, we compressed data into a bottleneck and decoded it back. That works, but there's a fundamental tension: the bottleneck must be small enough to regularize, yet large enough to not lose information.
+
+Diffusion models sidestep this entirely. There's no encoder, no bottleneck. Instead:
+
+1. **Destroy** the data by slowly adding Gaussian noise until nothing is left.
+2. **Learn to undo** each tiny step of destruction.
+
+If you can reverse one small step of noise, you can chain 1000 reversals and go from pure static to a crisp image. The key insight [@sohl2015deep] is that each reversal step is nearly Gaussian when the forward steps are small enough, so a neural network can learn it.
+
+<Callout variant="note" title="Want a visual walkthrough?">
+This video by Welch Labs covers the same core ideas with helpful animations and is a great companion to this post.
+<YouTube id="iv-5mZ_9CPY" title="But how do AI images and videos actually work? | Welch Labs" />
+</Callout>
+
+# The forward process
+
+The forward process is fixed (no parameters to learn). Given a clean image $x_0$, we define a sequence $x_1, x_2, \dots, x_T$ where each step adds a little [Gaussian noise](https://en.wikipedia.org/wiki/Gaussian_noise) controlled by a variance schedule $\beta_1, \dots, \beta_T$:
+
+$$
+q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(x_t;\; \sqrt{1-\beta_t}\, x_{t-1},\; \beta_t I\right)
+$$
+
+A nice property: we can jump to any timestep $t$ directly without iterating, thanks to the cumulative product $\bar\alpha_t = \prod_{s=1}^{t} (1-\beta_s)$ [@ho2020denoising] (the full derivation is in [Appendix A](#appendix-a-forward-process-closed-form)):
+
+$$
+q(x_t \mid x_0) = \mathcal{N}\!\left(x_t;\; \sqrt{\bar\alpha_t}\, x_0,\; (1-\bar\alpha_t)\, I\right)
+$$
+
+In code, that's one line:
+
+```python
+x_noisy = sqrt_alpha_bar * x0 + sqrt_one_minus_alpha_bar * noise
+```
+
+<ForwardProcess client:visible />
+
+At $t=0$, the image is untouched. At $t=999$, it's indistinguishable from pure Gaussian noise.
+
+## The noise schedule
+
+The choice of $\beta_t$ matters more than you'd think. A linear schedule destroys too much information in early steps, leaving the model with little to learn at low $t$. The cosine schedule [@nichol2021improved] fixes this by preserving more signal early on:
+
+$$\bar\alpha_t = \frac{f(t)}{f(0)}, \qquad f(t) = \cos\left(\frac{t/T + s}{1+s} \cdot \frac{\pi}{2}\right)^2$$
+
+<NoiseScheduleChart client:visible />
+
+Notice how $\bar\alpha_t$ (the signal-preserving factor) drops gently at first, then accelerates. This means the model gets useful gradients at every noise level, not just the extremes.
+
+# The reverse process
+
+Here's where learning happens. We want to go backwards: given a noisy $x_t$, produce a slightly less noisy $x_{t-1}$. It turns out [@ho2020denoising] that the optimal reverse step is also Gaussian:
+
+$$
+p_\theta(x_{t-1} \mid x_t) = \mathcal{N}\!\left(x_{t-1};\; \mu_\theta(x_t, t),\; \sigma_t^2 I\right)
+$$
+
+The model predicts the mean $\mu_\theta$. But instead of predicting $\mu$ directly, we predict the **noise** $\epsilon_\theta(x_t, t)$ that was added to get from $x_0$ to $x_t$.
+
+<Callout variant="tip" title="Why predict noise?">
+If the model predicted the clean image directly, gradients would be dominated by low-frequency content (the overall shape). Predicting noise puts all frequencies on equal footing, since Gaussian noise has a flat power spectrum. This simple reparameterization makes training dramatically more stable.
+</Callout>
+
+The training loss is MSE between predicted and actual noise (see [Appendix B](#appendix-b-variational-bound) and [Appendix C](#appendix-c-simplified-objective) for the full derivation):
+
+$$
+\mathcal{L} = \mathbb{E}_{x_0,\, \epsilon,\, t}\Big[\left\|\epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2\Big]
+$$
+
+At sampling time, we start from pure noise $x_T \sim \mathcal{N}(0, I)$ and iterate backwards:
+
+$$
+x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon_\theta(x_t, t)\right) + \sigma_t\, z
+$$
+
+where $z \sim \mathcal{N}(0, I)$ and $\sigma_t^2$ is the posterior variance. The last step ($t=1 \to 0$) is deterministic (no noise added).
+
+Putting it all together, the two algorithms [@ho2020denoising] are remarkably simple:
+
+<Columns spread class="my-8">
+<Callout variant="note" title="Training" class="h-full !my-0">
+
+1. Sample $x_0 \sim q(x_0)$
+2. Sample $t \sim \text{Uniform}(\{1, \dots, T\})$
+3. Sample $\epsilon \sim \mathcal{N}(0, I)$
+4. Gradient step on $\nabla_\theta \left\| \epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2$
+5. Repeat until converged
+
+</Callout>
+<Callout variant="note" title="Sampling" class="h-full !my-0">
+
+1. Sample $x_T \sim \mathcal{N}(0, I)$
+2. **for** $t = T, \dots, 1$ **do**
+3. &emsp; $z \sim \mathcal{N}(0, I)$ if $t > 1$, else $z = 0$
+4. &emsp; $x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon_\theta(x_t, t)\right) + \sigma_t z$
+5. **return** $x_0$
+
+</Callout>
+</Columns>
+
+<DenoisingProcess client:visible />
+
+# The architecture
+
+## UNet
+
+The workhorse is a UNet [@ronneberger2015unet]: an encoder-decoder with [skip connections](https://en.wikipedia.org/wiki/Residual_neural_network). The encoder downsamples through [ResNet blocks](https://arxiv.org/abs/1512.03385), the decoder upsamples and concatenates skip features from the corresponding encoder level.
+
+What makes it a *diffusion* UNet:
+- **Time conditioning**: the timestep $t$ is embedded via sinusoidal positional encoding (borrowed from Transformers [@vaswani2017attention]) and injected into every ResNet block as an additive bias.
+- [**Self-attention**](https://en.wikipedia.org/wiki/Attention_(machine_learning)) at lower spatial resolutions (16x16 and 8x8) to capture long-range dependencies.
+
+<Excalidraw data={unetDiagram} alt="UNet architecture: encoder-bottleneck-decoder with skip connections and time/class conditioning" />
+
+## Class conditioning
+
+To condition on which character to generate, we add a [learned embedding](https://en.wikipedia.org/wiki/Word_embedding) for each of the 62 classes. This embedding goes through the same MLP as the time embedding and adds to it:
+
+```python
+if self.class_embed is not None and label is not None:
+    c_emb = self.class_embed(label)
+    t_emb = t_emb + self.class_mlp(c_emb)
+```
+
+That's it. The class signal reaches every layer of the network through the time embedding pathway.
+
+# SDF: a better shape representation
+
+Instead of training on raw binary images (black/white pixels), we use [**Signed Distance Fields**](https://en.wikipedia.org/wiki/Signed_distance_function) (SDFs). For each pixel, the SDF stores how far it is from the nearest edge: negative inside the glyph, positive outside.
+
+Why this helps:
+- **Smooth gradients**: binary images have a discontinuity at every edge. SDFs are smooth everywhere, giving the model useful gradient signal across the entire image.
+- **Geometric information**: an SDF encodes not just "is this pixel inside the shape?" but "how far is it from the boundary?" This richer signal helps the model learn cleaner edges.
+
+The pipeline: download 614 bold fonts from [Google Fonts](https://fonts.google.com), render each of the 62 characters at 64×64, compute the [Euclidean distance transform](https://en.wikipedia.org/wiki/Distance_transform), clamp to $[-5, 5]$, and normalize to $[-1, 1]$. Some fonts lack certain glyphs, so we end up with 37,912 training examples rather than the full $614 \times 62 = 38{,}068$.
+
+<SDFPipeline client:visible />
+
+At inference time, the model outputs a normalized SDF. We denormalize it back to $[-5, 5]$ and threshold at zero: negative values (inside the glyph) become white, positive values (outside) become black. This gives us crisp binary edges regardless of how noisy the raw field is.
+
+```python
+def to_image(self, normalized_sdf: Float[Array, "h w"]) -> UInt8[Array, "h w"]:
+    raw = self.denormalize(normalized_sdf)       # [-1, 1] → [-5, 5]
+    return (raw < 0).astype(np.uint8) * 255      # inside → white
+```
+
+<Columns spread columns={2} class="my-6">
+  <NumberCard title="Fonts" value={614} description="Google Fonts (bold)" />
+  <NumberCard title="Characters" value={62} description="A-Z, a-z, 0-9" />
+  <NumberCard title="Training glyphs" value={37912} description="After filtering missing glyphs" />
+  <NumberCard title="Resolution" value={64} description="Pixels per glyph" />
+</Columns>
+
+# Training
+
+We train for 150 epochs on a [TPU v5e](https://cloud.google.com/tpu/docs/v5e) with batch size 256, using Adam [@kingma2014adam] at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
+
+[**Exponential Moving Average**](https://en.wikipedia.org/wiki/Exponential_smoothing) (EMA) maintains a slow-moving copy of the model weights:
+
+$$
+\theta_\text{EMA} \leftarrow 0.999 \cdot \theta_\text{EMA} + 0.001 \cdot \theta
+$$
+
+This smooths out training noise and consistently produces sharper samples than the raw model weights.
+
+<TrainingCurves client:visible />
+
+The loss drops steeply in the first 30 epochs as the model learns coarse structure, then gradually refines. Note that the curve hasn't fully plateaued by epoch 150, so longer training would likely improve sample quality further. For the purposes of this post, the results are more than sufficient. Here's what the validation samples look like across training:
+
+<EpochProgress client:visible />
+
+By epoch 30, the model produces recognizable glyphs. By epoch 90, most characters are crisp and well-formed. The jump in quality between epoch 10 and 60 is where the model transitions from "blobs in the right place" to "actual letterforms."
+
+# What's next
+
+This is a basic DDPM, the foundation that everything else builds on. Some natural extensions:
+
+- **DDIM sampling** [@song2020denoising]: skip steps during sampling to generate in 50 steps instead of 1000, with negligible quality loss.
+- **Classifier-free guidance** [@ho2022classifier]: interpolate between conditional and unconditional predictions to trade diversity for quality.
+- **Larger models**: our UNet has ~2.5M parameters. Scaling the base channels and adding more attention layers would sharpen fine details.
+
+The complete training pipeline (data preparation, model, training loop, sampling) is [on GitHub](https://github.com/romaingrx/romaingrx.com/tree/main/content/blog/20260302-ddpm/code), about 500 lines of JAX/[Equinox](https://docs.kidger.site/equinox/).
+
+---
+
+# Appendices
+
+## Appendix A: forward process closed form
+
+We want to show that $q(x_t \mid x_0)$ has a closed form. Start from the single-step forward:
+
+$$
+x_t = \sqrt{1-\beta_t}\, x_{t-1} + \sqrt{\beta_t}\, \epsilon_t, \qquad \epsilon_t \sim \mathcal{N}(0, I)
+$$
+
+Let $\alpha_t = 1-\beta_t$. Expanding one step:
+
+$$
+x_t = \sqrt{\alpha_t}\, x_{t-1} + \sqrt{1-\alpha_t}\, \epsilon_t
+$$
+
+Substituting $x_{t-1} = \sqrt{\alpha_{t-1}}\, x_{t-2} + \sqrt{1-\alpha_{t-1}}\, \epsilon_{t-1}$:
+
+$$
+x_t = \sqrt{\alpha_t \alpha_{t-1}}\, x_{t-2} + \sqrt{\alpha_t(1-\alpha_{t-1})}\, \epsilon_{t-1} + \sqrt{1-\alpha_t}\, \epsilon_t
+$$
+
+The last two terms are independent Gaussians. Their sum is Gaussian with variance $\alpha_t(1-\alpha_{t-1}) + (1-\alpha_t) = 1 - \alpha_t \alpha_{t-1}$. Repeating this recursion down to $x_0$ and defining $\bar\alpha_t = \prod_{s=1}^t \alpha_s$:
+
+$$
+\begin{align*}
+x_t &= \sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon, \qquad \epsilon \sim \mathcal{N}(0, I) \\[6pt]
+q(x_t \mid x_0) &= \mathcal{N}\!\left(x_t;\; \sqrt{\bar\alpha_t}\, x_0,\; (1-\bar\alpha_t)\, I\right)
+\end{align*}
+$$
+
+This is what lets us sample any $x_t$ in one step during training rather than iterating through all $t$ steps.
+
+## Appendix B: variational bound
+
+The approach here follows the same variational argument we used to derive the ELBO in the <BlogLink post="20260301-vae">VAE post</BlogLink>. The difference is that our latent variables are now the full chain $x_{1:T}$ rather than a single $z$, so the bound decomposes into per-step terms.
+
+Starting from the negative log-likelihood, we add a non-negative KL term:
+
+$$
+\begin{align*}
+-\log p(x_0) &\leq -\log p(x_0) + D_\text{KL}(q(x_{1:T}|x_0) \,\|\, p_\theta(x_{1:T}|x_0)) \\
+&= \mathbb{E}_q\!\left[-\log \frac{p_\theta(x_{0:T})}{q(x_{1:T}|x_0)}\right]
+\end{align*}
+$$
+
+Expanding the joint distributions $q(x_{1:T}|x_0) = \prod_{t=1}^T q(x_t|x_{t-1})$ and $p_\theta(x_{0:T}) = p(x_T) \prod_{t=1}^T p_\theta(x_{t-1}|x_t)$, then grouping terms:
+
+$$
+L = \mathbb{E}_q\!\left[-\log p(x_T) - \sum_{t=1}^T \log \frac{p_\theta(x_{t-1}|x_t)}{q(x_t|x_{t-1})}\right]
+$$
+
+The key trick is to condition on $x_0$ in the forward steps. By Bayes' rule, the forward posterior $q(x_{t-1}|x_t, x_0)$ is tractable and Gaussian:
+
+$$
+q(x_{t-1}|x_t, x_0) = \mathcal{N}(x_{t-1};\; \tilde\mu_t(x_t, x_0),\; \tilde\beta_t I)
+$$
+
+with closed-form parameters:
+
+$$
+\tilde\mu_t(x_t, x_0) = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\, x_0 + \frac{\sqrt{\alpha_t}\,(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\, x_t, \qquad \tilde\beta_t = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\, \beta_t
+$$
+
+Using this, the bound separates cleanly into three parts:
+
+$$
+L = \underbrace{D_\text{KL}(q(x_T|x_0) \,\|\, p(x_T))}_{L_T\text{: prior matching}} + \sum_{t=2}^T \underbrace{D_\text{KL}(q(x_{t-1}|x_t,x_0) \,\|\, p_\theta(x_{t-1}|x_t))}_{L_{t-1}\text{: denoising matching}} \underbrace{- \log p_\theta(x_0|x_1)}_{L_0\text{: reconstruction}}
+$$
+
+$L_T$ has no learnable parameters (the forward process is fixed). Each $L_{t-1}$ compares two Gaussians, so the KL has a closed form. $L_0$ is the reconstruction term. All the learning happens in the $L_{t-1}$ terms: teaching the model to match the true denoising posterior at each step.
+
+## Appendix C: simplified objective
+
+Each $L_{t-1}$ term compares the learned mean $\mu_\theta(x_t, t)$ to the forward posterior mean $\tilde\mu_t$. Since the variances $\tilde\beta_t$ are fixed, the KL reduces to an MSE between means:
+
+$$
+L_{t-1} = \frac{1}{2\tilde\beta_t} \left\| \tilde\mu_t(x_t, x_0) - \mu_\theta(x_t, t) \right\|^2 + C
+$$
+
+Using $x_t = \sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon$ from Appendix A, we can express $x_0$ in terms of $x_t$ and $\epsilon$, then substitute into $\tilde\mu_t$:
+
+$$
+x_0 = \frac{1}{\sqrt{\bar\alpha_t}}\left(x_t - \sqrt{1-\bar\alpha_t}\, \epsilon\right) \qquad \Longrightarrow \qquad \tilde\mu_t = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon\right)
+$$
+
+This is revealing: the true posterior mean is a function of $x_t$ and the noise $\epsilon$ that was added. So rather than predicting $\mu$ directly, we can reparameterize the model to predict the noise $\epsilon_\theta(x_t, t)$ and recover $\mu$ from it:
+
+$$
+\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\, \epsilon_\theta(x_t, t)\right)
+$$
+
+Plugging this into the MSE:
+
+$$
+L_{t-1} = \frac{\beta_t^2}{2\tilde\beta_t \alpha_t (1-\bar\alpha_t)} \left\| \epsilon - \epsilon_\theta(x_t, t) \right\|^2
+$$
+
+The weighting factor varies with $t$, giving different noise levels different importance. In practice, simply dropping this factor and weighting all timesteps equally works better [@ho2020denoising]:
+
+$$
+\mathcal{L}_\text{simple} = \mathbb{E}_{x_0,\, \epsilon,\, t}\Big[\left\|\epsilon - \epsilon_\theta\!\left(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \epsilon,\; t\right)\right\|^2\Big]
+$$
+
+This is the training objective used throughout this post. Equal weighting means the model devotes the same capacity to all noise levels, which empirically produces higher quality samples than the theoretically correct weighting.

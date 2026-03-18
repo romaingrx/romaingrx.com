@@ -1,0 +1,32 @@
+from pathlib import Path
+
+IMG_CHANNELS: int = 1
+IMG_SIZE: int = 64
+
+CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+NUM_CLASSES: int = len(CHARSET)
+
+SDF_CLAMP_MIN: float = -5.0
+SDF_CLAMP_MAX: float = 5.0
+
+TIMESTEPS = 1000
+BASE_CHANNELS = 48
+CHANNEL_MULTS = (1, 2, 4)
+ATTN_RESOLUTIONS = (16, 8)
+LR = 2e-4
+EPOCHS = 150
+BATCH_SIZE = 512
+EMA_DECAY = 0.999
+DROPOUT_RATE = 0.1
+COMPUTE_DTYPE = "float32"  # bfloat16 for TPU speed, float32 for full precision
+CHECKPOINT_EVERY = 10
+N_FORWARD_EXAMPLES = 5
+FORWARD_STEPS = [0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 999]
+N_DENOISING_EXAMPLES = 3
+N_SAMPLES = 12
+N_VALIDATION_SAMPLES = 3
+
+CODE_DIR = Path(__file__).parent.parent
+OUTPUT_FILE = CODE_DIR.parent / "run.json"
+CACHE_DIR = CODE_DIR / ".cache"
+CHECKPOINT_DIR = CODE_DIR / ".checkpoints"

@@ -1,0 +1,16 @@
+---
+import { excalidrawToSvg, type ExcalidrawFile } from '@/lib/excalidraw';
+import ImageViewer from './images/image-viewer.astro';
+
+interface Props {
+  data: ExcalidrawFile;
+  class?: string;
+  alt?: string;
+  showBackground?: boolean;
+}
+
+const { data, class: className, alt, showBackground = false } = Astro.props;
+const svgString = await excalidrawToSvg(data, { showBackground });
+---
+
+<ImageViewer html={svgString} alt={alt} caption={alt} className={className} />

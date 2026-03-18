@@ -5,7 +5,8 @@ import { Image } from 'astro:assets';
 import { cn } from '@/lib/utils';
 
 interface Props {
-  src: ImageMetadata;
+  src?: ImageMetadata;
+  html?: string;
   alt?: string;
   caption?: string;
   className?: string;
@@ -13,92 +14,82 @@ interface Props {
   height?: number;
 }
 
-const { src, alt = 'Image', caption, className, width, height } = Astro.props;
+const { src, html, alt = 'Image', caption, className, width, height } = Astro.props;
 ---
 
-<div class={cn('my-4', className)}>
-  <!-- Original image -->
-  <div class="group relative">
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      class="h-auto w-full cursor-pointer object-contain transition-all duration-300 hover:shadow-lg"
-      onclick="openModal(this)"
-    />
-    <!-- Zoom button -->
-    <button
-      class="bg-background text-foreground hover:bg-muted absolute top-2 right-2 rounded-full p-2 opacity-0 shadow-lg transition-all duration-200 group-hover:opacity-100"
-      aria-label="View larger image"
-      onclick="openModal(this)"
+<figure class={cn('image-viewer group my-6', className)}>
+  <div class="relative cursor-zoom-in" data-image-trigger>
+    {
+      html ? (
+        <div class="w-full [&>svg]:h-auto [&>svg]:w-full" set:html={html} />
+      ) : src ? (
+        <Image src={src} alt={alt} width={width} height={height} class="h-auto w-full" />
+      ) : null
+    }
+    <div
+      class="absolute inset-0 rounded-lg opacity-0 ring-1 ring-current/5 transition-opacity duration-200 group-hover:opacity-100"
     >
-      <Icon name="lucide:zoom-in" class="size-4" />
-    </button>
-  </div>
-
-  <!-- Caption -->
-  {caption && <p class="text-muted-foreground mt-2 text-center text-sm">{caption}</p>}
-
-  <!-- Modal overlay -->
-  <div
-    id="image-modal"
-    class="fixed inset-0 z-50 hidden items-center justify-center backdrop-blur-sm"
-  >
-    <div class="relative h-full max-h-[90vh] w-full max-w-[90vw] p-4">
-      <!-- Close button -->
-      <button
-        class="text-foreground hover:text-muted-foreground absolute top-0 right-0 transition-colors"
-        onclick="closeModal()"
-        aria-label="Close modal"
-      >
-        <Icon name="lucide:x" class="size-6" />
-      </button>
-
-      <!-- Modal image -->
-      <Image src={src} alt={alt} class="h-full w-full object-contain" />
     </div>
   </div>
-</div>
+
+  {
+    caption && (
+      <figcaption class="text-muted-foreground mt-3 text-center text-sm">{caption}</figcaption>
+    )
+  }
+
+  <!-- Lightbox -->
+  <div
+    class="image-lightbox fixed inset-0 z-50 hidden cursor-zoom-out items-center justify-center bg-black/80 backdrop-blur-sm"
+    data-image-lightbox
+  >
+    <button
+      class="absolute top-4 right-4 text-white/60 transition-colors hover:text-white"
+      aria-label="Close"
+      data-image-close
+    >
+      <Icon name="lucide:x" class="size-5" />
+    </button>
+    <div class="max-h-[90vh] max-w-[90vw] p-8">
+      {
+        html ? (
+          <div class="[&>svg]:max-h-[85vh] [&>svg]:w-auto [&>svg]:max-w-[85vw]" set:html={html} />
+        ) : src ? (
+          <Image src={src} alt={alt} class="max-h-[85vh] w-auto max-w-[85vw] object-contain" />
+        ) : null
+      }
+    </div>
+  </div>
+</figure>
 
 <script>
-  function openModal(_button: HTMLElement) {
-    const modal = document.getElementById('image-modal') as HTMLElement;
-    if (modal) {
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      document.body.style.overflow = 'hidden';
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.image-viewer').forEach((viewer) => {
+      const trigger = viewer.querySelector('[data-image-trigger]');
+      const lightbox = viewer.querySelector('[data-image-lightbox]') as HTMLElement;
+      const closeBtn = viewer.querySelector('[data-image-close]');
+      if (!trigger || !lightbox) return;
 
-      // Handle escape key
-      const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          closeModal();
-          document.removeEventListener('keydown', handleEscape);
-        }
+      const open = () => {
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
       };
-      document.addEventListener('keydown', handleEscape);
 
-      // Handle click outside
-      const handleClickOutside = (e: MouseEvent) => {
-        if (e.target === modal) {
-          closeModal();
-          modal.removeEventListener('click', handleClickOutside);
-        }
+      const close = () => {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = '';
       };
-      modal.addEventListener('click', handleClickOutside);
-    }
-  }
 
-  function closeModal() {
-    const modal = document.getElementById('image-modal') as HTMLElement;
-    if (modal) {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.body.style.overflow = '';
-    }
-  }
-
-  // Make functions globally available
-  (window as any).openModal = openModal;
-  (window as any).closeModal = closeModal;
+      trigger.addEventListener('click', open);
+      closeBtn?.addEventListener('click', close);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) close();
+      });
+      lightbox.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Escape') close();
+      });
+    });
+  });
 </script>

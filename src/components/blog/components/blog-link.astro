@@ -1,0 +1,32 @@
+---
+import { getEntry, render } from 'astro:content';
+import { formatDate } from '@/lib/format';
+import { slugify } from '@/lib/utils';
+import BlogLinkCard from './blog-link-card';
+
+interface Props {
+  post: string;
+}
+
+const { post: postId } = Astro.props;
+const entry = await getEntry('blog', postId);
+if (!entry) {
+  throw new Error(`BlogLink: blog post "${postId}" not found`);
+}
+const { remarkPluginFrontmatter } = await render(entry);
+const slug = slugify(entry.data.title);
+const href = `/blog/${slug}`;
+const hasChildren = Astro.slots.has('default');
+const date = formatDate(entry.data.published_date);
+---
+
+<BlogLinkCard
+  client:visible
+  href={href}
+  title={entry.data.title}
+  description={entry.data.description}
+  date={date}
+  readingTime={remarkPluginFrontmatter?.minutesRead}
+>
+  {hasChildren ? <slot /> : entry.data.title}
+</BlogLinkCard>
