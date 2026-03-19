@@ -31,7 +31,10 @@ export function ImageGrid({ images, columns = 4, size = 64, className }: ImageGr
       `}</style>
       <div className={cn(`image-grid-cols-${columns} grid gap-4`, className)}>
         {images.map((item, i) => (
-          <div key={i} className="flex flex-col items-center gap-1">
+          <div
+            key={item.label ?? `image-${item.src.slice(0, 32)}`}
+            className="flex flex-col items-center gap-1"
+          >
             <div className="flex items-center justify-center rounded bg-black p-2">
               <img
                 src={`data:image/png;base64,${item.src}`}

@@ -45,18 +45,17 @@ async function getContentWithAuthors<T extends ContentEntry>(
 
   return Promise.all(
     entries
-      .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
+      .toSorted((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
       .map(async (entry) => {
         const { remarkPluginFrontmatter } = await render(entry);
         const resolved = await resolveAuthors(entry, authors);
         const slug = slugify(entry.data.title);
-        return {
-          ...entry,
+        return Object.assign({}, entry, {
           authors: resolved,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
           slug,
           url: getAbsoluteUrl(`/${urlPrefix}/${slug}`, new URL(site.url)),
-        } as WithAuthors<T>;
+        }) as WithAuthors<T>;
       }),
   );
 }

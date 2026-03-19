@@ -15,10 +15,9 @@ interface Props {
 }
 
 const { post, class: className = '' } = Astro.props;
-const resources = post.data.resources.map((r) => ({
-  ...r,
-  value: resolveResourceValue(r.value, { collection: 'blog', entryId: post.id }),
-}));
+const resources = post.data.resources.map((r) =>
+  Object.assign({}, r, { value: resolveResourceValue(r.value, { collection: 'blog', entryId: post.id }) })
+);
 ---
 
 <header

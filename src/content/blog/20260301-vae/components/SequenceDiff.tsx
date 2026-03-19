@@ -47,7 +47,8 @@ function DiffRow({ recon }: { recon: Reconstruction }) {
           <span className="w-8 shrink-0 text-muted-foreground select-none">src</span>
           {chars.map((c, i) => (
             <span
-              key={i}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`src-${i}-${c.original}`}
               className={`inline-block w-[0.65em] text-center ${
                 c.match ? 'text-muted-foreground' : 'font-bold text-red-600 dark:text-red-400'
               }`}
@@ -60,7 +61,8 @@ function DiffRow({ recon }: { recon: Reconstruction }) {
           <span className="w-8 shrink-0 text-muted-foreground select-none">rec</span>
           {chars.map((c, i) => (
             <span
-              key={i}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`rec-${i}-${c.reconstructed}`}
               className={`inline-block w-[0.65em] text-center ${
                 c.match
                   ? 'text-green-600 dark:text-green-400'
@@ -75,7 +77,8 @@ function DiffRow({ recon }: { recon: Reconstruction }) {
           <span className="w-8 shrink-0" />
           {chars.map((c, i) => (
             <span
-              key={i}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`diff-${i}-${c.match ? 'match' : 'miss'}`}
               className={`inline-block w-[0.65em] text-center ${
                 c.match
                   ? 'text-green-600/40 dark:text-green-400/40'
@@ -92,10 +95,7 @@ function DiffRow({ recon }: { recon: Reconstruction }) {
 }
 
 export default function SequenceDiff() {
-  const sorted = useMemo(
-    () => [...run.reconstructions].sort((a, b) => b.accuracy - a.accuracy),
-    [],
-  );
+  const sorted = useMemo(() => run.reconstructions.toSorted((a, b) => b.accuracy - a.accuracy), []);
 
   return (
     <div className="my-4 space-y-3">
@@ -105,8 +105,8 @@ export default function SequenceDiff() {
           Original (src) vs reconstructed (rec) amino acid sequences. Mismatches highlighted in red.
         </p>
       </div>
-      {sorted.slice(0, 5).map((recon, i) => (
-        <DiffRow key={i} recon={recon} />
+      {sorted.slice(0, 5).map((recon) => (
+        <DiffRow key={recon.original} recon={recon} />
       ))}
     </div>
   );

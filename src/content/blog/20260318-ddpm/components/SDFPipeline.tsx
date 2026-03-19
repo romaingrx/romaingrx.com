@@ -23,7 +23,7 @@ export default function SDFPipeline() {
       <CardContent>
         <div className="flex items-center justify-center gap-4">
           {stages.map((stage, i) => (
-            <div key={i} className="flex items-center gap-4">
+            <div key={stage.label} className="flex items-center gap-4">
               {i > 0 && <span className="text-2xl text-muted-foreground">→</span>}
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center justify-center rounded bg-black p-1">

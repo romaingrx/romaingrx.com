@@ -11,16 +11,16 @@ export async function getDominantColor(image: ImageMetadata): Promise<string> {
     const colorThief = new ColorThief();
 
     return new Promise((resolve) => {
-      img.onload = () => {
+      img.addEventListener('load', () => {
         const color = colorThief.getColor(img);
         // Convert RGB to hex with opacity
         const [r, g, b] = color;
         resolve(`rgb(${r} ${g} ${b} / 0.1)`);
-      };
+      });
 
-      img.onerror = () => {
+      img.addEventListener('error', () => {
         resolve('rgb(234 179 8 / 0.1)'); // Default yellow color with opacity
-      };
+      });
 
       // Use the src from the image metadata
       img.src = image.src;

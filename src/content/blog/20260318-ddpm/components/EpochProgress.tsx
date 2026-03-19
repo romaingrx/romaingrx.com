@@ -50,7 +50,11 @@ export default function EpochProgress() {
       <CardContent className="flex flex-col items-center gap-4">
         <div className="flex gap-2">
           {current.images.map((img, i) => (
-            <div key={i} className="flex items-center justify-center rounded bg-black p-1">
+            // eslint-disable-next-line react/no-array-index-key -- static image list per epoch
+            <div
+              key={`${current.epoch}-${i}`}
+              className="flex items-center justify-center rounded bg-black p-1"
+            >
               <img
                 src={`data:image/png;base64,${img}`}
                 alt={`Epoch ${current.epoch + 1} sample ${i + 1}`}

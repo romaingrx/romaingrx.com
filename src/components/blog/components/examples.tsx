@@ -34,6 +34,7 @@ export default function Examples({ examples }: ExamplesProps) {
         <div className="mt-4 flex justify-end gap-2">
           {examples.map((_, index) => (
             <button
+              // eslint-disable-next-line react/no-array-index-key -- dot indicators for static list
               key={index}
               onClick={() => api?.scrollTo(index)}
               className={clsx(
@@ -47,6 +48,7 @@ export default function Examples({ examples }: ExamplesProps) {
       <Carousel className="w-full" orientation="horizontal" setApi={setApi}>
         <CarouselContent>
           {examples.map((example, index) => (
+            // eslint-disable-next-line react/no-array-index-key -- no unique id on generic records
             <CarouselItem key={index} className="w-full">
               <Card className="overflow-hidden">
                 <CardContent className="p-0">
@@ -54,7 +56,7 @@ export default function Examples({ examples }: ExamplesProps) {
                     <table className="w-full">
                       <tbody>
                         {Object.entries(example).map(([key, value], i) => (
-                          <tr key={i} className={clsx(i % 2 === 0 && 'bg-muted')}>
+                          <tr key={key} className={clsx(i % 2 === 0 && 'bg-muted')}>
                             <td className="p-4 font-semibold">{key}</td>
                             <td className="p-4">{value}</td>
                           </tr>

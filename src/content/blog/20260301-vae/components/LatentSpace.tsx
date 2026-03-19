@@ -37,7 +37,8 @@ function CustomTooltip({
       </div>
       <div className="max-w-[280px] font-mono text-xs leading-relaxed break-all">
         {sequence.split('').map((aa: string, i: number) => (
-          <span key={i} className="inline-block" style={{ color: seqColor(aa) }}>
+          // eslint-disable-next-line react/no-array-index-key -- positional character rendering
+          <span key={`${i}-${aa}`} className="inline-block" style={{ color: seqColor(aa) }}>
             {aa}
           </span>
         ))}
@@ -91,8 +92,13 @@ export default function LatentSpace() {
           />
           <Tooltip content={<CustomTooltip />} cursor={false} isAnimationActive={true} />
           <Scatter data={data} isAnimationActive={true}>
-            {data.map((point, i) => (
-              <Cell key={i} fill={seqColor(point.sequence)} fillOpacity={0.7} r={3} />
+            {data.map((point) => (
+              <Cell
+                key={`${point.x}-${point.y}`}
+                fill={seqColor(point.sequence)}
+                fillOpacity={0.7}
+                r={3}
+              />
             ))}
           </Scatter>
         </ScatterChart>

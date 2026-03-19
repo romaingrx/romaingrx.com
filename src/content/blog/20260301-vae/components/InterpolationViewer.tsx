@@ -48,7 +48,8 @@ function StepViewer({ interp }: { interp: Interpolation }) {
       <div className="flex flex-wrap font-mono text-xs leading-relaxed">
         {diffs[step].map((d, i) => (
           <span
-            key={i}
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${i}-${d.char}`}
             className={`inline-block w-[0.65em] text-center transition-all duration-150 ${
               d.changed
                 ? 'scale-110 rounded-sm bg-amber-500/15 font-bold text-amber-600 dark:text-amber-400'
@@ -97,9 +98,9 @@ export default function InterpolationViewer() {
 
       {run.interpolations.length > 1 && (
         <div className="flex gap-1.5">
-          {run.interpolations.map((_, i) => (
+          {run.interpolations.map((interp, i) => (
             <button
-              key={i}
+              key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}
               onClick={() => setSelected(i)}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                 selected === i
