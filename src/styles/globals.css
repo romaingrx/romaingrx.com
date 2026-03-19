@@ -207,6 +207,9 @@
       color: var(--primary-foreground);
     }
   }
+  html {
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
   }

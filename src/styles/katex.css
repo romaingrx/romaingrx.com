@@ -1,0 +1,32 @@
+@reference "./globals.css";
+
+/*
+ * KaTeX responsive overflow handling.
+ *
+ * .katex-display is a block element whose inner content can be arbitrarily
+ * wide. We force it to match its parent's width (not grow to fit content),
+ * then let overflow-x: auto provide a local scrollbar for wide equations.
+ */
+
+.prose .katex-display {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Slight font reduction on mobile to reduce scroll frequency */
+@media (max-width: 640px) {
+  .prose .katex-display {
+    font-size: 0.85em;
+  }
+}
+
+/* Give display equations more breathing room on wider screens */
+@media (min-width: 768px) {
+  .prose .katex-display {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    width: calc(100% + 3rem);
+  }
+}

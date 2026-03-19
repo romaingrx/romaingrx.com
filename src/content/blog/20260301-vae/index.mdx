@@ -16,7 +16,7 @@ resources:
     description: 'JAX/Equinox VAE implementation for protein sequences'
 ---
 
-import { TrainingCurves, LatentSpace, SequenceDiff, InterpolationViewer } from './components';
+import { InterpolationViewer, LatentSpace, SequenceDiff, TrainingCurves } from './components';
 
 What if you could compress a protein into just two numbers and reconstruct it? That's the promise of a **Variational Autoencoder** (VAE): learn a compact latent representation of complex data, then sample from it to generate new, plausible examples.
 
@@ -29,10 +29,12 @@ A VAE is made of two neural networks working together:
 - An **encoder** $q_\theta(z|x)$ compresses an input $x$ into a distribution over a low-dimensional latent space $z$.
 - A **decoder** $p_\phi(x|z)$ takes a point in that latent space and tries to reconstruct the original input.
 
-The key insight is that we don't just encode into a single point. We encode into a *distribution* (a mean $\mu$ and variance $\sigma^2$), then sample from it. This forces the model to learn a smooth, continuous latent space where nearby points decode to similar outputs.
+The key insight is that we don't just encode into a single point. We encode into a _distribution_ (a mean $\mu$ and variance $\sigma^2$), then sample from it. This forces the model to learn a smooth, continuous latent space where nearby points decode to similar outputs.
 
 <Callout variant="tip" title="Why not just use an autoencoder?">
-A regular autoencoder can learn to reconstruct perfectly, but its latent space has no structure. Points between two encodings might decode to garbage. The VAE trades some reconstruction accuracy for a latent space you can actually sample and interpolate from.
+  A regular autoencoder can learn to reconstruct perfectly, but its latent space has no structure.
+  Points between two encodings might decode to garbage. The VAE trades some reconstruction accuracy
+  for a latent space you can actually sample and interpolate from.
 </Callout>
 
 # Deriving the objective
@@ -41,7 +43,9 @@ A regular autoencoder can learn to reconstruct perfectly, but its latent space h
 
 Our goal is to maximize the log-likelihood of the data: learn a model that assigns high probability to the sequences we observe.
 
-$$\text{maximize} \quad \log p(x) = \log \int p(x|z) \, p(z) \, dz$$
+$$
+\text{maximize} \quad \log p(x) = \log \int p(x|z) \, p(z) \, dz
+$$
 
 The problem: this integral is **intractable**. We'd need to evaluate the decoder for every possible $z$.
 
@@ -51,9 +55,12 @@ Since we can't compute $p(z|x)$ directly, we introduce a learned approximation $
 
 This gives us the **Evidence Lower Bound** (ELBO):
 
-$$\mathcal{L} = \underbrace{\mathbb{E}_{z \sim q_\theta(z|x)} [\log p(x|z)]}_{\text{Reconstruction: decode well}} - \underbrace{D_\text{KL}(q_\theta(z|x) \,\|\, p(z))}_{\text{Regularization: stay close to prior}}$$
+$$
+\mathcal{L} = \underbrace{\mathbb{E}_{z \sim q_\theta(z|x)} [\log p(x|z)]}_{\text{Reconstruction: decode well}} - \underbrace{D_\text{KL}(q_\theta(z|x) \,\|\, p(z))}_{\text{Regularization: stay close to prior}}
+$$
 
 Two terms pulling in opposite directions:
+
 - The **reconstruction term** pushes the model to encode enough information to reconstruct $x$.
 - The **[KL divergence](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence) term** pushes $q_\theta(z|x)$ towards the prior $p(z) = \mathcal{N}(0, I)$, preventing the encoder from just memorizing.
 
@@ -63,13 +70,17 @@ There's still a problem: we can't backpropagate through the sampling step $z \si
 
 The fix is simple. Instead of sampling $z$ directly from the encoder's distribution, we sample noise $\epsilon \sim \mathcal{N}(0, I)$ and compute:
 
-$$z = \mu_\theta(x) + \sigma_\theta(x) \odot \epsilon$$
+$$
+z = \mu_\theta(x) + \sigma_\theta(x) \odot \epsilon
+$$
 
 The randomness comes from $\epsilon$, but the gradients flow through $\mu$ and $\sigma$ as usual. This is the **reparameterization trick**.
 
 The final loss over a dataset $D = \{x_1, \dots, x_N\}$:
 
-$$\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \left[ \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} [\log p(x_i | g_\theta(x_i, \epsilon))] - D_\text{KL}(q_\theta(z|x_i) \,\|\, p(z)) \right]$$
+$$
+\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \left[ \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} [\log p(x_i | g_\theta(x_i, \epsilon))] - D_\text{KL}(q_\theta(z|x_i) \,\|\, p(z)) \right]
+$$
 
 # Application: protein sequences
 
@@ -102,7 +113,7 @@ With a 2D latent space, we can directly visualize how the model organizes protei
 
 <LatentSpace client:visible />
 
-Ideally, the latent space should show smooth, continuous structure rather than scattered noise. This is what makes VAEs interesting as *generative* models: nearby points should decode to similar outputs.
+Ideally, the latent space should show smooth, continuous structure rather than scattered noise. This is what makes VAEs interesting as _generative_ models: nearby points should decode to similar outputs.
 
 ## Reconstruction quality
 
@@ -111,12 +122,14 @@ The real test: can the model reconstruct input sequences from just 2 numbers? He
 <SequenceDiff client:visible />
 
 <Callout variant="note" title="About the accuracy">
-With only 2 latent dimensions, we lose a lot of information. Production protein VAEs typically use 16-64 dimensions and reach near-perfect reconstruction. Here, we're optimizing for interpretability over performance.
+  With only 2 latent dimensions, we lose a lot of information. Production protein VAEs typically use
+  16-64 dimensions and reach near-perfect reconstruction. Here, we're optimizing for
+  interpretability over performance.
 </Callout>
 
 ## Latent interpolation
 
-The smoothness of the latent space is what makes a VAE a *generative* model. If we linearly interpolate between two encoded proteins and decode at each step, the intermediate sequences should transition gradually. Abrupt jumps would indicate holes or discontinuities in the learned space.
+The smoothness of the latent space is what makes a VAE a _generative_ model. If we linearly interpolate between two encoded proteins and decode at each step, the intermediate sequences should transition gradually. Abrupt jumps would indicate holes or discontinuities in the learned space.
 
 <InterpolationViewer client:visible />
 
