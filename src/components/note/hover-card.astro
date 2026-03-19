@@ -1,0 +1,21 @@
+---
+import type { NoteWithAuthors } from '@/lib/collections';
+import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import NoteHoverCardInner from './hover-card-inner.tsx';
+
+interface Props {
+  note: NoteWithAuthors;
+}
+
+const { note } = Astro.props;
+---
+
+<NoteHoverCardInner
+  title={note.data.title}
+  description={note.data.description}
+  readingTime={note.readingTime}
+  client:visible
+>
+  <slot />
+  <StackedAuthors authors={note.authors} show_name={false} slot="authors" />
+</NoteHoverCardInner>
