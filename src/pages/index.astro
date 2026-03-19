@@ -1,63 +1,21 @@
 ---
-import ContactCTA from '@/components/home/ContactCTA.astro';
-import ContentGrid from '@/components/home/ContentGrid.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
-import Shell from '@/components/Shell.astro';
-import { routes } from '@/configs/routes';
+import RecentNotes from '@/components/home/RecentNotes.astro';
+import RecentPosts from '@/components/home/RecentPosts.astro';
+import { site } from '@/configs/site';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getBlogPosts, getNotes } from '@/lib/collections';
 
-// export const prerender = true;
-
-// Get the recent published content
 const posts = (await getBlogPosts()).slice(0, 4);
-
-const notes = (await getNotes())
-  .sort((a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf())
-  .slice(0, 3);
-
-const title = "Romain's Blog";
-const description =
-  'Personal blog and portfolio showcasing my work and thoughts on AI safety, machine learning, and software development.';
+const notes = (await getNotes()).slice(0, 5);
 ---
 
-<BaseLayout title={title} description={description}>
-  <main class="flex min-h-screen flex-col">
-    <!-- Hero Section with Scroll Animation -->
-    <HeroSection />
-
-    <!-- Recent Content Bento Grid -->
-    <Shell type="page">
-      <section class="container mx-auto px-4 py-24">
-        <div class="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div>
-            <h2 class="text-3xl font-bold tracking-tight">Recent Content</h2>
-            <p class="text-muted-foreground">
-              Check out my latest blog posts and notes on AI, ML, and software development.
-            </p>
-          </div>
-          <div class="flex gap-4">
-            <a
-              href={routes.blogs}
-              class="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap shadow transition-colors focus-visible:ring-1 focus-visible:outline-hidden"
-            >
-              View All Posts
-            </a>
-            <a
-              href={routes.notes}
-              class="border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap shadow-sm focus-visible:ring-1 focus-visible:outline-hidden"
-            >
-              View All Notes
-            </a>
-          </div>
-        </div>
-
-        <!-- Content Grid Component -->
-        <ContentGrid posts={posts} notes={notes} />
-      </section>
-    </Shell>
-
-    <!-- Contact CTA -->
-    <ContactCTA />
-  </main>
+<BaseLayout title={site.title} description={site.description}>
+  <HeroSection title={`Hi, I'm ${site.name}`} description={site.description} />
+  <div class="mx-auto max-w-5xl px-4">
+    <RecentPosts posts={posts} />
+    <hr class="border-border/50 my-16" />
+    <RecentNotes notes={notes} />
+    <div class="pb-24"></div>
+  </div>
 </BaseLayout>
