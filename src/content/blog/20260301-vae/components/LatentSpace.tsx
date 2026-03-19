@@ -18,7 +18,13 @@ function seqColor(seq: string): string {
   return `hsl(${hue}, 55%, ${lightness}%)`;
 }
 
-function CustomTooltip({ active, payload }: any) {
+function CustomTooltip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: { payload: { x: number; y: number; sequence: string } }[];
+}) {
   if (!active || !payload?.[0]) return null;
   const { x, y, sequence } = payload[0].payload;
   return (

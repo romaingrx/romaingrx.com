@@ -63,8 +63,6 @@ function getStackStyles(index: number, total: number) {
   {
     displayImages.map((image, index) => {
       const stackStyles = getStackStyles(index, displayImages.length);
-      const isTopImage = index === displayImages.length - 1;
-
       return (
         <div
           class="absolute inset-0"

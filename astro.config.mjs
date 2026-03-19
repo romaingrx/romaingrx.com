@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField, fontProviders } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
+import pagefind from "astro-pagefind";
 // Rehype/Remark plugins
 import rehypeKatex from "rehype-katex";
 import rehypeExternalLinks from "rehype-external-links";
@@ -23,10 +24,8 @@ export default defineConfig({
     ? "https://romaingrx.com"
     : "http://localhost:4321",
   adapter: cloudflare({
-    platformProxy: {
-      enabled: true,
-    },
     imageService: "passthrough",
+    prerenderEnvironment: "node",
   }),
   env: {
     schema: {
@@ -78,6 +77,7 @@ export default defineConfig({
         "simple-icons": ["*"],
       },
     }),
+    pagefind(),
   ],
   vite: {
     plugins: [tailwindcss(), excalidraw()],
@@ -89,18 +89,19 @@ export default defineConfig({
       },
     },
   },
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Fira Code",
-        cssVariable: "--font-fira-code",
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Fira Sans",
-        cssVariable: "--font-fira-sans",
-      },
-    ],
+  prefetch: {
+    defaultStrategy: "viewport",
   },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Fira Code",
+      cssVariable: "--font-fira-code",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Fira Sans",
+      cssVariable: "--font-fira-sans",
+    },
+  ],
 });

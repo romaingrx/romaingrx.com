@@ -21,22 +21,24 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
             <h4 className="text-sm font-semibold">{author.data.name}</h4>
             <p className="text-sm text-muted-foreground">{author.data.title}</p>
             <div className="flex items-center gap-2 pt-2">
-              {Object.entries(author.data.socialLinks)?.map(([platform, social]) => {
-                return (
-                  <a
-                    key={`${platform}-${social.handle}`}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    <Icon
-                      icon={platforms_info[platform as Platform].icon_name}
-                      className="size-4"
-                    />
-                  </a>
-                );
-              })}
+              {Object.entries(author.data.socialLinks)
+                .filter(([, v]) => v)
+                .map(([platform, social]) => {
+                  return (
+                    <a
+                      key={`${platform}-${social!.handle}`}
+                      href={social!.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <Icon
+                        icon={platforms_info[platform as Platform].icon_name}
+                        className="size-4"
+                      />
+                    </a>
+                  );
+                })}
             </div>
           </div>
           {with_image && (

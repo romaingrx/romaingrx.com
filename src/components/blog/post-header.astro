@@ -3,6 +3,7 @@ import ContinueReading from '@/components/animations/continue-reading.astro';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import Resources from '@/components/blog/resources/index.astro';
 import Shell from '@/components/Shell.astro';
+import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import Time from '../ui/time.astro';
 import BlogPostBackground from './card/background';
@@ -14,6 +15,10 @@ interface Props {
 }
 
 const { post, class: className = '' } = Astro.props;
+const resources = post.data.resources.map((r) => ({
+  ...r,
+  value: resolveResourceValue(r.value, { collection: 'blog', entryId: post.id }),
+}));
 ---
 
 <header
@@ -69,7 +74,7 @@ const { post, class: className = '' } = Astro.props;
           <div class="relative mt-4">
             <div class="flex flex-col gap-3 text-start">
               <span class="text-muted-foreground text-sm font-medium">Resources</span>
-              <Resources resources={post.data.resources} />
+              <Resources resources={resources} />
             </div>
           </div>
         )

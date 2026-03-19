@@ -28,10 +28,10 @@ This is a personal website/blog built with **Astro 5.12.3**, TypeScript, React, 
 
 The site uses Astro's **content collections** with Zod schemas for type safety:
 
-- `/content/blog/` - Blog posts with frontmatter, images, references
-- `/content/note/` - Personal notes and documentation
-- `/content/timeline/` - Career/education timeline entries
-- `/content/author/` - Author profiles
+- `/src/content/blog/` - Blog posts with frontmatter, images, references
+- `/src/content/note/` - Personal notes and documentation
+- `/src/content/timeline/` - Career/education timeline entries
+- `/src/content/author/` - Author profiles
 
 Content collections are configured in `src/content.config.ts` with strict schemas.
 

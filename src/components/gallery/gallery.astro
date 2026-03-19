@@ -146,7 +146,6 @@ const { id, images, startIndex = 0, showCaptions = false, className } = Astro.pr
 
     connectedCallback() {
       // Get data attributes
-      const id = this.dataset.id;
       const startIndex = parseInt(this.dataset.startIndex || '0');
       const showCaptions = this.dataset.showCaptions === 'true';
 

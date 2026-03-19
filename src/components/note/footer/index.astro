@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import Resources from '@/components/blog/resources/index.astro';
 import TagBadge from '@/components/blog/tag-badge.astro';
 import Comments from '@/components/comments.astro';
+import { resolveResourceValue } from '@/configs/resources';
 import type { NoteWithAuthors } from '@/lib/collections';
 import { formatDate } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -13,7 +14,11 @@ interface Props {
 }
 
 const { note } = Astro.props;
-const { resources, tags, updated_date } = note.data;
+const { tags, updated_date } = note.data;
+const resources = note.data.resources.map((r) => ({
+  ...r,
+  value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }),
+}));
 ---
 
 <footer class="mt-16 flex flex-col gap-8">
@@ -39,7 +44,7 @@ const { resources, tags, updated_date } = note.data;
           resources.length > 0 && (
             <div class="space-y-3">
               <h3 class="text-muted-foreground text-sm font-medium">Resources</h3>
-              <Resources resources={note.data.resources} />
+              <Resources resources={resources} />
             </div>
           )
         }
