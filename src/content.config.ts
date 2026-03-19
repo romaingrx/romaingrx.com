@@ -15,6 +15,7 @@ const baseContentSchema = z.object({
   tags: z.array(z.string()).default([]),
   resources: z.array(resource_schema).default([]),
   x_thread_id: z.url().optional(),
+  bsky_thread_id: z.url().optional(),
 });
 
 const author = defineCollection({

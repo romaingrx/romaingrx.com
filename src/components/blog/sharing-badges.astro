@@ -45,7 +45,6 @@ const links = {
             `${author.data.socialLinks.twitter?.handle}:${author.data.title ?? author.data.name}`
         )
         .join(','),
-      in_reply_to: post.data.x_thread_id,
       hashtags: post.data.tags.join(','),
     },
   },

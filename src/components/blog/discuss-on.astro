@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+import { buttonVariants } from '@/components/ui/button';
+import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
+
+interface Props {
+  post: BlogPostWithAuthors | NoteWithAuthors;
+}
+
+const { post } = Astro.props;
+
+const threads = [
+  post.data.x_thread_id && {
+    label: 'X',
+    url: post.data.x_thread_id,
+    icon: 'simple-icons:x',
+  },
+  post.data.bsky_thread_id && {
+    label: 'Bluesky',
+    url: post.data.bsky_thread_id,
+    icon: 'simple-icons:bluesky',
+  },
+].filter(Boolean) as { label: string; url: string; icon: string }[];
+---
+
+<div class="flex flex-col items-center justify-center space-y-4 text-center">
+  <h2 class="text-2xl font-semibold tracking-tight">Thank you for reading!</h2>
+  <p class="text-muted-foreground">
+    {
+      threads.length > 0
+        ? 'Enjoyed this post? Join the conversation or share it with others.'
+        : 'If you found this helpful, feel free to share it with others.'
+    }
+  </p>
+  {
+    threads.length > 0 && (
+      <div class="flex flex-row gap-2 pt-1">
+        {threads.map((thread) => (
+          <a
+            href={thread.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={buttonVariants({ variant: 'outline', size: 'sm' })}
+            aria-label={`Discuss on ${thread.label}`}
+          >
+            <Icon name={thread.icon} class="size-4" />
+            {thread.label}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</div>
