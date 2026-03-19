@@ -11,6 +11,12 @@
   "observability": {
     "enabled": true,
   },
+  "kv_namespaces": [
+    {
+      "binding": "SESSION",
+      "id": "4e25f269f01b41e8a74261bbd5d24ae1",
+    },
+  ],
   "routes": [
     {
       "pattern": "romaingrx.com",
