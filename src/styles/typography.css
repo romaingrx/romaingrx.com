@@ -121,6 +121,17 @@
   font-weight: 500;
 }
 
+.prose .katex-display {
+  overflow-x: auto;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .prose .katex-display {
+    font-size: 0.85em;
+  }
+}
+
 .prose img {
   border-radius: 0.5rem;
   margin-top: 2em;
