@@ -1,15 +1,19 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "categories": {
-    "correctness": "warn"
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
   },
-  "plugins": ["typescript", "react"],
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "react"],
   "rules": {
     "no-unused-vars": "off",
+    "no-console": "off",
+    "no-shadow": "off",
     "typescript/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "typescript/no-explicit-any": "warn",
     "typescript/ban-ts-comment": "off",
-    "no-console": "off"
+    "react/react-in-jsx-scope": "off"
   },
   "ignorePatterns": [
     "dist/**",
