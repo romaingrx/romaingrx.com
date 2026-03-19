@@ -25,12 +25,12 @@ export default function ChartCard({
 }: ChartCardProps) {
   return (
     <Card className={className}>
-      <CardHeader>
+      <CardHeader className="px-3 sm:px-6">
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>{children}</CardContent>
-      {footer && <CardFooter>{footer}</CardFooter>}
+      <CardContent className="px-2 sm:px-6">{children}</CardContent>
+      {footer && <CardFooter className="px-3 sm:px-6">{footer}</CardFooter>}
     </Card>
   );
 }

@@ -57,10 +57,35 @@ export default function LatentSpace() {
       className="my-4"
     >
       <ChartContainer config={config} className="min-h-[400px] w-full">
-        <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+        <ScatterChart margin={{ top: 10, right: 10, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" dataKey="x" name="z₁" tickLine={false} axisLine={false} />
-          <YAxis type="number" dataKey="y" name="z₂" tickLine={false} axisLine={false} />
+          <XAxis
+            type="number"
+            dataKey="x"
+            name="z₁"
+            tickLine={false}
+            axisLine={false}
+            label={{
+              value: 'z₁',
+              position: 'insideBottom',
+              offset: -2,
+              style: { fontSize: 12 },
+            }}
+          />
+          <YAxis
+            type="number"
+            dataKey="y"
+            name="z₂"
+            tickLine={false}
+            axisLine={false}
+            label={{
+              value: 'z₂',
+              angle: -90,
+              position: 'insideLeft',
+              offset: 15,
+              style: { fontSize: 12 },
+            }}
+          />
           <Tooltip content={<CustomTooltip />} cursor={false} isAnimationActive={true} />
           <Scatter data={data} isAnimationActive={true}>
             {data.map((point, i) => (

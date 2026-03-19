@@ -29,7 +29,7 @@ export default function NoiseScheduleChart() {
       className="my-8"
     >
       <ChartContainer config={config} className="min-h-[300px] w-full">
-        <LineChart data={data} margin={{ top: 5, right: 50, bottom: 5, left: 50 }}>
+        <LineChart data={data} margin={{ top: 5, right: 10, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="t" tickLine={false} axisLine={false} />
           <YAxis
