@@ -134,8 +134,8 @@ function getDefaultSocialSetId() {
  */
 function formatSocialSetsForDisplay(socialSets) {
   // Separate personal and team accounts
-  const personal = socialSets.filter(s => !s.team);
-  const team = socialSets.filter(s => s.team);
+  const personal = socialSets.filter((s) => !s.team);
+  const team = socialSets.filter((s) => s.team);
 
   // Sort team accounts by team name
   team.sort((a, b) => (a.team.name || '').localeCompare(b.team.name || ''));
@@ -165,7 +165,7 @@ function requireSocialSetId(providedId) {
   }
 
   error('social_set_id is required', {
-    hint: 'Run: typefully.js config:set-default to set a default, or provide it as an argument'
+    hint: 'Run: typefully.js config:set-default to set a default, or provide it as an argument',
   });
 }
 
@@ -192,7 +192,7 @@ function resolveDraftTarget(positional, commandName, hasUseDefault) {
   // If no default configured, the single arg must be draft_id (will error on missing social_set_id)
   if (!defaultResult) {
     error('draft_id is required', {
-      hint: 'Provide both social_set_id and draft_id, or set a default social set with: typefully.js config:set-default'
+      hint: 'Provide both social_set_id and draft_id, or set a default social set with: typefully.js config:set-default',
     });
   }
 
@@ -204,7 +204,7 @@ To confirm you want to use the default social set (${defaultResult.id}), add --u
   typefully.js ${commandName} ${singleArg} --use-default
 
 Or provide both arguments explicitly:
-  typefully.js ${commandName} <social_set_id> <draft_id>`
+  typefully.js ${commandName} <social_set_id> <draft_id>`,
     });
   }
 
@@ -214,9 +214,12 @@ Or provide both arguments explicitly:
 function requireApiKey() {
   const result = getApiKey();
   if (!result) {
-    error(`API key not found. Run 'typefully.js setup' to configure your API key. Get your key at ${API_KEY_URL}`, {
-      action: 'Run: typefully.js setup'
-    });
+    error(
+      `API key not found. Run 'typefully.js setup' to configure your API key. Get your key at ${API_KEY_URL}`,
+      {
+        action: 'Run: typefully.js setup',
+      },
+    );
   }
   return result.key;
 }
@@ -257,7 +260,7 @@ async function apiRequest(method, endpoint, body = null, opts = {}) {
   const options = {
     method,
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
   };
@@ -370,9 +373,7 @@ function getQuotePostUrlFromParsed(parsed) {
   const primary = hasPrimary
     ? coerceFlagValueToString(parsed['quote-post-url'], '--quote-post-url')
     : null;
-  const alias = hasAlias
-    ? coerceFlagValueToString(parsed['quote-url'], '--quote-url')
-    : null;
+  const alias = hasAlias ? coerceFlagValueToString(parsed['quote-url'], '--quote-url') : null;
 
   if (primary && alias && primary !== alias) {
     error('Conflicting quote post URL values', {
@@ -386,7 +387,7 @@ function getQuotePostUrlFromParsed(parsed) {
 
 function addQuotePostUrl(posts, quotePostUrl) {
   if (!quotePostUrl) return posts;
-  return posts.map(post => ({ ...post, quote_post_url: quotePostUrl }));
+  return posts.map((post) => ({ ...post, quote_post_url: quotePostUrl }));
 }
 
 function parseCsvArg(value, flagName) {
@@ -401,7 +402,7 @@ function parseCsvArg(value, flagName) {
   if (value.trim() === '') return [];
   return value
     .split(',')
-    .map(v => v.trim())
+    .map((v) => v.trim())
     .filter(Boolean);
 }
 
@@ -432,9 +433,7 @@ function getRequiredStringArgFromParsed(parsed, key, aliases = []) {
   }
 
   const preferred = `--${key}`;
-  const aliasText = aliases.length > 0
-    ? ` (or ${aliases.map(a => `--${a}`).join(', ')})`
-    : '';
+  const aliasText = aliases.length > 0 ? ` (or ${aliases.map((a) => `--${a}`).join(', ')})` : '';
 
   if (value == null) {
     error(`${preferred}${aliasText} is required`);
@@ -482,7 +481,7 @@ function resolveDraftTargetFromParsed(parsed, commandName) {
 function splitThreadText(text) {
   // Split on --- that appears on its own line. Support both LF and CRLF.
   // Allow surrounding spaces so " --- " still counts, but avoid matching longer runs like "----".
-  return text.split(/\r?\n[ \t]*---[ \t]*\r?\n/).filter(t => t.trim());
+  return text.split(/\r?\n[ \t]*---[ \t]*\r?\n/).filter((t) => t.trim());
 }
 
 function getContentType(filename) {
@@ -491,7 +490,7 @@ function getContentType(filename) {
 }
 
 async function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function sanitizeFilename(filename) {
@@ -503,9 +502,9 @@ function sanitizeFilename(filename) {
   // Replace invalid characters with underscores
   // Valid: letters, numbers, underscores, dots, parentheses, hyphens
   const sanitized = basename
-    .replace(/[^a-zA-Z0-9_.()-]/g, '_')  // Replace invalid chars with underscore
-    .replace(/_+/g, '_')                  // Collapse multiple underscores
-    .replace(/^_|_$/g, '');               // Trim leading/trailing underscores
+    .replace(/[^a-zA-Z0-9_.()-]/g, '_') // Replace invalid chars with underscore
+    .replace(/_+/g, '_') // Collapse multiple underscores
+    .replace(/^_|_$/g, ''); // Trim leading/trailing underscores
 
   // Ensure we have a valid name
   const finalName = sanitized || 'upload';
@@ -538,30 +537,29 @@ async function cmdSocialSetsGet(args) {
 async function cmdLinkedInOrganizationsResolve(args) {
   const parsed = parseArgs(args);
   const socialSetId = resolveSocialSetIdFromParsed(parsed, parsed._positional[0]);
-  const organizationUrl = getRequiredStringArgFromParsed(
-    parsed,
-    'organization-url',
-    ['organization_url', 'url']
-  );
+  const organizationUrl = getRequiredStringArgFromParsed(parsed, 'organization-url', [
+    'organization_url',
+    'url',
+  ]);
 
   const params = new URLSearchParams();
   params.set('organization_url', organizationUrl);
 
   const data = await apiRequest(
     'GET',
-    `/social-sets/${socialSetId}/linkedin/organizations/resolve?${params}`
+    `/social-sets/${socialSetId}/linkedin/organizations/resolve?${params}`,
   );
   output(data);
 }
 
 async function cmdAnalyticsPostsList(args) {
-  const parsed = parseArgs(args, { 'include-replies': 'boolean', 'include_replies': 'boolean' });
+  const parsed = parseArgs(args, { 'include-replies': 'boolean', include_replies: 'boolean' });
   const socialSetId = resolveSocialSetIdFromParsed(parsed, parsed._positional[0]);
   const startDate = getRequiredStringArgFromParsed(parsed, 'start-date', ['start_date']);
   const endDate = getRequiredStringArgFromParsed(parsed, 'end-date', ['end_date']);
-  const platform = (parsed.platform
-    ? coerceFlagValueToString(parsed.platform, '--platform')
-    : 'x').toLowerCase();
+  const platform = (
+    parsed.platform ? coerceFlagValueToString(parsed.platform, '--platform') : 'x'
+  ).toLowerCase();
   const includeReplies = Boolean(parsed['include-replies'] || parsed.include_replies);
 
   if (platform !== 'x') {
@@ -578,7 +576,10 @@ async function cmdAnalyticsPostsList(args) {
   if (parsed.offset) params.set('offset', parsed.offset);
   if (includeReplies) params.set('include_replies', 'true');
 
-  const data = await apiRequest('GET', `/social-sets/${socialSetId}/analytics/${platform}/posts?${params}`);
+  const data = await apiRequest(
+    'GET',
+    `/social-sets/${socialSetId}/analytics/${platform}/posts?${params}`,
+  );
   output(data);
 }
 
@@ -621,7 +622,7 @@ async function cmdSetup(args) {
     console.error('');
     console.error(fmt.title('Typefully CLI Setup'));
     console.error('');
-    console.error(fmt.dim('Sign up free at typefully.com if you don\'t have an account.'));
+    console.error(fmt.dim("Sign up free at typefully.com if you don't have an account."));
     console.error('');
     console.error(fmt.info(`Get your API key at: ${fmt.link(API_KEY_URL)}`));
     console.error('');
@@ -640,18 +641,22 @@ async function cmdSetup(args) {
     } else {
       console.error('');
       console.error(fmt.bold('Where should the API key be stored?'));
-      console.error(`  ${fmt.num('1.')} Global ${fmt.dim('(~/.config/typefully/)')} ${fmt.label('- Available to all projects')}`);
-      console.error(`  ${fmt.num('2.')} Local ${fmt.dim('(./.typefully/)')} ${fmt.label('- Only this project')}`);
+      console.error(
+        `  ${fmt.num('1.')} Global ${fmt.dim('(~/.config/typefully/)')} ${fmt.label('- Available to all projects')}`,
+      );
+      console.error(
+        `  ${fmt.num('2.')} Local ${fmt.dim('(./.typefully/)')} ${fmt.label('- Only this project')}`,
+      );
       console.error('');
-      const choice = await prompt(`${colors.bold}Choose location [1/2]${colors.reset} ${fmt.dim('(default: 1)')}: `);
+      const choice = await prompt(
+        `${colors.bold}Choose location [1/2]${colors.reset} ${fmt.dim('(default: 1)')}: `,
+      );
       location = choice === '2' ? 'local' : 'global';
     }
   }
 
   const isLocal = location === 'local' || location === '2';
-  const configPath = isLocal
-    ? path.join(process.cwd(), LOCAL_CONFIG_FILE)
-    : GLOBAL_CONFIG_FILE;
+  const configPath = isLocal ? path.join(process.cwd(), LOCAL_CONFIG_FILE) : GLOBAL_CONFIG_FILE;
 
   // Read existing config to preserve other settings
   const existingConfig = readConfigFile(configPath) || {};
@@ -667,13 +672,21 @@ async function cmdSetup(args) {
       if (!gitignore.includes('.typefully/') && !gitignore.includes('.typefully\n')) {
         if (isNonInteractive) {
           // Auto-add to .gitignore in non-interactive mode
-          fs.appendFileSync(gitignorePath, '\n# Typefully config (contains API key)\n.typefully/\n');
+          fs.appendFileSync(
+            gitignorePath,
+            '\n# Typefully config (contains API key)\n.typefully/\n',
+          );
           console.error(fmt.success('Added .typefully/ to .gitignore'));
         } else {
           console.error('');
-          const addToGitignore = await prompt(`${colors.bold}Add .typefully/ to .gitignore?${colors.reset} ${fmt.dim('[Y/n]')}: `);
+          const addToGitignore = await prompt(
+            `${colors.bold}Add .typefully/ to .gitignore?${colors.reset} ${fmt.dim('[Y/n]')}: `,
+          );
           if (addToGitignore.toLowerCase() !== 'n') {
-            fs.appendFileSync(gitignorePath, '\n# Typefully config (contains API key)\n.typefully/\n');
+            fs.appendFileSync(
+              gitignorePath,
+              '\n# Typefully config (contains API key)\n.typefully/\n',
+            );
             console.error(fmt.success('Added .typefully/ to .gitignore'));
           }
         }
@@ -686,13 +699,19 @@ async function cmdSetup(args) {
         console.error(fmt.success('Created .gitignore with .typefully/ entry'));
       } else {
         console.error('');
-        console.error(fmt.warn('No .gitignore found. Your API key could be accidentally committed.'));
-        const createGitignore = await prompt(`${colors.bold}Create .gitignore with .typefully/ entry?${colors.reset} ${fmt.dim('[Y/n]')}: `);
+        console.error(
+          fmt.warn('No .gitignore found. Your API key could be accidentally committed.'),
+        );
+        const createGitignore = await prompt(
+          `${colors.bold}Create .gitignore with .typefully/ entry?${colors.reset} ${fmt.dim('[Y/n]')}: `,
+        );
         if (createGitignore.toLowerCase() !== 'n') {
           fs.writeFileSync(gitignorePath, '# Typefully config (contains API key)\n.typefully/\n');
           console.error(fmt.success('Created .gitignore with .typefully/ entry'));
         } else {
-          console.error(fmt.warn('Remember to add .typefully/ to .gitignore to protect your API key'));
+          console.error(
+            fmt.warn('Remember to add .typefully/ to .gitignore to protect your API key'),
+          );
         }
       }
     }
@@ -770,19 +789,27 @@ async function cmdSetup(args) {
         console.error(fmt.success(`Default social set: ${fmt.bold(name)} ${fmt.dim(username)}`));
       } else if (isNonInteractive) {
         // Multiple social sets in non-interactive mode
-        console.error(fmt.info(`Found ${socialSets.results.length} social sets. Use --default-social-set <id> to set one as default.`));
+        console.error(
+          fmt.info(
+            `Found ${socialSets.results.length} social sets. Use --default-social-set <id> to set one as default.`,
+          ),
+        );
       } else {
         // Multiple social sets in interactive mode - ask user to choose
         const formatted = formatSocialSetsForDisplay(socialSets.results);
 
         console.error('');
         console.error(fmt.bold('Choose a default social set'));
-        console.error(fmt.dim('This will be used when you don\'t specify one. You can always override it.'));
+        console.error(
+          fmt.dim("This will be used when you don't specify one. You can always override it."),
+        );
         console.error('');
         formatted.forEach(({ displayLine }) => console.error(displayLine));
         console.error('');
 
-        const choice = await prompt(`${colors.bold}Enter number${colors.reset} ${fmt.dim('(or Enter to skip)')}: `);
+        const choice = await prompt(
+          `${colors.bold}Enter number${colors.reset} ${fmt.dim('(or Enter to skip)')}: `,
+        );
         if (choice) {
           const choiceNum = parseInt(choice, 10);
           if (!isNaN(choiceNum) && choiceNum >= 1 && choiceNum <= formatted.length) {
@@ -830,21 +857,27 @@ async function cmdConfigShow() {
     configured: true,
     active_source: result.source,
     api_key_preview: result.key.slice(0, 8) + '...',
-    default_social_set: defaultSocialSet ? {
-      id: defaultSocialSet.id,
-      source: defaultSocialSet.source,
-    } : null,
+    default_social_set: defaultSocialSet
+      ? {
+          id: defaultSocialSet.id,
+          source: defaultSocialSet.source,
+        }
+      : null,
     config_files: {
-      local: localConfig ? {
-        path: localConfigPath,
-        has_key: !!localConfig.apiKey,
-        has_default_social_set: !!localConfig.defaultSocialSetId,
-      } : null,
-      global: globalConfig ? {
-        path: GLOBAL_CONFIG_FILE,
-        has_key: !!globalConfig.apiKey,
-        has_default_social_set: !!globalConfig.defaultSocialSetId,
-      } : null,
+      local: localConfig
+        ? {
+            path: localConfigPath,
+            has_key: !!localConfig.apiKey,
+            has_default_social_set: !!localConfig.defaultSocialSetId,
+          }
+        : null,
+      global: globalConfig
+        ? {
+            path: GLOBAL_CONFIG_FILE,
+            has_key: !!globalConfig.apiKey,
+            has_default_social_set: !!globalConfig.defaultSocialSetId,
+          }
+        : null,
     },
   });
 }
@@ -904,17 +937,21 @@ async function cmdConfigSetDefault(args) {
   if (!location) {
     console.error('');
     console.error(fmt.bold('Where should the default be stored?'));
-    console.error(`  ${fmt.num('1.')} Global ${fmt.dim('(~/.config/typefully/)')} ${fmt.label('- Available to all projects')}`);
-    console.error(`  ${fmt.num('2.')} Local ${fmt.dim('(./.typefully/)')} ${fmt.label('- Only this project')}`);
+    console.error(
+      `  ${fmt.num('1.')} Global ${fmt.dim('(~/.config/typefully/)')} ${fmt.label('- Available to all projects')}`,
+    );
+    console.error(
+      `  ${fmt.num('2.')} Local ${fmt.dim('(./.typefully/)')} ${fmt.label('- Only this project')}`,
+    );
     console.error('');
-    const choice = await prompt(`${colors.bold}Choose location [1/2]${colors.reset} ${fmt.dim('(default: 1)')}: `);
+    const choice = await prompt(
+      `${colors.bold}Choose location [1/2]${colors.reset} ${fmt.dim('(default: 1)')}: `,
+    );
     location = choice === '2' ? 'local' : 'global';
   }
 
   const isLocal = location === 'local' || location === '2';
-  const configPath = isLocal
-    ? path.join(process.cwd(), LOCAL_CONFIG_FILE)
-    : GLOBAL_CONFIG_FILE;
+  const configPath = isLocal ? path.join(process.cwd(), LOCAL_CONFIG_FILE) : GLOBAL_CONFIG_FILE;
 
   // Read existing config to preserve other settings
   const existingConfig = readConfigFile(configPath) || {};
@@ -1024,21 +1061,25 @@ async function cmdDraftsCreate(args) {
     // Smart default: get first connected platform
     const defaultPlatform = await getFirstConnectedPlatform(socialSetId);
     if (!defaultPlatform) {
-      error('No connected platforms found. Connect a platform at typefully.com or specify --platform');
+      error(
+        'No connected platforms found. Connect a platform at typefully.com or specify --platform',
+      );
     }
     platforms = defaultPlatform;
   }
 
-  const platformList = platforms.split(',').map(p => p.trim());
+  const platformList = platforms.split(',').map((p) => p.trim());
   if (quotePostUrl && !platformList.includes('x')) {
-    error('--quote-post-url is only supported for X posts. Include x in --platform or remove the quote flag.');
+    error(
+      '--quote-post-url is only supported for X posts. Include x in --platform or remove the quote flag.',
+    );
   }
 
   // Split text into posts (thread support)
   const posts = splitThreadText(text);
 
   // Parse media IDs
-  const mediaIds = parsed.media ? parsed.media.split(',').map(m => m.trim()) : [];
+  const mediaIds = parsed.media ? parsed.media.split(',').map((m) => m.trim()) : [];
 
   // Build posts array
   const basePostsArray = posts.map((postText, index) => {
@@ -1053,9 +1094,8 @@ async function cmdDraftsCreate(args) {
   // Build platforms object
   const platformsObj = {};
   for (const platform of platformList) {
-    const postsArray = platform === 'x'
-      ? addQuotePostUrl(basePostsArray, quotePostUrl)
-      : basePostsArray;
+    const postsArray =
+      platform === 'x' ? addQuotePostUrl(basePostsArray, quotePostUrl) : basePostsArray;
     const platformConfig = {
       enabled: true,
       posts: postsArray,
@@ -1121,14 +1161,16 @@ async function cmdDraftsUpdate(args) {
   const shouldUpdatePosts = Boolean(text || quotePostUrl);
   if (shouldUpdatePosts) {
     const explicitPlatformList = parsed.platform
-      ? parsed.platform.split(',').map(p => p.trim())
+      ? parsed.platform.split(',').map((p) => p.trim())
       : null;
     if (quotePostUrl && explicitPlatformList && !explicitPlatformList.includes('x')) {
-      error('--quote-post-url is only supported for X posts. Include x in --platform or remove the quote flag.');
+      error(
+        '--quote-post-url is only supported for X posts. Include x in --platform or remove the quote flag.',
+      );
     }
 
     // Parse media IDs
-    const mediaIds = parsed.media ? parsed.media.split(',').map(m => m.trim()) : [];
+    const mediaIds = parsed.media ? parsed.media.split(',').map((m) => m.trim()) : [];
 
     // Fetch existing draft to determine platforms (and for --append, to get posts)
     const existing = await apiRequest('GET', `/social-sets/${socialSetId}/drafts/${draftId}`);
@@ -1148,14 +1190,18 @@ async function cmdDraftsUpdate(args) {
         // Fallback: get first connected platform for this social set
         const defaultPlatform = await getFirstConnectedPlatform(socialSetId);
         if (!defaultPlatform) {
-          error('No connected platforms found. Connect a platform at typefully.com or specify --platform');
+          error(
+            'No connected platforms found. Connect a platform at typefully.com or specify --platform',
+          );
         }
         platformList = [defaultPlatform];
       }
     }
 
     if (quotePostUrl && !platformList.includes('x')) {
-      error('--quote-post-url is only supported for X posts. Include x in --platform or remove the quote flag.');
+      error(
+        '--quote-post-url is only supported for X posts. Include x in --platform or remove the quote flag.',
+      );
     }
 
     let postsArray;
@@ -1201,9 +1247,7 @@ async function cmdDraftsUpdate(args) {
     // Build platforms object
     const platformsObj = {};
     for (const p of platformList) {
-      const platformPosts = p === 'x'
-        ? addQuotePostUrl(postsArray, quotePostUrl)
-        : postsArray;
+      const platformPosts = p === 'x' ? addQuotePostUrl(postsArray, quotePostUrl) : postsArray;
       platformsObj[p] = {
         enabled: true,
         posts: platformPosts,
@@ -1233,7 +1277,9 @@ async function cmdDraftsUpdate(args) {
   }
 
   if (Object.keys(body).length === 0) {
-    error('At least one of --text, --file, --title, --schedule, --share, --notes, --tags, or --quote-post-url is required');
+    error(
+      'At least one of --text, --file, --title, --schedule, --share, --notes, --tags, or --quote-post-url is required',
+    );
   }
 
   const data = await apiRequest('PATCH', `/social-sets/${socialSetId}/drafts/${draftId}`, body);
@@ -1296,7 +1342,10 @@ async function cmdUpdateDraftAlias(args) {
   let text;
   if (Object.prototype.hasOwnProperty.call(parsed, 'text')) {
     text = coerceFlagValueToString(parsed.text, '--text');
-  } else if (!Object.prototype.hasOwnProperty.call(parsed, 'file') && parsed._positional.length > 1) {
+  } else if (
+    !Object.prototype.hasOwnProperty.call(parsed, 'file') &&
+    parsed._positional.length > 1
+  ) {
     text = parsed._positional.slice(1).join(' ');
   }
 
@@ -1427,7 +1476,10 @@ async function cmdMediaUpload(args) {
   const socialSetIdFlag = getSocialSetIdFromParsed(parsed);
   if (positional.length >= 2) {
     if (socialSetIdFlag && positional[0] !== socialSetIdFlag) {
-      error('Conflicting social_set_id values', { positional: positional[0], flag: socialSetIdFlag });
+      error('Conflicting social_set_id values', {
+        positional: positional[0],
+        flag: socialSetIdFlag,
+      });
     }
     socialSetId = socialSetIdFlag || positional[0];
     filePath = positional[1];
@@ -1528,7 +1580,10 @@ async function cmdMediaStatus(args) {
   const socialSetIdFlag = getSocialSetIdFromParsed(parsed);
   if (positional.length >= 2) {
     if (socialSetIdFlag && positional[0] !== socialSetIdFlag) {
-      error('Conflicting social_set_id values', { positional: positional[0], flag: socialSetIdFlag });
+      error('Conflicting social_set_id values', {
+        positional: positional[0],
+        flag: socialSetIdFlag,
+      });
     }
     socialSetId = socialSetIdFlag || positional[0];
     mediaId = positional[1];
@@ -1785,7 +1840,7 @@ GET YOUR API KEY:
 // ============================================================================
 
 const COMMANDS = {
-  'setup': cmdSetup,
+  setup: cmdSetup,
   'me:get': cmdMeGet,
   'social-sets:list': cmdSocialSetsList,
   'social-sets:get': cmdSocialSetsGet,
@@ -1809,7 +1864,7 @@ const COMMANDS = {
   'media:status': cmdMediaStatus,
   'config:show': cmdConfigShow,
   'config:set-default': cmdConfigSetDefault,
-  'help': showHelp,
+  help: showHelp,
   '--help': showHelp,
   '-h': showHelp,
 };
