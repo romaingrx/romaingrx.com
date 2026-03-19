@@ -1,7 +1,9 @@
 import React from 'react';
+
+import type { NoteWithAuthors } from '@/lib/collections';
+
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import type { NoteWithAuthors } from '@/lib/collections';
 
 type Props = {
   note: NoteWithAuthors;
@@ -12,7 +14,7 @@ export default function NoteHoverCard({ note, children }: Props) {
   return (
     <HoverCard>
       <HoverCardTrigger>{children}</HoverCardTrigger>
-      <HoverCardContent className="w-80 !z-[9999]" align="start" sideOffset={5}>
+      <HoverCardContent className="!z-[9999] w-80" align="start" sideOffset={5}>
         <div className="space-y-4">
           <div className="space-y-2">
             <h4 className="text-sm font-semibold">{note.data.title}</h4>

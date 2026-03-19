@@ -1,4 +1,5 @@
 import type { ImageMetadata } from 'astro';
+
 // @ts-expect-error : no types for colorthief
 import ColorThief from 'colorthief';
 

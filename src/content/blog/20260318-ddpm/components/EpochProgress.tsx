@@ -1,7 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import run from '../run.json';
 
 const entries = run.training_samples;
@@ -48,7 +50,7 @@ export default function EpochProgress() {
       <CardContent className="flex flex-col items-center gap-4">
         <div className="flex gap-2">
           {current.images.map((img, i) => (
-            <div key={i} className="rounded bg-black p-1 flex items-center justify-center">
+            <div key={i} className="flex items-center justify-center rounded bg-black p-1">
               <img
                 src={`data:image/png;base64,${img}`}
                 alt={`Epoch ${current.epoch + 1} sample ${i + 1}`}
@@ -68,7 +70,7 @@ export default function EpochProgress() {
           <button
             type="button"
             onClick={togglePlay}
-            className="flex-shrink-0 rounded p-1.5 hover:bg-muted transition-colors"
+            className="flex-shrink-0 rounded p-1.5 transition-colors hover:bg-muted"
             aria-label={playing ? 'Pause' : 'Play'}
           >
             {playing ? (
@@ -107,7 +109,7 @@ export default function EpochProgress() {
           />
         </div>
 
-        <span className="text-xs font-mono text-muted-foreground">epoch {current.epoch + 1}</span>
+        <span className="font-mono text-xs text-muted-foreground">epoch {current.epoch + 1}</span>
       </CardContent>
     </Card>
   );

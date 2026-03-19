@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+
 import clsx from 'clsx';
+
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -36,7 +38,7 @@ export default function Examples({ examples }: ExamplesProps) {
               onClick={() => api?.scrollTo(index)}
               className={clsx(
                 'size-2 rounded-full',
-                index === currentSlide ? 'bg-primary' : 'bg-gray-300'
+                index === currentSlide ? 'bg-primary' : 'bg-gray-300',
               )}
             />
           ))}

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import SmoothGradient, {
   type SmoothGradientProps,
 } from '@/components/backgrounds/smooth-gradient.tsx';

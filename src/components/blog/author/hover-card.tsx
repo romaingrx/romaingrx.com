@@ -1,9 +1,12 @@
 import { Image } from 'astro:assets';
 import React from 'react';
+
 import { Icon } from '@iconify/react';
+
+import type { Author } from '@/lib/collections';
+
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { platforms_info, type Platform } from '@/configs/platforms';
-import type { Author } from '@/lib/collections';
 
 type Props = {
   author: Author;
@@ -15,7 +18,7 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
   return (
     <HoverCard>
       <HoverCardTrigger>{children}</HoverCardTrigger>
-      <HoverCardContent className="w-80 !z-[9999]" align="start" sideOffset={5}>
+      <HoverCardContent className="!z-[9999] w-80" align="start" sideOffset={5}>
         <div className="flex justify-start space-x-4">
           <div className="space-y-1 text-left">
             <h4 className="text-sm font-semibold">{author.data.name}</h4>

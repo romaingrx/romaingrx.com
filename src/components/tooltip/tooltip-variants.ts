@@ -39,7 +39,7 @@ export const tooltipVariants = cva(
       side: 'top',
       intent: 'default',
     },
-  }
+  },
 );
 
 export type TooltipVariants = VariantProps<typeof tooltipVariants>;

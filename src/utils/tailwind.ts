@@ -1,4 +1,5 @@
 import React, { Children, cloneElement, isValidElement } from 'react';
+
 import { tailwindToCSS } from 'tw-to-css';
 
 const { twj } = tailwindToCSS({
@@ -40,12 +41,12 @@ export function inlineTailwind(el: React.JSX.Element): React.JSX.Element {
   const mergedStyle = { ...originalStyle, ...twStyle };
   // Recursively process children
   const processedChildren = Children.map(children, (child) =>
-    isValidElement(child) ? inlineTailwind(child as React.JSX.Element) : child
+    isValidElement(child) ? inlineTailwind(child as React.JSX.Element) : child,
   );
   // Return cloned element with updated props
   return cloneElement(
     el,
     { ...props, style: mergedStyle, className: className },
-    processedChildren
+    processedChildren,
   );
 }

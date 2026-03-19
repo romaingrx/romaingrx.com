@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "warn"
+  },
+  "plugins": ["typescript", "react"],
+  "rules": {
+    "no-unused-vars": "off",
+    "typescript/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "typescript/no-explicit-any": "warn",
+    "typescript/ban-ts-comment": "off",
+    "no-console": "off"
+  },
+  "ignorePatterns": [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "public/**",
+    "wrangler.*",
+    "**/*.d.ts",
+    ".worktrees/**",
+    "**/.venv/**",
+    "**/.obsidian/**"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.{js,mjs,cjs}"],
+      "env": { "node": true }
+    }
+  ]
+}

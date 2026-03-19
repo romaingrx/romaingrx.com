@@ -11,7 +11,7 @@ const DynamicTime: React.FC<DynamicTimeProps> = ({ date, className, formatStr, .
   return (
     <time
       dateTime={formatISO(date)}
-      className={cn('whitespace-nowrap text-xs text-muted-foreground', className)}
+      className={cn('text-xs whitespace-nowrap text-muted-foreground', className)}
       {...props}
     >
       {formatCompactDate(date, formatStr)}

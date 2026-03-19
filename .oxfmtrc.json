@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "ignorePatterns": [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "public/**",
+    "pnpm-lock.yaml",
+    "**/*.d.ts",
+    "wrangler.toml",
+    "**/*.astro",
+    ".worktrees/**",
+    "**/.venv/**",
+    "**/.obsidian/**"
+  ],
+  "sortImports": {
+    "customGroups": [
+      {
+        "groupName": "react-astro",
+        "elementNamePattern": ["react", "react-**", "astro", "astro:**", "astro-**"]
+      }
+    ],
+    "groups": [
+      "react-astro",
+      ["value-builtin", "value-external"],
+      "type-import",
+      "value-internal",
+      ["value-parent", "value-sibling", "value-index"],
+      "unknown"
+    ]
+  },
+  "sortTailwindcss": {
+    "stylesheet": "./src/styles/globals.css",
+    "functions": ["clsx", "cn"]
+  }
+}

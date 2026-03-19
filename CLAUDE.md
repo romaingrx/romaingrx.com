@@ -13,9 +13,10 @@ This is a personal website/blog built with **Astro 5.12.3**, TypeScript, React, 
 - `pnpm dev` - Start development server (includes Cloudflare types generation)
 - `pnpm build` - Type check and build for production
 - `pnpm check` - Run Astro type checking
-- `pnpm lint` - Run ESLint
-- `pnpm lint:fix` - Fix ESLint issues automatically
-- `pnpm format` - Format code with Prettier
+- `pnpm lint` - Run Oxlint
+- `pnpm lint:fix` - Fix Oxlint issues automatically
+- `pnpm format` - Format code with Oxfmt (JS/TS/CSS/JSON/MD/MDX) and Prettier (.astro only)
+- `pnpm format:check` - Check formatting without writing
 
 ### Deployment
 
@@ -70,5 +71,5 @@ Content collections are configured in `src/content.config.ts` with strict schema
 - **TypeScript strict mode** enabled with path aliases (`@/` for src/)
 - **File-based routing** in `/src/pages/` with dynamic routes for content
 - **Edge deployment** optimized for Cloudflare Workers
-- Code formatting enforced by Prettier, linting by ESLint
+- Code formatting enforced by Oxfmt (with Prettier for .astro files), linting by Oxlint
 - Custom language grammars located in `/public/grammars/`

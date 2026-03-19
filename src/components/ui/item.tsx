@@ -1,6 +1,8 @@
 import * as React from 'react';
+
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
@@ -44,7 +46,7 @@ const itemVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  }
+  },
 );
 
 function Item({
@@ -79,7 +81,7 @@ const itemMediaVariants = cva(
     defaultVariants: {
       variant: 'default',
     },
-  }
+  },
 );
 
 function ItemMedia({
@@ -122,9 +124,9 @@ function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="item-description"
       className={cn(
-        'text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance',
-        '[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
-        className
+        'line-clamp-2 text-sm leading-normal font-normal text-balance text-muted-foreground',
+        '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+        className,
       )}
       {...props}
     />

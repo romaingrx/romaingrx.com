@@ -1,6 +1,9 @@
 import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
+
 import { NODE_ENV } from 'astro:env/client';
+
 import { site } from '@/configs/site';
+
 import { getAbsoluteUrl, slugify } from './utils';
 
 export type Author = CollectionEntry<'author'>;
@@ -25,16 +28,18 @@ async function resolveAuthors(entry: ContentEntry, authors: Author[]): Promise<A
       const author = authors.find((a) => a.id === ref.id);
       if (!author) throw new Error(`Author ${ref.id} not found`);
       return author;
-    })
+    }),
   );
 }
 
 async function getContentWithAuthors<T extends ContentEntry>(
   collection: 'blog' | 'note',
-  urlPrefix: string
+  urlPrefix: string,
 ): Promise<WithAuthors<T>[]> {
   const entries = await astroGetCollection(collection, (entry) =>
-    NODE_ENV === 'production' ? entry.data.status === 'published' : entry.data.status !== 'archived'
+    NODE_ENV === 'production'
+      ? entry.data.status === 'published'
+      : entry.data.status !== 'archived',
   );
   const authors = await astroGetCollection('author');
 
@@ -52,7 +57,7 @@ async function getContentWithAuthors<T extends ContentEntry>(
           slug,
           url: getAbsoluteUrl(`/${urlPrefix}/${slug}`, new URL(site.url)),
         } as WithAuthors<T>;
-      })
+      }),
   );
 }
 

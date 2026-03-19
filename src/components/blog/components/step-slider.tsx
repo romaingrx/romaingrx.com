@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -97,7 +98,7 @@ export function StepSlider({
                       'rounded-full px-3 py-1 font-mono text-sm transition-colors',
                       i === activeIdx
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                        : 'bg-muted text-muted-foreground hover:bg-muted/80',
                     )}
                   >
                     {ex.label}
@@ -109,7 +110,7 @@ export function StepSlider({
         </CardHeader>
       )}
       <CardContent className="flex flex-col items-center gap-4">
-        <div className="rounded bg-card flex items-center justify-center">
+        <div className="flex items-center justify-center rounded bg-card">
           <img
             src={`data:image/png;base64,${current.image}`}
             alt={`Step t=${current.t}`}
@@ -127,7 +128,7 @@ export function StepSlider({
           <button
             type="button"
             onClick={togglePlay}
-            className="flex-shrink-0 rounded p-1.5 hover:bg-muted transition-colors"
+            className="flex-shrink-0 rounded p-1.5 transition-colors hover:bg-muted"
             aria-label={playing ? 'Pause' : 'Play'}
           >
             {playing ? (
@@ -166,7 +167,7 @@ export function StepSlider({
           />
         </div>
 
-        <span className="text-xs font-mono text-muted-foreground">t = {current.t}</span>
+        <span className="font-mono text-xs text-muted-foreground">t = {current.t}</span>
       </CardContent>
     </Card>
   );

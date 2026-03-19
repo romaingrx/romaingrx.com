@@ -1,4 +1,5 @@
 import { GoalIcon } from 'lucide-react';
+
 import Callout from '@/components/blog/components/callout';
 
 export default function Goal({ children }: { children: React.ReactNode }) {
