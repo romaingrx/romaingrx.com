@@ -47,7 +47,7 @@ const showRelated = relatedPosts.length > 0;
   showRelated ? (
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {relatedPosts.map((related) => (
-        <BlogCard post={related} size="sm" />
+        <BlogCard post={related} />
       ))}
     </div>
   ) : (
@@ -58,7 +58,7 @@ const showRelated = relatedPosts.length > 0;
             <Icon icon="mdi:arrow-left" className="size-4" />
             <span>Previous Post</span>
           </div>
-          <BlogCard post={previousPost} size="sm" />
+          <BlogCard post={previousPost} />
         </div>
       )}
       {nextPost && (
@@ -67,7 +67,7 @@ const showRelated = relatedPosts.length > 0;
             <span>Next Post</span>
             <Icon icon="mdi:arrow-right" className="size-4" />
           </div>
-          <BlogCard post={nextPost} size="sm" />
+          <BlogCard post={nextPost} />
         </div>
       )}
     </div>

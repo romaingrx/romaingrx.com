@@ -40,29 +40,21 @@ const resources = post.data.resources.map((r) => ({
     <div class="relative z-10 mx-auto text-center">
       <!-- Meta Information -->
       <div class="text-muted-foreground mb-8 flex items-center justify-center gap-2 text-sm">
-        <Time
-          date={post.data.published_date}
-          className="text-sm"
-          transition:name={`${post.id}-published-date`}
-        />
+        <Time date={post.data.published_date} className="text-sm" />
         <span class="leading-none">·</span>
-        <span transition:name={`${post.id}-reading-time`}>{post.readingTime}</span>
+        <span>{post.readingTime}</span>
       </div>
 
       <!-- Title -->
       <h1
         class="mb-6 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text pb-1 text-4xl font-bold tracking-tight text-transparent md:text-5xl lg:text-6xl dark:from-white dark:to-gray-200"
         style="min-width: min(100%, 600px);"
-        transition:name={`${post.id}-title`}
       >
         {post.data.title}
       </h1>
 
       <!-- Description -->
-      <p
-        class="text-muted-foreground mb-8 text-lg md:text-xl"
-        transition:name={`${post.id}-description`}
-      >
+      <p class="text-muted-foreground mb-8 text-lg md:text-xl">
         {post.data.description}
       </p>
 
@@ -81,7 +73,7 @@ const resources = post.data.resources.map((r) => ({
       <div class="relative mt-4 flex flex-row justify-between">
         <div class="flex flex-col gap-3 text-start">
           <span class="text-muted-foreground text-sm font-medium">Written by</span>
-          <StackedAuthors authors={post.authors} transition:name={`${post.id}-authors`} />
+          <StackedAuthors authors={post.authors} />
         </div>
         <div class="flex flex-col gap-3 text-start">
           <span class="text-muted-foreground text-sm font-medium">Share on</span>
