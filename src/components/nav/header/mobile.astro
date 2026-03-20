@@ -1,0 +1,84 @@
+---
+import { Icon } from 'astro-icon/components';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  navigation: { name: string; href: string }[];
+  currentPath: string;
+  className?: string;
+}
+
+const { navigation, currentPath, className } = Astro.props;
+
+const isActive = (href: string) => {
+  if (href === '//' || href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+};
+---
+
+<div class={cn('relative md:hidden', className)} id="mobile-nav">
+  <button
+    type="button"
+    class="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground transition-colors"
+    aria-label="Menu"
+    aria-expanded="false"
+    id="mobile-nav-trigger"
+  >
+    <Icon name="lucide:menu" class="size-5" />
+  </button>
+
+  <div
+    id="mobile-nav-menu"
+    class="absolute right-0 top-full mt-2 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-150 origin-top-right"
+  >
+    {navigation.map((item) => (
+      <a
+        href={item.href}
+        class={cn(
+          'mobile-nav-link block rounded-md px-3 py-2 text-sm transition-colors',
+          isActive(item.href)
+            ? 'text-foreground font-medium'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
+        )}
+        aria-current={isActive(item.href) ? 'page' : undefined}
+      >
+        {item.name}
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const trigger = document.getElementById('mobile-nav-trigger');
+    const menu = document.getElementById('mobile-nav-menu');
+    if (!trigger || !menu) return;
+
+    const open = () => {
+      menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+      menu.classList.add('opacity-100', 'scale-100');
+      trigger.setAttribute('aria-expanded', 'true');
+    };
+
+    const close = () => {
+      menu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+      menu.classList.remove('opacity-100', 'scale-100');
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggle = () => {
+      if (trigger.getAttribute('aria-expanded') === 'true') {
+        close();
+      } else {
+        open();
+      }
+    };
+
+    trigger.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+    menu.querySelectorAll('.mobile-nav-link').forEach((l) => l.addEventListener('click', close));
+    document.addEventListener('click', (e) => {
+      if (!trigger.contains(e.target as Node) && !menu.contains(e.target as Node)) close();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  });
+</script>

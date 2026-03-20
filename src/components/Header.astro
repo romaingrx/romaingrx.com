@@ -2,7 +2,7 @@
 import Logo from '@/components/logo/logo';
 import { SearchTrigger } from '@/components/search/search';
 import { routes } from '@/configs/routes';
-import { MobileNav } from './nav/header/mobile';
+import MobileNav from './nav/header/mobile.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
 const { pathname } = Astro.url;
@@ -75,7 +75,7 @@ const isActive = (href: string) => {
       <ThemeToggle />
 
       <!-- Mobile Navigation -->
-      <MobileNav navigation={navigation} currentPath={pathname} client:load />
+      <MobileNav navigation={navigation} currentPath={pathname} />
     </div>
   </nav>
 </header>
