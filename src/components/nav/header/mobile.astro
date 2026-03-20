@@ -49,36 +49,36 @@ const isActive = (href: string) => {
 </div>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
-    const trigger = document.getElementById('mobile-nav-trigger');
-    const menu = document.getElementById('mobile-nav-menu');
-    if (!trigger || !menu) return;
-
+  const trigger = document.getElementById('mobile-nav-trigger');
+  const menu = document.getElementById('mobile-nav-menu');
+  if (trigger && menu) {
     const open = () => {
       menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
       menu.classList.add('opacity-100', 'scale-100');
       trigger.setAttribute('aria-expanded', 'true');
     };
-
     const close = () => {
       menu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
       menu.classList.remove('opacity-100', 'scale-100');
       trigger.setAttribute('aria-expanded', 'false');
     };
-
-    const toggle = () => {
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (trigger.getAttribute('aria-expanded') === 'true') {
         close();
       } else {
         open();
       }
-    };
-
-    trigger.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
-    menu.querySelectorAll('.mobile-nav-link').forEach((l) => l.addEventListener('click', close));
-    document.addEventListener('click', (e) => {
-      if (!trigger.contains(e.target as Node) && !menu.contains(e.target as Node)) close();
     });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
-  });
+    document.addEventListener('click', (e) => {
+      if (!trigger.contains(e.target as Node) && !menu.contains(e.target as Node)) {
+        close();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        close();
+      }
+    });
+  }
 </script>

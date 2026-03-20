@@ -31,6 +31,7 @@ repos:
         stages: [pre-commit]
         pass_filenames: true
         files: \.(js|jsx|ts|tsx|mjs|cjs|md|mdx|css|json|yaml|yml)$
+        exclude: \.d\.ts$
 
       - id: prettier
         name: Prettier (Astro)

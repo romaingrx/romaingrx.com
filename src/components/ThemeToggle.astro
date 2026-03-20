@@ -95,12 +95,6 @@ import Button from '@/components/ui/button.astro';
   });
 
   // Handle click events
-  document.addEventListener('astro:page-load', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle?.addEventListener('click', handleToggleClick);
-    applyTheme(); // Ensure theme is applied after navigation
-  });
-
-  // Apply theme immediately after view transitions
-  document.addEventListener('astro:after-swap', applyTheme);
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle?.addEventListener('click', handleToggleClick);
 </script>

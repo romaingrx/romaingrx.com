@@ -89,7 +89,7 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
   iframeWatcher.observe(document.body, { childList: true, subtree: true });
 
   // Update theme on page navigation
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     updateGiscusTheme();
   });
 </script>

@@ -63,7 +63,7 @@ const { src, html, alt = 'Image', caption, className, width, height } = Astro.pr
 </figure>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.image-viewer').forEach((viewer) => {
       const trigger = viewer.querySelector('[data-image-trigger]');
       const lightbox = viewer.querySelector('[data-image-lightbox]') as HTMLElement;

@@ -1,7 +1,6 @@
 ---
 import '@/styles/globals.css';
 import { Font } from 'astro:assets';
-import { ClientRouter } from 'astro:transitions';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
 
@@ -43,7 +42,6 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
     <Font cssVariable="--font-fira-sans" preload />
 
     <slot name="head" />
-    <ClientRouter />
   </head>
   <body
     class="bg-background relative min-h-screen w-screen"
