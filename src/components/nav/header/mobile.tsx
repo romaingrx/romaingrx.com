@@ -5,8 +5,8 @@ import { Menu } from 'lucide-react';
 import Logo from '@/components/logo/logo';
 import { cn } from '@/lib/utils';
 
-import { Button } from '../../ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '../../ui/sheet';
+import { Button } from '../../ui/react/button';
+import { Sheet, SheetContent, SheetTrigger } from '../../ui/react/sheet';
 
 export interface NavItem {
   name: string;

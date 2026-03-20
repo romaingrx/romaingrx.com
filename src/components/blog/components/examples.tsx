@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/react/card';
 import {
   Carousel,
   CarouselContent,
@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
   type CarouselApi,
-} from '@/components/ui/carousel';
+} from '@/components/ui/react/carousel';
 
 export type ExamplesProps = {
   examples: Record<string, string>[];

@@ -3,8 +3,8 @@ import { cva } from 'class-variance-authority';
 
 import type { ResourceProvider, ResourceType } from '@/configs/resources';
 
-import { Badge } from '@/components/ui/badge';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Badge } from '@/components/ui/react/badge';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/react/hover-card';
 import { platforms_info } from '@/configs/platforms';
 import { cn } from '@/lib/utils';
 

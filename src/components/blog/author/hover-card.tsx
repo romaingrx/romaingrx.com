@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 
 import type { Author } from '@/lib/collections';
 
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/react/hover-card';
 import { platforms_info, type Platform } from '@/configs/platforms';
 
 type Props = {

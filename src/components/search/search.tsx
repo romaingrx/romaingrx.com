@@ -10,8 +10,8 @@ import {
   CommandItem,
   CommandList,
   CommandShortcut,
-} from '@/components/ui/command';
-import { Kbd } from '@/components/ui/kbd';
+} from '@/components/ui/react/command';
+import { Kbd } from '@/components/ui/react/kbd';
 
 interface SubResult {
   title: string;
