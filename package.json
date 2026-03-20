@@ -14,7 +14,9 @@
     "format": "oxfmt --ignore-path .gitignore --write . && prettier --write '**/*.astro'",
     "format:check": "oxfmt --ignore-path .gitignore --check . && prettier --check '**/*.astro'",
     "lint": "oxlint .",
-    "lint:fix": "oxlint --fix ."
+    "lint:fix": "oxlint --fix .",
+    "bundle-report": "bash scripts/bundle-report.sh",
+    "bundle-report:json": "bash scripts/bundle-report.sh --json"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.7",
