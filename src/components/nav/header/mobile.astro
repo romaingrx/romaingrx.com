@@ -1,6 +1,5 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Logo from '@/components/logo/logo';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -17,147 +16,69 @@ const isActive = (href: string) => {
 };
 ---
 
-<button
-  type="button"
-  class={cn('btn-ghost btn-sm-icon size-8 md:hidden', className)}
-  aria-label="Toggle navigation menu"
-  data-mobile-nav-trigger
->
-  <Icon name="lucide:menu" class="size-4" />
-</button>
+<div class={cn('relative md:hidden', className)} id="mobile-nav">
+  <button
+    type="button"
+    class="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground transition-colors"
+    aria-label="Menu"
+    aria-expanded="false"
+    id="mobile-nav-trigger"
+  >
+    <Icon name="lucide:menu" class="size-5" />
+  </button>
 
-<dialog id="mobile-nav" class="mobile-nav-dialog">
-  <div class="mobile-nav-panel">
-    <div class="flex items-center justify-between border-b border-border p-3">
-      <Logo class="h-7" with_text={false} />
-      <button
-        type="button"
-        class="btn-ghost btn-sm-icon size-8"
-        aria-label="Close navigation menu"
-        data-mobile-nav-close
+  <div
+    id="mobile-nav-menu"
+    class="absolute right-0 top-full mt-2 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-150 origin-top-right"
+  >
+    {navigation.map((item) => (
+      <a
+        href={item.href}
+        class={cn(
+          'mobile-nav-link block rounded-md px-3 py-2 text-sm transition-colors',
+          isActive(item.href)
+            ? 'text-foreground font-medium'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
+        )}
+        aria-current={isActive(item.href) ? 'page' : undefined}
       >
-        <Icon name="lucide:x" class="size-4" />
-      </button>
-    </div>
-
-    <nav class="space-y-1 p-6">
-      {navigation.map((item) => (
-        <a
-          href={item.href}
-          class={cn(
-            'flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors',
-            isActive(item.href)
-              ? 'bg-accent text-accent-foreground'
-              : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground',
-          )}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-          data-mobile-nav-link
-        >
-          {item.name}
-        </a>
-      ))}
-    </nav>
+        {item.name}
+      </a>
+    ))}
   </div>
-</dialog>
-
-<style>
-  .mobile-nav-dialog {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-    max-height: 100%;
-    border: none;
-    background: transparent;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 0.2s ease,
-      visibility 0.2s ease,
-      overlay 0.2s ease allow-discrete,
-      display 0.2s ease allow-discrete;
-  }
-
-  .mobile-nav-dialog[open] {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .mobile-nav-dialog::backdrop {
-    background: rgb(0 0 0 / 0.5);
-    backdrop-filter: blur(2px);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .mobile-nav-dialog[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    .mobile-nav-dialog[open] {
-      opacity: 0;
-    }
-    .mobile-nav-dialog[open]::backdrop {
-      opacity: 0;
-    }
-    .mobile-nav-dialog[open] .mobile-nav-panel {
-      translate: 100% 0;
-    }
-  }
-
-  .mobile-nav-panel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-    width: 280px;
-    max-width: calc(100% - 3rem);
-    background: var(--background);
-    border-left: 1px solid var(--border);
-    translate: 0 0;
-    transition: translate 0.2s ease;
-  }
-
-  .mobile-nav-dialog:not([open]) .mobile-nav-panel {
-    translate: 100% 0;
-  }
-</style>
+</div>
 
 <script>
-  function initMobileNav() {
-    const dialog = document.getElementById('mobile-nav') as HTMLDialogElement;
-    if (!dialog) return;
+  document.addEventListener('astro:page-load', () => {
+    const trigger = document.getElementById('mobile-nav-trigger');
+    const menu = document.getElementById('mobile-nav-menu');
+    if (!trigger || !menu) return;
 
-    // Open
-    document.querySelectorAll('[data-mobile-nav-trigger]').forEach((btn) => {
-      btn.addEventListener('click', () => dialog.showModal());
+    const open = () => {
+      menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+      menu.classList.add('opacity-100', 'scale-100');
+      trigger.setAttribute('aria-expanded', 'true');
+    };
+
+    const close = () => {
+      menu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+      menu.classList.remove('opacity-100', 'scale-100');
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggle = () => {
+      if (trigger.getAttribute('aria-expanded') === 'true') {
+        close();
+      } else {
+        open();
+      }
+    };
+
+    trigger.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+    menu.querySelectorAll('.mobile-nav-link').forEach((l) => l.addEventListener('click', close));
+    document.addEventListener('click', (e) => {
+      if (!trigger.contains(e.target as Node) && !menu.contains(e.target as Node)) close();
     });
-
-    // Close button
-    dialog.querySelectorAll('[data-mobile-nav-close]').forEach((btn) => {
-      btn.addEventListener('click', () => dialog.close());
-    });
-
-    // Close on backdrop click
-    dialog.addEventListener('click', (e) => {
-      if (e.target === dialog) dialog.close();
-    });
-
-    // Close on link click
-    dialog.querySelectorAll('[data-mobile-nav-link]').forEach((link) => {
-      link.addEventListener('click', () => dialog.close());
-    });
-
-    // Close on Escape (native dialog behavior, but ensure cleanup)
-    dialog.addEventListener('close', () => {
-      document.body.style.overflow = '';
-    });
-  }
-
-  document.addEventListener('astro:page-load', initMobileNav);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  });
 </script>
