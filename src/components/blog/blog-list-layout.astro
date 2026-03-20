@@ -1,0 +1,90 @@
+---
+import BlogCard from '@/components/blog/card/index.astro';
+import { routes } from '@/configs/routes';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { BlogPostWithAuthors } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  posts: BlogPostWithAuthors[];
+  categories: string[];
+  tags: string[];
+  activeCategory?: string;
+  activeTag?: string;
+}
+
+const { title, description, posts, categories, tags, activeCategory, activeTag } = Astro.props;
+
+const isAll = !activeCategory && !activeTag;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="mx-auto max-w-5xl px-4 py-12 md:py-20">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+      {title}
+    </h1>
+
+    <nav class="mt-6 flex flex-wrap items-center gap-2" aria-label="Filter posts">
+      <a
+        href={routes.blogs}
+        class={cn(
+          'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+          isAll
+            ? 'bg-foreground text-background'
+            : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+        )}
+      >
+        All
+      </a>
+      {
+        categories.map((cat) => (
+          <a
+            href={activeCategory === cat ? routes.blogs : `${routes.blogs}/category/${cat}`}
+            class={cn(
+              'rounded-full px-3 py-1.5 text-sm font-medium capitalize transition-colors',
+              activeCategory === cat
+                ? 'bg-foreground text-background'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+            )}
+          >
+            {cat}
+          </a>
+        ))
+      }
+      {
+        tags.length > 0 && (
+          <>
+            <span class="text-border mx-1 hidden select-none sm:inline">|</span>
+            {tags.map((tag) => (
+              <a
+                href={activeTag === tag ? routes.blogs : `${routes.blogs}/tag/${tag}`}
+                class={cn(
+                  'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+                  activeTag === tag
+                    ? 'bg-foreground text-background'
+                    : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                )}
+              >
+                {tag}
+              </a>
+            ))}
+          </>
+        )
+      }
+    </nav>
+
+    {
+      posts.length > 0 ? (
+        <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+          {posts.map((post) => (
+            <BlogCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-muted-foreground mt-10">No posts found.</p>
+      )
+    }
+  </div>
+</BaseLayout>

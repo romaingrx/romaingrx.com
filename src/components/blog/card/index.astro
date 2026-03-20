@@ -1,209 +1,60 @@
 ---
-import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import { cva, type VariantProps } from 'class-variance-authority';
-import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
-import {
-  CardContent,
-  CardDescription,
-  Card as CardPrimitive,
-  CardTitle,
-} from '@/components/ui/card';
 import Time from '@/components/ui/time.astro';
 import { routes } from '@/configs/routes';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
 import BlogPostBackground from './background';
 
-const cardVariants = cva(
-  'group overflow-hidden transition-all duration-200 rounded-lg bg-card hover:bg-accent/20 border shadow-sm hover:shadow p-0',
-  {
-    variants: {
-      layout: {
-        default: 'flex flex-col',
-        horizontal: 'grid grid-cols-1 sm:grid-cols-[35%_1fr] lg:grid-cols-[40%_1fr]',
-      },
-      size: {
-        default: 'w-full max-w-2xl',
-        sm: 'w-full max-w-xl',
-        lg: 'w-full max-w-3xl',
-      },
-      hasCover: {
-        true: '',
-        false: '',
-      },
-    },
-    compoundVariants: [
-      {
-        layout: 'horizontal',
-        size: 'sm',
-        class: 'h-[100px]',
-      },
-      {
-        layout: 'horizontal',
-        size: 'default',
-        class: 'h-[160px]',
-      },
-      {
-        layout: 'horizontal',
-        size: 'lg',
-        class: 'h-[160px]',
-      },
-      {
-        layout: 'default',
-        size: 'default',
-        class: 'h-[220px] sm:h-[240px]',
-      },
-      {
-        layout: 'default',
-        size: 'sm',
-        class: 'h-[180px] sm:h-[200px]',
-      },
-      {
-        layout: 'default',
-        size: 'lg',
-        class: 'h-[260px] sm:h-[280px]',
-      },
-    ],
-    defaultVariants: {
-      layout: 'default',
-      size: 'default',
-      hasCover: false,
-    },
-  }
-);
-
-const imageContainerVariants = cva(
-  'relative overflow-hidden flex items-center justify-center bg-muted/50 h-full w-full',
-  {
-    variants: {
-      layout: {
-        default: 'rounded-t-lg',
-        horizontal: 'rounded-l-lg sm:rounded-l-lg rounded-t-lg sm:rounded-tr-none',
-      },
-      size: {
-        default: '',
-        sm: '',
-        lg: '',
-      },
-      hasCover: {
-        true: '',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      layout: 'default',
-    },
-    compoundVariants: [
-      {
-        layout: 'default',
-        size: 'sm',
-        class: 'hidden',
-      },
-      {
-        layout: 'default',
-        hasCover: false,
-        class: 'hidden',
-      },
-    ],
-  }
-);
-
-type CardVariants = VariantProps<typeof cardVariants>;
-
-interface Props extends CardVariants {
+interface Props {
   post: BlogPostWithAuthors;
   className?: string;
+  showDescription?: boolean;
 }
 
-const { post, layout = 'default', size = 'default', className } = Astro.props;
+const { post, className, showDescription = true } = Astro.props;
 const hasCover = !!post.data.cover;
 ---
 
-<a href={routes.blog(post)} class="group/card relative z-100 block no-underline">
-  <CardPrimitive
-    className={cn(
-      cardVariants({ layout, size, hasCover }),
-      className,
-      'relative transition-all duration-300'
-    )}
-  >
-    <div class={cn(imageContainerVariants({ layout, size, hasCover }), 'relative')}>
-      <div
-        class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover/card:scale-105"
-      >
-        <BlogPostBackground value={post.id} />
-      </div>
-
-      {
-        hasCover ? (
-          <Image
-            src={post.data.cover!}
-            alt={post.data.title}
-            class="pointer-events-none relative z-10 h-auto w-auto max-w-[65%] object-contain transition-all duration-500 group-hover/card:scale-110"
-            width={300}
-            height={200}
-          />
-        ) : (
-          <div class="pointer-events-none relative z-10 flex h-full items-center justify-center p-6">
-            <div class="space-y-3 text-center">
-              <div class="relative mx-auto">
-                <div class="bg-primary/10 absolute inset-0 size-14 rounded-2xl blur-xl" />
-                <div class="border-border/60 bg-card/90 relative flex size-14 items-center justify-center rounded-2xl border shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover/card:scale-110">
-                  <Icon name="lucide:book-open" class="text-primary" />
-                </div>
-              </div>
-              <div class="space-y-1.5">
-                <div class="flex justify-center space-x-1">
-                  <div class="bg-primary/40 h-1.5 w-8 rounded-full" />
-                  <div class="bg-primary/25 h-1.5 w-6 rounded-full" />
-                  <div class="bg-primary/15 h-1.5 w-4 rounded-full" />
-                </div>
-                <div class="bg-border/40 mx-auto h-0.5 w-20 rounded-full" />
-              </div>
-            </div>
-          </div>
-        )
-      }
+<a href={routes.blog(post)} class={cn('group block no-underline', className)}>
+  <div class="bg-muted/50 relative aspect-[16/10] overflow-hidden rounded-xl">
+    <div
+      class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover:scale-105"
+    >
+      <BlogPostBackground value={post.id} />
     </div>
-    <div class="flex h-full flex-col text-left">
-      <CardContent className="flex flex-1 flex-col justify-between p-3 sm:p-4">
-        <div class="flex-1 space-y-1.5">
-          <CardTitle>
-            <h2
-              class="group-hover/card:text-primary line-clamp-2 text-base font-semibold tracking-tight transition-colors duration-300"
-              transition:name={`${post.id}-title`}
-            >
-              {post.data.title}
-            </h2>
-          </CardTitle>
-          <CardDescription>
-            <p
-              class="text-muted-foreground line-clamp-2 text-sm leading-relaxed"
-              transition:name={`${post.id}-description`}
-            >
-              {post.data.description}
-            </p>
-          </CardDescription>
-        </div>
+    {
+      hasCover && (
+        <Image
+          src={post.data.cover!}
+          alt={post.data.title}
+          class="pointer-events-none relative z-10 h-full w-full object-contain p-6"
+          width={600}
+          height={400}
+        />
+      )
+    }
+  </div>
 
-        <div class="mt-auto flex items-center gap-2 pt-3 sm:gap-3 sm:pt-4">
-          <div class="flex min-w-0 flex-1 items-center gap-2">
-            <StackedAuthors
-              authors={post.authors}
-              show_name={false}
-              transition:name={`${post.id}-authors`}
-            />
-            <span
-              class="text-muted-foreground text-xs whitespace-nowrap"
-              transition:name={`${post.id}-reading-time`}
-            >
-              {post.readingTime}
-            </span>
-          </div>
-          <Time date={post.data.published_date} transition:name={`${post.id}-published-date`} />
-        </div>
-      </CardContent>
+  <div class="flex flex-col gap-1.5 pt-3">
+    <div class="text-muted-foreground flex items-center gap-1.5 text-xs">
+      {post.data.categories[0] && <span class="capitalize">{post.data.categories[0]}</span>}
+      <span>&middot;</span>
+      <Time date={post.data.published_date} />
+      <span>&middot;</span>
+      <span>{post.readingTime}</span>
     </div>
-  </CardPrimitive>
+    <h2
+      class="group-hover:text-primary line-clamp-2 text-base leading-snug font-semibold tracking-tight transition-colors"
+    >
+      {post.data.title}
+    </h2>
+    {
+      showDescription && post.data.description && (
+        <p class="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
+          {post.data.description}
+        </p>
+      )
+    }
+  </div>
 </a>

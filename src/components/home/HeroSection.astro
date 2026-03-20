@@ -1,76 +1,36 @@
 ---
-import { Button } from '@/components/ui/button';
-import { Ripple } from '../magicui/ripple';
+import { Icon } from 'astro-icon/components';
+import { platforms_info } from '@/configs/platforms';
+import { socialLinks } from '@/configs/social';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
 ---
 
-<section class="relative h-[90vh] w-full overflow-hidden">
-  <div class="relative container mx-auto flex h-full flex-col items-center justify-center">
-    <div
-      class="animate-fade-up space-y-4 text-center opacity-0"
-      style="animation-delay: 0.2s; animation-fill-mode: forwards;"
-    >
-      <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-        Hi, I'm Romain
-      </h1>
-      <p class="text-muted-foreground mx-auto max-w-[700px] md:text-xl">
-        I'm a machine learning engineer and software engineer. I write about AI safety, machine
-        learning, and computers in general.
-      </p>
-      <div class="flex justify-center space-x-4">
-        <Button size="lg" variant="outline">
-          <a href="/blog">Read Blog</a>
-        </Button>
-        <Button size="lg" variant="outline">
-          <a href="/about">About Me</a>
-        </Button>
-      </div>
-    </div>
-    <Ripple />
-
-    <div
-      class="animate-fade-up absolute bottom-8 opacity-0"
-      style="animation-delay: 0.6s; animation-fill-mode: forwards;"
-    >
-      <button
-        class="hover:bg-muted flex items-center justify-center rounded-full p-2 transition-colors"
-        aria-label="Scroll to content"
-        onclick="document.getElementById('content').scrollIntoView({ behavior: 'smooth' })"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="size-6 animate-bounce"
+<section class="mx-auto max-w-5xl px-4 pt-16 pb-12 md:pt-24 md:pb-16">
+  <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+    {title}
+  </h1>
+  <p class="text-muted-foreground mt-4 max-w-xl text-lg">
+    {description}
+  </p>
+  <div class="mt-6 flex items-center gap-4">
+    {
+      socialLinks.map((link) => (
+        <a
+          href={link.url}
+          class="text-muted-foreground hover:text-foreground transition-colors"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.label}
         >
-          <path d="M12 5v14"></path>
-          <path d="m19 12-7 7-7-7"></path>
-        </svg>
-      </button>
-    </div>
+          <Icon name={platforms_info[link.platform].icon_name} class="size-5" />
+        </a>
+      ))
+    }
   </div>
 </section>
-
-<div id="content" class="scroll-mt-16"></div>
-
-<style>
-  @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-up {
-    animation: fade-up 0.5s ease-out;
-  }
-</style>

@@ -1,0 +1,26 @@
+---
+import BlogCard from '@/components/blog/card/index.astro';
+import { routes } from '@/configs/routes';
+import type { BlogPostWithAuthors } from '@/lib/collections';
+
+interface Props {
+  posts: BlogPostWithAuthors[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section>
+  <div class="flex items-baseline justify-between">
+    <h2 class="text-xl font-semibold tracking-tight">Recent posts</h2>
+    <a
+      href={routes.blogs}
+      class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+    >
+      View all &rarr;
+    </a>
+  </div>
+  <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+    {posts.map((post) => <BlogCard post={post} />)}
+  </div>
+</section>

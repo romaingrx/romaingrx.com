@@ -1,0 +1,40 @@
+---
+import Time from '@/components/ui/time.astro';
+import { routes } from '@/configs/routes';
+import type { NoteWithAuthors } from '@/lib/collections';
+
+interface Props {
+  notes: NoteWithAuthors[];
+}
+
+const { notes } = Astro.props;
+---
+
+<section>
+  <div class="flex items-baseline justify-between">
+    <h2 class="text-xl font-semibold tracking-tight">Recent notes</h2>
+    <a
+      href={routes.notes}
+      class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+    >
+      View all &rarr;
+    </a>
+  </div>
+  <ul class="mt-6 divide-y">
+    {
+      notes.map((note) => (
+        <li>
+          <a href={routes.note(note)} class="group flex items-center justify-between py-3">
+            <span class="group-hover:text-primary font-medium transition-colors">
+              {note.data.title}
+            </span>
+            <Time
+              date={note.data.published_date}
+              className="text-muted-foreground ml-4 shrink-0 text-sm"
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

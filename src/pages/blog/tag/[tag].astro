@@ -1,16 +1,10 @@
 ---
-import BlogCard from '@/components/blog/card/index.astro';
-import CategoryBadge from '@/components/blog/category-badge.astro';
-import TagBadge from '@/components/blog/tag-badge.astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogListLayout from '@/components/blog/blog-list-layout.astro';
 import { getBlogPosts } from '@/lib/collections';
-
-// export const prerender = true;
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
   const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
-
   return tags.map((tag) => ({
     params: { tag },
     props: { tag },
@@ -18,61 +12,17 @@ export async function getStaticPaths() {
 }
 
 const { tag } = Astro.props;
-
-// Get all published blog posts
 const allPosts = await getBlogPosts();
-
-// Filter posts by tag
 const posts = allPosts.filter((post) => post.data.tags.includes(tag));
-
-// Get unique categories and tags for sidebar
 const categories = [...new Set(allPosts.flatMap((post) => post.data.categories))];
 const tags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
-
-const title = `Blog - ${tag}`;
-const description = `Explore blog posts tagged with ${tag}.`;
 ---
 
-<BaseLayout title={title} description={description}>
-  <main class="container mx-auto px-4 py-12 md:py-24">
-    <div class="grid gap-12 lg:grid-cols-[1fr_16rem]">
-      <!-- Blog Posts Grid -->
-      <section class="space-y-12">
-        <div class="space-y-4">
-          <h1 class="text-4xl font-bold">Tag: {tag}</h1>
-          <p class="text-muted-foreground">
-            {posts.length} post{posts.length === 1 ? '' : 's'}
-          </p>
-        </div>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
-          {posts.map((post) => <BlogCard post={post} layout={'horizontal'} />)}
-        </div>
-      </section>
-
-      <!-- Sidebar -->
-      <aside class="space-y-8">
-        <!-- Categories -->
-        <div class="space-y-4">
-          <h2 class="text-xl font-semibold">Categories</h2>
-          <ul class="space-y-2">
-            {
-              categories.map((category) => (
-                <li>
-                  <CategoryBadge category={category} />
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-
-        <!-- Tags -->
-        <div class="space-y-4">
-          <h2 class="text-xl font-semibold">Tags</h2>
-          <div class="flex flex-wrap gap-2">
-            {tags.map((t) => <TagBadge tag={t} isActive={t === tag} />)}
-          </div>
-        </div>
-      </aside>
-    </div>
-  </main>
-</BaseLayout>
+<BlogListLayout
+  title="Blog"
+  description={`Blog posts tagged with ${tag}.`}
+  posts={posts}
+  categories={categories}
+  tags={tags}
+  activeTag={tag}
+/>

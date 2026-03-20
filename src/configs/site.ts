@@ -1,6 +1,7 @@
 export const site = {
   title: 'romaingrx.com',
-  description: 'Attach your seatbelt because the next 10 years will be wild',
+  name: 'Romain',
+  description: 'Machine learning engineer writing about AI safety, deep learning, and software.',
   url: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
   repo: 'romaingrx/romaingrx.com',
 } as const;
