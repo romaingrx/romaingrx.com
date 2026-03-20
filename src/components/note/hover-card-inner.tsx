@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/react/hover-card';
 
 type Props = {
   title: string;

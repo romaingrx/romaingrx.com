@@ -1,5 +1,11 @@
 import { ImageGrid } from '@/components/blog/components/image-grid';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/react/card';
 
 import run from '../run.json';
 

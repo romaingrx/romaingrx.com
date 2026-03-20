@@ -1,8 +1,8 @@
 ---
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import Button from '@/components/ui/button.astro';
+import Input from '@/components/ui/input.astro';
+import Label from '@/components/ui/label.astro';
+import Textarea from '@/components/ui/textarea.astro';
 
 interface Props {
   hideTitle?: boolean;
@@ -30,7 +30,7 @@ const { hideTitle = false } = Astro.props;
     <form method="POST" class="space-y-8">
       <div class="grid gap-6">
         <div class="grid gap-2">
-          <Label htmlFor="name">Name</Label>
+          <Label for="name">Name</Label>
           <Input
             id="name"
             name="name"
@@ -38,13 +38,12 @@ const { hideTitle = false } = Astro.props;
             required
             disabled
             className="p-6 text-lg"
-            aria-required="true"
-            minLength={2}
+            minlength={2}
           />
         </div>
 
         <div class="grid gap-2">
-          <Label htmlFor="email">Email</Label>
+          <Label for="email">Email</Label>
           <Input
             id="email"
             name="email"
@@ -53,12 +52,11 @@ const { hideTitle = false } = Astro.props;
             placeholder="john@example.com"
             required
             className="p-6 text-lg"
-            aria-required="true"
           />
         </div>
 
         <div class="grid gap-2">
-          <Label htmlFor="message">Message</Label>
+          <Label for="message">Message</Label>
           <Textarea
             id="message"
             name="message"
@@ -66,8 +64,7 @@ const { hideTitle = false } = Astro.props;
             disabled
             required
             className="min-h-[200px] p-6 text-lg"
-            aria-required="true"
-            minLength={10}
+            minlength={10}
           />
         </div>
       </div>

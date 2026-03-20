@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { CartesianGrid, Cell, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 
 import ChartCard from '@/components/charts/card';
-import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
+import { ChartContainer, type ChartConfig } from '@/components/ui/react/chart';
 
 import run from '../run.json';
 

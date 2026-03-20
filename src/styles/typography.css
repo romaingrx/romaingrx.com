@@ -78,8 +78,8 @@
 }
 
 .prose blockquote {
+  @apply border-l-border;
   border-left-width: 4px;
-  border-left-color: #e5e7eb;
   font-style: italic;
   margin-top: 2em;
   margin-bottom: 2em;

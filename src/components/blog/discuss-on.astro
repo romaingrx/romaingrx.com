@@ -1,6 +1,5 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { buttonVariants } from '@/components/ui/button';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
 
 interface Props {
@@ -40,7 +39,7 @@ const threads = [
             href={thread.url}
             target="_blank"
             rel="noopener noreferrer"
-            class={buttonVariants({ variant: 'outline', size: 'sm' })}
+            class="btn-sm-outline"
             aria-label={`Discuss on ${thread.label}`}
           >
             <Icon name={thread.icon} class="size-4" />

@@ -1,0 +1,44 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+
+type Variant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+type Size = 'default' | 'sm' | 'lg' | 'icon' | 'icon-sm' | 'icon-lg';
+
+interface Props extends HTMLAttributes<'button'> {
+  variant?: Variant;
+  size?: Size;
+  className?: string;
+}
+
+const variantClass: Record<Variant, string> = {
+  default: 'btn',
+  destructive: 'btn-destructive',
+  outline: 'btn-outline',
+  secondary: 'btn-secondary',
+  ghost: 'btn-ghost',
+  link: 'btn-link',
+};
+
+const sizePrefix: Record<Size, string> = {
+  default: '',
+  sm: '-sm',
+  lg: '-lg',
+  icon: '-icon',
+  'icon-sm': '-sm-icon',
+  'icon-lg': '-lg-icon',
+};
+
+function getClass(variant: Variant, size: Size): string {
+  if (size === 'default') return variantClass[variant];
+  if (variant === 'default') return `btn${sizePrefix[size]}`;
+  return `btn${sizePrefix[size]}-${variant}`;
+}
+
+const { variant = 'default', size = 'default', className, class: cls, ...props } = Astro.props;
+const baseClass = getClass(variant, size);
+---
+
+<button class={cn(baseClass, className, cls)} {...props}>
+  <slot />
+</button>

@@ -25,7 +25,12 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-import { Alert, AlertDescription, AlertTitle, type AlertVariant } from '@/components/ui/alert';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  type AlertVariant,
+} from '@/components/ui/react/alert';
 import { cn } from '@/lib/utils';
 
 export type CalloutVariant = Exclude<AlertVariant, 'default'>;
