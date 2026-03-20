@@ -39,16 +39,6 @@ export function formatCompactDate(date: Date | string, formatStr: string = 'yyyy
 }
 
 /**
- * Format reading time
- */
-export function formatReadingTime(minutes: number): string {
-  if (minutes < 1) {
-    return '< 1 min read';
-  }
-  return `${Math.round(minutes)} min read`;
-}
-
-/**
  * Format ISO string for datetime attributes
  */
 export function formatISO(date: Date | string): string {

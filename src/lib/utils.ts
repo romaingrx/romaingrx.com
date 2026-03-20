@@ -14,13 +14,6 @@ export function slugify(str: string): string {
     .replace(/(^-|-$)+/g, '');
 }
 
-export function calculateReadingTime(content: string): string {
-  const wordsPerMinute = 200;
-  const words = content.trim().split(/\s+/).length;
-  const minutes = Math.ceil(words / wordsPerMinute);
-  return `${minutes} min read`;
-}
-
 /**
  * Converts a relative path to an absolute URL
  * @param {string} path - The relative path to convert
