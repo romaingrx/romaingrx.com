@@ -1,0 +1,67 @@
+name: Bundle Size
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  bundle-size:
+    name: Bundle Size Report
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: pnpm/action-setup@02f6c237bd2518259fed6c71566509edfb3f2b74 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Generate bundle report
+        run: |
+          bash scripts/bundle-report.sh --json > /tmp/bundle.json
+
+          node -e "
+          const fs = require('fs');
+          const pr = JSON.parse(fs.readFileSync('/tmp/bundle.json', 'utf8'));
+
+          function h(bytes) {
+            if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + 'MB';
+            if (bytes >= 1024) return (bytes / 1024).toFixed(1) + 'KB';
+            return bytes + 'B';
+          }
+
+          let md = '## Bundle Size Report\n\n';
+          md += '| Metric | Size (gz) |\n|--------|----------:|\n';
+          md += '| JS | ' + h(pr.totals.js_gz) + ' |\n';
+          md += '| CSS | ' + h(pr.totals.css_gz) + ' |\n\n';
+
+          md += '| Route | JS | CSS | Total |\n';
+          md += '|-------|---:|----:|------:|\n';
+          for (const [route, d] of Object.entries(pr.pages)) {
+            md += '| \`' + route + '\` | ' + h(d.js_gz) + ' | ' + h(d.css_gz) + ' | ' + h(d.js_gz + d.css_gz) + ' |\n';
+          }
+
+          md += '\n<details><summary>Top JS chunks</summary>\n\n';
+          md += '| Chunk | Gzipped |\n|-------|---------:|\n';
+          for (const c of pr.top_chunks) {
+            md += '| \`' + c.name + '\` | ' + h(c.gz) + ' |\n';
+          }
+          md += '\n</details>\n';
+
+          fs.writeFileSync('/tmp/bundle-report.md', md);
+          "
+
+      - name: Post PR comment
+        uses: marocchino/sticky-pull-request-comment@70d2764d1a7d5d9560b100cbea0077fc8f633987 # v3
+        with:
+          path: /tmp/bundle-report.md
