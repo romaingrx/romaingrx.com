@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any -- DOM shim requires any casts */
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
+
 import type { Plugin } from 'vite';
 
 export interface ExcalidrawFile {
@@ -71,7 +72,7 @@ let domReady = false;
  */
 export async function excalidrawToSvg(
   diagram: ExcalidrawFile,
-  options: ExcalidrawToSvgOptions = {}
+  options: ExcalidrawToSvgOptions = {},
 ): Promise<string> {
   if (!domReady) {
     setupDomEnvironment();

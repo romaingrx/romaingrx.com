@@ -1,6 +1,8 @@
 import { defineCollection, reference } from 'astro:content';
+
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+
 import { platforms_enum } from './configs/platforms';
 import { resource_schema } from './configs/resources';
 
@@ -33,7 +35,7 @@ const author = defineCollection({
               url: z.url(),
               handle: z.string().optional(),
             })
-            .optional()
+            .optional(),
         ),
       })
       .strict(),

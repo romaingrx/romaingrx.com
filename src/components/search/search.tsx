@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import { FileTextIcon, Loader2Icon, NotebookIcon, SearchIcon } from 'lucide-react';
+
 import {
   CommandDialog,
   CommandEmpty,
@@ -42,8 +44,8 @@ async function loadPagefind() {
 
 function ResultIcon({ url }: { url: string }) {
   if (url.startsWith('/notes/'))
-    return <NotebookIcon className="text-muted-foreground size-4 shrink-0" />;
-  return <FileTextIcon className="text-muted-foreground size-4 shrink-0" />;
+    return <NotebookIcon className="size-4 shrink-0 text-muted-foreground" />;
+  return <FileTextIcon className="size-4 shrink-0 text-muted-foreground" />;
 }
 
 function ResultLabel({ url }: { url: string }) {
@@ -70,7 +72,7 @@ export function SearchTrigger() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-muted-foreground hover:text-foreground hover:bg-accent inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors"
+        className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         aria-label="Search"
       >
         <SearchIcon className="size-4" />
@@ -122,7 +124,7 @@ function SearchDialog({
       }
       const search = await pf.search(query);
       const data: SearchResult[] = await Promise.all(
-        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data())
+        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data()),
       );
       setResults(data);
       setLoading(false);
@@ -143,7 +145,7 @@ function SearchDialog({
       title="Search"
       description="Search blog posts and notes"
       showCloseButton={false}
-      className="top-[20%] translate-y-0 border-border/60 ring-1 ring-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] sm:max-w-lg"
+      className="top-[20%] translate-y-0 border-border/60 shadow-[0_0_40px_rgba(0,0,0,0.5)] ring-1 ring-white/10 sm:max-w-lg"
     >
       <CommandInput
         placeholder="Search posts and notes..."
@@ -153,7 +155,7 @@ function SearchDialog({
       <CommandList className="max-h-[min(400px,50vh)]">
         {loading && (
           <div className="flex items-center justify-center py-8">
-            <Loader2Icon className="text-muted-foreground size-5 animate-spin" />
+            <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
           </div>
         )}
         {!loading && query.trim() && results.length === 0 && (
@@ -173,11 +175,11 @@ function SearchDialog({
                     <span className="truncate text-sm font-medium">
                       {result.meta.title}
                       {sub.title !== result.meta.title && (
-                        <span className="text-muted-foreground font-normal"> — {sub.title}</span>
+                        <span className="font-normal text-muted-foreground"> — {sub.title}</span>
                       )}
                     </span>
                     <span
-                      className="text-muted-foreground line-clamp-1 text-xs [&_mark]:bg-transparent [&_mark]:font-semibold [&_mark]:text-foreground"
+                      className="line-clamp-1 text-xs text-muted-foreground [&_mark]:bg-transparent [&_mark]:font-semibold [&_mark]:text-foreground"
                       dangerouslySetInnerHTML={{ __html: sub.excerpt }}
                     />
                   </div>
@@ -185,12 +187,12 @@ function SearchDialog({
                     <ResultLabel url={result.url} />
                   </CommandShortcut>
                 </CommandItem>
-              ))
+              )),
             )}
           </CommandGroup>
         )}
         {!loading && !query.trim() && (
-          <div className="text-muted-foreground flex flex-col items-center gap-2 py-8 text-sm">
+          <div className="flex flex-col items-center gap-2 py-8 text-sm text-muted-foreground">
             <SearchIcon className="size-5 opacity-40" />
             <span>Type to search across all content</span>
           </div>

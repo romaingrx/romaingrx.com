@@ -1,5 +1,5 @@
 ---
-import NoteHoverCard from '@/components/note/hover-card';
+import NoteHoverCard from '@/components/note/hover-card.astro';
 import Shell from '@/components/Shell.astro';
 import Time from '@/components/ui/time.astro';
 import { routes } from '@/configs/routes';
@@ -42,7 +42,7 @@ const description = `Collection of notes tagged with "${tag}".`;
           <ul class="space-y-2">
             {notes.map((note) => (
               <li class="group bg-card hover:bg-accent/40 rounded-lg border transition-colors">
-                <NoteHoverCard note={note} client:load>
+                <NoteHoverCard note={note}>
                   <a href={routes.note(note)} class="flex items-center justify-between px-4 py-3">
                     <span class="group-hover:text-primary font-medium transition-colors">
                       {note.data.title}

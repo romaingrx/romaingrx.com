@@ -4,13 +4,13 @@ version = "0.1.0"
 description = "Variational Autoencoder for protein sequences in JAX"
 requires-python = ">=3.12"
 dependencies = [
-    "jax>=0.4.35",
-    "jaxlib>=0.4.35",
-    "equinox>=0.11.10",
-    "optax>=0.2.4",
-    "jaxtyping>=0.2.34",
-    "structlog>=24.0.0",
-    "pydantic>=2.0.0",
+  "jax>=0.4.35",
+  "jaxlib>=0.4.35",
+  "equinox>=0.11.10",
+  "optax>=0.2.4",
+  "jaxtyping>=0.2.34",
+  "structlog>=24.0.0",
+  "pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]

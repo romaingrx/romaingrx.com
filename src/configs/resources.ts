@@ -1,4 +1,5 @@
 import { z } from 'astro/zod';
+
 import { platforms_enum } from './platforms';
 import { site } from './site';
 
@@ -44,7 +45,7 @@ const branch = process.env.WORKERS_CI_BRANCH ?? 'main';
  */
 export function resolveResourceValue(
   value: string,
-  { collection, entryId }: { collection: string; entryId: string }
+  { collection, entryId }: { collection: string; entryId: string },
 ): string {
   if (!value.startsWith('./')) return value;
   const relativePath = value.slice(2);

@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
+
 import { CartesianGrid, Cell, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
+
 import ChartCard from '@/components/charts/card';
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
+
 import run from '../run.json';
 
 const config = {
@@ -28,18 +31,19 @@ function CustomTooltip({
   if (!active || !payload?.[0]) return null;
   const { x, y, sequence } = payload[0].payload;
   return (
-    <div className="bg-background border-border rounded-lg border p-3 shadow-xl">
-      <div className="text-muted-foreground mb-1 text-xs font-medium">
+    <div className="rounded-lg border border-border bg-background p-3 shadow-xl">
+      <div className="mb-1 text-xs font-medium text-muted-foreground">
         z = [{x.toFixed(2)}, {y.toFixed(2)}]
       </div>
-      <div className="max-w-[280px] break-all font-mono text-xs leading-relaxed">
+      <div className="max-w-[280px] font-mono text-xs leading-relaxed break-all">
         {sequence.split('').map((aa: string, i: number) => (
-          <span key={i} className="inline-block" style={{ color: seqColor(aa) }}>
+          // eslint-disable-next-line react/no-array-index-key -- positional character rendering
+          <span key={`${i}-${aa}`} className="inline-block" style={{ color: seqColor(aa) }}>
             {aa}
           </span>
         ))}
       </div>
-      <div className="text-muted-foreground mt-1 text-xs">{sequence.length} residues</div>
+      <div className="mt-1 text-xs text-muted-foreground">{sequence.length} residues</div>
     </div>
   );
 }
@@ -47,7 +51,7 @@ function CustomTooltip({
 export default function LatentSpace() {
   const data = useMemo(
     () => run.latent_space.map((p) => ({ x: p.z[0], y: p.z[1], sequence: p.sequence })),
-    []
+    [],
   );
 
   return (
@@ -88,8 +92,13 @@ export default function LatentSpace() {
           />
           <Tooltip content={<CustomTooltip />} cursor={false} isAnimationActive={true} />
           <Scatter data={data} isAnimationActive={true}>
-            {data.map((point, i) => (
-              <Cell key={i} fill={seqColor(point.sequence)} fillOpacity={0.7} r={3} />
+            {data.map((point) => (
+              <Cell
+                key={`${point.x}-${point.y}`}
+                fill={seqColor(point.sequence)}
+                fillOpacity={0.7}
+                r={3}
+              />
             ))}
           </Scatter>
         </ScatterChart>

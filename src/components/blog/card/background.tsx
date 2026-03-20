@@ -1,4 +1,5 @@
 import React from 'react';
+
 import SmoothGradient, {
   type SmoothGradientProps,
 } from '@/components/backgrounds/smooth-gradient.tsx';
@@ -9,16 +10,16 @@ export interface BlogPostBackgroundProps extends React.HTMLProps<HTMLDivElement>
   height?: string;
 }
 
-function generateSmoothGradientProps(title: string): SmoothGradientProps {
-  const hash = (str: string) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash + char) >>> 0;
-    }
-    return hash;
-  };
+function hash(str: string) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    h = ((h << 5) - h + char) >>> 0;
+  }
+  return h;
+}
 
+function generateSmoothGradientProps(title: string): SmoothGradientProps {
   const seed = hash(title);
   const hue1 = seed % 360;
   const hue2 = (hue1 + 60) % 360;

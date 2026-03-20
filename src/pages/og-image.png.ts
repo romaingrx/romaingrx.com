@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+
 import { generateOGImage } from '../utils/og';
 
 export const GET: APIRoute = async () => {

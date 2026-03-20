@@ -14,6 +14,7 @@
  */
 
 import type { ReactNode } from 'react';
+
 import {
   AlertCircle,
   AlertTriangle,
@@ -23,6 +24,7 @@ import {
   Star,
   type LucideIcon,
 } from 'lucide-react';
+
 import { Alert, AlertDescription, AlertTitle, type AlertVariant } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 
@@ -82,9 +84,9 @@ export function Callout({
 
   return (
     <Alert variant={variant} className={cn('my-6', className, astroClass)}>
-      <AlertTitle className="mb-4 flex gap-2 items-end">
+      <AlertTitle className="mb-4 flex items-end gap-2">
         <Icon className="size-4" />
-        <span className="font-semibold text-md">{displayTitle}</span>
+        <span className="text-md font-semibold">{displayTitle}</span>
       </AlertTitle>
       <AlertDescription className="[&_p]:mb-0 [&_p:not(:last-child)]:mb-3">
         {children}

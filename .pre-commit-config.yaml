@@ -21,20 +21,28 @@ repos:
       - id: conventional-pre-commit
         stages: [commit-msg]
 
-  # ESLint and Prettier (using local versions)
+  # Oxlint, Oxfmt and Prettier (using local versions)
   - repo: local
     hooks:
+      - id: oxfmt
+        name: Oxfmt
+        entry: pnpm oxfmt --ignore-path .gitignore --write
+        language: system
+        stages: [pre-commit]
+        pass_filenames: true
+        files: \.(js|jsx|ts|tsx|mjs|cjs|md|mdx|css|json|yaml|yml)$
+
       - id: prettier
-        name: Prettier
+        name: Prettier (Astro)
         entry: pnpm prettier --write
         language: system
         stages: [pre-commit]
         pass_filenames: true
-        files: \.(js|jsx|ts|tsx|astro|md|yaml|yml)$
+        files: \.astro$
 
-      - id: eslint
-        name: ESLint
-        entry: pnpm eslint --fix
+      - id: oxlint
+        name: Oxlint
+        entry: pnpm oxlint --fix
         language: system
         stages: [pre-commit]
         pass_filenames: true

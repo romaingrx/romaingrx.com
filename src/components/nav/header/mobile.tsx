@@ -1,7 +1,10 @@
 import * as React from 'react';
+
 import { Menu } from 'lucide-react';
+
 import Logo from '@/components/logo/logo';
 import { cn } from '@/lib/utils';
+
 import { Button } from '../../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../../ui/sheet';
 
@@ -38,7 +41,7 @@ export function MobileNav({ navigation, currentPath, className }: MobileNavProps
           <Menu className="size-4" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[280px] sm:w-[350px] p-0">
+      <SheetContent side="right" className="w-[280px] p-0 sm:w-[350px]">
         {/* Header with logo/brand */}
         <div className="border-b border-border bg-background/50 font-semibold capitalize">
           <div className="flex items-center justify-between p-1">
@@ -58,7 +61,7 @@ export function MobileNav({ navigation, currentPath, className }: MobileNavProps
                   'flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors',
                   isActive(item.href, currentPath)
                     ? 'bg-accent text-accent-foreground'
-                    : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground',
                 )}
                 aria-current={isActive(item.href, currentPath) ? 'page' : undefined}
               >

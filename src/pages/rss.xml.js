@@ -1,4 +1,5 @@
 import rss from '@astrojs/rss';
+
 import { routes } from '@/configs/routes';
 import { site } from '@/configs/site';
 import { getBlogPosts, getNotes } from '@/lib/collections';

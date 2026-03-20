@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+
 import { getBlogPosts } from '@/lib/collections';
 import { generateOGImage } from '@/utils/og';
 

@@ -1,8 +1,8 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 import ico from 'sharp-ico';
+import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -11,7 +11,7 @@ async function generateFavicon() {
     // Read the SVG file
     const svg_logo = await fs.readFile(
       path.join(__dirname, '../src/components/logo/logo.svg'),
-      'utf-8'
+      'utf-8',
     );
 
     // Generate different sizes

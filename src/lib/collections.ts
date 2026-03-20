@@ -1,6 +1,9 @@
 import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
+
 import { NODE_ENV } from 'astro:env/client';
+
 import { site } from '@/configs/site';
+
 import { getAbsoluteUrl, slugify } from './utils';
 
 export type Author = CollectionEntry<'author'>;
@@ -25,34 +28,35 @@ async function resolveAuthors(entry: ContentEntry, authors: Author[]): Promise<A
       const author = authors.find((a) => a.id === ref.id);
       if (!author) throw new Error(`Author ${ref.id} not found`);
       return author;
-    })
+    }),
   );
 }
 
 async function getContentWithAuthors<T extends ContentEntry>(
   collection: 'blog' | 'note',
-  urlPrefix: string
+  urlPrefix: string,
 ): Promise<WithAuthors<T>[]> {
   const entries = await astroGetCollection(collection, (entry) =>
-    NODE_ENV === 'production' ? entry.data.status === 'published' : entry.data.status !== 'archived'
+    NODE_ENV === 'production'
+      ? entry.data.status === 'published'
+      : entry.data.status !== 'archived',
   );
   const authors = await astroGetCollection('author');
 
   return Promise.all(
     entries
-      .sort((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
+      .toSorted((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
       .map(async (entry) => {
         const { remarkPluginFrontmatter } = await render(entry);
         const resolved = await resolveAuthors(entry, authors);
         const slug = slugify(entry.data.title);
-        return {
-          ...entry,
+        return Object.assign({}, entry, {
           authors: resolved,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
           slug,
           url: getAbsoluteUrl(`/${urlPrefix}/${slug}`, new URL(site.url)),
-        } as WithAuthors<T>;
-      })
+        }) as WithAuthors<T>;
+      }),
   );
 }
 

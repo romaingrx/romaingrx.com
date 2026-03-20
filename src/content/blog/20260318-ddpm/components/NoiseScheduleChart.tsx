@@ -1,4 +1,5 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+
 import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
@@ -8,6 +9,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart';
+
 import run from '../run.json';
 
 const config = {

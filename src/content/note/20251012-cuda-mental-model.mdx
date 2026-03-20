@@ -27,6 +27,7 @@ A grid is the entire collection of parallel work for your kernel.
 - A grid can be 1, 2 or 3 dimensional
 
 ## Block (thread block)
+
 A block is a group of threads that executes on the same [streaming multiprocessor (SM)](https://modal.com/gpu-glossary/device-hardware/streaming-multiprocessor).
 
 - Threads in a block can communicate via [shared memory](https://modal.com/gpu-glossary/device-software/shared-memory) and synchronize using barriers
@@ -38,7 +39,6 @@ A block is a group of threads that executes on the same [streaming multiprocesso
 This is the individual unit of execution.
 
 - The role is to access the right part of the data based on its index and execute the kernel
-
 
 # Code example
 
@@ -53,6 +53,7 @@ To do so, I've implemented some easy helper functions to unroll all these indice
 ## `get_offset`
 
 The first function `get_offset` simply gets the flattened index of the `coordinates` variable in a 3 dimensional cube of dimensions `dim`. For example, if we're at the coordinates `dim3(2, 2, 2)` in a cube of dimension `dim3(8, 8, 8)`, we need to sum all the individual units that came before our current `coordinates` in the following way:
+
 1. The current index in the x direction which is simply `coordinates.x`
 2. The current index in the y direction, which means that we need to take into account all the `coordinates.y` number of "rows" of dimensions `dim.x`
 3. And finally sum all the "rows" and "cols" of dimensions `dim.x` and `dim.y` times our coordinate in direction z `coordinates.z`
@@ -71,6 +72,7 @@ So in our cube example of dimensions `dim3(8, 8, 8)`, we'll have a flattened ind
 ## Main function `whoami`
 
 In CUDA, we define our kernel with a `__global__` keyword and in our kernel we have access to the following variables:
+
 - `gridDim` which defines the 3D dimensions of our grid
 - `blockDim` which also defines the dimensions of our blocks within the grid
 - `blockIdx` is the coordinate of the current block we're in
@@ -79,7 +81,6 @@ In CUDA, we define our kernel with a `__global__` keyword and in our kernel we h
 All these variables are 3 dimensional (`dim3`).
 
 So if we decide on our grid dimension and block dimensions, we'll be able to observe all our thread indexes within the blocks and grid.
-
 
 ```cu title=01_indexing.cu
 #include <stdio.h>

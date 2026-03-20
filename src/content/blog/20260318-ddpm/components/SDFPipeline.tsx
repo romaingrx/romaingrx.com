@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import run from '../run.json';
 
 const example = run.forward_process[0];
@@ -22,10 +23,10 @@ export default function SDFPipeline() {
       <CardContent>
         <div className="flex items-center justify-center gap-4">
           {stages.map((stage, i) => (
-            <div key={i} className="flex items-center gap-4">
+            <div key={stage.label} className="flex items-center gap-4">
               {i > 0 && <span className="text-2xl text-muted-foreground">→</span>}
               <div className="flex flex-col items-center gap-2">
-                <div className="rounded bg-black p-1 flex items-center justify-center">
+                <div className="flex items-center justify-center rounded bg-black p-1">
                   <img
                     src={`data:image/png;base64,${stage.image}`}
                     alt={stage.label}
@@ -34,7 +35,7 @@ export default function SDFPipeline() {
                     style={{ width: 96, height: 96, imageRendering: 'pixelated' }}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground font-mono">{stage.label}</span>
+                <span className="font-mono text-xs text-muted-foreground">{stage.label}</span>
               </div>
             </div>
           ))}

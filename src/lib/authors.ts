@@ -1,5 +1,5 @@
-import type { Platform } from '@/configs/platforms';
 import type { Author } from './collections';
+import type { Platform } from '@/configs/platforms';
 
 export function getAuthorsWithSocialLinks({
   authors,

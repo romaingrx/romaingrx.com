@@ -12,10 +12,9 @@ interface Props {
 }
 
 const { note, class: className = '' } = Astro.props;
-const resources = note.data.resources.map((r) => ({
-  ...r,
-  value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }),
-}));
+const resources = note.data.resources.map((r) =>
+  Object.assign({}, r, { value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }) })
+);
 ---
 
 <header class:list={['py-8', className]}>

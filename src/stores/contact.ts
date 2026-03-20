@@ -1,4 +1,5 @@
 import { persistentAtom } from '@nanostores/persistent';
+
 import { emptyContactForm, type ContactFormData } from '../schemas/contact';
 
 export const $contactForm = persistentAtom<ContactFormData>(
@@ -7,5 +8,5 @@ export const $contactForm = persistentAtom<ContactFormData>(
   {
     encode: JSON.stringify,
     decode: JSON.parse,
-  }
+  },
 );

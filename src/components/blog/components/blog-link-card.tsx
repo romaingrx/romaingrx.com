@@ -22,10 +22,10 @@ export default function BlogLinkCard({
       <HoverCardTrigger asChild>
         <a href={href}>{children}</a>
       </HoverCardTrigger>
-      <HoverCardContent className="w-72 !z-[9999]" align="start" sideOffset={6}>
+      <HoverCardContent className="!z-[9999] w-72" align="start" sideOffset={6}>
         <div className="space-y-1.5">
-          <p className="text-sm font-medium leading-snug">{title}</p>
-          <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
+          <p className="text-sm leading-snug font-medium">{title}</p>
+          <p className="line-clamp-2 text-xs text-muted-foreground">{description}</p>
           <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
             <span>{date}</span>
             {readingTime && (

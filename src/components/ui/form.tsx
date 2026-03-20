@@ -10,8 +10,10 @@ import {
   type FieldPath,
   type FieldValues,
 } from 'react-hook-form';
+
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
+
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -32,8 +34,9 @@ const FormField = <
 >({
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
+  const value = React.useMemo(() => ({ name: props.name }), [props.name]);
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
+    <FormFieldContext.Provider value={value}>
       <Controller {...props} />
     </FormFieldContext.Provider>
   );
@@ -70,9 +73,10 @@ const FormItemContext = React.createContext<FormItemContextValue>({} as FormItem
 
 function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = React.useId();
+  const value = React.useMemo(() => ({ id }), [id]);
 
   return (
-    <FormItemContext.Provider value={{ id }}>
+    <FormItemContext.Provider value={value}>
       <div data-slot="form-item" className={cn('grid gap-2', className)} {...props} />
     </FormItemContext.Provider>
   );
@@ -113,7 +117,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   );
@@ -131,7 +135,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-destructive text-sm', className)}
+      className={cn('text-sm text-destructive', className)}
       {...props}
     >
       {body}

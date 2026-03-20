@@ -17,7 +17,7 @@ const filteredEntries = type
   : entries;
 
 // Sort items by date (most recent first)
-const sortedItems = [...filteredEntries].sort((a, b) => {
+const sortedItems = filteredEntries.toSorted((a, b) => {
   const dateA = a.data.endDate === 'present' ? new Date() : new Date(a.data.startDate);
   const dateB = b.data.endDate === 'present' ? new Date() : new Date(b.data.startDate);
   return dateB.getTime() - dateA.getTime();

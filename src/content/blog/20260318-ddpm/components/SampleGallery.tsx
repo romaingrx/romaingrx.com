@@ -1,5 +1,6 @@
 import { ImageGrid } from '@/components/blog/components/image-grid';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import run from '../run.json';
 
 const images = run.samples.map((s) => ({ src: s.image, label: s.letter }));

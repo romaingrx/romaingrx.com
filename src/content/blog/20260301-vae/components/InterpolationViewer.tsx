@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+
 import run from '../run.json';
 
 type Interpolation = (typeof run.interpolations)[number];
@@ -20,7 +21,7 @@ function StepViewer({ interp }: { interp: Interpolation }) {
   }, [interp]);
 
   return (
-    <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-3">
+    <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
       <div className="flex items-center gap-3">
         <input
           type="range"
@@ -30,7 +31,7 @@ function StepViewer({ interp }: { interp: Interpolation }) {
           onChange={(e) => setStep(Number(e.target.value))}
           className="flex-1 accent-foreground"
         />
-        <span className="text-muted-foreground text-xs font-mono tabular-nums w-16 text-right">
+        <span className="w-16 text-right font-mono text-xs text-muted-foreground tabular-nums">
           {step}/{nSteps - 1}
         </span>
       </div>
@@ -44,13 +45,14 @@ function StepViewer({ interp }: { interp: Interpolation }) {
         </span>
       </div>
 
-      <div className="font-mono text-xs leading-relaxed flex flex-wrap">
+      <div className="flex flex-wrap font-mono text-xs leading-relaxed">
         {diffs[step].map((d, i) => (
           <span
-            key={i}
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${i}-${d.char}`}
             className={`inline-block w-[0.65em] text-center transition-all duration-150 ${
               d.changed
-                ? 'text-amber-600 dark:text-amber-400 bg-amber-500/15 rounded-sm font-bold scale-110'
+                ? 'scale-110 rounded-sm bg-amber-500/15 font-bold text-amber-600 dark:text-amber-400'
                 : d.isStart && d.isEnd
                   ? 'text-muted-foreground'
                   : d.isEnd
@@ -65,14 +67,14 @@ function StepViewer({ interp }: { interp: Interpolation }) {
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="space-y-0.5">
-          <div className="text-muted-foreground font-medium">Start</div>
-          <div className="font-mono text-muted-foreground/60 break-all leading-relaxed">
+          <div className="font-medium text-muted-foreground">Start</div>
+          <div className="font-mono leading-relaxed break-all text-muted-foreground/60">
             {interp.start}
           </div>
         </div>
         <div className="space-y-0.5">
-          <div className="text-muted-foreground font-medium">End</div>
-          <div className="font-mono text-muted-foreground/60 break-all leading-relaxed">
+          <div className="font-medium text-muted-foreground">End</div>
+          <div className="font-mono leading-relaxed break-all text-muted-foreground/60">
             {interp.end}
           </div>
         </div>
@@ -88,7 +90,7 @@ export default function InterpolationViewer() {
     <div className="my-4 space-y-3">
       <div>
         <h4 className="text-sm font-medium">Latent space interpolation</h4>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           Linear interpolation between two proteins in latent space. Drag the slider to walk through
           decoded sequences. Changed residues highlighted in amber.
         </p>
@@ -96,9 +98,9 @@ export default function InterpolationViewer() {
 
       {run.interpolations.length > 1 && (
         <div className="flex gap-1.5">
-          {run.interpolations.map((_, i) => (
+          {run.interpolations.map((interp, i) => (
             <button
-              key={i}
+              key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}
               onClick={() => setSelected(i)}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                 selected === i
