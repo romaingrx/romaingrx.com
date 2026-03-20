@@ -1,13 +1,19 @@
 ---
-import type { HTMLAttributes } from 'react';
-import DynamicTime from './react/DynamicTime.tsx';
+import { cn } from '@/lib/utils';
+import { formatDate } from '@/lib/format';
 
-interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
+interface Props {
   date: Date;
-  formatStr?: string;
+  className?: string;
+  class?: string;
 }
 
-const { date, ...props } = Astro.props;
+const { date, className, class: cls } = Astro.props;
 ---
 
-<DynamicTime client:load date={date} {...props} />
+<time
+  datetime={date.toISOString()}
+  class={cn('text-xs whitespace-nowrap text-muted-foreground', className, cls)}
+>
+  {formatDate(date)}
+</time>
