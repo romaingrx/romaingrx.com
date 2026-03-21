@@ -12,6 +12,6 @@ interface Props {
 const { variant = 'note', title, class: className, icon } = Astro.props;
 ---
 
-<CalloutComponent variant={variant} title={title} class={className} icon={icon} client:load>
+<CalloutComponent variant={variant} title={title} class={className} icon={icon} client:visible>
   <slot />
 </CalloutComponent>
