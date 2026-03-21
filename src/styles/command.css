@@ -1,0 +1,65 @@
+@reference "./globals.css";
+
+.command-dialog {
+  @apply inset-y-0 opacity-0 transition-all transition-discrete;
+
+  &:is([open], :popover-open) {
+    @apply opacity-100;
+
+    &::backdrop {
+      @apply opacity-100;
+    }
+    > * {
+      @apply scale-100;
+    }
+
+    @starting-style {
+      @apply opacity-0;
+
+      &::backdrop {
+        @apply opacity-0;
+      }
+      > * {
+        @apply scale-95;
+      }
+    }
+  }
+  &::backdrop {
+    @apply bg-black/50 opacity-0 transition-all transition-discrete;
+  }
+  > * {
+    @apply fixed top-[50%] left-[50%] z-50 flex w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg border bg-background shadow-lg sm:max-w-lg;
+    @apply max-h-[min(640px,calc(100%-2rem))] scale-95 transition-all;
+  }
+}
+
+.command {
+  > header {
+    @apply flex items-center gap-2 border-b px-3;
+
+    svg {
+      @apply size-4 shrink-0 opacity-50;
+    }
+    input {
+      @apply flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
+    }
+  }
+  [role='menu'] {
+    @apply max-h-[300px] overflow-x-hidden overflow-y-auto p-2;
+
+    [role='menuitem'] {
+      @apply relative flex w-full cursor-default items-center gap-2 truncate rounded-sm px-2 py-3 text-sm outline-hidden select-none aria-disabled:pointer-events-none aria-disabled:opacity-50;
+
+      &:hover,
+      &.active {
+        @apply bg-accent text-accent-foreground;
+      }
+    }
+    [role='heading'] {
+      @apply flex px-2 py-1.5 text-xs font-medium text-muted-foreground;
+    }
+    [role='separator'] {
+      @apply -mx-1 my-1 border-border;
+    }
+  }
+}

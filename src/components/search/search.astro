@@ -1,4 +1,5 @@
 ---
+import '@/styles/command.css';
 import { Icon } from 'astro-icon/components';
 ---
 
@@ -10,7 +11,7 @@ import { Icon } from 'astro-icon/components';
 >
   <Icon name="lucide:search" class="size-4" />
   <span class="hidden text-xs sm:inline">Search</span>
-  <kbd class="kbd hidden sm:inline-flex"><span class="text-[10px]">⌘</span>K</kbd>
+  <kbd class="hidden sm:inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">⌘K</kbd>
 </button>
 
 <dialog id="search-dialog" class="command-dialog" aria-label="Search">
@@ -82,23 +83,45 @@ import { Icon } from 'astro-icon/components';
   const elNoResults = document.getElementById('search-no-results')!;
   const elItems = document.getElementById('search-items')!;
 
+  let activeIndex = -1;
+
   function show(el: HTMLElement) { el.classList.remove('hidden'); }
   function hide(el: HTMLElement) { el.classList.add('hidden'); }
+
+  function getItems(): HTMLElement[] {
+    return Array.from(elItems.querySelectorAll('[role="menuitem"]'));
+  }
+
+  function setActive(index: number) {
+    const items = getItems();
+    items.forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+      if (i === index) item.scrollIntoView({ block: 'nearest' });
+    });
+    activeIndex = index;
+  }
 
   function openSearch() {
     dialog.showModal();
     input.focus();
+    activeIndex = -1;
     loadPagefind();
   }
 
   function closeSearch() {
     dialog.close();
     input.value = '';
+    activeIndex = -1;
     show(elEmpty);
     hide(elLoading);
     hide(elNoResults);
     hide(elItems);
     elItems.innerHTML = '';
+  }
+
+  function navigate(url: string) {
+    closeSearch();
+    window.location.href = url;
   }
 
   // Trigger
@@ -119,11 +142,30 @@ import { Icon } from 'astro-icon/components';
     }
   });
 
+  // Keyboard navigation inside dialog
+  dialog.addEventListener('keydown', (e) => {
+    const items = getItems();
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActive(activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActive(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+    } else if (e.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
+      e.preventDefault();
+      const href = items[activeIndex].getAttribute('href');
+      if (href) navigate(href);
+    }
+  });
+
   // Debounced search
   let timer: ReturnType<typeof setTimeout>;
   input.addEventListener('input', () => {
     clearTimeout(timer);
     const query = input.value.trim();
+    activeIndex = -1;
 
     if (!query) {
       show(elEmpty);
@@ -163,7 +205,7 @@ import { Icon } from 'astro-icon/components';
             const subtitle = sub.title !== result.meta.title
               ? ` <span class="font-normal text-muted-foreground">— ${sub.title}</span>`
               : '';
-            return `<a href="${sub.url}" role="menuitem" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors hover:bg-accent cursor-pointer" data-search-link>
+            return `<a href="${sub.url}" role="menuitem" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors cursor-pointer" data-search-link>
               <span class="shrink-0">${resultIcon(result.url)}</span>
               <span class="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span class="truncate font-medium">${result.meta.title}${subtitle}</span>
@@ -176,9 +218,13 @@ import { Icon } from 'astro-icon/components';
         .join('');
       show(elItems);
 
-      // Close on result click
-      elItems.querySelectorAll('[data-search-link]').forEach((link) => {
-        link.addEventListener('click', () => closeSearch());
+      // Mouse hover highlights
+      getItems().forEach((item, i) => {
+        item.addEventListener('mouseenter', () => setActive(i));
+        item.addEventListener('click', () => {
+          const href = item.getAttribute('href');
+          if (href) navigate(href);
+        });
       });
     }, 100);
   });
