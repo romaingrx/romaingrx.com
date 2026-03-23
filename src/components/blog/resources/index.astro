@@ -15,7 +15,7 @@ const { resources } = Astro.props;
       {resources.map((resource) => (
         // @ts-ignore
         <ResourceBadge
-          client:load
+          client:visible
           type={resource.type}
           provider={resource.provider}
           title={resource.title}

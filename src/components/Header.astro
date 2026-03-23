@@ -1,6 +1,6 @@
 ---
 import Logo from '@/components/logo/logo';
-import { SearchTrigger } from '@/components/search/search';
+import Search from '@/components/search/search.astro';
 import { routes } from '@/configs/routes';
 import MobileNav from './nav/header/mobile.astro';
 import ThemeToggle from './ThemeToggle.astro';
@@ -60,7 +60,6 @@ const isActive = (href: string) => {
             {/* Active indicator - elegant underline */}
             {isActive(item.href) && (
               <div
-                transition:name="active-indicator"
                 class="bg-foreground absolute bottom-0 left-1/2 h-px w-6 -translate-x-1/2 transition-all duration-200"
               />
             )}
@@ -71,7 +70,7 @@ const isActive = (href: string) => {
 
     <!-- Actions -->
     <div class="flex items-center gap-2">
-      <SearchTrigger client:idle transition:persist="search" />
+      <Search />
       <ThemeToggle />
 
       <!-- Mobile Navigation -->
@@ -81,7 +80,7 @@ const isActive = (href: string) => {
 </header>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('header');
     let lastScrollY = 0;
     let ticking = false;

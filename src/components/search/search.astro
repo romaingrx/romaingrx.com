@@ -1,0 +1,231 @@
+---
+import '@/styles/command.css';
+import { Icon } from 'astro-icon/components';
+---
+
+<button
+  type="button"
+  class="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+  aria-label="Search"
+  id="search-trigger"
+>
+  <Icon name="lucide:search" class="size-4" />
+  <span class="hidden text-xs sm:inline">Search</span>
+  <kbd class="hidden sm:inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">⌘K</kbd>
+</button>
+
+<dialog id="search-dialog" class="command-dialog" aria-label="Search">
+  <div class="command">
+    <header>
+      <Icon name="lucide:search" class="size-4 shrink-0 text-muted-foreground" />
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search posts and notes..."
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+    </header>
+    <div id="search-results" class="scrollbar">
+      <div id="search-empty" class="flex flex-col items-center gap-2 py-8 text-sm text-muted-foreground">
+        <Icon name="lucide:search" class="size-5 opacity-40" />
+        <span>Type to search across all content</span>
+      </div>
+      <div id="search-loading" class="hidden flex items-center justify-center py-8">
+        <Icon name="lucide:loader-2" class="size-5 animate-spin text-muted-foreground" />
+      </div>
+      <div id="search-no-results" class="hidden py-8 text-center text-sm text-muted-foreground">
+        No results found.
+      </div>
+      <div id="search-items" role="menu" class="hidden"></div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  let pagefind: {
+    search: (q: string) => Promise<{ results: { data: () => Promise<SearchResult> }[] }>;
+  } | null = null;
+
+  interface SubResult { title: string; url: string; excerpt: string; }
+  interface SearchResult { url: string; meta: { title: string }; sub_results: SubResult[]; }
+
+  async function loadPagefind() {
+    if (pagefind) return pagefind;
+    try {
+      const pf = await new Function('return import("/pagefind/pagefind.js")')();
+      await pf.init();
+      pagefind = pf;
+      return pf;
+    } catch {
+      return null;
+    }
+  }
+
+  function resultIcon(url: string): string {
+    if (url.startsWith('/notes/')) return '📓';
+    if (url.startsWith('/blog/')) return '📄';
+    return '📃';
+  }
+
+  function resultLabel(url: string): string {
+    if (url.startsWith('/notes/')) return 'Note';
+    if (url.startsWith('/blog/')) return 'Blog';
+    return 'Page';
+  }
+
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const trigger = document.getElementById('search-trigger')!;
+  const elEmpty = document.getElementById('search-empty')!;
+  const elLoading = document.getElementById('search-loading')!;
+  const elNoResults = document.getElementById('search-no-results')!;
+  const elItems = document.getElementById('search-items')!;
+
+  let activeIndex = -1;
+
+  function show(el: HTMLElement) { el.classList.remove('hidden'); }
+  function hide(el: HTMLElement) { el.classList.add('hidden'); }
+
+  function getItems(): HTMLElement[] {
+    return Array.from(elItems.querySelectorAll('[role="menuitem"]'));
+  }
+
+  function setActive(index: number) {
+    const items = getItems();
+    items.forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+      if (i === index) item.scrollIntoView({ block: 'nearest' });
+    });
+    activeIndex = index;
+  }
+
+  function openSearch() {
+    dialog.showModal();
+    input.focus();
+    activeIndex = -1;
+    loadPagefind();
+  }
+
+  function closeSearch() {
+    dialog.close();
+    input.value = '';
+    activeIndex = -1;
+    show(elEmpty);
+    hide(elLoading);
+    hide(elNoResults);
+    hide(elItems);
+    elItems.innerHTML = '';
+  }
+
+  function navigate(url: string) {
+    closeSearch();
+    window.location.href = url;
+  }
+
+  // Trigger
+  trigger.addEventListener('click', openSearch);
+
+  // Cmd+K
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
+  // Close on backdrop click
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) {
+      closeSearch();
+    }
+  });
+
+  // Keyboard navigation inside dialog
+  dialog.addEventListener('keydown', (e) => {
+    const items = getItems();
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActive(activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActive(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+    } else if (e.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
+      e.preventDefault();
+      const href = items[activeIndex].getAttribute('href');
+      if (href) navigate(href);
+    }
+  });
+
+  // Debounced search
+  let timer: ReturnType<typeof setTimeout>;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    const query = input.value.trim();
+    activeIndex = -1;
+
+    if (!query) {
+      show(elEmpty);
+      hide(elLoading);
+      hide(elNoResults);
+      hide(elItems);
+      elItems.innerHTML = '';
+      return;
+    }
+
+    hide(elEmpty);
+    show(elLoading);
+    hide(elNoResults);
+    hide(elItems);
+
+    timer = setTimeout(async () => {
+      const pf = await loadPagefind();
+      if (!pf) { hide(elLoading); return; }
+
+      const search = await pf.search(query);
+      const results: SearchResult[] = await Promise.all(
+        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data()),
+      );
+
+      hide(elLoading);
+
+      if (results.length === 0) {
+        show(elNoResults);
+        hide(elItems);
+        return;
+      }
+
+      hide(elNoResults);
+      elItems.innerHTML = results
+        .flatMap((result) =>
+          (result.sub_results ?? []).map((sub) => {
+            const subtitle = sub.title !== result.meta.title
+              ? ` <span class="font-normal text-muted-foreground">— ${sub.title}</span>`
+              : '';
+            return `<a href="${sub.url}" role="menuitem" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors cursor-pointer" data-search-link>
+              <span class="shrink-0">${resultIcon(result.url)}</span>
+              <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span class="truncate font-medium">${result.meta.title}${subtitle}</span>
+                <span class="line-clamp-1 text-xs text-muted-foreground [&_mark]:bg-transparent [&_mark]:font-semibold [&_mark]:text-foreground">${sub.excerpt}</span>
+              </span>
+              <span class="shrink-0 text-xs text-muted-foreground">${resultLabel(result.url)}</span>
+            </a>`;
+          }),
+        )
+        .join('');
+      show(elItems);
+
+      // Mouse hover highlights
+      getItems().forEach((item, i) => {
+        item.addEventListener('mouseenter', () => setActive(i));
+        item.addEventListener('click', () => {
+          const href = item.getAttribute('href');
+          if (href) navigate(href);
+        });
+      });
+    }, 100);
+  });
+</script>
