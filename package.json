@@ -71,7 +71,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@astrojs/node": "^10.0.1",
+    "@astrojs/node": "^11.0.0",
     "@iconify-json/simple-icons": "^1.2.93",
     "@shikijs/colorized-brackets": "^4.0.2",
     "@shikijs/transformers": "^4.0.2",
