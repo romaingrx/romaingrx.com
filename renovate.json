@@ -1,0 +1,70 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":enableVulnerabilityAlerts", "helpers:pinGitHubActionDigests"],
+  "timezone": "Europe/Zurich",
+  "schedule": ["before 7am on monday"],
+  "labels": ["dependencies"],
+  "prHourlyLimit": 3,
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "configMigration": true,
+  "platformAutomerge": true,
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "automerge": false
+  },
+  "postUpdateOptions": ["pnpmDedupe"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 7am on monday"],
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "description": "Astro core and integrations update together in one PR",
+      "matchPackageNames": ["astro", "/^@astrojs//"],
+      "groupName": "astro"
+    },
+    {
+      "description": "Majors coupled to the next Astro upgrade — pinned until then (see ROM-21)",
+      "matchPackageNames": ["recharts", "@tailwindcss/vite", "shiki", "/^@shikijs//"],
+      "enabled": false
+    },
+    {
+      "description": "Automerge pin and digest updates (zero runtime risk)",
+      "matchUpdateTypes": ["pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Automerge all patch updates in one PR",
+      "matchUpdateTypes": ["patch"],
+      "groupName": "patch dependencies",
+      "automerge": true
+    },
+    {
+      "description": "Group all minor updates into one reviewable PR",
+      "matchUpdateTypes": ["minor"],
+      "groupName": "minor dependencies"
+    },
+    {
+      "description": "Major updates wait for dashboard approval",
+      "matchUpdateTypes": ["major"],
+      "groupName": "major dependencies",
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Automerge GitHub Actions minor/patch bumps",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "github actions",
+      "automerge": true
+    },
+    {
+      "description": "Pin pre-commit hook revs by SHA (tags are mutable)",
+      "matchManagers": ["pre-commit"],
+      "pinDigests": true
+    }
+  ]
+}
