@@ -3,6 +3,7 @@
   "extends": ["config:recommended", ":enableVulnerabilityAlerts", "helpers:pinGitHubActionDigests"],
   "timezone": "Europe/Zurich",
   "schedule": ["before 7am on monday"],
+  "ignorePaths": ["src/content/blog/*/code/**"],
   "labels": ["dependencies"],
   "prHourlyLimit": 3,
   "prConcurrentLimit": 5,
