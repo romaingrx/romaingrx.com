@@ -92,6 +92,9 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+    // Initial sync from embla (an external system) must happen after the API
+    // exists; this mirrors the upstream shadcn/ui carousel implementation.
+    // oxlint-disable-next-line react/set-state-in-effect
     onSelect(api);
     api.on('reInit', onSelect);
     api.on('select', onSelect);
