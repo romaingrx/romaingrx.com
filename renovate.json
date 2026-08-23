@@ -28,7 +28,7 @@
       "groupName": "astro"
     },
     {
-      "description": "Majors coupled to the next Astro upgrade — pinned until then (see ROM-21)",
+      "description": "Majors coupled to the next Astro upgrade — pinned until then",
       "matchPackageNames": ["recharts", "@tailwindcss/vite", "shiki", "/^@shikijs//"],
       "enabled": false
     },
