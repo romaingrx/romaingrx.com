@@ -17,7 +17,9 @@ type Props = {
 export default function AuthorHoverCard({ author, children, with_image = true }: Props) {
   return (
     <HoverCard>
-      <HoverCardTrigger>{children}</HoverCardTrigger>
+      <HoverCardTrigger asChild>
+        <span className="inline-flex cursor-default">{children}</span>
+      </HoverCardTrigger>
       <HoverCardContent className="!z-[9999] w-80" align="start" sideOffset={5}>
         <div className="flex justify-start space-x-4">
           <div className="space-y-1 text-left">
