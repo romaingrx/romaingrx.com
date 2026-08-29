@@ -3,6 +3,7 @@ import React from 'react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/react/hover-card';
 
 type Props = {
+  href: string;
   title: string;
   description?: string;
   readingTime: string;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function NoteHoverCardInner({
+  href,
   title,
   description,
   readingTime,
@@ -19,7 +21,11 @@ export default function NoteHoverCardInner({
 }: Props) {
   return (
     <HoverCard>
-      <HoverCardTrigger>{children}</HoverCardTrigger>
+      <HoverCardTrigger asChild>
+        <a href={href} className="flex items-center justify-between px-4 py-3">
+          {children}
+        </a>
+      </HoverCardTrigger>
       <HoverCardContent className="!z-[9999] w-80" align="start" sideOffset={5}>
         <div className="space-y-4">
           <div className="space-y-2">
