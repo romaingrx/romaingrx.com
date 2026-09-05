@@ -79,7 +79,7 @@
     "@types/node": "^26.2.0",
     "happy-dom": "^20.11.6",
     "mdast-util-to-string": "^4.0.0",
-    "oxfmt": "^0.64.0",
+    "oxfmt": "^0.66.0",
     "oxlint": "^1.79.0",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
@@ -92,5 +92,5 @@
   "overrides": {
     "react-is": "^19.0.0-rc-69d4b800-20241021"
   },
-  "packageManager": "pnpm@11.22.0"
+  "packageManager": "pnpm@11.25.0"
 }
