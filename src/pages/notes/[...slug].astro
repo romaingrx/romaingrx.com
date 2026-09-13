@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { createRoute } from 'astro-typesafe-routes/create-route';
 import { components } from '@/components/blog/components';
 import Prose from '@/components/blog/prose.astro';
 import NoteFooter from '@/components/note/footer/index.astro';
@@ -8,13 +9,19 @@ import Shell from '@/components/Shell.astro';
 import NoteLayout from '@/layouts/NoteLayout.astro';
 import { getNotes } from '@/lib/collections';
 
-export async function getStaticPaths() {
+type Props = {
+  note: Awaited<ReturnType<typeof getNotes>>[number];
+};
+
+export const Route = createRoute({ routeId: '/notes/[...slug]' });
+
+export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
   const notes = await getNotes();
   return notes.map((note) => ({
     params: { slug: note.slug },
     props: { note },
   }));
-}
+});
 
 const { note } = Astro.props;
 const { Content } = await render(note);

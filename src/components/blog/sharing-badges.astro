@@ -1,11 +1,9 @@
 ---
-import type { Params } from 'astro';
 import { Icon } from 'astro-icon/components';
 import Tooltip from '@/components/tooltip/tooltip.astro';
 import { platforms_info, type Platform } from '@/configs/platforms';
 import { getAuthorsWithSocialLinks } from '@/lib/authors';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
-import { getAbsoluteUrl } from '@/lib/utils';
 
 interface Props {
   post: BlogPostWithAuthors | NoteWithAuthors;
@@ -16,7 +14,7 @@ const { post } = Astro.props;
 interface LinkProps {
   title: string;
   pathname: string;
-  params?: Params;
+  params?: Record<string, string | undefined>;
 }
 
 function getAuthorsWithSocialLinksAndWarn({ platform }: { platform: Platform }) {
@@ -72,12 +70,15 @@ ${post.data.tags.map((t) => `#${t}`).join(' ')}`,
   {
     Object.entries(links).map(([platform_name, props]) => {
       const platform = platforms_info[platform_name as Platform];
-      const anchor_url = getAbsoluteUrl(props.pathname, new URL(platform.base_url), props.params);
+      const anchorUrl = new URL(props.pathname, platform.base_url);
+      for (const [key, value] of Object.entries(props.params ?? {})) {
+        if (value) anchorUrl.searchParams.set(key, value);
+      }
       return (
         <Tooltip side="bottom" intent="default">
           <a
             slot="trigger"
-            href={anchor_url}
+            href={anchorUrl}
             target="_blank"
             rel="noopener noreferrer"
             class="text-muted-foreground hover:text-foreground transition-colors"
