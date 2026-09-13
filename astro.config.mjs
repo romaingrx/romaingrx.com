@@ -16,6 +16,7 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 
 import { shikiConfig } from './src/configs/shiki';
+import routeReport from './src/integrations/route-report.mjs';
 import { excalidraw } from './src/lib/excalidraw';
 import { rehypeCitationRelative } from './src/lib/rehype-citation-wrapper.mjs';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
@@ -78,6 +79,7 @@ export default defineConfig({
       },
     }),
     pagefind(),
+    routeReport,
   ],
   vite: {
     plugins: [tailwindcss(), excalidraw()],
