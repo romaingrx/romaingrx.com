@@ -1,7 +1,7 @@
 ---
 import { ArrowUpRight } from 'lucide-react';
-import { Button } from '@/components/ui/react/button';
 import { Card, CardDescription, CardTitle } from '@/components/ui/react/card';
+import { Link } from '@/components/ui/react/link';
 import { cn } from '@/lib/utils';
 
 export interface Props {
@@ -24,11 +24,17 @@ const { title, value, description, link, class: className } = Astro.props;
     <span class="text-2xl font-bold tabular-nums">{value.toLocaleString()}</span>
     {
       link && (
-        <a href={link} target="_blank">
-          <Button variant="secondary" size="sm" className="group">
-            <ArrowUpRight className="size-4 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-          </Button>
-        </a>
+        <Link
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="secondary"
+          size="icon"
+          className="group"
+          aria-label={`Open ${title}`}
+        >
+          <ArrowUpRight className="transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+        </Link>
       )
     }
   </div>

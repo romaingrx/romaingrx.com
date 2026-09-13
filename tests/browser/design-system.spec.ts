@@ -84,14 +84,14 @@ test('stored preference drives theme state and accessible control labels', async
     'Theme: Dark. Activate to change theme',
   );
 
-  await page.locator('#theme-toggle').dispatchEvent('click');
+  await page.locator('#theme-toggle').click();
   await expect(root).toHaveAttribute('data-theme', 'system');
   await expect(page.locator('#theme-toggle')).toHaveAttribute(
     'aria-label',
     /Theme: System \(Light\)/,
   );
 
-  await page.locator('#theme-toggle').dispatchEvent('click');
+  await page.locator('#theme-toggle').click();
   await expect(root).toHaveAttribute('data-theme', 'light');
 });
 
@@ -122,7 +122,7 @@ test('theme changes remain available when storage is unavailable', async ({ page
 
   const root = page.locator('html');
   await expect(root).toHaveAttribute('data-theme', 'system');
-  await page.locator('#theme-toggle').dispatchEvent('click');
+  await page.locator('#theme-toggle').click();
   await expect(root).toHaveAttribute('data-theme', 'light');
   await expect(page.locator('#theme-toggle')).toHaveAttribute(
     'aria-label',

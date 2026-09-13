@@ -2,6 +2,7 @@
 import type { ImageMetadata } from 'astro';
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
+import Button from '@/components/ui/button.astro';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -43,13 +44,15 @@ const { src, html, alt = 'Image', caption, className, width, height } = Astro.pr
     class="image-lightbox fixed inset-0 z-50 hidden cursor-zoom-out items-center justify-center bg-black/80 backdrop-blur-sm"
     data-image-lightbox
   >
-    <button
-      class="absolute top-4 right-4 text-white/60 transition-colors hover:text-white"
+    <Button
+      variant="ghost"
+      size="icon"
+      className="absolute top-4 right-4 text-white/60 hover:text-white"
       aria-label="Close"
       data-image-close
     >
       <Icon name="lucide:x" class="size-5" />
-    </button>
+    </Button>
     <div class="max-h-[90vh] max-w-[90vw] p-8">
       {
         html ? (

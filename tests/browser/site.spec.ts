@@ -31,5 +31,5 @@ test('development component fixture is available to the dev server', async ({ pa
 
   expect(response?.ok()).toBe(true);
   await expect(page).toHaveTitle('Design fixture');
-  await expect(page.getByText('YOOOOOOOOOOOO').first()).toBeVisible();
+  await expect(page.getByText('This alert identifies the active component fixture.')).toBeVisible();
 });
