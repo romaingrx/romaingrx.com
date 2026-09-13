@@ -6,13 +6,15 @@ import { routes } from '@/configs/routes';
 type Props = {
   tag: string;
   isActive?: boolean;
-  basePath?: string;
+  collection?: 'blog' | 'note';
 };
 
-const { tag, isActive = false, basePath = routes.blogs } = Astro.props;
+const { tag, isActive = false, collection = 'blog' } = Astro.props;
+const basePath = collection === 'note' ? routes.notes : routes.blogs;
+const tagPath = collection === 'note' ? routes.noteTag(tag) : routes.blogTag(tag);
 ---
 
-<a href={isActive ? `${basePath}` : `${basePath}/tag/${tag}`}>
+<a href={isActive ? basePath : tagPath}>
   <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
     <Icon name="lucide:tag" class="size-3" />
     <span>{tag}</span>

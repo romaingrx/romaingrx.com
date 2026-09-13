@@ -1,0 +1,24 @@
+---
+import { routes } from '@/configs/routes';
+import Shell from '@/components/Shell.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Link from '@/components/ui/link.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you requested could not be found.">
+  <meta slot="head" name="robots" content="noindex" />
+  <Shell type="page">
+    <section class="flex min-h-[50vh] flex-col items-center justify-center py-24 text-center">
+      <p class="text-muted-foreground text-sm font-semibold tracking-widest uppercase">404</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight">That page is not here.</h1>
+      <p class="text-muted-foreground mt-4 max-w-lg">
+        The link may be out of date, or the page may have moved. Try the latest writing or return home.
+      </p>
+      <nav class="mt-8 flex flex-wrap justify-center gap-3" aria-label="Recovery links">
+        <Link href={routes.home} variant="default">Home</Link>
+        <Link href={routes.blogs} variant="outline">Blog</Link>
+        <Link href={routes.notes} variant="outline">Notes</Link>
+      </nav>
+    </section>
+  </Shell>
+</BaseLayout>

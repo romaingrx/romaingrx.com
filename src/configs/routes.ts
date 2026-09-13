@@ -1,36 +1,35 @@
-/**
- * Routes configuration for the application
- * This file centralizes all route definitions to avoid hardcoding routes in components
- */
+import { $path } from 'astro-typesafe-routes/path';
 
-/**
- * Type for a blog post or note slug
- */
+import { site } from './site';
+
 export interface SlugParams {
   slug: string;
 }
 
-/**
- * Application routes
- */
+const encodeSegment = (value: string) => encodeURIComponent(value);
+
 export const routes = {
-  // Main pages
-  home: '/',
-  about: '/about',
-  contact: '/contact',
+  home: $path({ to: '/' }),
+  about: $path({ to: '/about' }),
+  contact: $path({ to: '/contact' }),
+  blogs: $path({ to: '/blog' }),
+  notes: $path({ to: '/notes' }),
+  ogImage: $path({ to: '/og-image.png' }),
 
-  // Collection pages
-  blogs: '/blog',
-  notes: '/notes',
-
-  // Dynamic routes with params
-  blog: (params: SlugParams) => `/blog/${params.slug}`,
-
-  note: (params: SlugParams) => `/notes/${params.slug}`,
+  blog: ({ slug }: SlugParams) =>
+    $path({ to: '/blog/[...slug]', params: { slug: encodeSegment(slug) } }),
+  note: ({ slug }: SlugParams) =>
+    $path({ to: '/notes/[...slug]', params: { slug: encodeSegment(slug) } }),
+  blogCategory: (category: string) =>
+    $path({ to: '/blog/category/[category]', params: { category: encodeSegment(category) } }),
+  blogTag: (tag: string) => $path({ to: '/blog/tag/[tag]', params: { tag: encodeSegment(tag) } }),
+  noteTag: (tag: string) => $path({ to: '/notes/tag/[tag]', params: { tag: encodeSegment(tag) } }),
+  blogOg: (id: string) => $path({ to: '/og/blog/[id].png', params: { id: encodeSegment(id) } }),
+  noteOg: (id: string) => $path({ to: '/og/note/[id].png', params: { id: encodeSegment(id) } }),
 } as const;
 
-/**
- * Type for the routes object
- * This allows for type checking when using routes in components
- */
+export function absolute(pathname: string, origin: string | URL = site.url): string {
+  return new URL(pathname, origin).toString();
+}
+
 export type Routes = typeof routes;

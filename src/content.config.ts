@@ -6,15 +6,30 @@ import { z } from 'astro/zod';
 import { platforms_enum } from './configs/platforms';
 import { resource_schema } from './configs/resources';
 
+const taxonomyValue = z
+  .string()
+  .min(1, 'Taxonomy values cannot be empty.')
+  .refine(
+    (value) => !['/', '%', '#', '?'].some((character) => value.includes(character)),
+    'Taxonomy values cannot contain "/", "%", "#", or "?" in a single-segment static route.',
+  )
+  .refine(
+    (value) => value !== '.' && value !== '..',
+    'Taxonomy values cannot be "." or ".." because URL segments normalize them.',
+  );
+
 // Shared schema for content entries with authors, status, and metadata
 const baseContentSchema = z.object({
   title: z.string(),
+  permalink: z
+    .string()
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use a lowercase hyphenated permalink.'),
   description: z.string().optional(),
   authors: z.array(reference('author')),
   status: z.enum(['published', 'draft', 'archived']).default('draft'),
   published_date: z.date(),
   updated_date: z.date().optional(),
-  tags: z.array(z.string()).default([]),
+  tags: z.array(taxonomyValue).default([]),
   resources: z.array(resource_schema).default([]),
   x_thread_id: z.url().optional(),
   bsky_thread_id: z.url().optional(),
@@ -48,7 +63,7 @@ const blog = defineCollection({
       .extend({
         description: z.string(),
         cover: image().optional(),
-        categories: z.array(z.string()).default([]),
+        categories: z.array(taxonomyValue).default([]),
         related_posts: z.array(reference('blog')).default([]),
         bibliography: z.union([z.string(), z.array(z.string())]).optional(),
         csl: z.enum(['apa', 'chicago', 'mla', 'vancouver', 'harvard1']).optional(),

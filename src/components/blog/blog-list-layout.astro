@@ -41,7 +41,7 @@ const isAll = !activeCategory && !activeTag;
       {
         categories.map((cat) => (
           <a
-            href={activeCategory === cat ? routes.blogs : `${routes.blogs}/category/${cat}`}
+            href={activeCategory === cat ? routes.blogs : routes.blogCategory(cat)}
             class={cn(
               'rounded-full px-3 py-1.5 text-sm font-medium capitalize transition-colors',
               activeCategory === cat
@@ -59,7 +59,7 @@ const isAll = !activeCategory && !activeTag;
             <span class="text-border mx-1 hidden select-none sm:inline">|</span>
             {tags.map((tag) => (
               <a
-                href={activeTag === tag ? routes.blogs : `${routes.blogs}/tag/${tag}`}
+                href={activeTag === tag ? routes.blogs : routes.blogTag(tag)}
                 class={cn(
                   'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
                   activeTag === tag

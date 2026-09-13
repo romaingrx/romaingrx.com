@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import { Font } from 'astro:assets';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
+import { absolute, routes } from '@/configs/routes';
 
 interface Props {
   title: string;
@@ -10,9 +11,10 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description, ogImage = '/og-image.png' } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
+const { title, description, ogImage = routes.ogImage } = Astro.props;
+const canonicalURL = absolute(Astro.url.pathname);
+const ogImageURL = new URL(absolute(ogImage));
+ogImageURL.searchParams.set('t', Date.now().toString());
 ---
 
 <!doctype html>
@@ -112,6 +114,7 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <title>{title}</title>

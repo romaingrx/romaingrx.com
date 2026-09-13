@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
+import { createRoute } from 'astro-typesafe-routes/create-route';
+
 import { getBlogPosts } from '@/lib/collections';
 import { generateOGImage } from '@/utils/og';
 
@@ -36,10 +38,16 @@ export const GET: APIRoute = async ({ params }) => {
   });
 };
 
-export async function getStaticPaths() {
+type Props = {
+  post: Awaited<ReturnType<typeof getBlogPosts>>[number];
+};
+
+export const Route = createRoute({ routeId: '/og/blog/[id].png' });
+
+export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
   const posts = await getBlogPosts();
   return posts.map((post) => ({
     params: { id: post.id },
     props: { post },
   }));
-}
+});
