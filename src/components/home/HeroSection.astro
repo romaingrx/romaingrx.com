@@ -1,6 +1,8 @@
 ---
 import { Icon } from 'astro-icon/components';
+import Link from '@/components/ui/link.astro';
 import { platforms_info } from '@/configs/platforms';
+import { routes } from '@/configs/routes';
 import { socialLinks } from '@/configs/social';
 
 interface Props {
@@ -18,19 +20,22 @@ const { title, description } = Astro.props;
   <p class="text-muted-foreground mt-4 max-w-xl text-lg">
     {description}
   </p>
-  <div class="mt-6 flex items-center gap-4">
+  <div class="mt-6 flex flex-wrap items-center gap-3">
     {
       socialLinks.map((link) => (
-        <a
+        <Link
           href={link.url}
-          class="text-muted-foreground hover:text-foreground transition-colors"
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground hover:text-foreground"
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.label}
         >
           <Icon name={platforms_info[link.platform].icon_name} class="size-5" />
-        </a>
+        </Link>
       ))
     }
+    <Link href={routes.contact} size="lg">Contact</Link>
   </div>
 </section>
