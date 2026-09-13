@@ -13,6 +13,8 @@ pnpm install --frozen-lockfile
 
 Run the checks before opening a pull request:
 
+Link draft pull requests to the stack before marking them ready so checks run with stack metadata.
+
 ```sh
 pnpm lint
 pnpm format:check
