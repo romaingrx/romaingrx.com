@@ -1,11 +1,16 @@
 ---
+import { fieldVariants } from './variants';
 import { cn } from '@/lib/utils';
 
 type Props = astroHTML.JSX.TextareaHTMLAttributes & {
   className?: string;
 };
 
-const { className, class: cls, ...props } = Astro.props;
+const { className, class: cls, value, ...props } = Astro.props;
 ---
 
-<textarea class={cn('input', className, cls)} {...props}><slot /></textarea>
+<textarea
+  {...props}
+  data-slot="textarea"
+  class={cn(fieldVariants(), 'min-h-24 resize-y', className, cls)}
+>{value}</textarea>

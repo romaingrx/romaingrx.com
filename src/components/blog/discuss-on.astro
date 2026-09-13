@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
+import Link from '@/components/ui/link.astro';
 
 interface Props {
   post: BlogPostWithAuthors | NoteWithAuthors;
@@ -35,16 +36,17 @@ const threads = [
     threads.length > 0 && (
       <div class="flex flex-row gap-2 pt-1">
         {threads.map((thread) => (
-          <a
+          <Link
             href={thread.url}
             target="_blank"
             rel="noopener noreferrer"
-            class="btn-sm-outline"
+            variant="outline"
+            size="sm"
             aria-label={`Discuss on ${thread.label}`}
           >
             <Icon name={thread.icon} class="size-4" />
             {thread.label}
-          </a>
+          </Link>
         ))}
       </div>
     )

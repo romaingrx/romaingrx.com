@@ -1,25 +1,22 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { badgeVariants, type BadgeSize, type BadgeVariant } from './variants';
 import { cn } from '@/lib/utils';
 
-type Variant = 'default' | 'secondary' | 'destructive' | 'outline' | 'active';
-
 interface Props extends HTMLAttributes<'span'> {
-  variant?: Variant;
+  variant?: BadgeVariant;
+  size?: BadgeSize;
   className?: string;
 }
 
-const variantClass: Record<Variant, string> = {
-  default: 'badge',
-  secondary: 'badge-secondary',
-  destructive: 'badge-destructive',
-  outline: 'badge-outline',
-  active: 'badge border-transparent bg-violet-500/10 text-violet-500 shadow hover:bg-violet-500/20',
-};
-
-const { variant = 'default', className, class: cls, ...props } = Astro.props;
+const { variant = 'default', size = 'default', className, class: cls, ...props } = Astro.props;
 ---
 
-<span class={cn(variantClass[variant], className, cls)} {...props}>
+<span
+  {...props}
+  data-slot="badge"
+  data-size={size}
+  class={cn(badgeVariants({ variant, size }), className, cls)}
+>
   <slot />
 </span>

@@ -1,5 +1,9 @@
 ---
-import { Alert, Button, Dialog, Loading } from '@/components/ui';
+import { Alert, Badge, Button, Dialog, Input, Label, Link, Loading, Textarea } from '@/components/ui';
+import { Badge as ReactBadge } from '@/components/ui/react/badge';
+import { Button as ReactButton } from '@/components/ui/react/button';
+import { Settings } from 'lucide-react';
+import { Icon } from 'astro-icon/components';
 import '@/styles/typography.css';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Section from '@/components/design/section.astro';
@@ -9,7 +13,15 @@ import Section from '@/components/design/section.astro';
   <div data-pagefind-ignore>
     <Section title="Alert">
       <Alert icon="lucide:brain" title="My title">
-        <div>YOOOOOOOOOOOO</div>
+        <div>This alert identifies the active component fixture.</div>
+      </Alert>
+      <Alert
+        data-design-error-alert
+        icon="lucide:circle-alert"
+        title="Validation error"
+        variant="destructive"
+      >
+        <div>Check the highlighted field before you continue.</div>
       </Alert>
     </Section>
 
@@ -18,8 +30,79 @@ import Section from '@/components/design/section.astro';
         >Edit Profile</Button
       >
       <Dialog id="my-modal" title="My title" description="My description">
-        <div>YOOOOOOOOOOOO</div>
+        <div>Edit profile fields appear here.</div>
       </Dialog>
+    </Section>
+
+    <Section title="Control matrix">
+      <div id="control-matrix" class="flex flex-wrap items-center gap-3">
+        <Button data-astro-control="action" type="button">Astro action</Button>
+        <Button data-astro-control="compact" type="button" variant="outline" size="sm">
+          Astro compact
+        </Button>
+        <Button
+          data-astro-control="icon"
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="Astro settings"
+        >
+          <Icon name="lucide:settings" />
+        </Button>
+        <Button
+          data-astro-control="loading"
+          type="button"
+          variant="secondary"
+          disabled
+          aria-busy="true"
+          aria-label="Saving Astro changes"
+        >
+          Saving
+        </Button>
+        <Link
+          data-astro-control="link"
+          href="#control-matrix-target"
+          variant="outline"
+          size="sm"
+        >
+          Astro link
+        </Link>
+        <Badge data-astro-badge variant="secondary">Astro badge</Badge>
+        <ReactButton data-react-control="action" type="button">React action</ReactButton>
+        <ReactButton data-react-control="compact" type="button" variant="outline" size="sm">
+          React compact
+        </ReactButton>
+        <ReactButton
+          data-react-control="icon"
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="React settings"
+        >
+          <Settings />
+        </ReactButton>
+        <ReactButton
+          data-react-control="loading"
+          type="button"
+          variant="secondary"
+          disabled
+          aria-busy="true"
+          aria-label="Saving React changes"
+        >
+          Saving
+        </ReactButton>
+        <ReactBadge data-react-badge variant="secondary">Ready</ReactBadge>
+      </div>
+      <span id="control-matrix-target" class="sr-only">Control matrix target</span>
+    </Section>
+
+    <Section title="Fields and status">
+      <div class="grid max-w-md gap-3">
+        <Label for="design-name">Display name</Label>
+        <Input id="design-name" placeholder="Your name" aria-invalid="true" />
+        <Label for="design-notes">Notes</Label>
+        <Textarea id="design-notes" placeholder="A short note" value="Prefilled note" />
+      </div>
     </Section>
 
     <Section title="Loading state">
