@@ -24,72 +24,56 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
 <div id={COMMENTS_SECTION_ID}>
   <script
     is:inline
-    src="https://giscus.app/client.js"
-    data-repo={site.repo}
-    data-repo-id="R_kgDOM6pBlQ"
-    data-category={category}
-    data-category-id={categoryId}
-    data-mapping="og:title"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="top"
-    data-lang="en"
-    data-loading="eager"
-    data-theme="gruvbox"
-    crossorigin="anonymous"
-    async></script>
+    define:vars={{ repo: site.repo, category, categoryId }}
+  >
+    const giscus = document.createElement('script');
+    giscus.src = 'https://giscus.app/client.js';
+    giscus.async = true;
+    giscus.crossOrigin = 'anonymous';
+    giscus.dataset.repo = repo;
+    giscus.dataset.repoId = 'R_kgDOM6pBlQ';
+    giscus.dataset.category = category;
+    giscus.dataset.categoryId = categoryId;
+    giscus.dataset.mapping = 'og:title';
+    giscus.dataset.strict = '0';
+    giscus.dataset.reactionsEnabled = '1';
+    giscus.dataset.emitMetadata = '0';
+    giscus.dataset.inputPosition = 'top';
+    giscus.dataset.lang = 'en';
+    giscus.dataset.loading = 'eager';
+    giscus.dataset.theme = document.documentElement.dataset.themeResolved === 'dark' ? 'dark' : 'light';
+    document.currentScript?.parentElement?.appendChild(giscus);
+  </script>
 </div>
 
-<script is:inline>
-  function getTheme() {
-    return document.documentElement.classList.contains('dark') ? 'gruvbox' : 'gruvbox';
-  }
+<script>
+  const controller = window.themeController;
+  const giscusScript = document.querySelector('script[src*="giscus"]');
 
-  function updateGiscusTheme() {
-    const theme = getTheme();
-    // Update the script tag
-    const giscusScript = document.querySelector('script[src*="giscus"]');
-    if (giscusScript) {
-      giscusScript.setAttribute('data-theme', theme);
-    }
+  const updateGiscusTheme = ({ resolved }: ThemeState) => {
+    const theme = resolved === 'dark' ? 'dark' : 'light';
+    giscusScript?.setAttribute('data-theme', theme);
 
-    // Update the iframe if it exists
-    const iframe = document.querySelector('iframe.giscus-frame');
-    if (iframe) {
-      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
-    }
-  }
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    iframe?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+  };
 
-  // Set the initial theme on the script tag before Giscus loads
-  document.querySelector('script[src*="giscus"]').setAttribute('data-theme', getTheme());
+  controller?.subscribe(updateGiscusTheme);
+  const syncGiscusWhenReady = (event: MessageEvent<unknown>) => {
+    if (event.origin !== 'https://giscus.app') return;
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (!iframe || iframe.contentWindow !== event.source) return;
 
-  // Watch for theme changes
-  const observer = new MutationObserver(updateGiscusTheme);
-  observer.observe(document.documentElement, { attributeFilter: ['class'] });
+    const data = event.data;
+    if (typeof data !== 'object' || data === null || !('giscus' in data)) return;
 
-  // Setup iframe observer when the iframe is created
-  function setupIframeObserver() {
-    const iframe = document.querySelector('iframe.giscus-frame');
-    if (iframe) {
-      updateGiscusTheme(); // Ensure theme is synced when iframe appears
-      const iframeObserver = new MutationObserver(updateGiscusTheme);
-      iframeObserver.observe(iframe, { attributeFilter: ['data-theme'] });
-    }
-  }
+    const giscus = data.giscus;
+    if (typeof giscus !== 'object' || giscus === null || !('resizeHeight' in giscus)) return;
+    if (typeof giscus.resizeHeight !== 'number') return;
 
-  // Watch for iframe creation
-  const iframeWatcher = new MutationObserver(() => {
-    if (document.querySelector('iframe.giscus-frame')) {
-      setupIframeObserver();
-      iframeWatcher.disconnect(); // Stop watching once iframe is found
-    }
-  });
-
-  iframeWatcher.observe(document.body, { childList: true, subtree: true });
-
-  // Update theme on page navigation
-  document.addEventListener('DOMContentLoaded', () => {
-    updateGiscusTheme();
-  });
+    const state = controller?.getState();
+    if (state) updateGiscusTheme(state);
+    window.removeEventListener('message', syncGiscusWhenReady);
+  };
+  window.addEventListener('message', syncGiscusWhenReady);
 </script>
