@@ -16,7 +16,9 @@
     "lint": "oxlint .",
     "lint:fix": "oxlint --fix .",
     "bundle-report": "bash scripts/bundle-report.sh",
-    "bundle-report:json": "bash scripts/bundle-report.sh --json"
+    "bundle-report:json": "bash scripts/bundle-report.sh --json",
+    "test:routes": "node scripts/check-routes.mjs",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.7",
@@ -73,6 +75,7 @@
   "devDependencies": {
     "@astrojs/node": "^10.0.1",
     "@iconify-json/simple-icons": "^1.2.93",
+    "@playwright/test": "^1.63.0",
     "@shikijs/colorized-brackets": "^4.0.2",
     "@shikijs/transformers": "^4.0.2",
     "@tailwindcss/vite": "^4.1.15",
@@ -91,6 +94,10 @@
   },
   "overrides": {
     "react-is": "^19.0.0-rc-69d4b800-20241021"
+  },
+  "engines": {
+    "node": ">=22.14.0",
+    "pnpm": ">=11.22.0"
   },
   "packageManager": "pnpm@11.22.0"
 }

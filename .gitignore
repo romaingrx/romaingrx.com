@@ -3,6 +3,8 @@
 
 # build output
 dist/
+test-results/
+playwright-report/
 
 # generated types
 .astro/
@@ -31,6 +33,10 @@ pnpm-debug.log*
 .wrangler
 .dev.vars*
 
-# personal docs
-docs/
+# Personal notes and local audit evidence. Keep the checked-in foundation
+# records below versioned and portable.
+docs/*
+!docs/foundation-roadmap.md
+!docs/route-manifest.md
+!docs/route-manifest.json
 features/

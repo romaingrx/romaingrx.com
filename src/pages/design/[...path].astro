@@ -1,0 +1,16 @@
+---
+import DesignFixture from '@/fixtures/design.astro';
+
+/**
+ * Keep the component fixture available in the development server while
+ * preventing it from producing a production route, search result, or sitemap
+ * entry.
+ */
+export const prerender = true;
+
+export function getStaticPaths() {
+  return import.meta.env.PROD ? [] : [{ params: { path: undefined } }];
+}
+---
+
+<DesignFixture />
