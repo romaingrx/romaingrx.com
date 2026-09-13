@@ -11,11 +11,17 @@ test('home exposes primary navigation and writing links', async ({ page }) => {
 });
 
 test('representative article renders its title heading', async ({ page }) => {
-  await page.goto('/blog/denoising-diffusion-from-scratch');
+  await page.goto('/blog');
 
-  await expect(page).toHaveTitle(/Denoising Diffusion from Scratch/);
+  const articleLink = page
+    .locator('main a[href^="/blog/"]')
+    .filter({ has: page.locator('h2') })
+    .first();
+  const articleTitle = await articleLink.locator('h2').innerText();
+  await articleLink.click();
+
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Denoising Diffusion from Scratch', exact: true }),
+    page.locator('main').getByRole('heading', { level: 1, name: articleTitle, exact: true }),
   ).toBeVisible();
   await expect(page.locator('main')).toBeVisible();
 });

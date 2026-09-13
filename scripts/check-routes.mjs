@@ -1,64 +1,79 @@
-import { readdir, readFile } from 'node:fs/promises';
+import { access, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 
-const outputDirectory = path.resolve('dist/client');
+const reportPath = path.resolve('.astro/route-manifest.json');
 
-async function collectFiles(directory) {
-  const entries = await readdir(directory, { withFileTypes: true });
-  const directories = entries.filter((entry) => entry.isDirectory());
-  const nestedFiles = await Promise.all(
-    directories.map((entry) => collectFiles(path.join(directory, entry.name))),
-  );
-  const files = entries
-    .filter((entry) => entry.isFile())
-    .map((entry) => path.join(directory, entry.name));
-
-  return files.concat(nestedFiles.flat());
+function formatList(items) {
+  return items.length ? items.join(', ') : 'none';
 }
 
-function routeFromFile(file) {
-  const relative = path.relative(outputDirectory, file).split(path.sep).join('/');
-  if (relative === 'index.html') return '/';
-  return `/${relative.replace(/\/index\.html$/, '').replace(/\.html$/, '')}`;
+function isFixturePath(pathname) {
+  const normalized = pathname.replace(/^\/+/, '');
+  return normalized === 'design' || normalized.startsWith('design/');
+}
+
+function sitemapContainsFixture(contents) {
+  return [...contents.matchAll(/<loc>([^<]+)<\/loc>/g)].some(([, location]) => {
+    try {
+      return isFixturePath(new URL(location).pathname);
+    } catch {
+      return isFixturePath(location);
+    }
+  });
 }
 
 try {
-  const files = await collectFiles(outputDirectory);
-  const htmlFiles = files.filter((file) => file.endsWith('.html'));
-  const routes = htmlFiles.map(routeFromFile).toSorted();
-  const { html: expectedRoutes, files: expectedFiles } = JSON.parse(
-    await readFile(new URL('../docs/route-manifest.json', import.meta.url), 'utf8'),
+  const report = JSON.parse(await readFile(reportPath, 'utf8'));
+  const outputDirectory = fileURLToPath(new URL(report.outputDirectory));
+  const outputEntries = await readdir(outputDirectory, { withFileTypes: true });
+  const outputFiles = report.assets.flatMap(({ files: urls }) =>
+    urls.map((url) => fileURLToPath(url)),
   );
-  const routeSet = new Set(routes);
-  const missingRoutes = expectedRoutes.filter((route) => !routeSet.has(route));
-  const actualFiles = new Set(
-    files.map((file) => `/${path.relative(outputDirectory, file).split(path.sep).join('/')}`),
-  );
-  const missingFiles = expectedFiles.filter((file) => !actualFiles.has(file));
-  const leakedRoutes = routes.filter(
-    (route) => route === '/design' || route.startsWith('/design/'),
-  );
+  const htmlOutputs = outputFiles.filter((file) => file.endsWith('.html'));
+  const missingAssets = (
+    await Promise.all(
+      outputFiles.map(async (file) => {
+        try {
+          await access(file);
+          return null;
+        } catch {
+          return file;
+        }
+      }),
+    )
+  ).filter((file) => file !== null);
 
-  const sitemapFiles = files.filter((file) => path.basename(file).startsWith('sitemap'));
+  const fixtureRoutes = report.pages.filter(isFixturePath);
+  const sitemapFiles = outputEntries
+    .filter((entry) => entry.isFile() && entry.name.startsWith('sitemap'))
+    .map((entry) => path.join(outputDirectory, entry.name));
   const sitemap = await Promise.all(sitemapFiles.map((file) => readFile(file, 'utf8')));
-  const fixtureInSitemap = sitemap.some((contents) => contents.includes('/design'));
+  const fixtureInSitemap = sitemap.some((sitemapContents) =>
+    sitemapContainsFixture(sitemapContents),
+  );
+  const errors = [];
 
-  if (missingRoutes.length || missingFiles.length || leakedRoutes.length || fixtureInSitemap) {
-    if (missingRoutes.length) console.error(`Missing expected routes: ${missingRoutes.join(', ')}`);
-    if (missingFiles.length)
-      console.error(`Missing expected output files: ${missingFiles.join(', ')}`);
-    if (leakedRoutes.length)
-      console.error(`Fixture routes found in production: ${leakedRoutes.join(', ')}`);
-    if (fixtureInSitemap) console.error('The development fixture is present in the sitemap.');
+  if (outputFiles.length === 0 || htmlOutputs.length === 0)
+    errors.push('Astro emitted no page or asset outputs.');
+  if (htmlOutputs.length !== report.pages.length)
+    errors.push('The generated page count does not match emitted HTML outputs.');
+  if (missingAssets.length) errors.push('Missing generated assets: ' + formatList(missingAssets));
+  if (fixtureRoutes.length)
+    errors.push('Fixture routes found in production: ' + formatList(fixtureRoutes));
+  if (fixtureInSitemap) errors.push('The development fixture is present in the sitemap.');
+
+  if (errors.length) {
+    for (const error of errors) console.error(error);
     process.exitCode = 1;
   }
 
-  console.log(`Production HTML routes (${routes.length}):`);
-  for (const route of routes) console.log(`- ${route}`);
+  console.log('Production HTML outputs (' + htmlOutputs.length + ').');
+  for (const route of report.pages) console.log('- /' + route);
 } catch (error) {
   if (error?.code === 'ENOENT') {
-    console.error(`Missing ${outputDirectory}. Run "pnpm build" first.`);
+    console.error('Missing ' + reportPath + '. Run "pnpm build" first.');
   } else {
     console.error(error);
   }

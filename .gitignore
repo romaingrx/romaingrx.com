@@ -38,5 +38,4 @@ pnpm-debug.log*
 docs/*
 !docs/foundation-roadmap.md
 !docs/route-manifest.md
-!docs/route-manifest.json
 features/

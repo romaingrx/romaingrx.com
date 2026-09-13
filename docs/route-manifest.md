@@ -1,30 +1,9 @@
-# Production route manifest
+# Production route check
 
-This is the PR 01 baseline for the static production output. The route list is
-stored in [`route-manifest.json`](./route-manifest.json), and
-`pnpm test:routes` validates every listed HTML route and generated file. The
-check also confirms that the development-only `/design` fixture is absent from
-production output and the sitemap.
-
-## Primary routes
-
-- `/`
-- `/about`
-- `/blog`
-- `/contact`
-- `/notes`
-
-## Published content routes
-
-- `/blog/denoising-diffusion-from-scratch`
-- `/blog/improvement-plan`
-- `/blog/llm-as-a-jailbreak-judge`
-- `/blog/mistral-nemo-red-teamer`
-- `/blog/variational-autoencoders-from-scratch`
-- `/notes/corne-keyboard-5x3-3-setup`
-- `/notes/cuda-mental-model`
-- `/notes/hassle-free-ml-environment-with-nix-flakes`
-
-Category, tag, RSS, Open Graph, and API outputs are recorded in the JSON
-manifest. The route check prints the complete emitted HTML manifest after each
-build.
+The Astro astro:build:done integration records the pages and assets from each
+production build in the ignored .astro/route-manifest.json report. The report
+uses Astro's resolved output directory, so it remains valid when the adapter or
+build layout changes. pnpm test:routes checks that Astro's generated pages have
+emitted HTML files, generated assets exist, and the development-only fixture is
+absent from production and the sitemap. The check prints the complete generated
+route list for review.
