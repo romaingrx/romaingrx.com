@@ -1,5 +1,6 @@
 ---
 import { Alert, Button, Dialog, Loading } from '@/components/ui';
+import '@/styles/typography.css';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Section from '@/components/design/section.astro';
 ---
@@ -23,6 +24,59 @@ import Section from '@/components/design/section.astro';
 
     <Section title="Loading state">
       <Loading />
+    </Section>
+
+    <Section title="Tokens and typography">
+      <article class="prose" data-design-typography>
+        <p data-design-reading>
+          Reading text uses Fira Sans, while <code data-design-code>code stays monospaced</code>.
+          <a href="#token-target">Article links stay visible</a> in every theme.
+        </p>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Status token examples">
+          <span
+            data-design-status
+            class="rounded px-2 py-1 text-xs"
+            style="background: var(--status-success); color: var(--background);"
+            >Success</span
+          >
+          <span
+            data-design-status
+            class="rounded px-2 py-1 text-xs"
+            style="background: var(--status-warning); color: var(--background);"
+            >Warning</span
+          >
+          <span
+            data-design-status
+            class="rounded px-2 py-1 text-xs"
+            style="background: var(--status-info); color: var(--background);"
+            >Info</span
+          >
+          <span
+            data-design-status
+            class="rounded px-2 py-1 text-xs"
+            style="background: var(--status-error); color: var(--background);"
+            >Error</span
+          >
+        </div>
+        <img
+          data-design-article-image
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+          alt=""
+          width="240"
+          height="80"
+          style="width: 240px; height: 80px;"
+        />
+        <div data-design-media-widget class="mt-4 rounded border p-2">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            alt=""
+            width="240"
+            height="80"
+            style="width: 240px; height: 80px;"
+          />
+        </div>
+        <span id="token-target" class="sr-only">Token target</span>
+      </article>
     </Section>
   </div>
 </BaseLayout>

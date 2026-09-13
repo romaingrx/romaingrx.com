@@ -19,6 +19,97 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <!-- Set the theme before styles load to avoid a light-mode flash. -->
+    <script is:inline>
+      const getSystemTheme = () => {
+        try {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        } catch {
+          return 'light';
+        }
+      };
+
+      (() => {
+        const storageKey = 'theme';
+        const preferences = new Set(['light', 'dark', 'system']);
+        const root = document.documentElement;
+
+        if (window.themeController) {
+          window.themeController.refresh();
+          return;
+        }
+
+        const isPreference = (value) => preferences.has(value);
+        const readPreference = () => {
+          try {
+            const stored = window.localStorage.getItem(storageKey);
+            return isPreference(stored) ? stored : 'system';
+          } catch {
+            return 'system';
+          }
+        };
+        const listeners = new Set();
+        const state = { preference: readPreference(), resolved: 'light' };
+
+        const apply = (preference, persist) => {
+          state.preference = isPreference(preference) ? preference : 'system';
+          state.resolved = state.preference === 'system' ? getSystemTheme() : state.preference;
+
+          if (persist) {
+            try {
+              window.localStorage.setItem(storageKey, state.preference);
+            } catch {
+              // Private browsing and blocked storage must not prevent theme changes.
+            }
+          }
+
+          root.classList.toggle('dark', state.resolved === 'dark');
+          root.dataset.theme = state.preference;
+          root.dataset.themeResolved = state.resolved;
+          root.style.colorScheme = state.resolved;
+
+          const snapshot = { ...state };
+          listeners.forEach((listener) => listener(snapshot));
+        };
+
+        const controller = {
+          getState: () => ({ ...state }),
+          setTheme: (preference) => apply(preference, true),
+          cycleTheme: () => {
+            const next = { light: 'dark', dark: 'system', system: 'light' }[state.preference];
+            apply(next, true);
+          },
+          refresh: () => apply(state.preference, false),
+          subscribe: (listener) => {
+            listeners.add(listener);
+            listener({ ...state });
+            return () => listeners.delete(listener);
+          },
+        };
+
+        let mediaQuery;
+        try {
+          mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        } catch {
+          mediaQuery = null;
+        }
+        const handleSystemChange = () => {
+          if (state.preference === 'system') apply('system', false);
+        };
+        if (mediaQuery?.addEventListener) {
+          mediaQuery.addEventListener('change', handleSystemChange);
+        } else if (mediaQuery?.addListener) {
+          mediaQuery.addListener(handleSystemChange);
+        }
+
+        window.addEventListener('storage', (event) => {
+          if (event.key === storageKey) apply(event.newValue, false);
+        });
+
+        window.themeController = controller;
+        apply(state.preference, false);
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
@@ -43,10 +134,7 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
 
     <slot name="head" />
   </head>
-  <body
-    class="bg-background relative min-h-screen w-screen"
-    style="font-family: var(--font-fira-code)"
-  >
+  <body class="bg-background relative min-h-screen w-screen">
     <div class="relative z-10 flex min-h-screen flex-col">
       <Header />
       <main class="flex-1">

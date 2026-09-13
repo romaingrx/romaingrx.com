@@ -1,5 +1,37 @@
 @reference "./globals.css";
 
+.prose,
+.prose-compact {
+  font-family: var(--font-sans);
+}
+
+.prose a,
+.prose-compact a {
+  color: var(--color-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    text-decoration-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.prose a:visited,
+.prose-compact a:visited {
+  color: var(--color-link-visited);
+}
+
+.prose a:hover,
+.prose-compact a:hover {
+  color: var(--color-link-hover);
+}
+
+.prose a:focus-visible,
+.prose-compact a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
 .prose h1,
 .prose h2,
 .prose h3,
@@ -10,57 +42,47 @@
 }
 
 .prose h1 {
-  font-size: 2.25rem;
-  margin-bottom: 2rem;
+  font-size: var(--text-heading-lg);
+  margin-bottom: calc(var(--spacing) * 8);
 }
 
 .prose h2 {
-  font-size: 1.875rem;
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
+  font-size: var(--text-heading-md);
+  margin-top: calc(var(--spacing) * 12);
+  margin-bottom: calc(var(--spacing) * 6);
 }
 
 .prose h3 {
-  font-size: 1.5rem;
-  margin-top: 2.5rem;
-  margin-bottom: 1.25rem;
+  font-size: var(--text-heading-sm);
+  margin-top: calc(var(--spacing) * 10);
+  margin-bottom: calc(var(--spacing) * 5);
 }
 
 .prose p {
+  font-size: var(--text-body);
   line-height: 1.75;
-  margin-bottom: 1.5rem;
+  margin-bottom: calc(var(--spacing) * 6);
 }
 
 .prose hr {
   @apply border-border;
   border-top-width: 1px;
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-}
-
-.prose a {
-  @apply text-primary;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.prose a:hover {
-  @apply text-primary/80;
-  text-decoration: underline;
+  margin-top: calc(var(--spacing) * 16);
+  margin-bottom: calc(var(--spacing) * 16);
 }
 
 .prose code {
   @apply bg-card text-card-foreground;
-  border-radius: 0.25rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
   font-size: 0.875em;
   padding: 0.2em 0.4em;
 }
 
 .prose pre {
   @apply bg-card text-card-foreground;
-  border-radius: 0.5rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-mono);
   font-size: 0.875em;
   line-height: 1.7142857;
   margin-top: 2em;
@@ -121,7 +143,12 @@
   font-weight: 500;
 }
 
-.prose img {
+.prose > img,
+.prose > p > img,
+.prose > figure > img,
+.prose > figure > a > img,
+.prose > picture > img,
+.prose > a > img {
   border-radius: 0.5rem;
   margin-top: 2em;
   margin-bottom: 2em;
@@ -189,7 +216,7 @@
 
 .prose tbody tr {
   border-bottom: 1px solid hsl(from var(--color-border) h s l / 0.3);
-  transition: background-color 0.2s;
+  transition: background-color var(--motion-duration-normal) var(--motion-ease-standard);
 }
 
 .prose tbody tr:hover {
@@ -219,6 +246,7 @@
 /* Compact Prose Styles - For shorter content like author descriptions, timeline entries */
 .prose-compact {
   @apply text-muted-foreground;
+  font-size: var(--text-body-sm);
   line-height: 1.6;
 
   /* Compact version of list variables */
@@ -238,47 +266,37 @@
 }
 
 .prose-compact h1 {
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
-  margin-top: 1rem;
+  font-size: var(--text-heading-sm);
+  margin-bottom: calc(var(--spacing) * 3);
+  margin-top: calc(var(--spacing) * 4);
 }
 
 .prose-compact h2 {
-  font-size: 1.25rem;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-body-lg);
+  margin-top: calc(var(--spacing) * 6);
+  margin-bottom: calc(var(--spacing) * 2);
 }
 
 .prose-compact h3 {
-  font-size: 1.125rem;
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-body);
+  margin-top: calc(var(--spacing) * 5);
+  margin-bottom: calc(var(--spacing) * 2);
 }
 
 .prose-compact h4 {
-  font-size: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 0.25rem;
+  font-size: var(--text-body-sm);
+  margin-top: calc(var(--spacing) * 4);
+  margin-bottom: var(--spacing);
 }
 
 .prose-compact p {
+  font-size: inherit;
   line-height: 1.6;
-  margin-bottom: 0.75rem;
+  margin-bottom: calc(var(--spacing) * 3);
 }
 
 .prose-compact p:last-child {
   margin-bottom: 0;
-}
-
-.prose-compact a {
-  @apply text-primary;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.prose-compact a:hover {
-  @apply text-primary/80;
-  text-decoration: underline;
 }
 
 .prose-compact strong {
@@ -293,7 +311,7 @@
 .prose-compact code {
   @apply bg-muted text-foreground;
   border-radius: 0.25rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.85em;
   padding: 0.1em 0.3em;
 }
@@ -301,11 +319,11 @@
 .prose-compact pre {
   @apply bg-muted text-foreground;
   border-radius: 0.375rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.85em;
   line-height: 1.5;
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-top: calc(var(--spacing) * 3);
+  margin-bottom: calc(var(--spacing) * 3);
   overflow-x: auto;
   padding: 0.75rem;
 }
@@ -322,9 +340,9 @@
   @apply border-l-primary/30 text-muted-foreground;
   border-left-width: 3px;
   font-style: italic;
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding-left: 1rem;
+  margin-top: calc(var(--spacing) * 3);
+  margin-bottom: calc(var(--spacing) * 3);
+  padding-left: calc(var(--spacing) * 4);
 }
 
 .prose-compact ul,
@@ -352,10 +370,15 @@
   margin-bottom: 0.25rem;
 }
 
-.prose-compact img {
+.prose-compact > img,
+.prose-compact > p > img,
+.prose-compact > figure > img,
+.prose-compact > figure > a > img,
+.prose-compact > picture > img,
+.prose-compact > a > img {
   border-radius: 0.375rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-top: calc(var(--spacing) * 3);
+  margin-bottom: calc(var(--spacing) * 3);
   max-width: 100%;
   height: auto;
 }
@@ -363,8 +386,8 @@
 .prose-compact hr {
   @apply border-border;
   border-top-width: 1px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: calc(var(--spacing) * 4);
+  margin-bottom: calc(var(--spacing) * 4);
 }
 
 /* Compact Table Styles */
@@ -412,7 +435,7 @@
 
 .prose-compact tbody tr {
   border-bottom: 1px solid hsl(from var(--color-border) h s l / 0.3);
-  transition: background-color 0.2s;
+  transition: background-color var(--motion-duration-normal) var(--motion-ease-standard);
 }
 
 .prose-compact tbody tr:hover {

@@ -7,7 +7,8 @@ import Button from '@/components/ui/button.astro';
   variant="ghost"
   size="icon"
   id="theme-toggle"
-  title="Toggle theme"
+  aria-label="Change theme (currently System)"
+  title="Theme: System"
   className="relative"
   transition:persist
 >
@@ -31,70 +32,22 @@ import Button from '@/components/ui/button.astro';
 </Button>
 
 <script>
-  type Theme = 'light' | 'dark' | 'system';
-
-  // Function to get the stored theme preference
-  const getThemePreference = (): Theme => {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      const theme = localStorage.getItem('theme');
-      if (theme === 'light' || theme === 'dark' || theme === 'system') {
-        return theme;
-      }
-    }
-    return 'system';
-  };
-
-  // Function to get the actual theme to apply (resolves 'system' to 'light' or 'dark')
-  const getAppliedTheme = (preference: Theme): 'light' | 'dark' => {
-    if (preference === 'system') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    return preference;
-  };
-
-  // Function to apply the theme
-  const applyTheme = () => {
-    const preference = getThemePreference();
-    const appliedTheme = getAppliedTheme(preference);
-
-    // Apply dark class based on resolved theme
-    document.documentElement.classList.toggle('dark', appliedTheme === 'dark');
-
-    // Apply data attribute for icon display
-    document.documentElement.setAttribute('data-theme', preference);
-  };
-
-  // Function to handle theme toggle (cycles through: light -> dark -> system)
-  const handleToggleClick = () => {
-    const currentPreference = getThemePreference();
-    let newPreference: Theme;
-
-    // Cycle through themes
-    if (currentPreference === 'light') {
-      newPreference = 'dark';
-    } else if (currentPreference === 'dark') {
-      newPreference = 'system';
-    } else {
-      newPreference = 'light';
-    }
-
-    localStorage.setItem('theme', newPreference);
-    applyTheme();
-  };
-
-  // Apply theme on initial load
-  applyTheme();
-
-  // Listen for system theme changes
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  mediaQuery.addEventListener('change', () => {
-    // Only react to system changes if the user has 'system' preference
-    if (getThemePreference() === 'system') {
-      applyTheme();
-    }
-  });
-
-  // Handle click events
   const themeToggle = document.getElementById('theme-toggle');
-  themeToggle?.addEventListener('click', handleToggleClick);
+  const controller = window.themeController;
+  const labels = { light: 'Light', dark: 'Dark', system: 'System' };
+
+  if (themeToggle && controller && !themeToggle.dataset.themeControllerBound) {
+    themeToggle.dataset.themeControllerBound = 'true';
+    const updateLabel = ({ preference, resolved }: ThemeState) => {
+      const label =
+        preference === 'system'
+          ? `Theme: System (${labels[resolved]})`
+          : `Theme: ${labels[preference]}`;
+      themeToggle.setAttribute('aria-label', `${label}. Activate to change theme`);
+      themeToggle.setAttribute('title', label);
+    };
+
+    controller.subscribe(updateLabel);
+    themeToggle.addEventListener('click', () => controller.cycleTheme());
+  }
 </script>
