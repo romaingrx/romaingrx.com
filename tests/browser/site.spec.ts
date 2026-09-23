@@ -8,6 +8,51 @@ test('home exposes primary navigation and writing links', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Notes' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'About' })).toBeVisible();
   await expect(page.getByRole('link', { name: /View all/ }).first()).toBeVisible();
+  await expect(
+    page.getByRole('navigation', { name: 'Global' }).getByRole('link', { name: 'Contact' }),
+  ).toHaveCount(1);
+});
+
+test('contact is discoverable and uses the configured LinkedIn destination', async ({ page }) => {
+  await page.goto('/');
+
+  const main = page.locator('main');
+  const contactLink = main.getByRole('link', { name: 'Contact', exact: true });
+  await expect(contactLink).toBeVisible();
+  await expect(contactLink).toHaveAttribute('href', '/contact');
+
+  const linkedInLink = main.getByRole('link', { name: 'Connect on LinkedIn' });
+  await expect(linkedInLink).toHaveAttribute('href', 'https://go.romaingrx.com/linkedin');
+  await expect(linkedInLink).toHaveAttribute('target', '_blank');
+  await expect(linkedInLink).toHaveAttribute('rel', 'noopener noreferrer');
+  expect(await linkedInLink.evaluate((element) => element.getBoundingClientRect().width)).toBe(44);
+  expect(await linkedInLink.evaluate((element) => element.getBoundingClientRect().height)).toBe(44);
+});
+
+test('mobile navigation exposes Contact', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  await page
+    .getByRole('navigation', { name: 'Global' })
+    .getByRole('button', { name: 'Menu' })
+    .click();
+  await expect(
+    page.locator('#mobile-nav-menu').getByRole('link', { name: 'Contact', exact: true }),
+  ).toBeVisible();
+});
+
+test('contact page has one main heading and no form', async ({ page }) => {
+  const response = await page.goto('/contact');
+
+  expect(response?.ok()).toBe(true);
+  const main = page.locator('main');
+  await expect(main).toHaveCount(1);
+  await expect(main.getByRole('heading', { level: 1 })).toHaveCount(1);
+  await expect(main.locator('form')).toHaveCount(0);
+
+  const linkedInLink = main.getByRole('link', { name: 'Connect on LinkedIn', exact: true });
+  await expect(linkedInLink).toHaveAttribute('href', 'https://go.romaingrx.com/linkedin');
 });
 
 test('representative article renders its title heading', async ({ page }) => {

@@ -1,23 +1,39 @@
 ---
-import ContactForm from '@/components/home/ContactForm.astro';
+import { Icon } from 'astro-icon/components';
+import Link from '@/components/ui/link.astro';
+import { platforms_info } from '@/configs/platforms';
+import { socialLinks } from '@/configs/social';
+import Shell from '@/components/Shell.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 const title = "Let's Collaborate";
 const description =
-  "Have an idea, project, or question? Reach out and let's create something amazing together.";
+  'Have an idea, project, or question? Connect with me on LinkedIn.';
+const linkedIn = socialLinks.find((link) => link.platform === 'linkedin');
+
+if (!linkedIn) {
+  throw new Error('LinkedIn contact destination is not configured.');
+}
 ---
 
 <BaseLayout title={title} description={description}>
-  <main class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-16">
-    <div class="w-full max-w-2xl">
+  <Shell type="page">
+    <section class="mx-auto flex max-w-2xl flex-col items-center py-16 text-center md:py-24">
       <h1 class="mb-6 text-center text-4xl font-bold tracking-tight">{title}</h1>
-      <p class="text-muted-foreground mb-12 text-center text-lg">
+      <p class="text-muted-foreground mb-8 text-center text-lg">
         {description}
       </p>
 
-      <div class="w-full">
-        <ContactForm hideTitle={true} />
-      </div>
-    </div>
-  </main>
+      <Link
+        href={linkedIn.url}
+        variant="default"
+        size="lg"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Icon name={platforms_info.linkedin.icon_name} />
+        Connect on LinkedIn
+      </Link>
+    </section>
+  </Shell>
 </BaseLayout>
