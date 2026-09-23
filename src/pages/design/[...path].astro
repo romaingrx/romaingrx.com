@@ -1,5 +1,7 @@
 ---
 import DesignFixture from '@/fixtures/design.astro';
+import EmptyDiscoveryFixture from '@/fixtures/discovery-empty.astro';
+import SingleDiscoveryFixture from '@/fixtures/discovery-single.astro';
 
 /**
  * Keep the component fixture available in the development server while
@@ -9,8 +11,22 @@ import DesignFixture from '@/fixtures/design.astro';
 export const prerender = true;
 
 export function getStaticPaths() {
-  return import.meta.env.PROD ? [] : [{ params: { path: undefined } }];
+  return import.meta.env.PROD
+    ? []
+    : [
+        { params: { path: undefined } },
+        { params: { path: 'discovery' } },
+        { params: { path: 'discovery-single' } },
+      ];
 }
 ---
 
-<DesignFixture />
+{
+  Astro.params.path === 'discovery' ? (
+    <EmptyDiscoveryFixture />
+  ) : Astro.params.path === 'discovery-single' ? (
+    <SingleDiscoveryFixture />
+  ) : (
+    <DesignFixture />
+  )
+}

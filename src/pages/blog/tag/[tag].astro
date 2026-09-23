@@ -27,6 +27,7 @@ const tags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
   title="Blog"
   description={`Blog posts tagged with ${tag}.`}
   posts={posts}
+  allPosts={allPosts}
   categories={categories}
   tags={tags}
   activeTag={tag}

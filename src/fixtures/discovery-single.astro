@@ -1,0 +1,17 @@
+---
+import BlogListLayout from '@/components/blog/blog-list-layout.astro';
+import { getBlogPosts } from '@/lib/collections';
+
+const post = (await getBlogPosts()).find((entry) => entry.slug === 'improvement-plan');
+if (!post) throw new Error('The singular discovery fixture needs its source post.');
+---
+
+<BlogListLayout
+  title="Blog"
+  description="Development fixture for a single matching post."
+  posts={[post]}
+  allPosts={[post]}
+  categories={['personal']}
+  tags={post.data.tags}
+  activeCategory="personal"
+/>

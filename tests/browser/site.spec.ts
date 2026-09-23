@@ -170,7 +170,7 @@ test('representative article renders its title heading', async ({ page }) => {
 test('taxonomy links encode values and preserve their generated route', async ({ page }) => {
   await page.goto('/blog');
 
-  const tagLink = page.getByRole('link', { name: 'from scratch', exact: true });
+  const tagLink = page.getByRole('link', { name: /^From Scratch \(\d+\)$/ });
   await expect(tagLink).toHaveAttribute('href', '/blog/tag/from%20scratch');
   await tagLink.click();
 
