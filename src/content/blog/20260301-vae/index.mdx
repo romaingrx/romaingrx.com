@@ -23,7 +23,7 @@ What if you could compress a protein into just two numbers and reconstruct it? T
 
 In this post, we'll derive the VAE objective from scratch [@kingma2013auto], then apply it to protein sequences [@sinai2017variational] and see what happens.
 
-# The intuition
+## The intuition
 
 A VAE is made of two neural networks working together:
 
@@ -38,9 +38,9 @@ The key insight is that we don't just encode into a single point. We encode into
   for a latent space you can actually sample and interpolate from.
 </Callout>
 
-# Deriving the objective
+## Deriving the objective
 
-## Starting point
+### Starting point
 
 Our goal is to maximize the log-likelihood of the data: learn a model that assigns high probability to the sequences we observe.
 
@@ -50,7 +50,7 @@ $$
 
 The problem: this integral is **intractable**. We'd need to evaluate the decoder for every possible $z$.
 
-## The ELBO
+### The ELBO
 
 Since we can't compute $p(z|x)$ directly, we introduce a learned approximation $q_\theta(z|x)$ and derive a tractable lower bound. The key move is multiplying by $\frac{q_\theta(z|x)}{q_\theta(z|x)}$ and applying [Jensen's inequality](https://en.wikipedia.org/wiki/Jensen%27s_inequality) (the full step-by-step derivation is in [Appendix A](#appendix-a-elbo-derivation)).
 
@@ -65,7 +65,7 @@ Two terms pulling in opposite directions:
 - The **reconstruction term** pushes the model to encode enough information to reconstruct $x$.
 - The **[KL divergence](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence) term** pushes $q_\theta(z|x)$ towards the prior $p(z) = \mathcal{N}(0, I)$, preventing the encoder from just memorizing.
 
-## The reparameterization trick
+### The reparameterization trick
 
 There's still a problem: we can't backpropagate through the sampling step $z \sim q_\theta(z|x)$.
 
@@ -83,7 +83,7 @@ $$
 \mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \left[ \mathbb{E}_{\epsilon \sim \mathcal{N}(0, I)} [\log p(x_i | g_\theta(x_i, \epsilon))] - D_\text{KL}(q_\theta(z|x_i) \,\|\, p(z)) \right]
 $$
 
-# Application: protein sequences
+## Application: protein sequences
 
 As a toy application, we'll train a VAE on protein sequences from the [**WW domain**](https://en.wikipedia.org/wiki/WW_domain) family ([Pfam PF00397](https://www.ebi.ac.uk/interpro/entry/pfam/PF00397/)), short protein domains of about 35-40 amino acids. Proteins are a nice fit for this because they're basically strings over a small alphabet, which keeps things simple while being more interesting than MNIST.
 
@@ -98,7 +98,7 @@ Each sequence is a string over the [20 standard amino acids](https://en.wikipedi
 
 The architecture is intentionally simple: a 2-layer MLP encoder mapping to a 2D latent space (so we can plot it), and a symmetric decoder. The full training pipeline is written in [JAX](https://github.com/jax-ml/jax) with [Equinox](https://docs.kidger.site/equinox/).
 
-## Training
+### Training
 
 One common issue with VAEs is [**posterior collapse**](https://en.wikipedia.org/wiki/Posterior_collapse): the KL term can dominate early in training, pushing $q(z|x)$ to match the prior before the decoder has learned anything useful. The encoder then learns to ignore the input entirely.
 
@@ -108,7 +108,7 @@ To avoid this, we use **KL annealing**: a coefficient $\beta$ that linearly incr
 
 You can see the reconstruction loss drops quickly in the first epochs while the KL term is suppressed. Once $\beta$ reaches 1, both terms find a balance.
 
-## Latent space
+### Latent space
 
 With a 2D latent space, we can directly visualize how the model organizes protein sequences. Each point is a sequence encoded by the model, colored by sequence content. Hover to inspect the amino acid sequence.
 
@@ -116,7 +116,7 @@ With a 2D latent space, we can directly visualize how the model organizes protei
 
 Ideally, the latent space should show smooth, continuous structure rather than scattered noise. This is what makes VAEs interesting as _generative_ models: nearby points should decode to similar outputs.
 
-## Reconstruction quality
+### Reconstruction quality
 
 The real test: can the model reconstruct input sequences from just 2 numbers? Here are some examples showing the original and reconstructed sequences side by side, with mismatches highlighted.
 
@@ -128,13 +128,13 @@ The real test: can the model reconstruct input sequences from just 2 numbers? He
   interpretability over performance.
 </Callout>
 
-## Latent interpolation
+### Latent interpolation
 
 The smoothness of the latent space is what makes a VAE a _generative_ model. If we linearly interpolate between two encoded proteins and decode at each step, the intermediate sequences should transition gradually. Abrupt jumps would indicate holes or discontinuities in the learned space.
 
 <InterpolationViewer client:visible />
 
-# Wrapping up
+## Wrapping up
 
 This is obviously a toy example, but it illustrates the core ideas well. Even with a minimal setup (2D latent space, simple MLP, 500 sequences), the VAE learns meaningful structure: similar sequences cluster together, interpolations produce smooth transitions, and reconstruction captures the dominant patterns.
 
@@ -144,9 +144,9 @@ For a deeper dive, check out the original VAE paper [@kingma2013auto] and its ap
 
 ---
 
-# Appendices
+## Appendices
 
-## Appendix A: ELBO derivation
+### Appendix A: ELBO derivation
 
 Starting from the log-likelihood and multiplying by $\frac{q_\theta(z|x)}{q_\theta(z|x)}$:
 

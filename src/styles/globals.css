@@ -217,6 +217,7 @@
   html {
     overflow-x: clip;
     scroll-behavior: smooth;
+    --reading-header-offset: 6.25rem;
   }
   html:has(dialog:modal) {
     overflow: hidden;

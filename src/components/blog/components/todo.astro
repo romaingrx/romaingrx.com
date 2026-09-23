@@ -12,7 +12,7 @@ const { className = '', hidden = false } = Astro.props;
 <div
   class={cn('bg-red-500/10 p-4 rounded-md border border-red-500/20', hidden && 'hidden', className)}
 >
-  <h1 class="text-lg font-bold text-red-500">TODO</h1>
+  <p class="text-lg font-bold text-red-500">TODO</p>
   <div class="text-muted-foreground mt-2 text-sm">
     <slot />
   </div>

@@ -6,11 +6,12 @@ import { cn } from '@/lib/utils';
 export interface Props {
   Element?: 'article' | 'div';
   class?: string;
+  id?: string;
 }
 
-const { Element = 'div', class: className } = Astro.props;
+const { Element = 'div', class: className, id } = Astro.props;
 ---
 
-<Element class={cn('prose', className)}>
+<Element id={id} tabindex={id ? -1 : undefined} class={cn('prose', className)}>
   <slot />
 </Element>

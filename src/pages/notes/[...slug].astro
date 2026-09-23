@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import { createRoute } from 'astro-typesafe-routes/create-route';
 import { components } from '@/components/blog/components';
+import TableOfContents from '@/components/blog/toc/index.astro';
 import Prose from '@/components/blog/prose.astro';
 import NoteFooter from '@/components/note/footer/index.astro';
 import NoteHeader from '@/components/note/note-header.astro';
@@ -24,13 +25,14 @@ export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
 });
 
 const { note } = Astro.props;
-const { Content } = await render(note);
+const { Content, headings } = await render(note);
 ---
 
 <NoteLayout note={note}>
   <NoteHeader note={note} />
   <Shell type="article">
-    <Prose Element="article">
+    <TableOfContents headings={headings} />
+    <Prose Element="article" id="article-intro">
       <Content components={components} />
     </Prose>
     <NoteFooter note={note} />

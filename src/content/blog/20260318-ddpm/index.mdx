@@ -36,7 +36,7 @@ In this post, we'll build one from scratch in [JAX](https://github.com/jax-ml/ja
 
 <SampleGallery client:visible />
 
-# The intuition
+## The intuition
 
 In the <BlogLink post="20260301-vae">VAE post</BlogLink>, we compressed data into a bottleneck and decoded it back. That works, but there's a fundamental tension: the bottleneck must be small enough to regularize, yet large enough to not lose information.
 
@@ -53,7 +53,7 @@ If you can reverse one small step of noise, you can chain 1000 reversals and go 
   <YouTube id="iv-5mZ_9CPY" title="But how do AI images and videos actually work? | Welch Labs" />
 </Callout>
 
-# The forward process
+## The forward process
 
 The forward process is fixed (no parameters to learn). Given a clean image $x_0$, we define a sequence $x_1, x_2, \dots, x_T$ where each step adds a little [Gaussian noise](https://en.wikipedia.org/wiki/Gaussian_noise) controlled by a variance schedule $\beta_1, \dots, \beta_T$:
 
@@ -77,7 +77,7 @@ x_noisy = sqrt_alpha_bar * x0 + sqrt_one_minus_alpha_bar * noise
 
 At $t=0$, the image is untouched. At $t=999$, it's indistinguishable from pure Gaussian noise.
 
-## The noise schedule
+### The noise schedule
 
 The choice of $\beta_t$ matters more than you'd think. A linear schedule destroys too much information in early steps, leaving the model with little to learn at low $t$. The cosine schedule [@nichol2021improved] fixes this by preserving more signal early on:
 
@@ -87,7 +87,7 @@ $$\bar\alpha_t = \frac{f(t)}{f(0)}, \qquad f(t) = \cos\left(\frac{t/T + s}{1+s} 
 
 Notice how $\bar\alpha_t$ (the signal-preserving factor) drops gently at first, then accelerates. This means the model gets useful gradients at every noise level, not just the extremes.
 
-# The reverse process
+## The reverse process
 
 Here's where learning happens. We want to go backwards: given a noisy $x_t$, produce a slightly less noisy $x_{t-1}$. It turns out [@ho2020denoising] that the optimal reverse step is also Gaussian:
 
@@ -143,9 +143,9 @@ Putting it all together, the two algorithms [@ho2020denoising] are remarkably si
 
 <DenoisingProcess client:visible />
 
-# The architecture
+## The architecture
 
-## UNet
+### UNet
 
 The workhorse is a UNet [@ronneberger2015unet]: an encoder-decoder with [skip connections](https://en.wikipedia.org/wiki/Residual_neural_network). The encoder downsamples through [ResNet blocks](https://arxiv.org/abs/1512.03385), the decoder upsamples and concatenates skip features from the corresponding encoder level.
 
@@ -159,7 +159,7 @@ What makes it a _diffusion_ UNet:
   alt="UNet architecture: encoder-bottleneck-decoder with skip connections and time/class conditioning"
 />
 
-## Class conditioning
+### Class conditioning
 
 To condition on which character to generate, we add a [learned embedding](https://en.wikipedia.org/wiki/Word_embedding) for each of the 62 classes. This embedding goes through the same MLP as the time embedding and adds to it:
 
@@ -171,7 +171,7 @@ if self.class_embed is not None and label is not None:
 
 That's it. The class signal reaches every layer of the network through the time embedding pathway.
 
-# SDF: a better shape representation
+## SDF: a better shape representation
 
 Instead of training on raw binary images (black/white pixels), we use [**Signed Distance Fields**](https://en.wikipedia.org/wiki/Signed_distance_function) (SDFs). For each pixel, the SDF stores how far it is from the nearest edge: negative inside the glyph, positive outside.
 
@@ -199,7 +199,7 @@ def to_image(self, normalized_sdf: Float[Array, "h w"]) -> UInt8[Array, "h w"]:
   <NumberCard title="Resolution" value={64} description="Pixels per glyph" />
 </Columns>
 
-# Training
+## Training
 
 We train for 150 epochs on a [TPU v5e](https://cloud.google.com/tpu/docs/v5e) with batch size 256, using Adam [@kingma2014adam] at a learning rate of $2 \times 10^{-4}$ and EMA decay of 0.999.
 
@@ -219,7 +219,7 @@ The loss drops steeply in the first 30 epochs as the model learns coarse structu
 
 By epoch 30, the model produces recognizable glyphs. By epoch 90, most characters are crisp and well-formed. The jump in quality between epoch 10 and 60 is where the model transitions from "blobs in the right place" to "actual letterforms."
 
-# What's next
+## What's next
 
 This is a basic DDPM, the foundation that everything else builds on. Some natural extensions:
 
@@ -231,9 +231,9 @@ The complete training pipeline (data preparation, model, training loop, sampling
 
 ---
 
-# Appendices
+## Appendices
 
-## Appendix A: forward process closed form
+### Appendix A: forward process closed form
 
 We want to show that $q(x_t \mid x_0)$ has a closed form. Start from the single-step forward:
 
@@ -264,7 +264,7 @@ $$
 
 This is what lets us sample any $x_t$ in one step during training rather than iterating through all $t$ steps.
 
-## Appendix B: variational bound
+### Appendix B: variational bound
 
 The approach here follows the same variational argument we used to derive the ELBO in the <BlogLink post="20260301-vae">VAE post</BlogLink>. The difference is that our latent variables are now the full chain $x_{1:T}$ rather than a single $z$, so the bound decomposes into per-step terms.
 
@@ -303,7 +303,7 @@ $$
 
 $L_T$ has no learnable parameters (the forward process is fixed). Each $L_{t-1}$ compares two Gaussians, so the KL has a closed form. $L_0$ is the reconstruction term. All the learning happens in the $L_{t-1}$ terms: teaching the model to match the true denoising posterior at each step.
 
-## Appendix C: simplified objective
+### Appendix C: simplified objective
 
 Each $L_{t-1}$ term compares the learned mean $\mu_\theta(x_t, t)$ to the forward posterior mean $\tilde\mu_t$. Since the variances $\tilde\beta_t$ are fixed, the KL reduces to an MSE between means:
 

@@ -38,7 +38,11 @@
 .prose h4 {
   font-weight: 700;
   line-height: 1.2;
-  scroll-margin-top: 100px;
+  scroll-margin-top: var(--reading-header-offset);
+}
+
+.prose[id] {
+  scroll-margin-top: var(--reading-header-offset);
 }
 
 .prose h1 {

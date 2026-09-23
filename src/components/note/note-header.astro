@@ -19,46 +19,42 @@ const resources = note.data.resources.map((r) =>
 );
 ---
 
-<header class:list={['py-8', className]}>
+<header class:list={['py-6', className]}>
   <Shell type="article">
-    <div class="bg-card/40 rounded-xl border p-6">
-      <div class="space-y-2">
-        <div class="space-y-4">
-          <h1 class="text-4xl font-bold tracking-tight" data-pagefind-meta="title">
-            {note.data.title}
-          </h1>
-          {
-            note.data.description && (
-              <p class="text-muted-foreground text-xl" data-pagefind-meta="description">
-                {note.data.description}
-              </p>
-            )
-          }
-        </div>
+    <div class="space-y-5">
+      <div class="space-y-3">
+        <h1 class="text-4xl font-bold tracking-tight" data-pagefind-meta="title">
+          {note.data.title}
+        </h1>
+        {
+          note.data.description && (
+            <p class="text-muted-foreground text-lg" data-pagefind-meta="description">
+              {note.data.description}
+            </p>
+          )
+        }
+      </div>
 
-        <div class="text-muted-foreground flex items-center gap-4 text-sm" data-pagefind-ignore>
-          <div class="flex items-center gap-2">
-            <Time date={note.data.published_date} />
-            <span>•</span>
-            <span>{note.readingTime}</span>
-          </div>
+      <div class="text-muted-foreground flex items-center gap-4 text-sm" data-pagefind-ignore>
+        <div class="flex items-center gap-2">
+          <Time date={note.data.published_date} />
+          <span>•</span>
+          <span>{note.readingTime}</span>
         </div>
+      </div>
 
-        <div class="flex w-full items-center gap-6" data-pagefind-ignore>
-          <div class="flex flex-col gap-3 text-start">
-            {
-              note.data.resources && (
-                <>
-                  <span class="text-muted-foreground text-sm font-medium">Resources</span>
-                  <Resources resources={resources} />
-                </>
-              )
-            }
-          </div>
-          <div class="flex flex-col gap-3 text-start">
-            <span class="text-muted-foreground text-sm font-medium">Share on</span>
-            <SharingBadges post={note} />
-          </div>
+      <div class="flex w-full flex-wrap items-center gap-6" data-pagefind-ignore>
+        {
+          note.data.resources.length > 0 && (
+            <div class="flex flex-col gap-2 text-start">
+              <span class="text-muted-foreground text-sm font-medium">Resources</span>
+              <Resources resources={resources} />
+            </div>
+          )
+        }
+        <div class="flex flex-col gap-2 text-start">
+          <span class="text-muted-foreground text-sm font-medium">Share on</span>
+          <SharingBadges post={note} />
         </div>
       </div>
     </div>
