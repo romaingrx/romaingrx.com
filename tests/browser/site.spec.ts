@@ -33,7 +33,10 @@ test('mobile navigation exposes Contact', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  await page.getByRole('button', { name: 'Menu' }).click();
+  await page
+    .getByRole('navigation', { name: 'Global' })
+    .getByRole('button', { name: 'Menu' })
+    .click();
   await expect(
     page.locator('#mobile-nav-menu').getByRole('link', { name: 'Contact', exact: true }),
   ).toBeVisible();
