@@ -1,10 +1,6 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import {
-  buttonVariants,
-  type AccessibleControlProps,
-  type ButtonVariant,
-} from './variants';
+import { buttonVariants, type AccessibleControlProps, type ButtonVariant } from './variants';
 import { cn } from '@/lib/utils';
 
 type BaseProps = Omit<HTMLAttributes<'button'>, 'aria-label' | 'aria-labelledby'> & {
@@ -14,19 +10,9 @@ type BaseProps = Omit<HTMLAttributes<'button'>, 'aria-label' | 'aria-labelledby'
 
 type Props = BaseProps & AccessibleControlProps;
 
-const {
-  variant = 'default',
-  size = 'default',
-  className,
-  class: cls,
-  ...props
-} = Astro.props;
+const { variant = 'default', size = 'default', className, class: cls, ...props } = Astro.props;
 ---
 
-<button
-  {...props}
-  data-slot="button"
-  class={cn(buttonVariants({ variant, size }), className, cls)}
->
+<button {...props} data-slot="button" class={cn(buttonVariants({ variant, size }), className, cls)}>
   <slot />
 </button>

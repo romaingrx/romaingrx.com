@@ -54,6 +54,42 @@ test('native image dialogs keep focus, restore their triggers, and stay independ
   await expect(secondTrigger).toBeFocused();
 });
 
+test('Astro Dialog uses token styling, a 44px close target, and native dismissal', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/design');
+
+  const opener = page.getByRole('button', { name: 'Edit Profile' });
+  const dialog = page.getByRole('dialog', { name: 'My title' });
+  const close = dialog.getByRole('button', { name: 'Close dialog' });
+  await opener.click();
+  await expect(dialog).toBeVisible();
+
+  const dialogBox = await dialog.boundingBox();
+  const closeBox = await close.boundingBox();
+  expect(dialogBox).not.toBeNull();
+  expect(dialogBox!.width).toBeLessThanOrEqual(358);
+  expect(dialogBox!.x).toBeGreaterThanOrEqual(0);
+  expect(dialogBox!.x + dialogBox!.width).toBeLessThanOrEqual(390);
+  expect(closeBox).not.toBeNull();
+  expect(closeBox!.width).toBeGreaterThanOrEqual(44);
+  expect(closeBox!.height).toBeGreaterThanOrEqual(44);
+
+  await close.click();
+  await expect(dialog).toBeHidden();
+
+  await opener.click();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(opener).toBeFocused();
+
+  await opener.click();
+  await page.mouse.click(1, 1);
+  await expect(dialog).toBeHidden();
+  await expect(opener).toBeFocused();
+});
+
 test('development component fixture is available to the dev server', async ({ page }) => {
   const response = await page.goto('/design');
 

@@ -14,8 +14,20 @@ interface Props extends HTMLAttributes<'div'> {
 const { icon, title, variant = 'default', className, class: cls, ...props } = Astro.props;
 ---
 
-<div {...props} data-slot="alert" role="alert" class={cn(alertVariants({ variant }), className, cls)}>
+<div
+  {...props}
+  data-slot="alert"
+  role="alert"
+  class={cn(alertVariants({ variant }), className, cls)}
+>
   <Icon name={icon} class={'size-4'} />
-  <h2 data-slot="alert-title" class="col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight">{title}</h2>
-  <section data-slot="alert-description" class="col-start-2 grid justify-items-start gap-1 text-sm text-muted-foreground [&_p]:leading-relaxed"><slot /></section>
+  <h2 data-slot="alert-title" class="col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight">
+    {title}
+  </h2>
+  <section
+    data-slot="alert-description"
+    class="text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed"
+  >
+    <slot />
+  </section>
 </div>
