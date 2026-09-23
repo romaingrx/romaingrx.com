@@ -3,7 +3,7 @@ import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-import { platforms_enum } from './configs/platforms';
+import { platforms_enum } from './configs/platforms-schema';
 import { resource_schema } from './configs/resources';
 
 const taxonomyValue = z

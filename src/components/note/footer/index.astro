@@ -12,9 +12,10 @@ import RelatedNotes from './related-notes.astro';
 
 interface Props {
   note: NoteWithAuthors;
+  allNotes: NoteWithAuthors[];
 }
 
-const { note } = Astro.props;
+const { note, allNotes } = Astro.props;
 const { tags, updated_date } = note.data;
 const resources = note.data.resources.map((r) =>
   Object.assign({}, r, {
@@ -74,7 +75,7 @@ const resources = note.data.resources.map((r) =>
   <!-- Related Content Section -->
   <div class="mb-16">
     <h2 class="mb-6 text-2xl font-semibold tracking-tight">More Notes</h2>
-    <RelatedNotes note={note} />
+    <RelatedNotes note={note} allNotes={allNotes} />
   </div>
 
   <!-- Comments Section -->

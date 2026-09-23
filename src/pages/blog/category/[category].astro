@@ -1,26 +1,35 @@
 ---
 import { createRoute } from 'astro-typesafe-routes/create-route';
 import BlogListLayout from '@/components/blog/blog-list-layout.astro';
-import { getBlogPosts } from '@/lib/collections';
+import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
 
-type Props = { category: string };
+type Props = {
+  category: string;
+  posts: BlogPostWithAuthors[];
+  allPosts: BlogPostWithAuthors[];
+  categories: string[];
+  tags: string[];
+};
 
 export const Route = createRoute({ routeId: '/blog/category/[category]' });
 
 export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
   const posts = await getBlogPosts();
   const categories = [...new Set(posts.flatMap((post) => post.data.categories))];
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
   return categories.map((category) => ({
     params: { category },
-    props: { category },
+    props: {
+      category,
+      posts: posts.filter((post) => post.data.categories.includes(category)),
+      allPosts: posts,
+      categories,
+      tags,
+    },
   }));
 });
 
-const { category } = Astro.props;
-const allPosts = await getBlogPosts();
-const posts = allPosts.filter((post) => post.data.categories.includes(category));
-const categories = [...new Set(allPosts.flatMap((post) => post.data.categories))];
-const tags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
+const { category, posts, allPosts, categories, tags } = Astro.props;
 ---
 
 <BlogListLayout

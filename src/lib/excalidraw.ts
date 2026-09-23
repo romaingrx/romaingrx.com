@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- DOM shim requires any casts */
+import { Window } from 'happy-dom';
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
 
 import type { Plugin } from 'vite';
 
@@ -21,47 +20,41 @@ export interface ExcalidrawToSvgOptions {
  * @excalidraw/utils exportToSvg can run in Node.js without Playwright.
  */
 function setupDomEnvironment(): void {
-  const require = createRequire(import.meta.url);
-  const { Window } = require('happy-dom');
   const win = new Window({ url: 'http://localhost' });
+  Object.defineProperty(win, 'devicePixelRatio', { value: 1 });
 
-  for (const key of Object.getOwnPropertyNames(win)) {
-    if (!(key in globalThis) && key !== 'undefined') {
-      try {
-        (globalThis as any)[key] = win[key];
-      } catch {
-        // Some properties are non-configurable
-      }
+  class FontFaceStub {
+    status = 'loaded';
+    unicodeRange = '';
+
+    constructor(readonly family: string) {}
+
+    async load() {
+      return this;
     }
   }
-  (globalThis as any).window = win;
-  (globalThis as any).devicePixelRatio = 1;
 
-  // FontFace stub — excalidraw tries to register fonts via FontFace API
-  if (!('FontFace' in globalThis)) {
-    (globalThis as any).FontFace = class FontFace {
-      family: string;
-      status = 'loaded';
-      unicodeRange = '';
-      constructor(family: string) {
-        this.family = family;
-      }
-      async load() {
-        return this;
-      }
-    };
-  }
-
-  if (!win.document.fonts) {
-    win.document.fonts = {
+  Object.defineProperty(win.document, 'fonts', {
+    value: {
       add() {},
       check() {
         return true;
       },
       ready: Promise.resolve(),
       *[Symbol.iterator]() {},
-    };
-  }
+    },
+  });
+
+  // @excalidraw/utils reads these browser globals at module initialization.
+  Object.defineProperties(globalThis, {
+    window: { configurable: true, value: win },
+    document: { configurable: true, value: win.document },
+    navigator: { configurable: true, value: win.navigator },
+    devicePixelRatio: { configurable: true, value: 1 },
+    HTMLCanvasElement: { configurable: true, value: win.HTMLCanvasElement },
+    Image: { configurable: true, value: win.Image },
+    FontFace: { configurable: true, value: FontFaceStub },
+  });
 }
 
 let domReady = false;
@@ -91,7 +84,7 @@ export async function excalidrawToSvg(
     files: null,
   };
 
-  const svg = await exportToSvg(data as any);
+  const svg = await exportToSvg(data as Parameters<typeof exportToSvg>[0]);
   return svg.outerHTML;
 }
 

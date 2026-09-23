@@ -14,9 +14,10 @@ import RelatedPosts from './related-posts.astro';
 
 interface Props {
   post: BlogPostWithAuthors;
+  allPosts: BlogPostWithAuthors[];
 }
 
-const { post } = Astro.props;
+const { post, allPosts } = Astro.props;
 const { authors } = post;
 const { tags, categories, updated_date, related_posts } = post.data;
 const resources = post.data.resources.map((r) =>
@@ -110,7 +111,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         <h2 class="mb-6 text-2xl font-semibold tracking-tight">
           {post.data.related_posts ? 'Related Content' : 'More Posts'}
         </h2>
-        <RelatedPosts post={post} />
+        <RelatedPosts post={post} allPosts={allPosts} />
       </div>
     )
   }

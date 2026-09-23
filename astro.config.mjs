@@ -5,6 +5,7 @@ import astroTypesafeRoutes from 'astro-typesafe-routes';
 
 // Astro integrations
 import cloudflare from '@astrojs/cloudflare';
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -21,15 +22,16 @@ import { site } from './src/configs/site';
 import routeReport from './src/integrations/route-report.mjs';
 import { excalidraw } from './src/lib/excalidraw';
 import { rehypeCitationRelative } from './src/lib/rehype-citation-wrapper.mjs';
-import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
 // https://astro.build/config
 export default defineConfig({
   site: site.url,
-  adapter: cloudflare({
-    imageService: import.meta.env.PROD ? 'custom' : 'passthrough',
-    prerenderEnvironment: 'node',
-  }),
+  adapter: import.meta.env.PROD
+    ? cloudflare({
+        imageService: 'custom',
+        prerenderEnvironment: 'node',
+      })
+    : undefined,
   env: {
     schema: {
       NODE_ENV: envField.enum({
@@ -42,18 +44,22 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkMath, remarkReadingTime],
-    rehypePlugins: [
-      rehypeKatex,
-      rehypeCitationRelative,
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
-          rel: ['noopener', 'noreferrer'],
-        },
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [
+        rehypeKatex,
+        rehypeCitationRelative,
+        [
+          rehypeExternalLinks,
+          {
+            target: '_blank',
+            rel: ['noopener', 'noreferrer'],
+          },
+        ],
       ],
-    ],
+      gfm: true,
+      smartypants: true,
+    }),
   },
   integrations: [
     expressiveCode({
@@ -66,11 +72,7 @@ export default defineConfig({
       },
       plugins: [pluginLineNumbers()],
     }),
-    mdx({
-      gfm: true,
-      optimize: true,
-      smartypants: true,
-    }),
+    mdx({ optimize: true }),
     sitemap(),
     react(),
 

@@ -1,46 +1,22 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 
 import { createRoute } from 'astro-typesafe-routes/create-route';
 
 import { getNotes } from '@/lib/collections';
-import { generateOGImage } from '@/utils/og';
+import { generateOGImage, pngResponse } from '@/utils/og';
 
-export const GET: APIRoute = async ({ params }) => {
-  // Extract the note ID from the URL, handling potential URL encoding
-  const noteId = params.id?.split('?')[0]; // Get the ID and remove any trailing parameters
+type Props = { title: string; description: string };
 
-  if (!noteId) {
-    return new Response('Missing note ID', { status: 400 });
-  }
-
-  // Get the note data
-  const notes = await getCollection('note');
-  const note = notes.find((note) => note.id === noteId);
-
-  if (!note) {
-    return new Response('Note not found', { status: 404 });
-  }
-
-  // Generate the OG image with proper type handling for description
+export const GET: APIRoute<Props> = async ({ props }) => {
+  const { title, description } = props;
+  if (!title) return new Response('Note not found', { status: 404 });
   const png = await generateOGImage({
-    title: note.data.title,
+    title,
     showLogo: true,
-    description: note.data.description || '',
+    description,
   });
 
-  return new Response(new Uint8Array(png), {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=0, s-maxage=86400, must-revalidate',
-      'CDN-Cache-Control': 'public, max-age=86400',
-      'Surrogate-Control': 'public, max-age=86400',
-    },
-  });
-};
-
-type Props = {
-  note: Awaited<ReturnType<typeof getNotes>>[number];
+  return pngResponse(png);
 };
 
 export const Route = createRoute({ routeId: '/og/note/[id].png' });
@@ -49,6 +25,6 @@ export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
   const notes = await getNotes();
   return notes.map((note) => ({
     params: { id: note.id },
-    props: { note },
+    props: { title: note.data.title, description: note.data.description || '' },
   }));
 });

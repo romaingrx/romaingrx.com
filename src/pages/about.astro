@@ -1,7 +1,17 @@
 ---
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import ProfileSection from '@/components/about/ProfileSection.astro';
 import Timeline from '@/components/about/Timeline.astro';
 import Layout from '@/layouts/BaseLayout.astro';
+
+const [author, timelineEntries] = await Promise.all([
+  getEntry('author', 'romaingrx'),
+  getCollection('timeline'),
+]);
+if (!author) throw new Error('Author not found for owner of the website');
+
+const entriesFor = (type: CollectionEntry<'timeline'>['data']['type']) =>
+  timelineEntries.filter((entry) => entry.data.type === type);
 
 // export const prerender = true;
 
@@ -11,16 +21,16 @@ const page_description =
 
 <Layout title="About me" description={page_description}>
   <div class="container mx-auto max-w-6xl px-4 py-8">
-    <ProfileSection author="romaingrx" />
+    <ProfileSection author={author} />
 
     <!-- Timeline Sections -->
     <div class="mt-12 space-y-16">
       <div class="grid gap-16 lg:grid-cols-2">
-        <Timeline type="experience" title="Experience" />
-        <Timeline type="project" title="Projects" />
+        <Timeline type="experience" entries={entriesFor('experience')} title="Experience" />
+        <Timeline type="project" entries={entriesFor('project')} title="Projects" />
       </div>
       <div class="mx-auto max-w-3xl">
-        <Timeline type="education" title="Education" />
+        <Timeline type="education" entries={entriesFor('education')} title="Education" />
       </div>
     </div>
   </div>
