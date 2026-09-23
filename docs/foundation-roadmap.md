@@ -1,8 +1,10 @@
 # Foundation roadmap
 
-13 September 2026 · Proposed implementation plan · No implementation PRs opened
+Updated 23 September 2026 · Implementation plan · Final local and hosted validation complete; manual checks remain
 
-The recommended plan contains **14 focused PRs**. Each PR delivers a usable change, records its checks, and preserves existing content URLs.
+The roadmap defines **14 focused PRs**. PR01–PR14 implementation is in place. A fresh pinned install, production build, route checks, lint, and the full cross-engine suite (228/228) pass. The suite includes committed-popup navigation readiness, focused reading scenarios, and controlled playback; the independent 82-fragment audit also passes. The hosted validator passed 9/9; responsive Notes and taxonomy pages, the settled Corne gallery, article navigation, related-note behavior, prose themes, and live Giscus theme changes were verified.
+
+The item-by-item evidence is recorded in [foundation-validation.md](foundation-validation.md). Actual 200% browser zoom, physical touch, soft-keyboard, and screen-reader checks remain unverified; a narrowed viewport is not treated as browser zoom.
 
 The target is an Astro website with consistent design tokens, small components, explicit interaction behavior, and reliable content contracts.
 
@@ -60,7 +62,10 @@ The showcase is a small Astro fixture. It shares production components and stays
 
 **PR sequence**
 
-The numbers give the recommended merge order. Dependencies identify the actual prerequisites. Each PR branches from the latest applicable merged foundation.
+The numbers give the required merge order. Dependencies identify actual
+prerequisites. Integrate each implementation PR onto the latest foundation in
+sequence; PR 14 starts from the fully integrated PR 01–13 stack and does not
+replace its behavioral tests with worker-only results.
 
 | PR  | Proposed title                                            | Main outcome                                        | Depends on |
 | --- | --------------------------------------------------------- | --------------------------------------------------- | ---------- |
@@ -364,7 +369,9 @@ The original audit did not establish production performance, complete browser co
 **Merge rules and completion criteria**
 
 - Keep each PR focused on its stated outcome. Separate unrelated dependency upgrades and content edits.
-- Include the problem, resulting behavior, affected routes, screenshots where useful, and actual validation results in each PR description.
+- Write each PR body as one plain-English paragraph with no headings or bullet
+  sections. State the problem, resulting behavior, affected routes, useful
+  screenshots, and validation actually completed. Do not claim unrun checks.
 - Preserve public URLs, content assets, theme preferences, and existing useful interactions throughout migration.
 - Add focused regression checks for meaningful behavior. Avoid tests that repeat implementation details or snapshot every markup change.
 - Keep content readable when optional search, comments, or decorative scripts fail.

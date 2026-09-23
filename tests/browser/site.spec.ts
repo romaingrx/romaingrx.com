@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { tabKey } from '../helpers/keyboard';
+
 test('home exposes primary navigation and writing links', async ({ page }) => {
   await page.goto('/');
 
@@ -29,7 +31,7 @@ test('contact is discoverable and uses the configured LinkedIn destination', asy
   expect(await linkedInLink.evaluate((element) => element.getBoundingClientRect().height)).toBe(44);
 });
 
-test('mobile navigation exposes Contact', async ({ page }) => {
+test('mobile navigation exposes Contact', async ({ page, browserName }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
@@ -43,7 +45,7 @@ test('mobile navigation exposes Contact', async ({ page }) => {
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   await expect(menu.getByRole('link', { name: 'Contact', exact: true })).toBeVisible();
 
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey(browserName));
   await expect(menu.getByRole('link', { name: 'Home', exact: true })).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(menu.getByRole('link')).toHaveCount(0);
@@ -55,13 +57,13 @@ test('mobile navigation exposes Contact', async ({ page }) => {
   await expect(menu.getByRole('link')).toHaveCount(0);
 });
 
-test('skip link moves keyboard focus to the main content target', async ({ page }) => {
+test('skip link moves keyboard focus to the main content target', async ({ page, browserName }) => {
   await page.goto('/');
 
   const skipLink = page.getByRole('link', { name: 'Skip to main content' });
   const main = page.locator('#main-content');
 
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey(browserName));
   await expect(skipLink).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(main).toBeFocused();

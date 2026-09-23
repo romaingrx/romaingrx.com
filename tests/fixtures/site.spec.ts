@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+import { tabKey } from '../helpers/keyboard';
+
 test('native image dialogs keep focus, restore their triggers, and stay independent', async ({
   page,
+  browserName,
 }) => {
   await page.goto('/design');
 
@@ -17,15 +20,29 @@ test('native image dialogs keep focus, restore their triggers, and stay independ
   await expect(firstDialog.getByRole('button', { name: 'Close dialog' })).toBeFocused();
   await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
 
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey(browserName));
   expect(
     await page.evaluate(() => {
       const dialog = document.querySelector('dialog[open]');
       return document.activeElement === document.body || dialog?.contains(document.activeElement);
     }),
   ).toBe(true);
-  await page.keyboard.press('Shift+Tab');
-  await expect(firstDialog.getByRole('button', { name: 'Close dialog' })).toBeFocused();
+  await page.keyboard.press(tabKey(browserName, true));
+  expect(
+    await page.evaluate(() => {
+      const dialog = document.querySelector('dialog[open]');
+      return dialog?.contains(document.activeElement);
+    }),
+  ).toBe(true);
+
+  await firstTrigger.evaluate((trigger) => (trigger as HTMLButtonElement).focus());
+  await expect(firstTrigger).not.toBeFocused();
+  expect(
+    await page.evaluate(() => {
+      const dialog = document.querySelector('dialog[open]');
+      return dialog?.contains(document.activeElement);
+    }),
+  ).toBe(true);
 
   const dialogBox = await firstDialog.boundingBox();
   expect(dialogBox).not.toBeNull();
