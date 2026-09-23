@@ -2,7 +2,7 @@
 
 Updated 23 September 2026 · Implementation plan · Final local and hosted validation complete; manual checks remain
 
-The roadmap defines **14 focused PRs**. PR01–PR14 implementation is in place. A fresh pinned install, production build, route checks, lint, the full cross-engine suite (213/213), 12 focused readiness/playback/reading cases across three engines, and the 82-fragment audit pass. The hosted validator passed 9/9; responsive Notes and taxonomy pages, the settled Corne gallery, article navigation, related-note behavior, prose themes, and live Giscus theme changes were verified.
+The roadmap defines **14 focused PRs**. PR01–PR14 implementation is in place. A fresh pinned install, production build, route checks, lint, and the full cross-engine suite (228/228) pass. The suite includes committed-popup navigation readiness, focused reading scenarios, and controlled playback; the independent 82-fragment audit also passes. The hosted validator passed 9/9; responsive Notes and taxonomy pages, the settled Corne gallery, article navigation, related-note behavior, prose themes, and live Giscus theme changes were verified.
 
 The item-by-item evidence is recorded in [foundation-validation.md](foundation-validation.md). Actual 200% browser zoom, physical touch, soft-keyboard, and screen-reader checks remain unverified; a narrowed viewport is not treated as browser zoom.
 
