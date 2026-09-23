@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { tabKey } from '../helpers/keyboard';
+
 test('the published Corne gallery opens by keyboard and keeps captions, position, and focus together', async ({
   page,
 }) => {
@@ -32,6 +34,7 @@ test('the published Corne gallery opens by keyboard and keeps captions, position
 
 test('the Corne lightbox fits short mobile viewports without cropping its image or crowding controls', async ({
   page,
+  browserName,
 }) => {
   await page.setViewportSize({ width: 390, height: 568 });
   await page.goto('/notes/corne-keyboard-5x3-3-setup');
@@ -44,7 +47,7 @@ test('the Corne lightbox fits short mobile viewports without cropping its image 
     true,
   );
   const previousButton = dialog.getByRole('button', { name: 'Previous image' });
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey(browserName));
   await expect(previousButton).toBeFocused();
   await expect
     .poll(() => previousButton.evaluate((button) => getComputedStyle(button).outlineColor))
