@@ -196,6 +196,7 @@ test('sharing controls fit at 320px and keep 44px hit targets', async ({ page })
   const metrics = await row.evaluate((element) => ({
     clientWidth: element.clientWidth,
     scrollWidth: element.scrollWidth,
+    right: element.getBoundingClientRect().right,
     linkWidths: Array.from(element.querySelectorAll('a')).map(
       (control) => control.getBoundingClientRect().width,
     ),
@@ -212,6 +213,27 @@ test('sharing controls fit at 320px and keep 44px hit targets', async ({ page })
   expect(metrics.linkWidths).toHaveLength(3);
   expect(metrics.linkWidths.every((width) => width >= 44)).toBe(true);
   expect(metrics.controlWidths.every((width) => width >= 44)).toBe(true);
+  expect(metrics.right).toBeLessThanOrEqual(320);
+  const headerBounds = await page.locator('header > .w-full > .page-gutter').evaluate((element) => {
+    const { left, right, width } = element.getBoundingClientRect();
+    return { left, right, width };
+  });
+  expect(headerBounds.left).toBeGreaterThanOrEqual(0);
+  expect(headerBounds.right).toBeLessThanOrEqual(320);
+  const contentBounds = await sharing.evaluate((element) => ({
+    shareRight: element.getBoundingClientRect().right,
+    controls: Array.from(element.querySelectorAll('a, button')).map((control) => {
+      const { left, right, width, height } = control.getBoundingClientRect();
+      return { left, right, width, height };
+    }),
+  }));
+  expect(contentBounds.shareRight).toBeLessThanOrEqual(320);
+  expect(contentBounds.controls).toHaveLength(5);
+  expect(
+    contentBounds.controls.every(
+      ({ left, right, width, height }) => left >= 0 && right <= 320 && width >= 44 && height >= 44,
+    ),
+  ).toBe(true);
   expect(await page.locator('html').evaluate((element) => element.scrollWidth)).toBeLessThanOrEqual(
     320,
   );

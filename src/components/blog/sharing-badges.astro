@@ -53,7 +53,7 @@ const links: Partial<Record<Platform, LinkProps>> = {
 ---
 
 <div class="space-y-2" data-content-share data-share-title={post.data.title}>
-  <div class="flex flex-nowrap items-center gap-1.5 overflow-x-auto">
+  <div class="flex flex-wrap items-center gap-1.5">
     {
       Object.entries(links).map(([platformName, props]) => {
         if (!props) return null;
