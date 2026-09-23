@@ -1,5 +1,6 @@
 ---
 import type { BlogPostWithAuthors } from '@/lib/collections';
+import { routes } from '@/configs/routes';
 import '@/styles/katex.css';
 import BaseLayout from './BaseLayout.astro';
 
@@ -10,7 +11,7 @@ interface Props {
 const { post } = Astro.props;
 
 // Create a cache-busting URL for the OG image using URLSearchParams for proper encoding
-const ogImageUrl = `/og/blog/${post.id}.png`;
+const ogImageUrl = routes.blogOg(post.id);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} ogImage={ogImageUrl}>

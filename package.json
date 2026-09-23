@@ -80,6 +80,7 @@
     "@shikijs/transformers": "^4.0.2",
     "@tailwindcss/vite": "^4.1.15",
     "@types/node": "^26.2.0",
+    "astro-typesafe-routes": "5.2.2",
     "happy-dom": "^20.11.6",
     "mdast-util-to-string": "^4.0.0",
     "oxfmt": "^0.64.0",

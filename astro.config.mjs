@@ -1,6 +1,7 @@
 import expressiveCode from 'astro-expressive-code';
 import icon from 'astro-icon';
 import pagefind from 'astro-pagefind';
+import astroTypesafeRoutes from 'astro-typesafe-routes';
 
 // Astro integrations
 import cloudflare from '@astrojs/cloudflare';
@@ -16,6 +17,7 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 
 import { shikiConfig } from './src/configs/shiki';
+import { site } from './src/configs/site';
 import routeReport from './src/integrations/route-report.mjs';
 import { excalidraw } from './src/lib/excalidraw';
 import { rehypeCitationRelative } from './src/lib/rehype-citation-wrapper.mjs';
@@ -23,7 +25,7 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
+  site: site.url,
   adapter: cloudflare({
     imageService: 'passthrough',
     prerenderEnvironment: 'node',
@@ -79,6 +81,7 @@ export default defineConfig({
       },
     }),
     pagefind(),
+    astroTypesafeRoutes(),
     routeReport,
   ],
   vite: {

@@ -1,9 +1,8 @@
 import rss from '@astrojs/rss';
 
-import { routes } from '@/configs/routes';
+import { absolute, routes } from '@/configs/routes';
 import { site } from '@/configs/site';
 import { getBlogPosts, getNotes } from '@/lib/collections';
-import { getAbsoluteUrl } from '@/lib/utils';
 
 export async function GET(context) {
   // Get published blog posts and notes
@@ -19,7 +18,7 @@ export async function GET(context) {
       title: post.data.title,
       description: post.data.description || '',
       pubDate: post.data.published_date,
-      link: getAbsoluteUrl(routes.blog(post), siteUrl),
+      link: absolute(routes.blog(post), siteUrl),
       categories: [...post.data.tags, ...(post.data.categories || [])],
       content: post.data.description || '',
     })),
@@ -27,7 +26,7 @@ export async function GET(context) {
       title: note.data.title,
       description: note.data.description || '',
       pubDate: note.data.published_date,
-      link: getAbsoluteUrl(routes.note(note), siteUrl),
+      link: absolute(routes.note(note), siteUrl),
       categories: note.data.tags,
       content: note.data.description || '',
     })),

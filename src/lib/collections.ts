@@ -2,9 +2,7 @@ import { getCollection as astroGetCollection, render, type CollectionEntry } fro
 
 import { NODE_ENV } from 'astro:env/client';
 
-import { site } from '@/configs/site';
-
-import { getAbsoluteUrl, slugify } from './utils';
+import { absolute, routes } from '@/configs/routes';
 
 export type Author = CollectionEntry<'author'>;
 export type BlogPost = CollectionEntry<'blog'>;
@@ -32,40 +30,59 @@ async function resolveAuthors(entry: ContentEntry, authors: Author[]): Promise<A
   );
 }
 
+function assertUniquePermalinks(entries: readonly ContentEntry[]): void {
+  const seen = new Map<string, string>();
+  for (const entry of entries) {
+    const previousId = seen.get(entry.data.permalink);
+    if (previousId) {
+      throw new Error(
+        `Duplicate content permalink "${entry.data.permalink}" in ${previousId} and ${entry.id}`,
+      );
+    }
+    seen.set(entry.data.permalink, entry.id);
+  }
+}
+
+function isVisible(entry: ContentEntry): boolean {
+  return NODE_ENV === 'production'
+    ? entry.data.status === 'published'
+    : entry.data.status !== 'archived';
+}
+
 async function getContentWithAuthors<T extends ContentEntry>(
-  collection: 'blog' | 'note',
-  urlPrefix: string,
+  entries: readonly T[],
+  createPath: (params: { slug: string }) => string,
 ): Promise<WithAuthors<T>[]> {
-  const entries = await astroGetCollection(collection, (entry) =>
-    NODE_ENV === 'production'
-      ? entry.data.status === 'published'
-      : entry.data.status !== 'archived',
-  );
   const authors = await astroGetCollection('author');
 
   return Promise.all(
     entries
+      .filter(isVisible)
       .toSorted((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
       .map(async (entry) => {
         const { remarkPluginFrontmatter } = await render(entry);
         const resolved = await resolveAuthors(entry, authors);
-        const slug = slugify(entry.data.title);
+        const slug = entry.data.permalink;
         return Object.assign({}, entry, {
           authors: resolved,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
           slug,
-          url: getAbsoluteUrl(`/${urlPrefix}/${slug}`, new URL(site.url)),
-        }) as WithAuthors<T>;
+          url: absolute(createPath({ slug })),
+        });
       }),
   );
 }
 
-export function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
-  return getContentWithAuthors<BlogPost>('blog', 'blog');
+export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
+  const entries = await astroGetCollection('blog');
+  assertUniquePermalinks(entries);
+  return getContentWithAuthors(entries, routes.blog);
 }
 
-export function getNotes(): Promise<NoteWithAuthors[]> {
-  return getContentWithAuthors<Note>('note', 'note');
+export async function getNotes(): Promise<NoteWithAuthors[]> {
+  const entries = await astroGetCollection('note');
+  assertUniquePermalinks(entries);
+  return getContentWithAuthors(entries, routes.note);
 }
 
 export async function getAuthors(): Promise<Author[]> {
