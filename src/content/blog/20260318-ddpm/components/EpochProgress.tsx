@@ -36,14 +36,14 @@ export default function EpochProgress() {
               // oxlint-disable-next-line react/no-array-index-key -- static image list per epoch
               <div
                 key={`${current.epoch}-${index}`}
-                className="flex aspect-square min-w-0 items-center justify-center overflow-hidden rounded bg-black p-1 sm:size-32"
+                className="flex aspect-square min-w-0 items-center justify-center overflow-hidden rounded bg-black sm:size-32"
               >
                 <img
                   src={`data:image/png;base64,${image}`}
                   alt={`Epoch ${current.epoch + 1} sample ${index + 1}`}
                   width={128}
                   height={128}
-                  className="aspect-square object-contain"
+                  className="box-border aspect-square object-contain p-1"
                   style={{
                     width: '100%',
                     height: '100%',
