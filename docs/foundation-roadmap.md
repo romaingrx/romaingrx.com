@@ -1,10 +1,10 @@
 # Foundation roadmap
 
-Updated 23 September 2026 · Implementation plan · Release checks pending
+Updated 23 September 2026 · Implementation plan · Final local and hosted validation complete; manual checks remain
 
-The roadmap defines **14 focused PRs**. PR01–PR14 implementation is in place; the fresh install, build, route checks, lint, and final cross-engine suite (213/213) pass. Release sign-off remains open pending deployed-preview checks and documented manual accessibility checks or limitations.
+The roadmap defines **14 focused PRs**. PR01–PR14 implementation is in place. A fresh pinned install, production build, route checks, lint, the full cross-engine suite (213/213), 12 focused readiness/playback/reading cases across three engines, and the 82-fragment audit pass. The hosted validator passed 9/9; responsive Notes and taxonomy pages, the settled Corne gallery, article navigation, related-note behavior, prose themes, and live Giscus theme changes were verified.
 
-The item-by-item status and remaining evidence are recorded in [foundation-validation.md](foundation-validation.md). The 200% zoom, physical touch, soft-keyboard, and screen-reader checks are not currently claimed.
+The item-by-item evidence is recorded in [foundation-validation.md](foundation-validation.md). Actual 200% browser zoom, physical touch, soft-keyboard, and screen-reader checks remain unverified; a narrowed viewport is not treated as browser zoom.
 
 The target is an Astro website with consistent design tokens, small components, explicit interaction behavior, and reliable content contracts.
 
