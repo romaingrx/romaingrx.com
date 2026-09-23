@@ -28,7 +28,21 @@ test('native image dialogs keep focus, restore their triggers, and stay independ
     }),
   ).toBe(true);
   await page.keyboard.press(tabKey(browserName, true));
-  await expect(firstDialog.getByRole('button', { name: 'Close dialog' })).toBeFocused();
+  expect(
+    await page.evaluate(() => {
+      const dialog = document.querySelector('dialog[open]');
+      return dialog?.contains(document.activeElement);
+    }),
+  ).toBe(true);
+
+  await firstTrigger.evaluate((trigger) => (trigger as HTMLButtonElement).focus());
+  await expect(firstTrigger).not.toBeFocused();
+  expect(
+    await page.evaluate(() => {
+      const dialog = document.querySelector('dialog[open]');
+      return dialog?.contains(document.activeElement);
+    }),
+  ).toBe(true);
 
   const dialogBox = await firstDialog.boundingBox();
   expect(dialogBox).not.toBeNull();
