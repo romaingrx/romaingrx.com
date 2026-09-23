@@ -21,7 +21,7 @@ function StepViewer({ interp }: { interp: Interpolation }) {
   }, [interp]);
 
   return (
-    <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+    <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4" data-pagefind-ignore>
       <div className="flex items-center gap-3">
         <input
           type="range"
@@ -97,7 +97,7 @@ export default function InterpolationViewer() {
       </div>
 
       {run.interpolations.length > 1 && (
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5" data-pagefind-ignore>
           {run.interpolations.map((interp, i) => (
             <button
               key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}

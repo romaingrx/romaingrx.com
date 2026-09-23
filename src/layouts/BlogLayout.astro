@@ -14,7 +14,12 @@ const { post } = Astro.props;
 const ogImageUrl = routes.blogOg(post.id);
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} ogImage={ogImageUrl}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={ogImageUrl}
+  indexContent
+>
   <link
     slot="head"
     rel="stylesheet"

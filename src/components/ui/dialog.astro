@@ -23,6 +23,7 @@ const { id, title, description, label, className, hideCloseButton = false, ...pr
   aria-labelledby={title ? `${id}-title` : undefined}
   aria-describedby={description ? `${id}-description` : undefined}
   data-astro-dialog
+  data-pagefind-ignore
   {...props}
 >
   <article>

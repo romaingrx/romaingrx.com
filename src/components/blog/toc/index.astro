@@ -13,7 +13,7 @@ const { headings } = Astro.props;
 const tocSlugs = headings.map((h) => h.slug).filter(Boolean);
 ---
 
-<nav aria-label="Table of contents" class="sticky top-24 hidden lg:block">
+<nav aria-label="Table of contents" class="sticky top-24 hidden lg:block" data-pagefind-ignore>
   <div class="group/toc relative">
     <div
       class={cn(

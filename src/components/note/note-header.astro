@@ -13,7 +13,9 @@ interface Props {
 
 const { note, class: className = '' } = Astro.props;
 const resources = note.data.resources.map((r) =>
-  Object.assign({}, r, { value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }) })
+  Object.assign({}, r, {
+    value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }),
+  })
 );
 ---
 
@@ -22,15 +24,19 @@ const resources = note.data.resources.map((r) =>
     <div class="bg-card/40 rounded-xl border p-6">
       <div class="space-y-2">
         <div class="space-y-4">
-          <h1 class="text-4xl font-bold tracking-tight">{note.data.title}</h1>
+          <h1 class="text-4xl font-bold tracking-tight" data-pagefind-meta="title">
+            {note.data.title}
+          </h1>
           {
             note.data.description && (
-              <p class="text-muted-foreground text-xl">{note.data.description}</p>
+              <p class="text-muted-foreground text-xl" data-pagefind-meta="description">
+                {note.data.description}
+              </p>
             )
           }
         </div>
 
-        <div class="text-muted-foreground flex items-center gap-4 text-sm">
+        <div class="text-muted-foreground flex items-center gap-4 text-sm" data-pagefind-ignore>
           <div class="flex items-center gap-2">
             <Time date={note.data.published_date} />
             <span>•</span>
@@ -38,7 +44,7 @@ const resources = note.data.resources.map((r) =>
           </div>
         </div>
 
-        <div class="flex w-full items-center gap-6">
+        <div class="flex w-full items-center gap-6" data-pagefind-ignore>
           <div class="flex flex-col gap-3 text-start">
             {
               note.data.resources && (
