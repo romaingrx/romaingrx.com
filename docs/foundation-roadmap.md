@@ -1,13 +1,10 @@
 # Foundation roadmap
 
-13 September 2026 · Implementation plan · Status updated 23 September 2026
+Updated 23 September 2026 · Implementation plan · Release checks pending
 
-The recommended plan contains **14 focused PRs**. Each PR delivers a usable change, records its checks, and preserves existing content URLs.
+The roadmap defines **14 focused PRs**. PR01–PR14 implementation is in place; the fresh install, build, route checks, lint, and final cross-engine suite (213/213) pass. Release sign-off remains open pending deployed-preview checks and documented manual accessibility checks or limitations.
 
-The stack is in progress: PRs 01–10 are integrated; PRs 11–13 are awaiting
-ordered integration and final validation. PR 14 is the release evidence and
-documentation layer. Treat this status as a snapshot and update it when the
-stack changes.
+The item-by-item status and remaining evidence are recorded in [foundation-validation.md](foundation-validation.md). The 200% zoom, physical touch, soft-keyboard, and screen-reader checks are not currently claimed.
 
 The target is an Astro website with consistent design tokens, small components, explicit interaction behavior, and reliable content contracts.
 
