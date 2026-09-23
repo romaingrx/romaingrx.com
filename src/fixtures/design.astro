@@ -63,11 +63,7 @@ const carouselExamples = [
     </Section>
 
     <Section title="Button and dialog">
-      <Button
-        type="button"
-        onclick="document.getElementById('my-modal').showModal()"
-        variant="ghost">Edit Profile</Button
-      >
+      <Button type="button" data-open-profile-dialog variant="ghost">Edit Profile</Button>
       <Dialog id="my-modal" title="My title" description="My description">
         <div>Edit profile fields appear here.</div>
       </Dialog>
@@ -263,3 +259,14 @@ const carouselExamples = [
     </Section>
   </div>
 </BaseLayout>
+
+<script>
+  import { showModal } from '@/lib/dialog';
+
+  const opener = document.querySelector<HTMLButtonElement>('[data-open-profile-dialog]');
+  const dialog = document.getElementById('my-modal');
+
+  if (opener && dialog instanceof HTMLDialogElement) {
+    opener.addEventListener('click', () => showModal(dialog, opener));
+  }
+</script>
