@@ -1,18 +1,21 @@
 ---
 import '@/styles/command.css';
 import { Icon } from 'astro-icon/components';
+import Button from '@/components/ui/button.astro';
 ---
 
-<button
+<Button
   type="button"
-  class="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+  variant="ghost"
+  size="sm"
+  className="text-muted-foreground hover:text-foreground"
   aria-label="Search"
   id="search-trigger"
 >
   <Icon name="lucide:search" class="size-4" />
   <span class="hidden text-xs sm:inline">Search</span>
   <kbd class="hidden sm:inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">⌘K</kbd>
-</button>
+</Button>
 
 <dialog id="search-dialog" class="command-dialog" aria-label="Search">
   <div class="command">

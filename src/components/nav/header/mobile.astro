@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import Button from '@/components/ui/button.astro';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -17,15 +18,17 @@ const isActive = (href: string) => {
 ---
 
 <div class={cn('relative md:hidden', className)} id="mobile-nav">
-  <button
+  <Button
     type="button"
-    class="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground transition-colors"
+    variant="ghost"
+    size="icon"
+    className="text-muted-foreground hover:text-foreground"
     aria-label="Menu"
     aria-expanded="false"
     id="mobile-nav-trigger"
   >
     <Icon name="lucide:menu" class="size-5" />
-  </button>
+  </Button>
 
   <div
     id="mobile-nav-menu"
