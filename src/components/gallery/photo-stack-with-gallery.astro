@@ -1,5 +1,4 @@
 ---
-import Dialog from '@/components/ui/dialog.astro';
 import Gallery from './gallery.astro';
 import PhotoStack from './photostack.astro';
 import type { ImageItem } from './types';
@@ -17,38 +16,60 @@ const {
   images,
   size = 'md',
   startIndex = 0,
-  showCaptions,
+  showCaptions = false,
 } = Astro.props;
-const DIALOG_ID = `${id}-dialog`;
+const dialogId = `${id}-dialog`;
 ---
 
-<!-- Photo Stack that opens the lightbox -->
-<PhotoStack images={images} size={size} onclick={`${id}_open`} />
+<astro-photo-stack-gallery id={id} class="contents">
+  <PhotoStack images={images} size={size} dialogId={dialogId} />
 
-<!-- Lightbox Gallery using Dialog -->
-<Dialog id={DIALOG_ID} label="Photo gallery" className="[&>article]:h-screen [&>article]:w-screen">
-  <Gallery
-    id={id}
-    images={images}
-    startIndex={startIndex}
-    showCaptions={showCaptions}
-    className="h-full w-full"
-  />
-</Dialog>
+  {
+    images.length > 0 && (
+      <dialog
+        id={dialogId}
+        aria-label="Photo gallery"
+        data-gallery-dialog
+        data-pagefind-ignore
+        class="gallery-dialog fixed inset-0 m-0 h-dvh max-h-dvh w-screen max-w-none overflow-hidden border-0 bg-black p-0 text-white shadow-none backdrop:bg-black/80"
+      >
+        <Gallery
+          images={images}
+          startIndex={startIndex}
+          showCaptions={showCaptions}
+          showCloseButton
+          className="h-full w-full"
+        />
+      </dialog>
+    )
+  }
+</astro-photo-stack-gallery>
 
-<script is:inline define:vars={{ id, startIndex }}>
-  // Global function to open gallery
-  const dialogId = `${id}-dialog`;
-  window[`${id}_open`] = (index = startIndex) => {
-    const dialog = document.getElementById(dialogId);
-    if (dialog) {
-      // Set the start index for the gallery
-      const gallery = dialog.querySelector('astro-gallery');
-      if (gallery) {
-        gallery.currentIndex = index;
-        gallery.updateDisplay();
-      }
-      dialog.showModal();
+<script>
+  import { enableBackdropDismissal, showModal } from '@/lib/dialog';
+
+  class AstroPhotoStackGallery extends HTMLElement {
+    private abortController: AbortController | null = null;
+
+    connectedCallback() {
+      this.disconnectedCallback();
+      this.abortController = new AbortController();
+      const { signal } = this.abortController;
+      const opener = this.querySelector<HTMLButtonElement>('[data-gallery-opener]');
+      const dialog = this.querySelector<HTMLDialogElement>('dialog[data-gallery-dialog]');
+      if (!opener || !dialog) return;
+
+      enableBackdropDismissal(dialog, signal);
+      opener.addEventListener('click', () => showModal(dialog, opener), { signal });
     }
-  };
+
+    disconnectedCallback() {
+      this.abortController?.abort();
+      this.abortController = null;
+    }
+  }
+
+  if (!customElements.get('astro-photo-stack-gallery')) {
+    customElements.define('astro-photo-stack-gallery', AstroPhotoStackGallery);
+  }
 </script>
