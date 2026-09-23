@@ -1,5 +1,15 @@
 ---
-import { Alert, Badge, Button, Dialog, Input, Label, Link, Loading, Textarea } from '@/components/ui';
+import {
+  Alert,
+  Badge,
+  Button,
+  Dialog,
+  Input,
+  Label,
+  Link,
+  Loading,
+  Textarea,
+} from '@/components/ui';
 import { Badge as ReactBadge } from '@/components/ui/react/badge';
 import { Button as ReactButton } from '@/components/ui/react/button';
 import { Settings } from 'lucide-react';
@@ -7,6 +17,12 @@ import { Icon } from 'astro-icon/components';
 import '@/styles/typography.css';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Section from '@/components/design/section.astro';
+import ImageViewer from '@/components/blog/components/images/image-viewer.astro';
+
+const diagramOne =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" rx="12" fill="#d5ac7c"/><text x="160" y="96" text-anchor="middle" font-size="24" fill="#30251d">Diagram one</text></svg>';
+const diagramTwo =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" rx="12" fill="#8fa7a0"/><text x="160" y="96" text-anchor="middle" font-size="24" fill="#202a27">Diagram two</text></svg>';
 ---
 
 <BaseLayout title="Design fixture" description="Development-only component fixture">
@@ -26,12 +42,21 @@ import Section from '@/components/design/section.astro';
     </Section>
 
     <Section title="Button and dialog">
-      <Button type="button" onclick="document.getElementById('my-modal').showModal()" variant="ghost"
-        >Edit Profile</Button
+      <Button
+        type="button"
+        onclick="document.getElementById('my-modal').showModal()"
+        variant="ghost">Edit Profile</Button
       >
       <Dialog id="my-modal" title="My title" description="My description">
         <div>Edit profile fields appear here.</div>
       </Dialog>
+    </Section>
+
+    <Section title="Native image dialogs">
+      <div class="grid gap-6 md:grid-cols-2">
+        <ImageViewer html={diagramOne} alt="Diagram one" />
+        <ImageViewer html={diagramTwo} alt="Diagram two" />
+      </div>
     </Section>
 
     <Section title="Control matrix">
@@ -59,12 +84,7 @@ import Section from '@/components/design/section.astro';
         >
           Saving
         </Button>
-        <Link
-          data-astro-control="link"
-          href="#control-matrix-target"
-          variant="outline"
-          size="sm"
-        >
+        <Link data-astro-control="link" href="#control-matrix-target" variant="outline" size="sm">
           Astro link
         </Link>
         <Badge data-astro-badge variant="secondary">Astro badge</Badge>
@@ -119,26 +139,22 @@ import Section from '@/components/design/section.astro';
           <span
             data-design-status
             class="rounded px-2 py-1 text-xs"
-            style="background: var(--status-success); color: var(--background);"
-            >Success</span
+            style="background: var(--status-success); color: var(--background);">Success</span
           >
           <span
             data-design-status
             class="rounded px-2 py-1 text-xs"
-            style="background: var(--status-warning); color: var(--background);"
-            >Warning</span
+            style="background: var(--status-warning); color: var(--background);">Warning</span
           >
           <span
             data-design-status
             class="rounded px-2 py-1 text-xs"
-            style="background: var(--status-info); color: var(--background);"
-            >Info</span
+            style="background: var(--status-info); color: var(--background);">Info</span
           >
           <span
             data-design-status
             class="rounded px-2 py-1 text-xs"
-            style="background: var(--status-error); color: var(--background);"
-            >Error</span
+            style="background: var(--status-error); color: var(--background);">Error</span
           >
         </div>
         <img

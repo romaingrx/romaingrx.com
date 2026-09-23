@@ -33,13 +33,109 @@ test('mobile navigation exposes Contact', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  await page
-    .getByRole('navigation', { name: 'Global' })
-    .getByRole('button', { name: 'Menu' })
-    .click();
-  await expect(
-    page.locator('#mobile-nav-menu').getByRole('link', { name: 'Contact', exact: true }),
-  ).toBeVisible();
+  const navigation = page.getByRole('navigation', { name: 'Global' });
+  const trigger = navigation.getByRole('button', { name: 'Menu' });
+  const menu = page.locator('#mobile-nav-menu');
+
+  await expect(menu.getByRole('link')).toHaveCount(0);
+  await trigger.focus();
+  await trigger.press('Enter');
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await expect(menu.getByRole('link', { name: 'Contact', exact: true })).toBeVisible();
+
+  await page.keyboard.press('Tab');
+  await expect(menu.getByRole('link', { name: 'Home', exact: true })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(menu.getByRole('link')).toHaveCount(0);
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await page.locator('main').click({ position: { x: 5, y: 5 } });
+  await expect(menu.getByRole('link')).toHaveCount(0);
+});
+
+test('skip link moves keyboard focus to the main content target', async ({ page }) => {
+  await page.goto('/');
+
+  const skipLink = page.getByRole('link', { name: 'Skip to main content' });
+  const main = page.locator('#main-content');
+
+  await page.keyboard.press('Tab');
+  await expect(skipLink).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(main).toBeFocused();
+  await expect(page).toHaveURL(/#main-content$/);
+});
+
+test('navigation keeps the current section active and the header visible during interaction', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/blog/tag/from%20scratch');
+
+  const navigation = page.getByRole('navigation', { name: 'Global' });
+  const blogLinks = navigation.locator('a[href="/blog"]');
+  const menu = page.locator('#mobile-nav-menu');
+  const trigger = navigation.getByRole('button', { name: 'Menu' });
+  const header = page.locator('#header');
+
+  await expect(blogLinks).toHaveCount(2);
+  await expect(blogLinks.nth(0)).toHaveAttribute('aria-current', 'page');
+  await expect(blogLinks.nth(1)).toHaveAttribute('aria-current', 'page');
+
+  await trigger.focus();
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await expect
+    .poll(() => header.evaluate((element) => element.getBoundingClientRect().bottom))
+    .toBeGreaterThan(0);
+
+  await trigger.press('Enter');
+  await expect(menu).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, 800));
+  await expect
+    .poll(() => header.evaluate((element) => element.getBoundingClientRect().bottom))
+    .toBeGreaterThan(0);
+});
+
+test('an image dialog locks page scrolling on a long article', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/blog/denoising-diffusion-from-scratch');
+
+  const trigger = page.getByRole('button', { name: /Open image: UNet architecture:/ });
+  await trigger.scrollIntoViewIfNeeded();
+  await trigger.click();
+  const dialog = page.getByRole('dialog', { name: /Image viewer: UNet architecture:/ });
+  await expect(dialog).toBeVisible();
+
+  const diagram = dialog.locator('[data-image-content] svg');
+  const imageBox = await diagram.boundingBox();
+  expect(imageBox).not.toBeNull();
+
+  const closeBox = await dialog.getByRole('button', { name: 'Close dialog' }).boundingBox();
+  expect(closeBox).not.toBeNull();
+  const controlsOverlapDiagram =
+    closeBox!.x < imageBox!.x + imageBox!.width &&
+    closeBox!.x + closeBox!.width > imageBox!.x &&
+    closeBox!.y < imageBox!.y + imageBox!.height &&
+    closeBox!.y + closeBox!.height > imageBox!.y;
+  expect(controlsOverlapDiagram).toBe(false);
+
+  expect(imageBox!.x).toBeGreaterThanOrEqual(0);
+  expect(imageBox!.y).toBeGreaterThanOrEqual(0);
+  expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(390);
+  expect(imageBox!.y + imageBox!.height).toBeLessThanOrEqual(844);
+  const [actualAspect, viewBoxAspect] = await diagram.evaluate((svg) => {
+    const [, , width, height] = svg.getAttribute('viewBox')!.split(/\s+/).map(Number);
+    const bounds = svg.getBoundingClientRect();
+    return [bounds.width / bounds.height, width / height];
+  });
+  expect(actualAspect).toBeCloseTo(viewBoxAspect!, 2);
+
+  const scrollY = await page.evaluate(() => window.scrollY);
+  await page.mouse.move(10, 10);
+  await page.mouse.wheel(0, 400);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrollY);
 });
 
 test('contact page has one main heading and no form', async ({ page }) => {
@@ -113,12 +209,4 @@ test('not found page provides branded recovery links', async ({ page }) => {
   await expect(
     page.getByRole('navigation', { name: 'Recovery links' }).getByRole('link', { name: 'Home' }),
   ).toBeVisible();
-});
-
-test('development component fixture is available to the dev server', async ({ page }) => {
-  const response = await page.goto('/design');
-
-  expect(response?.ok()).toBe(true);
-  await expect(page).toHaveTitle('Design fixture');
-  await expect(page.getByText('This alert identifies the active component fixture.')).toBeVisible();
 });

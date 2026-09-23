@@ -139,8 +139,14 @@ ogImageURL.searchParams.set('t', Date.now().toString());
   </head>
   <body class="bg-background relative min-h-screen w-screen">
     <div class="relative z-10 flex min-h-screen flex-col">
+      <a
+        href="#main-content"
+        class="focus:bg-background focus:text-foreground sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:px-4 focus:py-3 focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
       <Header />
-      <main class="flex-1">
+      <main id="main-content" class="flex-1 focus:outline-none" tabindex="-1">
         <slot />
       </main>
       <Footer />

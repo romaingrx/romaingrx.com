@@ -1,4 +1,3 @@
-import { Image } from 'astro:assets';
 import React from 'react';
 
 import { Icon } from '@iconify/react';
@@ -10,11 +9,10 @@ import { platforms_info, type Platform } from '@/configs/platforms';
 
 type Props = {
   author: Author;
-  with_image?: boolean;
   children: React.ReactNode;
 };
 
-export default function AuthorHoverCard({ author, children, with_image = true }: Props) {
+export default function AuthorHoverCard({ author, children }: Props) {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
@@ -46,13 +44,6 @@ export default function AuthorHoverCard({ author, children, with_image = true }:
                 })}
             </div>
           </div>
-          {with_image && (
-            <Image
-              src={author.data.image}
-              alt={author.data.name}
-              class="size-12 rounded-lg border object-cover"
-            />
-          )}
         </div>
       </HoverCardContent>
     </HoverCard>

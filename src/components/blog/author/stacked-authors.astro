@@ -20,7 +20,7 @@ if (!authors.length) return null;
   <div class="flex -space-x-4">
     {
       authors.map((author, i) => (
-        <AuthorHoverCard author={author} with_image={false} client:visible>
+        <AuthorHoverCard author={author} client:visible>
           <div class="flex items-center justify-center gap-2">
             <div
               class={cn(

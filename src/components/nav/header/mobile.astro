@@ -5,16 +5,11 @@ import { cn } from '@/lib/utils';
 
 interface Props {
   navigation: { name: string; href: string }[];
-  currentPath: string;
+  activeHref?: string;
   className?: string;
 }
 
-const { navigation, currentPath, className } = Astro.props;
-
-const isActive = (href: string) => {
-  if (href === '//' || href === '/') return currentPath === '/';
-  return currentPath.startsWith(href);
-};
+const { navigation, activeHref, className } = Astro.props;
 ---
 
 <div class={cn('relative md:hidden', className)} id="mobile-nav">
@@ -25,6 +20,7 @@ const isActive = (href: string) => {
     className="text-muted-foreground hover:text-foreground"
     aria-label="Menu"
     aria-expanded="false"
+    aria-controls="mobile-nav-menu"
     id="mobile-nav-trigger"
   >
     <Icon name="lucide:menu" class="size-5" />
@@ -32,22 +28,25 @@ const isActive = (href: string) => {
 
   <div
     id="mobile-nav-menu"
-    class="absolute right-0 top-full mt-2 w-44 rounded-lg border border-border bg-popover p-1 shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-150 origin-top-right"
+    class="border-border bg-popover absolute top-full right-0 mt-2 w-44 origin-top-right rounded-lg border p-1 shadow-lg"
+    hidden
   >
-    {navigation.map((item) => (
-      <a
-        href={item.href}
-        class={cn(
-          'mobile-nav-link block rounded-md px-3 py-2 text-sm transition-colors',
-          isActive(item.href)
-            ? 'text-foreground font-medium'
-            : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
-        )}
-        aria-current={isActive(item.href) ? 'page' : undefined}
-      >
-        {item.name}
-      </a>
-    ))}
+    {
+      navigation.map((item) => (
+        <a
+          href={item.href}
+          class={cn(
+            'mobile-nav-link block rounded-md px-3 py-2 text-sm transition-colors',
+            item.href === activeHref
+              ? 'text-foreground font-medium'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+          )}
+          aria-current={item.href === activeHref ? 'page' : undefined}
+        >
+          {item.name}
+        </a>
+      ))
+    }
   </div>
 </div>
 
@@ -55,32 +54,24 @@ const isActive = (href: string) => {
   const trigger = document.getElementById('mobile-nav-trigger');
   const menu = document.getElementById('mobile-nav-menu');
   if (trigger && menu) {
-    const open = () => {
-      menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
-      menu.classList.add('opacity-100', 'scale-100');
-      trigger.setAttribute('aria-expanded', 'true');
+    const setOpen = (open: boolean) => {
+      menu.hidden = !open;
+      trigger.setAttribute('aria-expanded', String(open));
     };
-    const close = () => {
-      menu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
-      menu.classList.remove('opacity-100', 'scale-100');
-      trigger.setAttribute('aria-expanded', 'false');
-    };
+
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (trigger.getAttribute('aria-expanded') === 'true') {
-        close();
-      } else {
-        open();
-      }
+      setOpen(trigger.getAttribute('aria-expanded') !== 'true');
     });
     document.addEventListener('click', (e) => {
       if (!trigger.contains(e.target as Node) && !menu.contains(e.target as Node)) {
-        close();
+        setOpen(false);
       }
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        close();
+      if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        trigger.focus();
       }
     });
   }

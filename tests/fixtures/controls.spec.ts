@@ -76,9 +76,12 @@ test('icon controls have names and keyboard activation with visible focus', asyn
 test('fields, alerts, loading, and links expose native semantics', async ({ page }) => {
   await expect(page.getByLabel('Display name')).toHaveAttribute('data-slot', 'input');
   await expect(page.getByLabel('Display name')).toHaveAttribute('aria-invalid', 'true');
-  await expect(page.getByLabel('Notes')).toHaveAttribute('data-slot', 'textarea');
-  await expect(page.getByLabel('Notes')).toHaveAttribute('placeholder', 'A short note');
-  await expect(page.getByLabel('Notes')).toHaveValue('Prefilled note');
+  await expect(page.getByLabel('Notes', { exact: true })).toHaveAttribute('data-slot', 'textarea');
+  await expect(page.getByLabel('Notes', { exact: true })).toHaveAttribute(
+    'placeholder',
+    'A short note',
+  );
+  await expect(page.getByLabel('Notes', { exact: true })).toHaveValue('Prefilled note');
   await expect(
     page
       .getByRole('alert')
