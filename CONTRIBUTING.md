@@ -25,6 +25,10 @@ pnpm exec playwright install chromium
 pnpm test:browser
 ```
 
+Build before running the browser suite. Playwright checks published routes on a
+Wrangler production preview and checks the private design fixture on Astro dev.
+The development fixture is not part of the production build.
+
 Do not disable Corepack or pnpm integrity verification to work around an
 installation error. Update the toolchain or lockfile when the supported
 versions change.
