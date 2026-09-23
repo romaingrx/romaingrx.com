@@ -36,18 +36,18 @@ const { authors } = Astro.props;
         <CardContent>
           <div class="flex gap-3">
             {Object.entries(author.data.socialLinks)
-              .filter(([, v]) => v)
-              .map(([platform, link]) => (
+              .flatMap(([platform, link]) =>
+                link ? [{ platform: platform as Platform, ...link }] : []
+              )
+              .map(({ platform, url }) => (
                 <a
-                  href={link!.url}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="text-muted-foreground hover:text-foreground transition-colors"
+                  class="text-muted-foreground hover:text-foreground inline-flex size-11 items-center justify-center rounded-md transition-colors"
+                  aria-label={`${author.data.name} on ${platform}`}
                 >
-                  <Icon name={platforms_info[platform as Platform].icon_name} class="size-5" />
-                  <span class="sr-only">
-                    {author.data.name} on {platform}
-                  </span>
+                  <Icon name={platforms_info[platform].icon_name} class="size-5" />
                 </a>
               ))}
           </div>

@@ -107,3 +107,19 @@ and `examples`; do not mix both data shapes. Keep playback timers in the shared
 examples pauses playback, and playback stops on its final frame. Keep scientific
 samples in square, `object-fit: contain` frames so their proportions remain
 stable on narrow screens.
+
+## Content discovery
+
+Keep category and tag keys unchanged in routes. Format their visible labels
+separately. Keep a selected filter state and its result count visible. Note cards
+must have one link, with the date and description readable without hover. Use the
+central content URL when sharing, and report copy or share failures with a
+selectable URL. Timeline order uses numeric `order` first, then descending
+`startDate`, then the entry ID.
+
+## Astro image output
+
+Cloudflare compile mode does not collect static image transforms when Node runs
+prerendering. Use Astro Sharp for production prerendered assets and passthrough
+in development. Keep image pages prerendered, and verify emitted formats and
+dimensions when changing this setup.
