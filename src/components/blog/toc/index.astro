@@ -83,7 +83,10 @@ const toc = buildToc(headings);
       cancelAnimationFrame(alignmentFrame);
       alignmentFrame = requestAnimationFrame(() => {
         alignmentFrame = 0;
-        if (heading.isConnected) heading.scrollIntoView({ block: 'start', behavior: 'instant' });
+        if (heading.isConnected) {
+          heading.focus({ preventScroll: true });
+          heading.scrollIntoView({ block: 'start', behavior: 'instant' });
+        }
       });
     };
 
