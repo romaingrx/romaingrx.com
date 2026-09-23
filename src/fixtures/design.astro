@@ -21,11 +21,29 @@ import ImageViewer from '@/components/blog/components/images/image-viewer.astro'
 import { PhotoStackWithGallery } from '@/components/gallery';
 import keyboardBuild from '@/content/note/20251026-corne-salsa/images/0.jpg';
 import keyboardFinal from '@/content/note/20251026-corne-salsa/images/4.jpg';
+import PlaybackCleanupFixture from '@/fixtures/PlaybackCleanupFixture';
+import { StepSlider } from '@/components/blog/components/step-slider';
+import Examples from '@/components/blog/components/examples';
 
 const diagramOne =
   '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" rx="12" fill="#d5ac7c"/><text x="160" y="96" text-anchor="middle" font-size="24" fill="#30251d">Diagram one</text></svg>';
 const diagramTwo =
   '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" rx="12" fill="#8fa7a0"/><text x="160" y="96" text-anchor="middle" font-size="24" fill="#202a27">Diagram two</text></svg>';
+const samplePixel =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/9TsAAAAASUVORK5CYII=';
+const shortPlayback = [
+  { t: 10, image: samplePixel },
+  { t: 20, image: samplePixel },
+  { t: 30, image: samplePixel },
+];
+const examplePlayback = [
+  { label: 'A', steps: shortPlayback },
+  { label: 'B', steps: shortPlayback.slice(0, 2) },
+];
+const carouselExamples = [
+  { language: 'First', description: 'First carousel example' },
+  { language: 'Second', description: 'Second carousel example' },
+];
 ---
 
 <BaseLayout title="Design fixture" description="Development-only component fixture">
@@ -211,6 +229,37 @@ const diagramTwo =
         </div>
         <span id="token-target" class="sr-only">Token target</span>
       </article>
+    </Section>
+
+    <Section title="Scientific widget fixtures">
+      <div class="grid gap-6 lg:grid-cols-2">
+        <StepSlider mode="steps" steps={[]} title="Empty steps" client:load />
+        <StepSlider
+          mode="steps"
+          steps={shortPlayback}
+          title="Timed steps"
+          intervalMs={500}
+          size={24}
+          client:load
+        />
+        <StepSlider
+          mode="steps"
+          steps={[shortPlayback[0]]}
+          title="Single step"
+          size={24}
+          client:load
+        />
+        <StepSlider
+          mode="examples"
+          examples={examplePlayback}
+          title="Example playback"
+          intervalMs={60}
+          size={24}
+          client:load
+        />
+        <PlaybackCleanupFixture client:load />
+        <Examples examples={carouselExamples} client:load />
+      </div>
     </Section>
   </div>
 </BaseLayout>

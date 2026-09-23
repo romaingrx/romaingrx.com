@@ -98,3 +98,12 @@ Keep the disclosure usable by keyboard and touch at every viewport size.
 Inline citations remain ordinary links to bibliography entries. Each cited
 entry provides visible return links to all citation occurrences. Keep those
 links available without hover and preserve citation and bibliography IDs.
+
+## Scientific widgets
+
+Use `StepSlider` with either `mode="steps"` and `steps`, or `mode="examples"`
+and `examples`; do not mix both data shapes. Keep playback timers in the shared
+`usePlayback` hook used by `StepSlider` and `EpochProgress`. Seeking or changing
+examples pauses playback, and playback stops on its final frame. Keep scientific
+samples in square, `object-fit: contain` frames so their proportions remain
+stable on narrow screens.
