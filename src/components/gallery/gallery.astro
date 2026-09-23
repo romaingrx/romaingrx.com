@@ -1,286 +1,320 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import { Button, Loading } from '@/components/ui';
+import { Button } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import type { ImageItem } from './types';
 
 interface Props {
-  id: string;
   images: ImageItem[];
   startIndex?: number;
   showCaptions?: boolean;
+  showCloseButton?: boolean;
   className?: string;
 }
 
-const { id, images, startIndex = 0, showCaptions = false, className } = Astro.props;
+const {
+  images,
+  startIndex = 0,
+  showCaptions = false,
+  showCloseButton = false,
+  className,
+} = Astro.props;
+const requestedIndex = Number.isFinite(startIndex) ? Math.trunc(startIndex) : 0;
+const initialIndex =
+  images.length === 0 ? 0 : Math.max(0, Math.min(requestedIndex, images.length - 1));
+const hasMultipleImages = images.length > 1;
 ---
 
-<!-- Gallery custom element -->
 <astro-gallery
-  data-id={id}
-  data-start-index={startIndex}
-  data-show-captions={showCaptions}
-  class={cn('gallery relative flex h-[1024px] items-center justify-center', className)}
+  data-start-index={initialIndex}
+  class={cn('gallery flex h-full min-h-0 w-full flex-col bg-black text-white', className)}
 >
-  <!-- Loading indicator -->
-  <div class="gallery-loading absolute inset-0 z-50 flex items-center justify-center">
-    <Loading />
+  {
+    showCloseButton && (
+      <div class="gallery-toolbar flex shrink-0 justify-end px-3 sm:px-5">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="gallery-control gallery-close bg-white/15 text-white hover:bg-white/25 hover:text-white focus-visible:outline-white"
+          aria-label="Close gallery"
+        >
+          <Icon name="lucide:x" class="size-6" />
+        </Button>
+      </div>
+    )
+  }
+
+  <div
+    class="gallery-stage relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-3 sm:px-16"
+  >
+    {
+      images.map((image, index) => (
+        <div
+          class="gallery-image absolute inset-0 flex items-center justify-center"
+          data-index={index}
+          hidden={index !== initialIndex}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt}
+            class="h-full w-full object-contain"
+            loading={index === initialIndex ? 'eager' : 'lazy'}
+          />
+        </div>
+      ))
+    }
+
+    {
+      images.length === 0 && (
+        <p class="gallery-empty text-center text-white">No images in this gallery.</p>
+      )
+    }
+
+    <div
+      class="gallery-loading pointer-events-none absolute inset-0 flex items-center justify-center bg-black/45"
+      role="status"
+      hidden={images.length === 0}
+    >
+      <span class="sr-only">Loading image</span>
+      <span
+        class="size-8 animate-spin rounded-full border-2 border-white/35 border-t-white"
+        aria-hidden="true"></span>
+    </div>
+    <p
+      class="gallery-error absolute inset-x-4 bottom-4 rounded bg-black/85 p-3 text-center text-sm text-white"
+      role="status"
+      hidden
+    >
+      This image could not be loaded.
+    </p>
+
+    <Button
+      variant="ghost"
+      size="icon"
+      className="gallery-control gallery-prev absolute top-1/2 left-2 -translate-y-1/2 bg-black/75 text-white hover:bg-black/90 hover:text-white focus-visible:outline-white sm:left-4"
+      aria-label="Previous image"
+      hidden={!hasMultipleImages}
+    >
+      <Icon name="lucide:chevron-left" class="size-7" />
+    </Button>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="gallery-control gallery-next absolute top-1/2 right-2 -translate-y-1/2 bg-black/75 text-white hover:bg-black/90 hover:text-white focus-visible:outline-white sm:right-4"
+      aria-label="Next image"
+      hidden={!hasMultipleImages}
+    >
+      <Icon name="lucide:chevron-right" class="size-7" />
+    </Button>
   </div>
 
-  <!-- Main content container -->
-  <div
-    class="gallery-content relative flex h-full w-full flex-col items-center justify-center px-4 py-6"
-  >
-    <!-- Navigation buttons -->
-    <Button
-      variant="ghost"
-      size="icon"
-      className="gallery-prev text-foreground hover:bg-accent absolute top-1/2 left-4 z-10 -translate-y-1/2 disabled:opacity-30"
-      aria-label="Previous image"
+  <div class="gallery-footer flex shrink-0 flex-col items-center gap-2 px-3 sm:gap-3">
+    {
+      showCaptions && (
+        <div class="gallery-captions max-w-[90vw] text-center text-sm text-white sm:text-base">
+          {images.map((image, index) => (
+            <p class="gallery-caption" data-index={index} hidden={index !== initialIndex}>
+              {image.caption || image.alt}
+            </p>
+          ))}
+        </div>
+      )
+    }
+    <p
+      class="gallery-counter rounded-full bg-black/85 px-4 py-2 text-sm font-medium text-white"
+      role="status"
+      aria-live="polite"
+      hidden={images.length === 0}
     >
-      <Icon name="lucide:chevron-left" class="size-8" />
-    </Button>
-
-    <Button
-      variant="ghost"
-      size="icon"
-      className="gallery-next text-foreground hover:bg-accent absolute top-1/2 right-4 z-10 -translate-y-1/2 disabled:opacity-30"
-      aria-label="Next image"
-    >
-      <Icon name="lucide:chevron-right" class="size-8" />
-    </Button>
-
-    <!-- Image container -->
-    <div
-      class="gallery-images relative flex w-full max-w-[85vw] flex-1 items-center justify-center pb-20"
-    >
-      {
-        images.map((image, index) => (
-          <div
-            class:list={[
-              'gallery-image absolute inset-0 flex items-center justify-center transition-opacity duration-300',
-              index === startIndex ? 'opacity-100' : 'pointer-events-none opacity-0',
-            ]}
-            data-index={index}
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              class="h-full w-full object-contain"
-              loading="lazy"
-            />
-          </div>
-        ))
-      }
-    </div>
-
-    <!-- Caption and Counter Container -->
-    <div class="absolute right-0 bottom-4 left-0 flex flex-col items-center gap-3">
-      <!-- Caption -->
-      {
-        showCaptions && (
-          <div class="gallery-captions relative mx-auto max-w-[85vw] px-4 text-center">
-            {images.map((image, index) => (
-              <p
-                class:list={[
-                  'gallery-caption text-foreground/90 text-sm transition-opacity duration-300',
-                  index === startIndex ? 'opacity-100' : 'pointer-events-none absolute opacity-0',
-                ]}
-                data-index={index}
-              >
-                {image.caption || image.alt}
-              </p>
-            ))}
-          </div>
-        )
-      }
-
-      <!-- Image counter -->
-      <div
-        class="gallery-counter text-foreground rounded-full bg-black/60 px-4 py-2 text-sm font-medium backdrop-blur-sm"
-      >
-        <span>1 / {images.length}</span>
-      </div>
-    </div>
+      Photo {initialIndex + 1} of {images.length}
+    </p>
   </div>
 </astro-gallery>
 
 <script>
-  // Extend window interface for gallery functions
-  declare global {
-    interface Window {
-      [key: `${string}_next`]: () => void;
-      [key: `${string}_prev`]: () => void;
-      [key: `${string}_goTo`]: (index: number) => void;
-      [key: `${string}_open`]: (index?: number) => void;
-    }
-  }
-
-  // Custom element for gallery functionality
-  export class AstroGallery extends HTMLElement {
-    currentIndex: number;
-    images: Element[];
-    showCaptions: boolean;
-    touchStartX: number;
-    touchEndX: number;
-    loading: Element | null;
-    prevBtn: Element | null;
-    nextBtn: Element | null;
-    counter: Element | null;
-    captions: NodeListOf<Element> | null;
-
-    constructor() {
-      super();
-      this.currentIndex = 0;
-      this.images = [];
-      this.showCaptions = true;
-      this.touchStartX = 0;
-      this.touchEndX = 0;
-      this.loading = null;
-      this.prevBtn = null;
-      this.nextBtn = null;
-      this.counter = null;
-      this.captions = null;
-    }
+  class AstroGallery extends HTMLElement {
+    private abortController: AbortController | null = null;
+    private currentIndex = 0;
+    private images: HTMLElement[] = [];
+    private captions: HTMLElement[] = [];
+    private loading: HTMLElement | null = null;
+    private error: HTMLElement | null = null;
+    private counter: HTMLElement | null = null;
+    private gestureStart: { x: number; y: number } | null = null;
 
     connectedCallback() {
-      // Get data attributes
-      const startIndex = parseInt(this.dataset.startIndex || '0');
-      const showCaptions = this.dataset.showCaptions === 'true';
+      this.disconnectedCallback();
+      this.abortController = new AbortController();
+      const { signal } = this.abortController;
+      this.images = Array.from(this.querySelectorAll<HTMLElement>('.gallery-image'));
+      this.captions = Array.from(this.querySelectorAll<HTMLElement>('.gallery-caption'));
+      this.loading = this.querySelector<HTMLElement>('.gallery-loading');
+      this.error = this.querySelector<HTMLElement>('.gallery-error');
+      this.counter = this.querySelector<HTMLElement>('.gallery-counter');
+      const requestedIndex = Number.parseInt(this.dataset.startIndex ?? '0', 10);
+      this.currentIndex = this.clampIndex(Number.isFinite(requestedIndex) ? requestedIndex : 0);
 
-      this.currentIndex = startIndex;
-      this.showCaptions = showCaptions;
-
-      // Get all images from the DOM
-      const imageElements = this.querySelectorAll('.gallery-image');
-      this.images = Array.from(imageElements);
-
-      // Get other DOM elements within this component
-      this.loading = this.querySelector('.gallery-loading');
-      this.prevBtn = this.querySelector('.gallery-prev');
-      this.nextBtn = this.querySelector('.gallery-next');
-      this.counter = this.querySelector('.gallery-counter span');
-      this.captions = this.querySelectorAll('.gallery-caption');
-
-      this.init();
-    }
-
-    init() {
-      // Bind events
-      if (this.prevBtn) {
-        this.prevBtn.addEventListener('click', () => this.prev());
-      }
-      if (this.nextBtn) {
-        this.nextBtn.addEventListener('click', () => this.next());
-      }
-
-      // Keyboard navigation - make component focusable and handle keyboard events
-      this.setAttribute('tabindex', '0');
-      this.addEventListener('keydown', (e: KeyboardEvent) => {
-        switch (e.key) {
-          case 'ArrowLeft':
-            e.preventDefault();
+      this.querySelector<HTMLButtonElement>('.gallery-prev')?.addEventListener(
+        'click',
+        () => this.prev(),
+        {
+          signal,
+        }
+      );
+      this.querySelector<HTMLButtonElement>('.gallery-next')?.addEventListener(
+        'click',
+        () => this.next(),
+        {
+          signal,
+        }
+      );
+      this.querySelector<HTMLButtonElement>('.gallery-close')?.addEventListener(
+        'click',
+        () => {
+          this.closest('dialog')?.close();
+        },
+        { signal }
+      );
+      this.addEventListener(
+        'keydown',
+        (event: KeyboardEvent) => {
+          if (event.key === 'ArrowLeft' && this.images.length > 1) {
+            event.preventDefault();
             this.prev();
-            break;
-          case 'ArrowRight':
-            e.preventDefault();
+          } else if (event.key === 'ArrowRight' && this.images.length > 1) {
+            event.preventDefault();
             this.next();
-            break;
-          case 'Escape':
-            e.preventDefault();
-            this.closest('dialog')?.close();
-            break;
-        }
+          }
+        },
+        { signal }
+      );
+
+      const stage = this.querySelector<HTMLElement>('.gallery-stage');
+      stage?.addEventListener(
+        'pointerdown',
+        (event: PointerEvent) => {
+          if (!event.isPrimary) {
+            this.gestureStart = null;
+            return;
+          }
+          if (event.target instanceof Element && event.target.closest('button')) return;
+          this.gestureStart = { x: event.clientX, y: event.clientY };
+        },
+        { signal }
+      );
+      stage?.addEventListener(
+        'pointerup',
+        (event: PointerEvent) => {
+          const start = this.gestureStart;
+          this.gestureStart = null;
+          if (!start || !event.isPrimary) return;
+          const dx = event.clientX - start.x;
+          const dy = event.clientY - start.y;
+          if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy)) return;
+          if (dx < 0) this.next();
+          else this.prev();
+        },
+        { signal }
+      );
+      stage?.addEventListener(
+        'pointercancel',
+        () => {
+          this.gestureStart = null;
+        },
+        { signal }
+      );
+
+      this.images.forEach((container, index) => {
+        const image = container.querySelector<HTMLImageElement>('img');
+        if (!image) return;
+        image.addEventListener('load', () => this.handleImageEvent(index), { signal });
+        image.addEventListener('error', () => this.handleImageEvent(index), { signal });
       });
-
-      // Touch/swipe gestures
-      this.addEventListener('touchstart', (e: TouchEvent) => {
-        this.touchStartX = e.changedTouches[0].screenX;
-      });
-
-      this.addEventListener('touchend', (e: TouchEvent) => {
-        this.touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe();
-      });
-
-      // Make globally available
-      window[`${this.dataset.id}_next`] = () => this.next();
-      window[`${this.dataset.id}_prev`] = () => this.prev();
-      window[`${this.dataset.id}_goTo`] = (index) => this.goTo(index);
-
-      // Hide loading after a brief delay
-      setTimeout(() => {
-        if (this.loading) {
-          // @ts-ignore
-          this.loading.style.display = 'none';
-        }
-      }, 100);
 
       this.updateDisplay();
     }
 
-    next() {
+    disconnectedCallback() {
+      this.abortController?.abort();
+      this.abortController = null;
+    }
+
+    private clampIndex(index: number) {
+      return this.images.length === 0 ? 0 : Math.max(0, Math.min(index, this.images.length - 1));
+    }
+
+    private next() {
+      if (this.images.length < 2) return;
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
       this.updateDisplay();
     }
 
-    prev() {
-      this.currentIndex = this.currentIndex === 0 ? this.images.length - 1 : this.currentIndex - 1;
+    private prev() {
+      if (this.images.length < 2) return;
+      this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
       this.updateDisplay();
     }
 
-    goTo(index: number) {
-      this.currentIndex = Math.max(0, Math.min(index, this.images.length - 1));
-      this.updateDisplay();
+    private handleImageEvent(index: number) {
+      if (index === this.currentIndex) this.updateImageStatus();
     }
 
-    handleSwipe() {
-      const swipeThreshold = 50;
-      const diff = this.touchStartX - this.touchEndX;
-
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-          this.next(); // Swipe left
-        } else {
-          this.prev(); // Swipe right
-        }
-      }
-    }
-
-    updateDisplay() {
-      // Update image visibility
-      this.images.forEach((imageEl, index) => {
-        const isActive = index === this.currentIndex;
-        imageEl.classList.toggle('opacity-100', isActive);
-        imageEl.classList.toggle('opacity-0', !isActive);
+    private updateDisplay() {
+      this.images.forEach((image, index) => {
+        image.hidden = index !== this.currentIndex;
       });
-
-      // Update captions
-      if (this.showCaptions && this.captions) {
-        this.captions.forEach((captionEl, index) => {
-          const isActive = index === this.currentIndex;
-          captionEl.classList.toggle('opacity-100', isActive);
-          captionEl.classList.toggle('opacity-0', !isActive);
-        });
-      }
-
-      // Update counter
+      this.captions.forEach((caption, index) => {
+        caption.hidden = index !== this.currentIndex;
+      });
       if (this.counter) {
-        this.counter.textContent = `${this.currentIndex + 1} / ${this.images.length}`;
+        this.counter.textContent = this.images.length
+          ? `Photo ${this.currentIndex + 1} of ${this.images.length}`
+          : '';
+        this.counter.hidden = this.images.length === 0;
       }
+      this.updateImageStatus();
+    }
 
-      // Update navigation buttons
-      if (this.prevBtn && this.nextBtn) {
-        const hasMultiple = this.images.length > 1;
-        // @ts-ignore
-        this.prevBtn.disabled = !hasMultiple;
-        // @ts-ignore
-        this.nextBtn.disabled = !hasMultiple;
-      }
+    private updateImageStatus() {
+      const image = this.images[this.currentIndex]?.querySelector<HTMLImageElement>('img');
+      const loaded = Boolean(image?.complete && image.naturalWidth > 0);
+      const failed = Boolean(image?.complete && image.naturalWidth === 0);
+      if (this.loading) this.loading.hidden = this.images.length === 0 || loaded || failed;
+      if (this.error) this.error.hidden = !failed;
     }
   }
 
-  // Register the custom element
-  customElements.define('astro-gallery', AstroGallery);
+  if (!customElements.get('astro-gallery')) customElements.define('astro-gallery', AstroGallery);
 </script>
+
+<style>
+  .gallery {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .gallery-toolbar {
+    padding-block-start: max(0.75rem, env(safe-area-inset-top));
+  }
+
+  .gallery-footer {
+    padding-block-end: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .gallery-control {
+    min-height: 44px;
+    min-width: 44px;
+    height: 44px;
+    width: 44px;
+    flex: none;
+  }
+
+  .gallery-stage {
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .gallery [hidden] {
+    display: none !important;
+  }
+</style>
