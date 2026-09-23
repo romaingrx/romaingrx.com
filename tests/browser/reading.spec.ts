@@ -1,6 +1,14 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 import { buildToc } from '../../src/lib/toc';
+
+const ddpmArticlePath = '/blog/denoising-diffusion-from-scratch';
+
+async function openDenoisingArticle(page: Page, fragment = '') {
+  await page.route('https://giscus.app/**', (route) => route.abort());
+  await page.route('https://www.youtube-nocookie.com/**', (route) => route.abort());
+  await page.goto(`${ddpmArticlePath}${fragment}`, { waitUntil: 'domcontentloaded' });
+}
 
 test('Contents nests skipped heading levels under their nearest shallower heading', () => {
   const toc = buildToc([
@@ -43,98 +51,118 @@ test('blog structure has one page H1 and shows the introduction in the first des
   await expect(main.locator('#article-intro')).toBeFocused();
 });
 
-test('Contents works at phone, tablet, and desktop widths and tracks the reached section', async ({
-  page,
-}) => {
-  await page.goto('/blog/denoising-diffusion-from-scratch', { waitUntil: 'domcontentloaded' });
-  const navigation = page.getByRole('navigation', { name: 'Contents' });
-  const disclosure = navigation.locator('details');
-  const summary = navigation.getByText('Contents', { exact: true });
+test.describe('reading links with reduced motion', () => {
+  test.use({ reducedMotion: 'reduce' });
 
-  for (const width of [390, 768, 1280]) {
-    await page.setViewportSize({ width, height: 800 });
-    await expect(summary).toBeVisible();
-    await expect(disclosure).not.toHaveAttribute('open', '');
-    await summary.focus();
-    await page.keyboard.press('Enter');
-    await expect(disclosure).toHaveAttribute('open', '');
-    await expect(navigation.getByRole('link', { name: 'Appendices', exact: true })).toBeVisible();
-    await page.keyboard.press('Space');
-    await expect(disclosure).not.toHaveAttribute('open', '');
+  for (const [name, width] of [
+    ['phone', 390],
+    ['tablet', 768],
+    ['desktop', 1280],
+  ] as const) {
+    test(`Contents disclosure supports keyboard at ${name} width`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 });
+      await openDenoisingArticle(page);
+      const navigation = page.getByRole('navigation', { name: 'Contents' });
+      const disclosure = navigation.locator('details');
+      const summary = navigation.getByText('Contents', { exact: true });
+
+      await expect(summary).toBeVisible();
+      await expect(disclosure).not.toHaveAttribute('open', '');
+      await summary.focus();
+      await page.keyboard.press('Enter');
+      await expect(disclosure).toHaveAttribute('open', '');
+      await expect(navigation.getByRole('link', { name: 'Appendices', exact: true })).toBeVisible();
+      await page.keyboard.press('Space');
+      await expect(disclosure).not.toHaveAttribute('open', '');
+    });
   }
 
-  await summary.focus();
-  await page.keyboard.press('Enter');
-  const appendices = navigation.getByRole('link', { name: 'Appendices', exact: true });
-  await appendices.click();
-  await expect(page).toHaveURL(/#appendices$/);
-  await expect(page.locator('#appendices')).toBeFocused();
-  await expect
-    .poll(() =>
-      page.locator('#appendices').evaluate((heading) => {
-        const offset = Number.parseFloat(getComputedStyle(heading).scrollMarginTop);
-        return Math.abs(heading.getBoundingClientRect().top - offset);
-      }),
-    )
-    .toBeLessThan(4);
-  await expect(appendices).toHaveAttribute('aria-current', 'location');
-  await expect
-    .poll(() =>
-      page.locator('#appendices').evaluate((heading) => heading.getBoundingClientRect().top),
-    )
-    .toBeGreaterThan(80);
+  test('Contents anchors focus and track the reached section', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await openDenoisingArticle(page);
+    const navigation = page.getByRole('navigation', { name: 'Contents' });
+    const summary = navigation.getByText('Contents', { exact: true });
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    const appendices = navigation.getByRole('link', { name: 'Appendices', exact: true });
+    await appendices.click();
+    await expect(page).toHaveURL(/#appendices$/);
+    const heading = page.locator('#appendices');
+    await expect(heading).toBeFocused();
+    const aligned = () =>
+      heading.evaluate((element) => {
+        const offset = Number.parseFloat(getComputedStyle(element).scrollMarginTop);
+        return Math.abs(element.getBoundingClientRect().top - offset);
+      });
+    await expect.poll(aligned).toBeLessThan(4);
+    await expect(appendices).toHaveAttribute('aria-current', 'location');
+    await expect
+      .poll(() => heading.evaluate((element) => element.getBoundingClientRect().top))
+      .toBeGreaterThan(80);
 
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await appendices.click();
-  await expect
-    .poll(() =>
-      page.locator('#appendices').evaluate((heading) => {
-        const offset = Number.parseFloat(getComputedStyle(heading).scrollMarginTop);
-        return Math.abs(heading.getBoundingClientRect().top - offset);
-      }),
-    )
-    .toBeLessThan(4);
-
-  await page.goto('/blog/denoising-diffusion-from-scratch#appendices', {
-    waitUntil: 'domcontentloaded',
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await appendices.focus();
+    await page.keyboard.press('Enter');
+    await expect.poll(aligned).toBeLessThan(4);
   });
-  await expect(page.locator('#appendices')).toBeFocused();
-  await expect
-    .poll(() =>
-      page.locator('#appendices').evaluate((heading) => {
-        const offset = Number.parseFloat(getComputedStyle(heading).scrollMarginTop);
-        return Math.abs(heading.getBoundingClientRect().top - offset);
-      }),
-    )
-    .toBeLessThan(4);
-});
 
-test('citation bibliography entries link back to every cited occurrence', async ({ page }) => {
-  await page.goto('/blog/denoising-diffusion-from-scratch', { waitUntil: 'domcontentloaded' });
-
-  const bibliographyEntry = page.locator('#bib-ho2020denoising');
-  const backlinks = bibliographyEntry.getByRole('link', {
-    name: /^Return to citation \d+ in the article$/,
+  test('an incoming Contents fragment focuses and aligns its heading', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await openDenoisingArticle(page, '#appendices');
+    const heading = page.locator('#appendices');
+    await expect(heading).toBeFocused();
+    await expect
+      .poll(() =>
+        heading.evaluate((element) => {
+          const offset = Number.parseFloat(getComputedStyle(element).scrollMarginTop);
+          return Math.abs(element.getBoundingClientRect().top - offset);
+        }),
+      )
+      .toBeLessThan(4);
   });
-  const citationIds = await page
-    .locator('article span[id^="citation--"]')
-    .evaluateAll((spans) =>
-      spans
+
+  test('bibliography backlinks map every citation occurrence', async ({ page }) => {
+    await openDenoisingArticle(page);
+    const relation = await page.evaluate(() => {
+      const ids = [...document.querySelectorAll<HTMLElement>('article span[id^="citation--"]')]
         .filter((span) => span.querySelector('a[href="#bib-ho2020denoising"]'))
-        .map((span) => span.id),
+        .map((span) => span.id);
+      const backlinks = [
+        ...document.querySelectorAll<HTMLAnchorElement>(
+          '#bib-ho2020denoising a[aria-label^="Return to citation"]',
+        ),
+      ].map((link) => ({ href: link.hash, name: link.getAttribute('aria-label') }));
+      return { ids, backlinks };
+    });
+    expect(relation.ids.length).toBeGreaterThan(1);
+    expect(relation.backlinks.map(({ name }) => name)).toEqual(
+      relation.ids.map((_, index) => `Return to citation ${index + 1} in the article`),
     );
-  await expect(backlinks).toHaveCount(citationIds.length);
+    expect(relation.backlinks.map(({ href }) => href)).toEqual(relation.ids.map((id) => `#${id}`));
+  });
 
-  const citation = page.locator(`#${citationIds[0]} a[href="#bib-ho2020denoising"]`);
-  await citation.click();
-  await expect(page).toHaveURL(/#bib-ho2020denoising$/);
-  await expect(bibliographyEntry).toBeFocused();
-
-  const firstBacklink = backlinks.first();
-  await expect(firstBacklink).toBeVisible();
-  await firstBacklink.click();
-  await expect(page).toHaveURL(new RegExp(`#${citationIds[0]}$`));
-  await expect(page.locator(`#${citationIds[0]}`)).toBeFocused();
+  test('citation and bibliography links return focus to the matching content', async ({ page }) => {
+    await openDenoisingArticle(page);
+    const citationId = await page
+      .locator('article')
+      .evaluate(
+        (article) =>
+          [...article.querySelectorAll<HTMLElement>('span[id^="citation--"]')].find((span) =>
+            span.querySelector('a[href="#bib-ho2020denoising"]'),
+          )?.id,
+      );
+    expect(citationId).toBeTruthy();
+    const bibliographyEntry = page.locator('#bib-ho2020denoising');
+    await page.locator(`#${citationId} a[href="#bib-ho2020denoising"]`).click();
+    await expect(page).toHaveURL(/#bib-ho2020denoising$/);
+    await expect(bibliographyEntry).toBeFocused();
+    await bibliographyEntry
+      .getByRole('link', { name: /^Return to citation \d+ in the article$/ })
+      .first()
+      .click();
+    await expect(page).toHaveURL(new RegExp(`#${citationId}$`));
+    await expect(page.locator(`#${citationId}`)).toBeFocused();
+  });
 });
 
 test('notes include the same labeled Contents disclosure', async ({ page }) => {
