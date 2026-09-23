@@ -16,22 +16,30 @@ interface Props {
 }
 
 const { src, html, alt = 'Image', caption, className, width, height } = Astro.props;
+const dialogId = `image-viewer-${Math.random().toString(36).slice(2, 10)}`;
 ---
 
-<figure class={cn('image-viewer group my-6', className)}>
-  <div class="relative cursor-zoom-in" data-image-trigger>
+<figure class={cn('image-viewer my-6', className)} data-image-viewer>
+  <button
+    type="button"
+    class="group focus-visible:outline-focus relative block w-full cursor-zoom-in appearance-none rounded-lg border-0 bg-transparent p-0 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid"
+    aria-label={`Open image: ${alt}`}
+    aria-haspopup="dialog"
+    aria-controls={dialogId}
+    data-image-trigger
+  >
     {
       html ? (
-        <div class="w-full [&>svg]:h-auto [&>svg]:w-full" set:html={html} />
+        <span class="block w-full [&>svg]:h-auto [&>svg]:w-full" set:html={html} />
       ) : src ? (
         <Image src={src} alt={alt} width={width} height={height} class="h-auto w-full" />
       ) : null
     }
-    <div
-      class="absolute inset-0 rounded-lg opacity-0 ring-1 ring-current/5 transition-opacity duration-200 group-hover:opacity-100"
-    >
-    </div>
-  </div>
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 rounded-lg opacity-0 ring-1 ring-current/5 transition-opacity duration-200 group-hover:opacity-100"
+    ></span>
+  </button>
 
   {
     caption && (
@@ -39,60 +47,59 @@ const { src, html, alt = 'Image', caption, className, width, height } = Astro.pr
     )
   }
 
-  <!-- Lightbox -->
-  <div
-    class="image-lightbox fixed inset-0 z-50 hidden cursor-zoom-out items-center justify-center bg-black/80 backdrop-blur-sm"
-    data-image-lightbox
+  <dialog
+    id={dialogId}
+    aria-label={`Image viewer: ${alt}`}
+    class="image-viewer-dialog text-foreground fixed top-1/2 left-1/2 m-0 max-h-none max-w-none -translate-x-1/2 -translate-y-1/2 overflow-visible border-0 bg-transparent p-0 backdrop:bg-black/80"
+    data-image-dialog
   >
-    <Button
-      variant="ghost"
-      size="icon"
-      className="absolute top-4 right-4 text-white/60 hover:text-white"
-      aria-label="Close"
-      data-image-close
+    <div
+      class="max-h-[calc(100dvh-2rem)] max-w-[calc(100vw-2rem)] overflow-auto rounded-lg bg-white p-4 shadow-2xl"
     >
-      <Icon name="lucide:x" class="size-5" />
-    </Button>
-    <div class="max-h-[90vh] max-w-[90vw] p-8">
+      <div class="flex justify-end pb-2">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="bg-black/60 text-white shadow-lg hover:bg-black/80 hover:text-white focus-visible:outline-black"
+          aria-label="Close dialog"
+          autofocus
+          onclick="this.closest('dialog')?.close()"
+        >
+          <Icon name="lucide:x" class="size-5" />
+        </Button>
+      </div>
       {
         html ? (
-          <div class="[&>svg]:max-h-[85vh] [&>svg]:w-auto [&>svg]:max-w-[85vw]" set:html={html} />
+          <div
+            data-image-content
+            class="[&>svg]:block [&>svg]:h-auto [&>svg]:max-h-[calc(100dvh-8rem)] [&>svg]:w-auto [&>svg]:max-w-[calc(100vw-4rem)]"
+            set:html={html}
+          />
         ) : src ? (
-          <Image src={src} alt={alt} class="max-h-[85vh] w-auto max-w-[85vw] object-contain" />
+          <div data-image-content>
+            <Image
+              src={src}
+              alt={alt}
+              class="block h-auto max-h-[calc(100dvh-8rem)] w-auto max-w-[calc(100vw-4rem)] object-contain"
+            />
+          </div>
         ) : null
       }
     </div>
-  </div>
+  </dialog>
 </figure>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.image-viewer').forEach((viewer) => {
-      const trigger = viewer.querySelector('[data-image-trigger]');
-      const lightbox = viewer.querySelector('[data-image-lightbox]') as HTMLElement;
-      const closeBtn = viewer.querySelector('[data-image-close]');
-      if (!trigger || !lightbox) return;
+  import { enableBackdropDismissal, showModal } from '@/lib/dialog';
 
-      const open = () => {
-        lightbox.classList.remove('hidden');
-        lightbox.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-      };
+  document.querySelectorAll<HTMLElement>('[data-image-viewer]').forEach((viewer) => {
+    const trigger = viewer.querySelector<HTMLButtonElement>('[data-image-trigger]');
+    const dialog = viewer.querySelector<HTMLDialogElement>('[data-image-dialog]');
 
-      const close = () => {
-        lightbox.classList.add('hidden');
-        lightbox.classList.remove('flex');
-        document.body.style.overflow = '';
-      };
+    if (!trigger || !dialog) return;
 
-      trigger.addEventListener('click', open);
-      closeBtn?.addEventListener('click', close);
-      lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) close();
-      });
-      lightbox.addEventListener('keydown', (e) => {
-        if ((e as KeyboardEvent).key === 'Escape') close();
-      });
-    });
+    enableBackdropDismissal(dialog);
+    trigger.addEventListener('click', () => showModal(dialog, trigger));
   });
 </script>

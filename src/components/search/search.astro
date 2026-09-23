@@ -14,31 +14,40 @@ import Button from '@/components/ui/button.astro';
 >
   <Icon name="lucide:search" class="size-4" />
   <span class="hidden text-xs sm:inline">Search</span>
-  <kbd class="hidden sm:inline-flex items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">⌘K</kbd>
+  <kbd
+    class="border-border bg-muted text-muted-foreground hidden items-center gap-0.5 rounded border px-1.5 py-0.5 text-[10px] font-medium sm:inline-flex"
+    >⌘K</kbd
+  >
 </Button>
 
 <dialog id="search-dialog" class="command-dialog" aria-label="Search">
   <div class="command">
     <header>
-      <Icon name="lucide:search" class="size-4 shrink-0 text-muted-foreground" />
+      <Icon name="lucide:search" class="text-muted-foreground size-4 shrink-0" />
       <input
         type="text"
         id="search-input"
+        aria-label="Search posts and notes"
         placeholder="Search posts and notes..."
+        autofocus
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
       />
+      <Button type="button" variant="ghost" size="sm" id="search-close">Close</Button>
     </header>
     <div id="search-results" class="scrollbar">
-      <div id="search-empty" class="flex flex-col items-center gap-2 py-8 text-sm text-muted-foreground">
+      <div
+        id="search-empty"
+        class="text-muted-foreground flex flex-col items-center gap-2 py-8 text-sm"
+      >
         <Icon name="lucide:search" class="size-5 opacity-40" />
         <span>Type to search across all content</span>
       </div>
-      <div id="search-loading" class="hidden flex items-center justify-center py-8">
-        <Icon name="lucide:loader-2" class="size-5 animate-spin text-muted-foreground" />
+      <div id="search-loading" class="flex hidden items-center justify-center py-8">
+        <Icon name="lucide:loader-2" class="text-muted-foreground size-5 animate-spin" />
       </div>
-      <div id="search-no-results" class="hidden py-8 text-center text-sm text-muted-foreground">
+      <div id="search-no-results" class="text-muted-foreground hidden py-8 text-center text-sm">
         No results found.
       </div>
       <div id="search-items" role="menu" class="hidden"></div>
@@ -47,12 +56,22 @@ import Button from '@/components/ui/button.astro';
 </dialog>
 
 <script>
+  import { enableBackdropDismissal, showModal } from '@/lib/dialog';
+
   let pagefind: {
     search: (q: string) => Promise<{ results: { data: () => Promise<SearchResult> }[] }>;
   } | null = null;
 
-  interface SubResult { title: string; url: string; excerpt: string; }
-  interface SearchResult { url: string; meta: { title: string }; sub_results: SubResult[]; }
+  interface SubResult {
+    title: string;
+    url: string;
+    excerpt: string;
+  }
+  interface SearchResult {
+    url: string;
+    meta: { title: string };
+    sub_results: SubResult[];
+  }
 
   async function loadPagefind() {
     if (pagefind) return pagefind;
@@ -81,6 +100,7 @@ import Button from '@/components/ui/button.astro';
   const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
   const input = document.getElementById('search-input') as HTMLInputElement;
   const trigger = document.getElementById('search-trigger')!;
+  const closeTrigger = document.getElementById('search-close')!;
   const elEmpty = document.getElementById('search-empty')!;
   const elLoading = document.getElementById('search-loading')!;
   const elNoResults = document.getElementById('search-no-results')!;
@@ -88,8 +108,12 @@ import Button from '@/components/ui/button.astro';
 
   let activeIndex = -1;
 
-  function show(el: HTMLElement) { el.classList.remove('hidden'); }
-  function hide(el: HTMLElement) { el.classList.add('hidden'); }
+  function show(el: HTMLElement) {
+    el.classList.remove('hidden');
+  }
+  function hide(el: HTMLElement) {
+    el.classList.add('hidden');
+  }
 
   function getItems(): HTMLElement[] {
     return Array.from(elItems.querySelectorAll('[role="menuitem"]'));
@@ -104,15 +128,19 @@ import Button from '@/components/ui/button.astro';
     activeIndex = index;
   }
 
-  function openSearch() {
-    dialog.showModal();
+  function openSearch(opener: HTMLElement = trigger) {
+    showModal(dialog, opener);
     input.focus();
     activeIndex = -1;
     loadPagefind();
   }
 
   function closeSearch() {
-    dialog.close();
+    if (dialog.open) dialog.close();
+    resetSearch();
+  }
+
+  function resetSearch() {
     input.value = '';
     activeIndex = -1;
     show(elEmpty);
@@ -128,20 +156,17 @@ import Button from '@/components/ui/button.astro';
   }
 
   // Trigger
-  trigger.addEventListener('click', openSearch);
+  trigger.addEventListener('click', () => openSearch(trigger));
+  closeTrigger.addEventListener('click', closeSearch);
+  dialog.addEventListener('close', resetSearch);
+  enableBackdropDismissal(dialog);
 
   // Cmd+K
   document.addEventListener('keydown', (e) => {
     if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
-      openSearch();
-    }
-  });
-
-  // Close on backdrop click
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) {
-      closeSearch();
+      const activeElement = document.activeElement;
+      openSearch(activeElement instanceof HTMLElement ? activeElement : trigger);
     }
   });
 
@@ -186,11 +211,14 @@ import Button from '@/components/ui/button.astro';
 
     timer = setTimeout(async () => {
       const pf = await loadPagefind();
-      if (!pf) { hide(elLoading); return; }
+      if (!pf) {
+        hide(elLoading);
+        return;
+      }
 
       const search = await pf.search(query);
       const results: SearchResult[] = await Promise.all(
-        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data()),
+        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data())
       );
 
       hide(elLoading);
@@ -205,9 +233,10 @@ import Button from '@/components/ui/button.astro';
       elItems.innerHTML = results
         .flatMap((result) =>
           (result.sub_results ?? []).map((sub) => {
-            const subtitle = sub.title !== result.meta.title
-              ? ` <span class="font-normal text-muted-foreground">— ${sub.title}</span>`
-              : '';
+            const subtitle =
+              sub.title !== result.meta.title
+                ? ` <span class="font-normal text-muted-foreground">— ${sub.title}</span>`
+                : '';
             return `<a href="${sub.url}" role="menuitem" class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors cursor-pointer" data-search-link>
               <span class="shrink-0">${resultIcon(result.url)}</span>
               <span class="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -216,7 +245,7 @@ import Button from '@/components/ui/button.astro';
               </span>
               <span class="shrink-0 text-xs text-muted-foreground">${resultLabel(result.url)}</span>
             </a>`;
-          }),
+          })
         )
         .join('');
       show(elItems);

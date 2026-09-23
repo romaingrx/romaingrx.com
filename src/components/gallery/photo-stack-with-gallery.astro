@@ -26,7 +26,7 @@ const DIALOG_ID = `${id}-dialog`;
 <PhotoStack images={images} size={size} onclick={`${id}_open`} />
 
 <!-- Lightbox Gallery using Dialog -->
-<Dialog id={DIALOG_ID} className="[&>article]:h-screen [&>article]:w-screen">
+<Dialog id={DIALOG_ID} label="Photo gallery" className="[&>article]:h-screen [&>article]:w-screen">
   <Gallery
     id={id}
     images={images}
