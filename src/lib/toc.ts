@@ -6,21 +6,24 @@ export type Heading = MarkdownHeading & {
 
 export function buildToc(headings: MarkdownHeading[]): Heading[] {
   const toc: Heading[] = [];
-  const parents = new Map<number, Heading>();
+  const parents: Heading[] = [];
 
   for (const heading of headings) {
     const newHeading: Heading = { ...heading, subheadings: [] };
 
-    if (newHeading.depth === 1) {
-      toc.push(newHeading);
-    } else {
-      const parent = parents.get(newHeading.depth - 1);
-      if (parent) {
-        parent.subheadings.push(newHeading);
-      }
+    while (parents.length > 0 && parents[parents.length - 1].depth >= newHeading.depth) {
+      parents.pop();
     }
 
-    parents.set(newHeading.depth, newHeading);
+    const parent = parents[parents.length - 1];
+    if (parent) {
+      parent.subheadings.push(newHeading);
+    } else {
+      toc.push(newHeading);
+    }
+
+    parents.push(newHeading);
   }
+
   return toc;
 }

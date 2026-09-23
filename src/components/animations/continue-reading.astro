@@ -2,11 +2,14 @@
 import { Icon } from 'astro-icon/components';
 ---
 
-<a href="#continue-reading">
-  <div class="flex flex-col items-center space-y-4" id="continue-reading">
+<a
+  href="#article-intro"
+  class="focus-visible:outline-focus rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-solid"
+>
+  <div class="flex flex-col items-center space-y-3">
     <span class="text-muted-foreground text-sm">Continue Reading</span>
-    <div class="animate-up-down fill-muted-foreground">
-      <Icon name="lucide:arrow-down" class="stroke-width-1 stroke-muted-foreground size-8" />
+    <div class="animate-up-down text-muted-foreground">
+      <Icon name="lucide:arrow-down" class="size-8 stroke-current" />
     </div>
   </div>
 </a>

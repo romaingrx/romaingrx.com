@@ -1,70 +1,28 @@
 ---
-import { cva, type VariantProps } from 'class-variance-authority';
 import type { Heading } from '@/lib/toc';
-import { cn } from '@/lib/utils';
 
 type Props = {
   heading: Heading;
 };
 
 const { heading } = Astro.props;
-
-const headingStyle = cva('', {
-  variants: {
-    divDepth: {
-      1: '',
-      2: '',
-      3: '',
-      4: '',
-      5: '',
-    },
-    textDepth: {
-      1: 'text-muted-foreground',
-      2: 'text-muted-foreground',
-      3: 'text-muted-foreground',
-      4: 'text-muted-foreground',
-      5: 'text-muted-foreground',
-    },
-  },
-});
-
-type Depth = VariantProps<typeof headingStyle>['textDepth'];
-
-function getDepthVariant({ heading: { depth } }: { heading: Heading }): Depth {
-  if ([1, 2, 3, 4, 5].includes(depth)) {
-    return depth as Depth;
-  }
-  return undefined;
-}
 ---
 
-<li class="[&.active>div:first-child]:bg-foreground my-1 text-sm">
-  <div
-    class={cn(
-      'my-2 h-0.5 rounded-md bg-muted group-hover/toc:hidden',
-      headingStyle({ divDepth: getDepthVariant({ heading }) })
-    )}
-  >
-  </div>
+<li>
   <a
     href={'#' + heading.slug}
-    class={cn(
-      'toc-link hidden hover:underline group-hover/toc:flex transition-colors peer',
-      '[&.active]:text-foreground [&.active]:font-semibold',
-      headingStyle({ textDepth: getDepthVariant({ heading }) })
-    )}
+    data-toc-link
+    class="text-muted-foreground hover:text-foreground focus-visible:outline-focus hover:bg-muted/60 aria-[current=location]:bg-muted aria-[current=location]:text-foreground flex min-h-11 items-center rounded-md px-3 py-2 text-sm leading-snug focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid aria-[current=location]:font-semibold"
   >
     {heading.text}
   </a>
   {
     heading.subheadings.length > 0 && (
-      <div class="border-border my-[0.1rem] border-l-0 group-hover/toc:border-l">
-        <ul class="ml-2 group-hover/toc:ml-4">
-          {heading.subheadings.map((subheading) => (
-            <Astro.self heading={subheading} />
-          ))}
-        </ul>
-      </div>
+      <ul class="border-border ml-3 space-y-1 border-l pl-2">
+        {heading.subheadings.map((subheading) => (
+          <Astro.self heading={subheading} />
+        ))}
+      </ul>
     )
   }
 </li>

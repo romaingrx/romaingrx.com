@@ -16,18 +16,18 @@ resources:
 
 When I coded a CUDA kernel for the first time, I remember being a bit confused with the hierarchy and different levels (grid, blocks, ...). The goal of this note is to give a few helper functions and the overall mental model for the many dimensions.
 
-# Grid, blocks, warps, threads, ...?
+## Grid, blocks, warps, threads, ...?
 
 The goal of the [Single instruction, multiple threads (SIMT)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads) model is to expose the same instruction, parallelize it as much as possible on the different parts of the data. CUDA uses a hierarchical structure where threads are organized into blocks, and blocks are organized into a grid. The configuration of this structure is left to the developer to make effective use of the hardware for the specific data shape and type of algorithm to run.
 
-## Grid
+### Grid
 
 A grid is the entire collection of parallel work for your kernel.
 
 - It's composed of independent blocks that execute concurrently with indeterminate order
 - A grid can be 1, 2 or 3 dimensional
 
-## Block (thread block)
+### Block (thread block)
 
 A block is a group of threads that executes on the same [streaming multiprocessor (SM)](https://modal.com/gpu-glossary/device-hardware/streaming-multiprocessor).
 
@@ -35,13 +35,13 @@ A block is a group of threads that executes on the same [streaming multiprocesso
 - A block contains one or more warps, where a warp is a constant number of threads (`32` for all Nvidia GPUs so far) that run at once
 - A block can also be 1, 2 or 3 dimensional
 
-## Thread
+### Thread
 
 This is the individual unit of execution.
 
 - The role is to access the right part of the data based on its index and execute the kernel
 
-# Code example
+## Code example
 
 The easiest way to explore this is to actually log the index of each thread. To determine the final index of the thread, we need to get:
 
@@ -51,7 +51,7 @@ The easiest way to explore this is to actually log the index of each thread. To 
 
 To do so, I've implemented some easy helper functions to unroll all these indices in a comprehensive way.
 
-## `get_offset`
+### `get_offset`
 
 The first function `get_offset` simply gets the flattened index of the `coordinates` variable in a 3 dimensional cube of dimensions `dim`. For example, if we're at the coordinates `dim3(2, 2, 2)` in a cube of dimension `dim3(8, 8, 8)`, we need to sum all the individual units that came before our current `coordinates` in the following way:
 
@@ -70,7 +70,7 @@ __device__ int get_offset(dim3 coordinates, dim3 dim){
 
 So in our cube example of dimensions `dim3(8, 8, 8)`, we'll have a flattened index that can go between $0$ and $512$ ($8*8*8$).
 
-## Main function `whoami`
+### Main function `whoami`
 
 In CUDA, we define our kernel with a `__global__` keyword and in our kernel we have access to the following variables:
 

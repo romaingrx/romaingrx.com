@@ -74,6 +74,7 @@ export const rehypeCitationRelative =
     };
 
     await rehypeCitation(config)(tree, file);
+    addCitationBacklinks(tree);
   };
 
 /**
@@ -82,7 +83,7 @@ export const rehypeCitationRelative =
 function addReferencesHeading(tree) {
   const referencesHeading = {
     type: 'element',
-    tagName: 'h1',
+    tagName: 'h2',
     properties: {
       id: 'references',
       className: ['references-heading'],
@@ -96,4 +97,67 @@ function addReferencesHeading(tree) {
   };
 
   tree.children.push(referencesHeading);
+}
+
+function addCitationBacklinks(tree) {
+  const references = new Map();
+
+  visitElements(tree, (node) => {
+    const citationId = node.properties?.id;
+    if (
+      node.tagName !== 'span' ||
+      typeof citationId !== 'string' ||
+      !citationId.startsWith('citation--')
+    ) {
+      return;
+    }
+
+    node.properties.tabIndex = -1;
+    const occurrence = citationId.match(/--(\d+)$/)?.[1];
+    if (!occurrence) return;
+
+    visitElements(node, (child) => {
+      if (child.tagName !== 'a') return;
+      const href = child.properties?.href;
+      if (typeof href !== 'string' || !href.startsWith('#bib-')) return;
+
+      const citekey = href.slice('#bib-'.length);
+      const backlinks = references.get(citekey) ?? [];
+      backlinks.push({ citationId, occurrence });
+      references.set(citekey, backlinks);
+    });
+  });
+
+  visitElements(tree, (node) => {
+    const id = node.properties?.id;
+    if (node.tagName !== 'div' || typeof id !== 'string' || !id.startsWith('bib-')) return;
+
+    node.properties.tabIndex = -1;
+    const backlinks = references.get(id.slice('bib-'.length)) ?? [];
+    if (backlinks.length === 0) return;
+
+    node.children.push({
+      type: 'element',
+      tagName: 'span',
+      properties: {
+        className: ['citation-backlinks'],
+        ariaLabel: 'Citations in article',
+      },
+      children: backlinks.map(({ citationId, occurrence }) => ({
+        type: 'element',
+        tagName: 'a',
+        properties: {
+          className: ['citation-backlink'],
+          href: `#${citationId}`,
+          ariaLabel: `Return to citation ${occurrence} in the article`,
+        },
+        children: [{ type: 'text', value: `↩ ${occurrence}` }],
+      })),
+    });
+  });
+}
+
+function visitElements(node, visitor) {
+  if (node.type === 'element') visitor(node);
+  for (const child of node.children ?? []) visitElements(child, visitor);
 }

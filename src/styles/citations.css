@@ -24,6 +24,24 @@
   @apply pb-3;
 }
 
+.prose [id^='citation--'],
+.prose .csl-entry[id] {
+  scroll-margin-top: var(--reading-header-offset);
+}
+
+.citation-backlinks {
+  @apply mt-2 flex flex-wrap gap-2;
+}
+
+.citation-backlink {
+  @apply inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-muted px-2 text-sm text-muted-foreground no-underline hover:text-foreground;
+}
+
+.citation-backlink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 /* Auto-generated references heading */
 /* .references-heading {} */
 

@@ -73,3 +73,20 @@ clear, and close invalidate pending work. Retry must recover both module-load
 and query-data failures, and Show more loads only the next result batch. Run a
 production build before browser tests so both Pagefind and Wrangler use the
 current source.
+
+## Article structure and Contents
+
+An article page has one H1 in its header. Begin body sections at H2 and nest
+subsections one level lower. Notes and blog posts use the shared `.prose`
+typography and Contents component, while their headers can keep distinct
+layouts. Keep existing heading IDs stable when changing heading levels. The
+generated References heading is H2 and keeps the `references` ID.
+
+Contents is a native `<details>` disclosure with a `<summary>` label. Its links
+target body heading IDs, update `aria-current="location"` for the latest
+section above the sticky header, and use a scroll margin that clears the header.
+Keep the disclosure usable by keyboard and touch at every viewport size.
+
+Inline citations remain ordinary links to bibliography entries. Each cited
+entry provides visible return links to all citation occurrences. Keep those
+links available without hover and preserve citation and bibliography IDs.

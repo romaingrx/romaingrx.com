@@ -32,10 +32,9 @@ const { Content, headings } = await render(post);
 
 <BlogLayout post={post}>
   <PostHeader post={post} />
-  <div class="mt-10"></div>
-  <TableOfContents headings={headings} />
   <Shell type="article">
-    <Prose Element="article">
+    <TableOfContents headings={headings} />
+    <Prose Element="article" id="article-intro">
       <Content components={components} />
     </Prose>
     <PostFooter post={post} />
