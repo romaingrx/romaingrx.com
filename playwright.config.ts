@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const browserProjects = [
+  { name: 'chromium', device: devices['Desktop Chrome'] },
+  { name: 'firefox', device: devices['Desktop Firefox'] },
+  { name: 'webkit', device: devices['Desktop Safari'] },
+] as const;
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -20,16 +26,16 @@ export default defineConfig({
       timeout: 120_000,
     },
   ],
-  projects: [
+  projects: browserProjects.flatMap(({ name, device }) => [
     {
-      name: 'chromium-production',
+      name: `${name}-production`,
       testMatch: 'browser/**/*.spec.ts',
-      use: { ...devices['Desktop Chrome'], baseURL: 'http://127.0.0.1:4322' },
+      use: { ...device, baseURL: 'http://127.0.0.1:4322' },
     },
     {
-      name: 'chromium-fixtures',
+      name: `${name}-fixtures`,
       testMatch: 'fixtures/**/*.spec.ts',
-      use: { ...devices['Desktop Chrome'], baseURL: 'http://127.0.0.1:4321' },
+      use: { ...device, baseURL: 'http://127.0.0.1:4321' },
     },
-  ],
+  ]),
 });

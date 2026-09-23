@@ -21,7 +21,7 @@ pnpm format:check
 pnpm check
 pnpm build
 pnpm test:routes
-pnpm exec playwright install chromium
+pnpm exec playwright install chromium firefox webkit
 pnpm test:browser
 ```
 
@@ -50,6 +50,24 @@ asset load so a later build attempt can retry.
 Do not disable Corepack or pnpm integrity verification to work around an
 installation error. Update the toolchain or lockfile when the supported
 versions change.
+
+## Tokens, controls, and content identity
+
+Use semantic color, spacing, typography, and motion tokens from
+`src/styles/globals.css`. Keep renderer wrappers small and use the shared
+variants in `src/components/ui/variants.ts`; give standalone controls an
+accessible name, a visible focus state, and a preferred 44 px hit area.
+
+Build post, note, taxonomy, canonical, and share URLs with
+`src/configs/routes.ts`. Keep public slugs stable when titles change. Add a
+redirect when a published path must change. Pages load content at their route
+boundary and pass the needed data to presentation components.
+
+Keep browser controllers small and give listeners, timers, and subscriptions a
+clear cleanup owner. Keep server-only adapters out of browser modules. Static
+callouts need no React hydration; interactive article widgets keep their
+behavior next to the content and follow the documented widget props and
+lifecycle contracts below.
 
 ## Navigation and overlay behavior
 
