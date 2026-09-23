@@ -27,11 +27,14 @@ test('StepSlider handles empty, single, end, replay, seek, and example changes',
     page.locator('astro-island[component-export="StepSlider"]:not([ssr])').filter({ has: timed }),
   ).toHaveCount(1);
   await expect(slider).toHaveAttribute('aria-valuetext', 'timestep 10; step 1 of 3');
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+
   await timed.getByRole('button', { name: 'Play timesteps' }).click();
   await expect(timed.getByRole('button', { name: 'Pause playback' })).toBeVisible();
   await timed.getByRole('button', { name: 'Pause playback' }).click();
   const pausedAt = await slider.getAttribute('aria-valuetext');
-  await page.waitForTimeout(600);
+  await page.clock.runFor(600);
   await expect(slider).toHaveAttribute('aria-valuetext', pausedAt!);
 
   await timed.getByRole('button', { name: 'Play timesteps' }).click();
@@ -39,16 +42,23 @@ test('StepSlider handles empty, single, end, replay, seek, and example changes',
   await slider.press('ArrowRight');
   await expect(slider).toHaveAttribute('aria-valuetext', 'timestep 20; step 2 of 3');
   await expect(timed.getByRole('button', { name: 'Play timesteps' })).toBeVisible();
-  await page.waitForTimeout(600);
+  await page.clock.runFor(600);
   await expect(slider).toHaveAttribute('aria-valuetext', 'timestep 20; step 2 of 3');
 
   await timed.getByRole('button', { name: 'Play timesteps' }).click();
+  await page.clock.runFor(500);
   await expect(slider).toHaveAttribute('aria-valuetext', 'timestep 30; step 3 of 3');
   await expect(timed.getByRole('button', { name: 'Replay from first timestep' })).toBeVisible();
 
   await timed.getByRole('button', { name: 'Replay from first timestep' }).click();
   await expect(slider).toHaveAttribute('aria-valuetext', 'timestep 10; step 1 of 3');
   await expect(timed.getByRole('button', { name: 'Pause playback' })).toBeVisible();
+  await page.clock.runFor(500);
+  await expect(slider).toHaveAttribute('aria-valuetext', 'timestep 20; step 2 of 3');
+  await timed.getByRole('button', { name: 'Pause playback' }).click();
+  const replayPausedAt = await slider.getAttribute('aria-valuetext');
+  await page.clock.runFor(600);
+  await expect(slider).toHaveAttribute('aria-valuetext', replayPausedAt!);
 
   const example = page
     .locator('[data-slot="card"]')
@@ -59,7 +69,7 @@ test('StepSlider handles empty, single, end, replay, seek, and example changes',
   await expect(exampleSlider).toHaveValue('0');
   await expect(exampleSlider).toHaveAttribute('aria-valuetext', 'timestep 10; step 1 of 2');
   await expect(example.getByRole('button', { name: 'Play timesteps' })).toBeVisible();
-  await page.waitForTimeout(600);
+  await page.clock.runFor(600);
   await expect(exampleSlider).toHaveValue('0');
 });
 
