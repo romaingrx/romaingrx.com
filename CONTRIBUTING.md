@@ -50,6 +50,14 @@ Use the existing Radix dialog primitives for React islands. Include a dialog
 title and visible Close control, and keep Escape dismissal, focus containment,
 focus restoration, and backdrop dismissal consistent with Astro dialogs.
 
+Photo galleries use a native button to open the dialog. Previous and Next
+wrap from the last photo to the first and from the first to the last. A gallery
+with zero photos has no opener; a one-photo gallery has no navigation
+controls. The active photo's load or error event controls its status. On mobile,
+the image keeps its aspect ratio and Close, Previous, and Next controls remain
+at least 44 CSS pixels tall. Horizontal swipes navigate; vertical scrolling and
+pinch zoom remain available.
+
 Mobile navigation is a disclosure. Its button controls a menu with
 `aria-controls` and `aria-expanded`. Keep the closed menu hidden from keyboard
 and assistive technology. Escape closes the menu and returns focus to its

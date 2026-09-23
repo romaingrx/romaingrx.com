@@ -18,6 +18,9 @@ import '@/styles/typography.css';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Section from '@/components/design/section.astro';
 import ImageViewer from '@/components/blog/components/images/image-viewer.astro';
+import { PhotoStackWithGallery } from '@/components/gallery';
+import keyboardBuild from '@/content/note/20251026-corne-salsa/images/0.jpg';
+import keyboardFinal from '@/content/note/20251026-corne-salsa/images/4.jpg';
 
 const diagramOne =
   '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" rx="12" fill="#d5ac7c"/><text x="160" y="96" text-anchor="middle" font-size="24" fill="#30251d">Diagram one</text></svg>';
@@ -56,6 +59,38 @@ const diagramTwo =
       <div class="grid gap-6 md:grid-cols-2">
         <ImageViewer html={diagramOne} alt="Diagram one" />
         <ImageViewer html={diagramTwo} alt="Diagram two" />
+      </div>
+    </Section>
+
+    <Section title="Photo galleries">
+      <div class="flex flex-wrap items-center gap-6">
+        <PhotoStackWithGallery
+          id="gallery-fixture-clamped"
+          images={[
+            { src: keyboardBuild, alt: 'Keyboard build', caption: 'Keyboard build, first view' },
+            {
+              src: keyboardFinal,
+              alt: 'Completed keyboard',
+              caption: 'Completed keyboard, final view',
+            },
+          ]}
+          startIndex={99}
+          showCaptions
+        />
+        <PhotoStackWithGallery
+          id="gallery-fixture-independent"
+          images={[
+            { src: keyboardFinal, alt: 'Completed keyboard', caption: 'Independent gallery view' },
+            { src: keyboardBuild, alt: 'Keyboard build', caption: 'Second independent view' },
+          ]}
+          showCaptions
+        />
+        <PhotoStackWithGallery
+          id="gallery-fixture-single"
+          images={[{ src: keyboardBuild, alt: 'A single keyboard image' }]}
+          startIndex={-4}
+        />
+        <PhotoStackWithGallery id="gallery-fixture-empty" images={[]} />
       </div>
     </Section>
 

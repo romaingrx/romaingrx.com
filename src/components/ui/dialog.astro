@@ -63,5 +63,5 @@ const { id, title, description, label, className, hideCloseButton = false, ...pr
 
   document
     .querySelectorAll<HTMLDialogElement>('dialog[data-astro-dialog]')
-    .forEach(enableBackdropDismissal);
+    .forEach((dialog) => enableBackdropDismissal(dialog));
 </script>
