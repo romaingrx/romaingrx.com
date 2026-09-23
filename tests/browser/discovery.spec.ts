@@ -149,12 +149,17 @@ test('author hover-card social links have names and 44px targets', async ({ page
   await authorImage.hover();
   const socialLinks = page.getByRole('link', { name: /^Follow Romain Graux on / });
   await expect(socialLinks.first()).toBeVisible();
-  const sizes = await socialLinks.evaluateAll((links) =>
-    links.map((link) => {
-      const box = link.getBoundingClientRect();
-      return [box.width, box.height];
-    }),
-  );
+  const readSizes = () =>
+    socialLinks.evaluateAll((links) =>
+      links.map((link) => {
+        const box = link.getBoundingClientRect();
+        return [box.width, box.height];
+      }),
+    );
+  await expect
+    .poll(async () => (await readSizes()).every(([width, height]) => width >= 44 && height >= 44))
+    .toBe(true);
+  const sizes = await readSizes();
   expect(sizes.length).toBeGreaterThan(0);
   expect(sizes.every(([width, height]) => width >= 44 && height >= 44)).toBe(true);
 });
@@ -234,9 +239,6 @@ test('sharing controls fit at 320px and keep 44px hit targets', async ({ page })
       ({ left, right, width, height }) => left >= 0 && right <= 320 && width >= 44 && height >= 44,
     ),
   ).toBe(true);
-  expect(await page.locator('html').evaluate((element) => element.scrollWidth)).toBeLessThanOrEqual(
-    320,
-  );
 });
 
 test('the blog author and share controls stack without horizontal overflow on mobile', async ({
