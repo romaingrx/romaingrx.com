@@ -12,6 +12,7 @@ import { getNotes } from '@/lib/collections';
 
 type Props = {
   note: Awaited<ReturnType<typeof getNotes>>[number];
+  allNotes: Awaited<ReturnType<typeof getNotes>>;
 };
 
 export const Route = createRoute({ routeId: '/notes/[...slug]' });
@@ -20,11 +21,11 @@ export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
   const notes = await getNotes();
   return notes.map((note) => ({
     params: { slug: note.slug },
-    props: { note },
+    props: { note, allNotes: notes },
   }));
 });
 
-const { note } = Astro.props;
+const { note, allNotes } = Astro.props;
 const { Content, headings } = await render(note);
 ---
 
@@ -35,6 +36,6 @@ const { Content, headings } = await render(note);
     <Prose Element="article" id="article-intro">
       <Content components={components} />
     </Prose>
-    <NoteFooter note={note} />
+    <NoteFooter note={note} allNotes={allNotes} />
   </Shell>
 </NoteLayout>

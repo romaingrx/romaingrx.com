@@ -26,18 +26,32 @@ test('singular blog discovery keeps the selected category and singular count', a
   await expect(page.getByText('1 post', { exact: true })).toBeVisible();
 });
 
-test('the profile image loads with the development passthrough service', async ({ page }) => {
+test('the profile image loads from the native Sharp development service', async ({ page }) => {
   await page.goto('/about');
 
   const portrait = page.getByRole('img', { name: 'Romain Graux', exact: true }).first();
-  const imageUrl = await portrait.evaluate((image: HTMLImageElement) => image.currentSrc);
-  const response = await page.request.get(imageUrl);
+  const selectedImage = await portrait.evaluate((image: HTMLImageElement) => {
+    const selectedCandidate = image.srcset
+      .split(',')
+      .map((candidate) => candidate.trim().split(/\s+/))
+      .find(([url]) => new URL(url, document.baseURI).href === image.currentSrc);
+
+    return {
+      url: image.currentSrc,
+      expectedWidth: Number.parseInt(selectedCandidate?.[1] ?? '', 10),
+    };
+  });
+  expect(selectedImage.expectedWidth).toBeGreaterThan(0);
+
+  const response = await page.request.get(selectedImage.url);
   expect(response.ok()).toBe(true);
 
   const output = await sharp(await response.body()).metadata();
-  expect(output.format).toBe('jpeg');
-  expect(output.width).toBe(926);
+  expect(output.format).toBe('webp');
+  expect(output.width).toBe(selectedImage.expectedWidth);
   expect(output.height).toBe(output.width);
   await expect(portrait).toHaveJSProperty('complete', true);
-  await expect(portrait).toHaveJSProperty('naturalWidth', 926);
+  expect(await portrait.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(
+    0,
+  );
 });

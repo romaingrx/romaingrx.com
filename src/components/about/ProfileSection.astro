@@ -1,18 +1,15 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import { getEntry, render } from 'astro:content';
+import { render, type CollectionEntry } from 'astro:content';
 import CompactProse from '@/components/ui/compact-prose.astro';
 import { platforms_info, type Platform } from '@/configs/platforms';
 
 interface Props {
-  author: string;
+  author: CollectionEntry<'author'>;
 }
 
-const author = await getEntry('author', Astro.props.author);
-if (!author) {
-  throw new Error('Author not found for owner of the website');
-}
+const { author } = Astro.props;
 const { name, title, image, socialLinks } = author.data;
 const profileLinks = Object.entries(socialLinks).flatMap(([platform, link]) =>
   link ? [{ platform: platform as Platform, ...link }] : []

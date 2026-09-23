@@ -1,6 +1,6 @@
 import { z } from 'astro/zod';
 
-import { platforms_enum } from './platforms';
+import { platforms_enum } from './platforms-schema';
 import { site } from './site';
 
 export const resourceTypeEnum = z.enum(['code', 'model', 'dataset', 'paper']);

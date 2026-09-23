@@ -29,6 +29,24 @@ Build before running the browser suite. Playwright checks published routes on a
 Wrangler production preview and checks the private design fixture on Astro dev.
 The development fixture is not part of the production build.
 
+Astro dev runs without the Cloudflare adapter because the site does not use
+Cloudflare runtime bindings during development. `pnpm preview` builds with the
+adapter and runs Wrangler for production-runtime parity. To check content
+refresh, edit a published entry's title and confirm it changes on both its
+listing and detail page without restarting dev; then revert the edit.
+
+## Content and build boundaries
+
+Load collections in a page or `getStaticPaths()` boundary, then pass entries to
+cards and related-content components. Do not make child components reload the
+same collection or cache content in module scope; Astro dev must see edits
+without a process restart. Keep non-interactive callouts and similar UI as
+static Astro output instead of hydrating React.
+
+Module-scoped caches may hold immutable build assets, such as the OG fonts and
+logo. Do not put page or collection data in those caches, and clear a failed
+asset load so a later build attempt can retry.
+
 Do not disable Corepack or pnpm integrity verification to work around an
 installation error. Update the toolchain or lockfile when the supported
 versions change.
@@ -119,7 +137,7 @@ selectable URL. Timeline order uses numeric `order` first, then descending
 
 ## Astro image output
 
-Cloudflare compile mode does not collect static image transforms when Node runs
-prerendering. Use Astro Sharp for production prerendered assets and passthrough
-in development. Keep image pages prerendered, and verify emitted formats and
-dimensions when changing this setup.
+Astro dev omits the Cloudflare adapter and uses Astro's default Sharp image
+service. Production builds use the Cloudflare adapter's custom image service;
+`pnpm preview` runs that build through Wrangler. Keep image pages prerendered,
+and verify emitted formats and dimensions when changing this setup.
