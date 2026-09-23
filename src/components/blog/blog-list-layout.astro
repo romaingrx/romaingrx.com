@@ -3,87 +3,94 @@ import BlogCard from '@/components/blog/card/index.astro';
 import { routes } from '@/configs/routes';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
+import { formatTaxonomyLabel } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 interface Props {
   title: string;
   description: string;
   posts: BlogPostWithAuthors[];
+  allPosts: BlogPostWithAuthors[];
   categories: string[];
   tags: string[];
   activeCategory?: string;
   activeTag?: string;
 }
 
-const { title, description, posts, categories, tags, activeCategory, activeTag } = Astro.props;
-
+const { title, description, posts, allPosts, categories, tags, activeCategory, activeTag } =
+  Astro.props;
 const isAll = !activeCategory && !activeTag;
+const filterClass = (active: boolean) =>
+  cn(
+    'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+    active
+      ? 'bg-foreground text-background'
+      : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+  );
 ---
 
 <BaseLayout title={title} description={description}>
   <div class="mx-auto max-w-5xl px-4 py-12 md:py-20">
-    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-      {title}
-    </h1>
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
 
-    <nav class="mt-6 flex flex-wrap items-center gap-2" aria-label="Filter posts">
-      <a
-        href={routes.blogs}
-        class={cn(
-          'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
-          isAll
-            ? 'bg-foreground text-background'
-            : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-        )}
-      >
-        All
-      </a>
-      {
-        categories.map((cat) => (
-          <a
-            href={activeCategory === cat ? routes.blogs : routes.blogCategory(cat)}
-            class={cn(
-              'rounded-full px-3 py-1.5 text-sm font-medium capitalize transition-colors',
-              activeCategory === cat
-                ? 'bg-foreground text-background'
-                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-            )}
-          >
-            {cat}
-          </a>
-        ))
-      }
+    <nav class="mt-6 space-y-4" aria-label="Filter posts">
+      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Categories">
+        <span class="text-muted-foreground mr-1 text-sm">Categories</span>
+        <a href={routes.blogs} aria-current={isAll ? 'page' : undefined} class={filterClass(isAll)}>
+          All posts <span class="ml-1 tabular-nums">({allPosts.length})</span>
+        </a>
+        {
+          categories.map((category) => {
+            const active = activeCategory === category;
+            const count = allPosts.filter((post) => post.data.categories.includes(category)).length;
+            return (
+              <a
+                href={routes.blogCategory(category)}
+                aria-current={active ? 'page' : undefined}
+                class={filterClass(active)}
+              >
+                {formatTaxonomyLabel(category)} <span class="ml-1 tabular-nums">({count})</span>
+              </a>
+            );
+          })
+        }
+      </div>
       {
         tags.length > 0 && (
-          <>
-            <span class="text-border mx-1 hidden select-none sm:inline">|</span>
-            {tags.map((tag) => (
-              <a
-                href={activeTag === tag ? routes.blogs : routes.blogTag(tag)}
-                class={cn(
-                  'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
-                  activeTag === tag
-                    ? 'bg-foreground text-background'
-                    : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                )}
-              >
-                {tag}
-              </a>
-            ))}
-          </>
+          <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Tags">
+            <span class="text-muted-foreground mr-1 text-sm">Tags</span>
+            {tags.map((tag) => {
+              const active = activeTag === tag;
+              const count = allPosts.filter((post) => post.data.tags.includes(tag)).length;
+              return (
+                <a
+                  href={routes.blogTag(tag)}
+                  aria-current={active ? 'page' : undefined}
+                  class={filterClass(active)}
+                >
+                  {formatTaxonomyLabel(tag)} <span class="ml-1 tabular-nums">({count})</span>
+                </a>
+              );
+            })}
+          </div>
         )
       }
     </nav>
 
+    <p class="text-muted-foreground mt-6 text-sm" aria-live="polite">
+      {posts.length}
+      {posts.length === 1 ? 'post' : 'posts'}
+    </p>
+
     {
       posts.length > 0 ? (
-        <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+        <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
           {posts.map((post) => (
             <BlogCard post={post} />
           ))}
         </div>
       ) : (
-        <p class="text-muted-foreground mt-10">No posts found.</p>
+        <p class="text-muted-foreground mt-6">No posts found.</p>
       )
     }
   </div>

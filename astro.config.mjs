@@ -27,7 +27,7 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 export default defineConfig({
   site: site.url,
   adapter: cloudflare({
-    imageService: 'passthrough',
+    imageService: import.meta.env.PROD ? 'custom' : 'passthrough',
     prerenderEnvironment: 'node',
   }),
   env: {

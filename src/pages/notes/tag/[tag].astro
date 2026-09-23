@@ -1,9 +1,9 @@
 ---
 import { createRoute } from 'astro-typesafe-routes/create-route';
-import NoteHoverCard from '@/components/note/hover-card.astro';
+import NoteCard from '@/components/note/card/index.astro';
 import Shell from '@/components/Shell.astro';
-import Time from '@/components/ui/time.astro';
 import { routes } from '@/configs/routes';
+import { formatTaxonomyLabel } from '@/lib/format';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getNotes } from '@/lib/collections';
 
@@ -29,43 +29,37 @@ export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
 
 const { tag, notes } = Astro.props;
 
-const title = `Notes tagged "${tag}"`;
-const description = `Collection of notes tagged with "${tag}".`;
+const label = formatTaxonomyLabel(tag);
+const title = `Notes tagged “${label}”`;
+const description = `Notes filed under ${label}.`;
 ---
 
 <BaseLayout title={title} description={description}>
   <Shell type="article">
-    <div class="space-y-12">
+    <div class="space-y-10 py-8">
       <div class="space-y-4">
         <h1 class="text-4xl font-bold tracking-tight">
-          Notes tagged "{tag}"
+          {title}
         </h1>
-        <p class="text-muted-foreground text-xl">
-          {description}
-        </p>
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <p class="text-muted-foreground text-lg">
+            {description}
+          </p>
+          <a class="text-primary underline-offset-4 hover:underline" href={routes.notes}>
+            All notes
+          </a>
+        </div>
       </div>
 
       {
         notes.length > 0 ? (
-          <ul class="space-y-2">
+          <div class="grid gap-4 sm:grid-cols-2">
             {notes.map((note) => (
-              <li class="group bg-card hover:bg-accent/40 rounded-lg border transition-colors">
-                <NoteHoverCard note={note}>
-                  <a href={routes.note(note)} class="flex items-center justify-between px-4 py-3">
-                    <span class="group-hover:text-primary font-medium transition-colors">
-                      {note.data.title}
-                    </span>
-                    <Time
-                      date={note.data.published_date}
-                      className="text-sm text-muted-foreground"
-                    />
-                  </a>
-                </NoteHoverCard>
-              </li>
+              <NoteCard note={note} />
             ))}
-          </ul>
+          </div>
         ) : (
-          <p class="text-muted-foreground text-center">No notes found with this tag.</p>
+          <p class="text-muted-foreground">No notes found with this tag.</p>
         )
       }
     </div>

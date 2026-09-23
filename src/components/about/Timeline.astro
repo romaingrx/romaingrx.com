@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import CompactProse from '../ui/compact-prose.astro';
+import { formatMonthDate } from '@/lib/format';
 
 interface Props {
   type?: 'education' | 'experience' | 'project';
@@ -16,11 +17,14 @@ const filteredEntries = type
   ? entries.filter((entry: CollectionEntry<'timeline'>) => entry.data.type === type)
   : entries;
 
-// Sort items by date (most recent first)
+// Explicit order wins; otherwise use start date, then stable entry ID.
 const sortedItems = filteredEntries.toSorted((a, b) => {
-  const dateA = a.data.endDate === 'present' ? new Date() : new Date(a.data.startDate);
-  const dateB = b.data.endDate === 'present' ? new Date() : new Date(b.data.startDate);
-  return dateB.getTime() - dateA.getTime();
+  if (a.data.order !== undefined || b.data.order !== undefined) {
+    if (a.data.order === undefined) return 1;
+    if (b.data.order === undefined) return -1;
+    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+  }
+  return b.data.startDate.localeCompare(a.data.startDate) || a.id.localeCompare(b.id);
 });
 
 // Pre-render all content
@@ -35,7 +39,7 @@ const renderedContent = await Promise.all(
 );
 ---
 
-<div class="space-y-6">
+<div class="space-y-6" data-timeline={type ?? 'all'}>
   <!-- Subtle section title -->
   <div class="flex items-center gap-3">
     <h2 class="text-foreground text-lg font-semibold">
@@ -82,8 +86,8 @@ const renderedContent = await Promise.all(
                   <div class="flex items-center gap-1.5 sm:justify-end">
                     <Icon name="lucide:calendar" class="size-3" />
                     <span class="font-mono whitespace-nowrap">
-                      {item.data.startDate}
-                      {item.data.endDate ? ` – ${item.data.endDate}` : ''}
+                      {formatMonthDate(item.data.startDate)}
+                      {item.data.endDate ? ` – ${formatMonthDate(item.data.endDate)}` : ''}
                     </span>
                   </div>
                   <div class="flex items-center gap-1.5 sm:justify-end">

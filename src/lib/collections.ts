@@ -63,11 +63,12 @@ async function getContentWithAuthors<T extends ContentEntry>(
         const { remarkPluginFrontmatter } = await render(entry);
         const resolved = await resolveAuthors(entry, authors);
         const slug = entry.data.permalink;
+        const contentPath = createPath({ slug });
         return Object.assign({}, entry, {
           authors: resolved,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
           slug,
-          url: absolute(createPath({ slug })),
+          url: absolute(contentPath.endsWith('/') ? contentPath : `${contentPath}/`),
         });
       }),
   );

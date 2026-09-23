@@ -11,6 +11,7 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
   title="Blog"
   description="Explore my thoughts and insights on AI, machine learning, and software development."
   posts={posts}
+  allPosts={posts}
   categories={categories}
   tags={tags}
 />

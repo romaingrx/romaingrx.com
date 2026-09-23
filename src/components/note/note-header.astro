@@ -43,16 +43,20 @@ const resources = note.data.resources.map((r) =>
         </div>
       </div>
 
-      <div class="flex w-full flex-wrap items-center gap-6" data-pagefind-ignore>
+      <div
+        class="flex w-full flex-col gap-6 sm:flex-row sm:items-end"
+        data-pagefind-ignore
+        data-header-controls
+      >
         {
-          note.data.resources.length > 0 && (
-            <div class="flex flex-col gap-2 text-start">
+          resources.length > 0 && (
+            <div class="flex flex-col gap-3 text-start">
               <span class="text-muted-foreground text-sm font-medium">Resources</span>
               <Resources resources={resources} />
             </div>
           )
         }
-        <div class="flex flex-col gap-2 text-start">
+        <div class="flex flex-col gap-3 text-start" data-header-share>
           <span class="text-muted-foreground text-sm font-medium">Share on</span>
           <SharingBadges post={note} />
         </div>

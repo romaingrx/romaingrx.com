@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Tooltip from '@/components/tooltip/tooltip.astro';
+import { Button, Input, Link } from '@/components/ui';
 import { platforms_info, type Platform } from '@/configs/platforms';
 import { getAuthorsWithSocialLinks } from '@/lib/authors';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
@@ -17,79 +17,152 @@ interface LinkProps {
   params?: Record<string, string | undefined>;
 }
 
-function getAuthorsWithSocialLinksAndWarn({ platform }: { platform: Platform }) {
-  const authors = getAuthorsWithSocialLinks({ authors: post.authors, platform });
-  if (authors.length > 1) {
-    console.warn(
-      `Found ${authors.length} authors with a ${platform} handle but will pick the first one only to share`
-    );
-  }
-  return authors;
+const xAuthors = getAuthorsWithSocialLinks({ authors: post.authors, platform: 'twitter' });
+if (xAuthors.length > 1) {
+  console.warn(`Found ${xAuthors.length} authors with a twitter handle; sharing uses the first.`);
 }
-
-const authors_x_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'twitter' });
-const authors_linkedin_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'linkedin' });
-
-const links = {
+const xAuthor = xAuthors[0];
+const links: Partial<Record<Platform, LinkProps>> = {
   twitter: {
     title: `Share ${post.data.title} on X`,
     pathname: '/intent/post',
     params: {
       url: post.url,
-      via: authors_x_handle[0]?.data.socialLinks.twitter?.handle,
-      related: authors_x_handle
-        .map(
-          (author) =>
-            `${author.data.socialLinks.twitter?.handle}:${author.data.title ?? author.data.name}`
-        )
+      via: xAuthor?.data.socialLinks.twitter?.handle,
+      related: xAuthors
+        .map((author) => {
+          const handle = author.data.socialLinks.twitter?.handle;
+          return handle ? `${handle}:${author.data.title ?? author.data.name}` : undefined;
+        })
+        .filter((value): value is string => value !== undefined)
         .join(','),
       hashtags: post.data.tags.join(','),
     },
   },
   hackernews: {
-    title: `Share ${post.data.title} on HackerNews`,
+    title: `Share ${post.data.title} on Hacker News`,
     pathname: '/submitlink',
-    params: {
-      u: post.url,
-      t: post.data.title,
-    },
+    params: { u: post.url, t: post.data.title },
   },
   linkedin: {
     title: `Share ${post.data.title} on LinkedIn`,
     pathname: '/sharing/share-offsite',
-    params: {
-      text: `${post.data.title} from @${authors_linkedin_handle[0].data.socialLinks.linkedin?.handle}
-${post.data.tags.map((t) => `#${t}`).join(' ')}`,
-      url: post.url,
-    },
+    params: { url: post.url },
   },
-} as const satisfies Partial<Record<Platform, LinkProps>>;
+};
 ---
 
-<div class="flex flex-row gap-2">
-  {
-    Object.entries(links).map(([platform_name, props]) => {
-      const platform = platforms_info[platform_name as Platform];
-      const anchorUrl = new URL(props.pathname, platform.base_url);
-      for (const [key, value] of Object.entries(props.params ?? {})) {
-        if (value) anchorUrl.searchParams.set(key, value);
-      }
-      return (
-        <Tooltip side="bottom" intent="default">
-          <a
-            slot="trigger"
-            href={anchorUrl}
+<div class="space-y-2" data-content-share data-share-title={post.data.title}>
+  <div class="flex flex-nowrap items-center gap-1.5 overflow-x-auto">
+    {
+      Object.entries(links).map(([platformName, props]) => {
+        if (!props) return null;
+        const platform = platformName as Platform;
+        const platformInfo = platforms_info[platform];
+        const anchorUrl = new URL(props.pathname, platformInfo.base_url);
+        for (const [key, value] of Object.entries(props.params ?? {})) {
+          if (value) anchorUrl.searchParams.set(key, value);
+        }
+        return (
+          <Link
+            href={anchorUrl.toString()}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-muted-foreground hover:text-foreground transition-colors"
+            variant="ghost"
+            size="icon"
             aria-label={props.title}
+            title={props.title}
           >
-            <Icon name={platform.icon_name} class="size-5" />
-            <span class="sr-only">{props.title}</span>
-          </a>
-          <div slot="content">{props.title}</div>
-        </Tooltip>
-      );
-    })
-  }
+            <Icon name={platformInfo.icon_name} class="size-5" />
+          </Link>
+        );
+      })
+    }
+    <Button
+      type="button"
+      size="sm"
+      variant="secondary"
+      className="min-h-11 shrink-0"
+      data-copy-link
+    >
+      <Icon name="lucide:link" class="size-4" />
+      Copy link
+    </Button>
+    <Button
+      type="button"
+      size="sm"
+      variant="secondary"
+      className="min-h-11 shrink-0"
+      data-native-share
+      hidden
+    >
+      <Icon name="lucide:share-2" class="size-4" />
+      Share
+    </Button>
+  </div>
+  <p class="text-muted-foreground text-sm" role="status" aria-live="polite" data-share-status></p>
+  <div class="w-full space-y-1" data-share-fallback hidden>
+    <label class="text-muted-foreground mb-1 block text-sm" for={`share-url-${post.id}`}>
+      Select this URL to copy it
+    </label>
+    <Input
+      id={`share-url-${post.id}`}
+      className="w-full"
+      type="url"
+      value={post.url}
+      readonly
+      data-share-url
+    />
+  </div>
 </div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-content-share]').forEach((root) => {
+    const status = root.querySelector<HTMLElement>('[data-share-status]');
+    const fallback = root.querySelector<HTMLElement>('[data-share-fallback]');
+    const urlField = root.querySelector<HTMLInputElement>('[data-share-url]');
+    const copyButton = root.querySelector<HTMLButtonElement>('[data-copy-link]');
+    const shareButton = root.querySelector<HTMLButtonElement>('[data-native-share]');
+    const url = urlField?.value;
+
+    if (!status || !fallback || !urlField || !copyButton || !shareButton || !url) return;
+    if (typeof navigator.share === 'function') {
+      shareButton.hidden = false;
+    }
+
+    const showFallback = () => {
+      fallback.hidden = false;
+    };
+
+    copyButton.addEventListener('click', async () => {
+      try {
+        if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(url);
+        status.textContent = 'Link copied.';
+      } catch {
+        showFallback();
+        status.textContent = 'Copy failed. Select the URL below to copy it.';
+      }
+    });
+
+    shareButton.addEventListener('click', async () => {
+      try {
+        await navigator.share({ title: root.dataset.shareTitle ?? '', url });
+        status.textContent = 'Link shared.';
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          status.textContent = 'Sharing canceled.';
+          return;
+        }
+        showFallback();
+        status.textContent = 'Sharing failed. Select the URL below to copy it.';
+      }
+    });
+  });
+</script>
+
+<style>
+  [data-content-share] [data-native-share][hidden] {
+    display: none !important;
+  }
+</style>

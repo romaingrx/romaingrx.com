@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import Badge from '@/components/ui/badge.astro';
 import { routes } from '@/configs/routes';
+import { formatTaxonomyLabel } from '@/lib/format';
 
 type Props = {
   category: string;
@@ -14,6 +15,6 @@ const { category, isActive = false } = Astro.props;
 <a href={isActive ? routes.blogs : routes.blogCategory(category)}>
   <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
     <Icon name="lucide:folder" class="size-3" />
-    <span>{category}</span>
+    <span>{formatTaxonomyLabel(category)}</span>
   </Badge>
 </a>

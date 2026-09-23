@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import type { Author } from '@/lib/collections';
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/react/hover-card';
+import { Link } from '@/components/ui/react/link';
 import { platforms_info, type Platform } from '@/configs/platforms';
 
 type Props = {
@@ -13,6 +14,9 @@ type Props = {
 };
 
 export default function AuthorHoverCard({ author, children }: Props) {
+  const socialLinks = Object.entries(author.data.socialLinks).flatMap(([platform, social]) =>
+    social ? [{ platform: platform as Platform, ...social }] : [],
+  );
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
@@ -24,24 +28,20 @@ export default function AuthorHoverCard({ author, children }: Props) {
             <h4 className="text-sm font-semibold">{author.data.name}</h4>
             <p className="text-sm text-muted-foreground">{author.data.title}</p>
             <div className="flex items-center gap-2 pt-2">
-              {Object.entries(author.data.socialLinks)
-                .filter(([, v]) => v)
-                .map(([platform, social]) => {
-                  return (
-                    <a
-                      key={`${platform}-${social!.handle}`}
-                      href={social!.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <Icon
-                        icon={platforms_info[platform as Platform].icon_name}
-                        className="size-4"
-                      />
-                    </a>
-                  );
-                })}
+              {socialLinks.map(({ platform, url }) => (
+                <Link
+                  key={platform}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`Follow ${author.data.name} on ${platform}`}
+                  title={`Follow ${author.data.name} on ${platform}`}
+                >
+                  <Icon icon={platforms_info[platform].icon_name} className="size-4" />
+                </Link>
+              ))}
             </div>
           </div>
         </div>

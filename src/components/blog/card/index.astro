@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Time from '@/components/ui/time.astro';
 import { routes } from '@/configs/routes';
+import { formatTaxonomyLabel } from '@/lib/format';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
 import BlogPostBackground from './background';
@@ -17,14 +18,12 @@ const hasCover = !!post.data.cover;
 ---
 
 <a href={routes.blog(post)} class={cn('group block no-underline', className)}>
-  <div class="bg-muted/50 relative aspect-[16/10] overflow-hidden rounded-xl">
-    <div
-      class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-    >
-      <BlogPostBackground value={post.id} />
-    </div>
-    {
-      hasCover && (
+  {
+    hasCover ? (
+      <div class="bg-muted/50 relative aspect-[16/10] overflow-hidden rounded-xl">
+        <div class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+          <BlogPostBackground value={post.id} />
+        </div>
         <Image
           src={post.data.cover!}
           alt={post.data.title}
@@ -32,25 +31,43 @@ const hasCover = !!post.data.cover;
           width={600}
           height={400}
         />
-      )
-    }
-  </div>
+      </div>
+    ) : (
+      <div class="bg-card group-hover:bg-accent/40 flex min-h-52 flex-col justify-end rounded-xl border p-6 transition-colors">
+        {post.data.categories[0] && (
+          <span class="text-muted-foreground mb-3 text-xs font-medium tracking-wide uppercase">
+            {formatTaxonomyLabel(post.data.categories[0])}
+          </span>
+        )}
+        <h2 class="group-hover:text-primary line-clamp-3 text-xl leading-snug font-semibold tracking-tight transition-colors">
+          {post.data.title}
+        </h2>
+        {showDescription && post.data.description && (
+          <p class="text-muted-foreground mt-2 line-clamp-2 text-sm leading-relaxed">
+            {post.data.description}
+          </p>
+        )}
+      </div>
+    )
+  }
 
   <div class="flex flex-col gap-1.5 pt-3">
     <div class="text-muted-foreground flex items-center gap-1.5 text-xs">
-      {post.data.categories[0] && <span class="capitalize">{post.data.categories[0]}</span>}
+      {post.data.categories[0] && <span>{formatTaxonomyLabel(post.data.categories[0])}</span>}
       <span>&middot;</span>
       <Time date={post.data.published_date} />
       <span>&middot;</span>
       <span>{post.readingTime}</span>
     </div>
-    <h2
-      class="group-hover:text-primary line-clamp-2 text-base leading-snug font-semibold tracking-tight transition-colors"
-    >
-      {post.data.title}
-    </h2>
     {
-      showDescription && post.data.description && (
+      hasCover && (
+        <h2 class="group-hover:text-primary line-clamp-2 text-base leading-snug font-semibold tracking-tight transition-colors">
+          {post.data.title}
+        </h2>
+      )
+    }
+    {
+      hasCover && showDescription && post.data.description && (
         <p class="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
           {post.data.description}
         </p>

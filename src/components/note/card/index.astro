@@ -20,6 +20,11 @@ const { note, className } = Astro.props;
       >
         {note.data.title}
       </h2>
+      <div class="text-muted-foreground flex items-center gap-1.5 text-xs">
+        <Time date={note.data.published_date} />
+        <span>&middot;</span>
+        <span>{note.readingTime}</span>
+      </div>
       {
         note.data.description && (
           <p class="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
@@ -27,11 +32,6 @@ const { note, className } = Astro.props;
           </p>
         )
       }
-      <div class="text-muted-foreground flex items-center gap-1.5 text-xs">
-        <Time date={note.data.published_date} />
-        <span>&middot;</span>
-        <span>{note.readingTime}</span>
-      </div>
     </div>
   </div>
 </a>
