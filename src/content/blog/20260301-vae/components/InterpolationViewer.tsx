@@ -7,6 +7,8 @@ type Interpolation = (typeof run.interpolations)[number];
 function StepViewer({ interp }: { interp: Interpolation }) {
   const [step, setStep] = useState(0);
   const nSteps = interp.steps.length;
+  const currentStep = nSteps === 0 ? 0 : Math.min(step, nSteps - 1);
+  const latent = interp.z_steps[currentStep] ?? [0, 0];
 
   const diffs = useMemo(() => {
     return interp.steps.map((seq, stepIdx) => {
@@ -20,33 +22,53 @@ function StepViewer({ interp }: { interp: Interpolation }) {
     });
   }, [interp]);
 
+  if (nSteps === 0) {
+    return (
+      <p role="status" className="text-sm text-muted-foreground">
+        No interpolation steps are available.
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4" data-pagefind-ignore>
-      <div className="flex items-center gap-3">
-        <input
-          type="range"
-          min={0}
-          max={nSteps - 1}
-          value={step}
-          onChange={(e) => setStep(Number(e.target.value))}
-          className="flex-1 accent-foreground"
-        />
-        <span className="w-16 text-right font-mono text-xs text-muted-foreground tabular-nums">
-          {step}/{nSteps - 1}
-        </span>
-      </div>
+      {nSteps > 1 ? (
+        <div className="flex items-center gap-3" data-pagefind-ignore>
+          <input
+            type="range"
+            min={0}
+            max={nSteps - 1}
+            value={currentStep}
+            aria-label="Latent interpolation step"
+            aria-valuetext={`Step ${currentStep + 1} of ${nSteps}; latent coordinates ${latent[0].toFixed(2)}, ${latent[1].toFixed(2)}`}
+            onChange={(event) => setStep(Number(event.target.value))}
+            className="h-11 flex-1 accent-foreground"
+          />
+          <output className="w-16 text-right font-mono text-xs text-muted-foreground tabular-nums">
+            {currentStep + 1}/{nSteps}
+          </output>
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground" data-pagefind-ignore>
+          Only interpolation step 1 of 1 is available.
+        </p>
+      )}
 
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <span className="font-mono">
-          z = [{interp.z_steps[step][0].toFixed(2)}, {interp.z_steps[step][1].toFixed(2)}]
-        </span>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground" data-pagefind-ignore>
+        <output className="font-mono">
+          z = [{latent[0].toFixed(2)}, {latent[1].toFixed(2)}]
+        </output>
         <span className="ml-auto">
-          {step === 0 ? 'Start' : step === nSteps - 1 ? 'End' : `Step ${step}`}
+          {currentStep === 0
+            ? 'Start'
+            : currentStep === nSteps - 1
+              ? 'End'
+              : `Step ${currentStep + 1}`}
         </span>
       </div>
 
-      <div className="flex flex-wrap font-mono text-xs leading-relaxed">
-        {diffs[step].map((d, i) => (
+      <div className="flex flex-wrap font-mono text-xs leading-relaxed" data-pagefind-ignore>
+        {diffs[currentStep].map((d, i) => (
           <span
             // eslint-disable-next-line react/no-array-index-key
             key={`${i}-${d.char}`}
@@ -97,10 +119,12 @@ export default function InterpolationViewer() {
       </div>
 
       {run.interpolations.length > 1 && (
-        <div className="flex gap-1.5" data-pagefind-ignore>
+        <div className="flex gap-1.5">
           {run.interpolations.map((interp, i) => (
             <button
               key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}
+              type="button"
+              aria-pressed={selected === i}
               onClick={() => setSelected(i)}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                 selected === i
@@ -114,7 +138,16 @@ export default function InterpolationViewer() {
         </div>
       )}
 
-      <StepViewer interp={run.interpolations[selected]} />
+      {run.interpolations[selected] ? (
+        <StepViewer
+          key={`${run.interpolations[selected].start}-${run.interpolations[selected].end}`}
+          interp={run.interpolations[selected]}
+        />
+      ) : (
+        <p role="status" className="text-sm text-muted-foreground">
+          No interpolation examples are available.
+        </p>
+      )}
     </div>
   );
 }
