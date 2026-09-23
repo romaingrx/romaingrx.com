@@ -10,6 +10,7 @@ const examples = run.denoising.slice(0, 3).map((ex) => ({
 export default function DenoisingProcess() {
   return (
     <StepSlider
+      mode="examples"
       examples={examples}
       title="Reverse process"
       description={(letter) => `Denoising "${letter}" from pure noise`}

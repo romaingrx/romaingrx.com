@@ -1,7 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Pause, Play, RotateCcw } from 'lucide-react';
 
+import { Button } from '@/components/ui/react/button';
 import {
   Card,
   CardContent,
@@ -9,43 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/react/card';
+import { usePlayback } from '@/hooks/use-playback';
 
 import run from '../run.json';
 
 const entries = run.training_samples;
 
 export default function EpochProgress() {
-  const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const current = entries[index];
-
-  const clearTimer = useCallback(() => {
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!playing) {
-      clearTimer();
-      return;
-    }
-    intervalRef.current = setInterval(() => {
-      setIndex((prev) => {
-        if (prev >= entries.length - 1) {
-          setPlaying(false);
-          return prev;
-        }
-        return prev + 1;
-      });
-    }, 500);
-    return clearTimer;
-  }, [playing, clearTimer]);
-
-  const togglePlay = () => setPlaying((p) => !p);
+  const playback = usePlayback({ count: entries.length, intervalMs: 500 });
+  const current = entries[playback.index];
 
   return (
     <Card className="my-8">
@@ -54,74 +27,85 @@ export default function EpochProgress() {
         <CardDescription>Validation samples across training</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
-        <div className="flex gap-2" data-pagefind-ignore>
-          {current.images.map((img, i) => (
-            // oxlint-disable-next-line react/no-array-index-key -- static image list per epoch
-            <div
-              key={`${current.epoch}-${i}`}
-              className="flex items-center justify-center rounded bg-black p-1"
-            >
-              <img
-                src={`data:image/png;base64,${img}`}
-                alt={`Epoch ${current.epoch + 1} sample ${i + 1}`}
-                width={128}
-                height={128}
-                style={{
-                  width: 128,
-                  height: 128,
-                  imageRendering: 'pixelated',
-                }}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex w-full items-center gap-3" data-pagefind-ignore>
-          <button
-            type="button"
-            onClick={togglePlay}
-            className="flex-shrink-0 rounded p-1.5 transition-colors hover:bg-muted"
-            aria-label={playing ? 'Pause' : 'Play'}
+        {current ? (
+          <div
+            className="grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2 sm:flex sm:flex-wrap sm:justify-center"
+            data-pagefind-ignore
           >
-            {playing ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
+            {current.images.map((image, index) => (
+              // oxlint-disable-next-line react/no-array-index-key -- static image list per epoch
+              <div
+                key={`${current.epoch}-${index}`}
+                className="flex aspect-square min-w-0 items-center justify-center overflow-hidden rounded bg-black p-1 sm:size-32"
               >
-                <rect x="6" y="4" width="4" height="16" />
-                <rect x="14" y="4" width="4" height="16" />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <polygon points="5,3 19,12 5,21" />
-              </svg>
-            )}
-          </button>
-          <input
-            type="range"
-            min={0}
-            max={entries.length - 1}
-            value={index}
-            onChange={(e) => {
-              setIndex(Number(e.target.value));
-              setPlaying(false);
-            }}
-            className="w-full accent-primary"
-          />
-        </div>
+                <img
+                  src={`data:image/png;base64,${image}`}
+                  alt={`Epoch ${current.epoch + 1} sample ${index + 1}`}
+                  width={128}
+                  height={128}
+                  className="aspect-square object-contain"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: '1 / 1',
+                    objectFit: 'contain',
+                    imageRendering: 'pixelated',
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p role="status" className="text-sm text-muted-foreground">
+            No validation samples are available.
+          </p>
+        )}
 
-        <span className="font-mono text-xs text-muted-foreground" data-pagefind-ignore>
-          epoch {current.epoch + 1}
-        </span>
+        {entries.length > 1 && current ? (
+          <div className="flex w-full items-center gap-3" data-pagefind-ignore>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={
+                playback.playing
+                  ? 'Pause playback'
+                  : playback.index === entries.length - 1
+                    ? 'Replay from first epoch'
+                    : 'Play epochs'
+              }
+              onClick={playback.toggle}
+            >
+              {playback.playing ? (
+                <Pause />
+              ) : playback.index === entries.length - 1 ? (
+                <RotateCcw />
+              ) : (
+                <Play />
+              )}
+            </Button>
+            <input
+              type="range"
+              min={0}
+              max={entries.length - 1}
+              value={playback.index}
+              aria-label="Training epoch"
+              aria-valuetext={`epoch ${current.epoch + 1}; validation sample ${playback.index + 1} of ${entries.length}`}
+              onChange={(event) => playback.seek(Number(event.target.value))}
+              className="h-11 w-full accent-primary"
+            />
+          </div>
+        ) : current ? (
+          <p className="text-sm text-muted-foreground" data-pagefind-ignore>
+            Only epoch {current.epoch + 1} is available.
+          </p>
+        ) : null}
+
+        {current && entries.length > 1 && (
+          <output className="font-mono text-xs text-muted-foreground" data-pagefind-ignore>
+            Epoch {current.epoch + 1} · validation sample {playback.index + 1} of {entries.length}
+          </output>
+        )}
       </CardContent>
     </Card>
   );
