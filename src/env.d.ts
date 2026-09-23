@@ -7,16 +7,7 @@ declare module "*.excalidraw" {
 }
 
 
-interface BasecoatInstance {
-	register: (name: string, selector: string, init: (el: Element) => void) => void;
-	init: (name: string) => void;
-	initAll: () => void;
-	start: () => void;
-	stop: () => void;
-}
-
 declare interface Window {
-  basecoat: BasecoatInstance;
   themeController?: ThemeController;
 }
 

@@ -1,4 +1,4 @@
-# Prettier is only used for .astro files
-# Everything else is formatted by oxfmt
+# Prettier formats Astro; Oxfmt handles the other source files.
 *
+!*/
 !**/*.astro

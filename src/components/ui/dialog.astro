@@ -18,7 +18,10 @@ const { id, title, description, label, className, hideCloseButton = false, ...pr
 
 <dialog
   id={id}
-  class={cn('dialog relative w-full', className)}
+  class={cn(
+    'fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-lg border border-border bg-card p-0 text-card-foreground shadow-xl backdrop:bg-black/60',
+    className
+  )}
   aria-label={label}
   aria-labelledby={title ? `${id}-title` : undefined}
   aria-describedby={description ? `${id}-description` : undefined}
@@ -26,36 +29,39 @@ const { id, title, description, label, className, hideCloseButton = false, ...pr
   data-pagefind-ignore
   {...props}
 >
-  <article>
+  <div class="relative space-y-4 p-6">
     {
       (title || description) && (
-        <header>
-          {title && <h2 id={`${id}-title`}>{title}</h2>}
-          {description && <p id={`${id}-description`}>{description}</p>}
+        <header class="space-y-1 pr-10">
+          {title && (
+            <h2 id={`${id}-title`} class="text-lg leading-none font-semibold">
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p id={`${id}-description`} class="text-muted-foreground text-sm">
+              {description}
+            </p>
+          )}
         </header>
       )
     }
 
-    <section>
+    <section class="space-y-4">
       <slot />
     </section>
 
     <slot name="footer" />
     {
       !hideCloseButton && (
-        <Button
-          variant="ghost"
-          type="button"
-          size="icon"
-          aria-label="Close dialog"
-          onclick="this.closest('dialog')?.close()"
-          className="absolute top-4 right-4 rounded-full"
-        >
-          <Icon name="lucide:x" class="size-4" />
-        </Button>
+        <form method="dialog" class="absolute top-3 right-3">
+          <Button variant="ghost" type="submit" size="icon" aria-label="Close dialog">
+            <Icon name="lucide:x" class="size-4" />
+          </Button>
+        </form>
       )
     }
-  </article>
+  </div>
 </dialog>
 
 <script>
