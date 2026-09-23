@@ -54,7 +54,7 @@ export default function EpochProgress() {
         <CardDescription>Validation samples across training</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2" data-pagefind-ignore>
           {current.images.map((img, i) => (
             // oxlint-disable-next-line react/no-array-index-key -- static image list per epoch
             <div
@@ -76,7 +76,7 @@ export default function EpochProgress() {
           ))}
         </div>
 
-        <div className="flex w-full items-center gap-3">
+        <div className="flex w-full items-center gap-3" data-pagefind-ignore>
           <button
             type="button"
             onClick={togglePlay}
@@ -119,7 +119,9 @@ export default function EpochProgress() {
           />
         </div>
 
-        <span className="font-mono text-xs text-muted-foreground">epoch {current.epoch + 1}</span>
+        <span className="font-mono text-xs text-muted-foreground" data-pagefind-ignore>
+          epoch {current.epoch + 1}
+        </span>
       </CardContent>
     </Card>
   );

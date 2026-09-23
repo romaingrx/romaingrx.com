@@ -1,16 +1,13 @@
 @reference "./globals.css";
 
 .command-dialog {
-  @apply inset-y-0 opacity-0 transition-all transition-discrete;
+  @apply fixed inset-0 m-auto max-h-[min(640px,calc(100dvh-2rem))] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-lg border bg-background p-0 text-foreground opacity-0 shadow-lg transition-opacity transition-discrete;
 
-  &:is([open], :popover-open) {
+  &[open] {
     @apply opacity-100;
 
     &::backdrop {
       @apply opacity-100;
-    }
-    > * {
-      @apply scale-100;
     }
 
     @starting-style {
@@ -19,21 +16,16 @@
       &::backdrop {
         @apply opacity-0;
       }
-      > * {
-        @apply scale-95;
-      }
     }
   }
   &::backdrop {
-    @apply bg-black/50 opacity-0 transition-all transition-discrete;
-  }
-  > * {
-    @apply fixed top-[50%] left-[50%] z-50 flex w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg border bg-background shadow-lg sm:max-w-lg;
-    @apply max-h-[min(640px,calc(100%-2rem))] scale-95 transition-all;
+    @apply bg-black/50 opacity-0 transition-opacity transition-discrete;
   }
 }
 
-.command {
+.search-command {
+  @apply flex max-h-full flex-col overflow-hidden;
+
   > header {
     @apply flex items-center gap-2 border-b px-3;
 
@@ -41,25 +33,63 @@
       @apply size-4 shrink-0 opacity-50;
     }
     input {
-      @apply flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
+      @apply h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus focus-visible:outline-solid;
     }
   }
-  [role='menu'] {
-    @apply max-h-[300px] overflow-x-hidden overflow-y-auto p-2;
 
-    [role='menuitem'] {
-      @apply relative flex w-full cursor-default items-center gap-2 truncate rounded-sm px-2 py-3 text-sm outline-hidden select-none aria-disabled:pointer-events-none aria-disabled:opacity-50;
+  #search-results {
+    @apply max-h-[min(65vh,420px)] min-h-0 overflow-x-hidden overflow-y-auto p-2;
+  }
 
-      &:hover,
-      &.active {
-        @apply bg-accent text-accent-foreground;
-      }
+  .search-status {
+    @apply px-3 py-6 text-center text-sm text-muted-foreground;
+  }
+
+  .search-spinner {
+    @apply items-center justify-center py-6;
+
+    &:not(.hidden) {
+      @apply flex;
     }
-    [role='heading'] {
-      @apply flex px-2 py-1.5 text-xs font-medium text-muted-foreground;
+  }
+
+  .search-results {
+    @apply space-y-2;
+  }
+
+  .search-result-document {
+    @apply rounded-md border-b px-2 py-3 last:border-0;
+  }
+
+  .search-result-heading {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .search-result-document-link {
+    @apply rounded font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus focus-visible:outline-solid;
+  }
+
+  .search-result-kind {
+    @apply shrink-0 text-xs text-muted-foreground;
+  }
+
+  .search-result-excerpt {
+    @apply mt-1 line-clamp-2 text-xs text-muted-foreground;
+
+    mark {
+      @apply bg-transparent font-semibold text-foreground;
     }
-    [role='separator'] {
-      @apply -mx-1 my-1 border-border;
-    }
+  }
+
+  .search-result-sections {
+    @apply mt-2 space-y-1;
+  }
+
+  .search-result-section-link {
+    @apply block rounded-md px-2 py-2 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus focus-visible:outline-solid;
+  }
+
+  .search-result-section-title {
+    @apply block text-sm font-medium text-foreground;
   }
 }

@@ -31,7 +31,7 @@ export default function Examples({ examples }: ExamplesProps) {
   return (
     <div className="flex flex-col gap-4">
       {examples.length > 1 && (
-        <div className="mt-4 flex justify-end gap-2">
+        <div className="mt-4 flex justify-end gap-2" data-pagefind-ignore>
           {examples.map((_, index) => (
             <button
               // eslint-disable-next-line react/no-array-index-key -- dot indicators for static list
@@ -69,8 +69,8 @@ export default function Examples({ examples }: ExamplesProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden md:flex" />
-        <CarouselNext className="hidden md:flex" />
+        <CarouselPrevious className="hidden md:flex" data-pagefind-ignore="" />
+        <CarouselNext className="hidden md:flex" data-pagefind-ignore="" />
       </Carousel>
     </div>
   );

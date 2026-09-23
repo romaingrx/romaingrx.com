@@ -13,6 +13,11 @@ const { note } = Astro.props;
 const ogImageUrl = routes.noteOg(note.id);
 ---
 
-<BaseLayout title={note.data.title} description={note.data.description || ''} ogImage={ogImageUrl}>
+<BaseLayout
+  title={note.data.title}
+  description={note.data.description || ''}
+  ogImage={ogImageUrl}
+  indexContent
+>
   <slot />
 </BaseLayout>

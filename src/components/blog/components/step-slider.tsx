@@ -94,7 +94,7 @@ export function StepSlider({
               {descText && <CardDescription>{descText}</CardDescription>}
             </div>
             {hasTabs && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-pagefind-ignore>
                 {allExamples.map((ex, i) => (
                   <button
                     key={ex.label}
@@ -116,7 +116,7 @@ export function StepSlider({
         </CardHeader>
       )}
       <CardContent className="flex flex-col items-center gap-4">
-        <div className="flex items-center justify-center rounded bg-card">
+        <div className="flex items-center justify-center rounded bg-card" data-pagefind-ignore>
           <img
             src={`data:image/png;base64,${current.image}`}
             alt={`Step t=${current.t}`}
@@ -130,7 +130,7 @@ export function StepSlider({
           />
         </div>
 
-        <div className="flex w-full items-center gap-3">
+        <div className="flex w-full items-center gap-3" data-pagefind-ignore>
           <button
             type="button"
             onClick={togglePlay}
@@ -173,7 +173,9 @@ export function StepSlider({
           />
         </div>
 
-        <span className="font-mono text-xs text-muted-foreground">t = {current.t}</span>
+        <span className="font-mono text-xs text-muted-foreground" data-pagefind-ignore>
+          t = {current.t}
+        </span>
       </CardContent>
     </Card>
   );

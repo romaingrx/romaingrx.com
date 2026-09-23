@@ -9,9 +9,10 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  indexContent?: boolean;
 }
 
-const { title, description, ogImage = routes.ogImage } = Astro.props;
+const { title, description, ogImage = routes.ogImage, indexContent = false } = Astro.props;
 const canonicalURL = absolute(Astro.url.pathname);
 const ogImageURL = new URL(absolute(ogImage));
 ogImageURL.searchParams.set('t', Date.now().toString());
@@ -146,7 +147,12 @@ ogImageURL.searchParams.set('t', Date.now().toString());
         Skip to main content
       </a>
       <Header />
-      <main id="main-content" class="flex-1 focus:outline-none" tabindex="-1">
+      <main
+        id="main-content"
+        class="flex-1 focus:outline-none"
+        tabindex="-1"
+        data-pagefind-body={indexContent ? true : undefined}
+      >
         <slot />
       </main>
       <Footer />

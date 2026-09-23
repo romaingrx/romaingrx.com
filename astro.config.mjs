@@ -80,7 +80,7 @@ export default defineConfig({
         'simple-icons': ['*'],
       },
     }),
-    pagefind(),
+    pagefind({ indexConfig: { rootSelector: 'main[data-pagefind-body]' } }),
     astroTypesafeRoutes(),
     routeReport,
   ],

@@ -56,3 +56,20 @@ and assistive technology. Escape closes the menu and returns focus to its
 button. Keep the header visible while its menu is open or any header control has
 focus. Keep a skip link before the header and give its main-content target a
 programmatic focus target.
+
+## Search indexing and behavior
+
+Only published blog and note detail pages set `indexContent` in their layout.
+The Pagefind root is `main[data-pagefind-body]`; keep each page title, summary,
+and prose inside that main landmark. Add `data-pagefind-meta="title"` and
+`data-pagefind-meta="description"` to the corresponding content fields. Do not
+enable indexing for listing pages, fixtures, or site chrome. Mark transient
+dialog content and interactive controls with `data-pagefind-ignore` while
+keeping article explanations and captions searchable.
+
+Search results use ordinary links. Arrow keys move DOM focus between result
+links; Enter and modifier clicks keep their native link behavior. Query edits,
+clear, and close invalidate pending work. Retry must recover both module-load
+and query-data failures, and Show more loads only the next result batch. Run a
+production build before browser tests so both Pagefind and Wrangler use the
+current source.
