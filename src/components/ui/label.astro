@@ -8,6 +8,13 @@ type Props = astroHTML.JSX.LabelHTMLAttributes & {
 const { className, class: cls, ...props } = Astro.props;
 ---
 
-<label class={cn('text-foreground text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70', className, cls)} {...props}>
+<label
+  class={cn(
+    'text-foreground text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+    className,
+    cls
+  )}
+  {...props}
+>
   <slot />
 </label>

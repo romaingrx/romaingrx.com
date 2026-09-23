@@ -9,8 +9,4 @@ type Props = astroHTML.JSX.InputHTMLAttributes & {
 const { className, class: cls, ...props } = Astro.props;
 ---
 
-<input
-  {...props}
-  data-slot="input"
-  class={cn(fieldVariants(), className, cls)}
-/>
+<input {...props} data-slot="input" class={cn(fieldVariants(), className, cls)} />

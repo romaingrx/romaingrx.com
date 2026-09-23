@@ -22,10 +22,7 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
 ---
 
 <div id={COMMENTS_SECTION_ID}>
-  <script
-    is:inline
-    define:vars={{ repo: site.repo, category, categoryId }}
-  >
+  <script is:inline define:vars={{ repo: site.repo, category, categoryId }}>
     const giscus = document.createElement('script');
     giscus.src = 'https://giscus.app/client.js';
     giscus.async = true;
@@ -41,7 +38,8 @@ const { category = 'Comments', categoryId = 'DIC_kwDOM6pBlc4Cmqh8' } = Astro.pro
     giscus.dataset.inputPosition = 'top';
     giscus.dataset.lang = 'en';
     giscus.dataset.loading = 'eager';
-    giscus.dataset.theme = document.documentElement.dataset.themeResolved === 'dark' ? 'dark' : 'light';
+    giscus.dataset.theme =
+      document.documentElement.dataset.themeResolved === 'dark' ? 'dark' : 'light';
     document.currentScript?.parentElement?.appendChild(giscus);
   </script>
 </div>
