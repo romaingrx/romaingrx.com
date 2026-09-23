@@ -46,7 +46,7 @@ test('blog structure has one page H1 and shows the introduction in the first des
 test('Contents works at phone, tablet, and desktop widths and tracks the reached section', async ({
   page,
 }) => {
-  await page.goto('/blog/denoising-diffusion-from-scratch');
+  await page.goto('/blog/denoising-diffusion-from-scratch', { waitUntil: 'domcontentloaded' });
   const navigation = page.getByRole('navigation', { name: 'Contents' });
   const disclosure = navigation.locator('details');
   const summary = navigation.getByText('Contents', { exact: true });
@@ -95,7 +95,9 @@ test('Contents works at phone, tablet, and desktop widths and tracks the reached
     )
     .toBeLessThan(4);
 
-  await page.goto('/blog/denoising-diffusion-from-scratch#appendices');
+  await page.goto('/blog/denoising-diffusion-from-scratch#appendices', {
+    waitUntil: 'domcontentloaded',
+  });
   await expect(page.locator('#appendices')).toBeFocused();
   await expect
     .poll(() =>
@@ -108,7 +110,7 @@ test('Contents works at phone, tablet, and desktop widths and tracks the reached
 });
 
 test('citation bibliography entries link back to every cited occurrence', async ({ page }) => {
-  await page.goto('/blog/denoising-diffusion-from-scratch');
+  await page.goto('/blog/denoising-diffusion-from-scratch', { waitUntil: 'domcontentloaded' });
 
   const bibliographyEntry = page.locator('#bib-ho2020denoising');
   const backlinks = bibliographyEntry.getByRole('link', {
