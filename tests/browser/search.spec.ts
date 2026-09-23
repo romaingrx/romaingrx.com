@@ -168,7 +168,9 @@ test('search anchors preserve modifier clicks', async ({ page }) => {
   const popupPromise = page.context().waitForEvent('page');
   await titleLink.click({ modifiers: [process.platform === 'darwin' ? 'Meta' : 'Control'] });
   const popup = await popupPromise;
-  await expect(popup).toHaveURL(/\/blog\/denoising-diffusion-from-scratch\/?$/);
+  await popup.waitForURL(/\/blog\/denoising-diffusion-from-scratch\/?$/, {
+    waitUntil: 'domcontentloaded',
+  });
   await expect(dialog).toBeVisible();
   await popup.close();
 });
