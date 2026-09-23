@@ -2,7 +2,7 @@
 
 Updated 23 September 2026. This ledger maps all 27 defects and 15 improvements to the implementation and regression checks.
 
-The final integrated Playwright suite passed all 213 cases across Chromium, Firefox, and WebKit. After readiness fixes, 12 focused cases covering search-popup readiness, controlled playback timing, and reading navigation also passed across all three engines. A fresh pinned install, production build, route checks, and lint pass.
+The final integrated Playwright suite passed all 228 cases across Chromium, Firefox, and WebKit. It includes committed-popup navigation readiness, focused reading scenarios, and controlled playback coverage. A fresh pinned install, production build, route checks, and lint pass.
 
 The local production UI matrix covered 288 combinations (Chromium, Firefox, and WebKit; 390, 768, and 1280 px; both themes; normal and reduced motion). It found no navigation errors, HTTP responses at or above 400, root overflow above 1 px, measured header/main/share bounds outside the viewport, or confirmed broken images. Its image counter included some zero-size hidden/deferred images at the viewport origin. The independent heading check preserved all 82 existing heading fragments across eight entries, with one H1 per entry and unique IDs.
 
@@ -70,6 +70,6 @@ The deployed responsive probe checked the 390 px Notes, Productivity notes tag, 
 
 ## Release gate
 
-The local release checks are green: fresh pinned install, production build, route checks, lint, the full three-engine suite (213/213), 12 focused readiness/playback/reading cases across all three engines, and the independent 82-fragment audit. The hosted validator passed 9/9, and the deployed responsive and interaction checks above passed. The remaining release checks are actual 200% browser zoom and manual physical-device touch, soft-keyboard, screen-reader, and native-sharing behavior; these were not verified. A narrowed viewport is not treated as a substitute for browser zoom.
+The local release checks are green: fresh pinned install, production build, route checks, lint, and the full three-engine suite (228/228), including committed-popup navigation readiness, focused reading scenarios, and controlled playback; the independent 82-fragment audit also passes. The hosted validator passed 9/9, and the deployed responsive and interaction checks above passed. The remaining release checks are actual 200% browser zoom and manual physical-device touch, soft-keyboard, screen-reader, and native-sharing behavior; these were not verified. A narrowed viewport is not treated as a substitute for browser zoom.
 
 CI uploaded the retained failure traces for [run 35835033930](https://github.com/romaingrx/romaingrx.com/actions/runs/35835033930) as `playwright-traces-35835033930-1` (2,363,270 bytes; seven-day retention). See [CONTRIBUTING.md](../CONTRIBUTING.md) for the shared implementation and validation conventions.
