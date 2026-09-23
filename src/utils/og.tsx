@@ -1,14 +1,71 @@
 import satori from 'satori';
 import sharp from 'sharp';
 
+import logoSvg from '@/components/logo/logo.svg?raw';
 import { site } from '@/configs/site';
 
-import { inlineTailwind } from './tailwind';
+const ogColors = {
+  primary: '#d5b990',
+  primaryForeground: '#291f10',
+  mutedForeground: '#5c4623',
+} as const;
 
-interface OGImageProps {
+interface OGAssets {
+  logo: string;
+  fonts: {
+    name: string;
+    data: ArrayBuffer;
+    weight: 500 | 800;
+    style: 'normal';
+  }[];
+}
+
+let ogAssetsPromise: Promise<OGAssets> | undefined;
+
+// These immutable image assets are shared for one build process; content is read per route.
+function loadOGAssets(): Promise<OGAssets> {
+  if (!ogAssetsPromise) {
+    ogAssetsPromise = Promise.all([
+      fetch('https://api.fontsource.org/v1/fonts/inter/latin-800-normal.ttf').then((response) => {
+        if (!response.ok) throw new Error(`Failed to load the OG bold font: ${response.status}`);
+        return response.arrayBuffer();
+      }),
+      fetch('https://api.fontsource.org/v1/fonts/inter/latin-500-normal.ttf').then((response) => {
+        if (!response.ok) throw new Error(`Failed to load the OG regular font: ${response.status}`);
+        return response.arrayBuffer();
+      }),
+      sharp(Buffer.from(logoSvg)).resize(40).png().toBuffer(),
+    ])
+      .then(([bold, regular, logo]) => ({
+        logo: `data:image/png;base64,${logo.toString('base64')}`,
+        fonts: [
+          { name: 'Inter', data: bold, weight: 800 as const, style: 'normal' as const },
+          { name: 'Inter', data: regular, weight: 500 as const, style: 'normal' as const },
+        ],
+      }))
+      .catch((error: unknown) => {
+        ogAssetsPromise = undefined;
+        throw error;
+      });
+  }
+  return ogAssetsPromise;
+}
+
+export interface OGImageProps {
   title: string;
   description?: string;
   showLogo?: boolean;
+}
+
+export function pngResponse(png: Uint8Array): Response {
+  return new Response(new Uint8Array(png), {
+    headers: {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'public, max-age=0, s-maxage=86400, must-revalidate',
+      'CDN-Cache-Control': 'public, max-age=86400',
+      'Surrogate-Control': 'public, max-age=86400',
+    },
+  });
 }
 
 export async function generateOGImage({
@@ -16,13 +73,14 @@ export async function generateOGImage({
   description,
   showLogo = true,
 }: OGImageProps): Promise<Buffer> {
+  const { fonts, logo: logoDataUrl } = await loadOGAssets();
   // Create the markup using React
   const markup = (
     <div
-      className="bg-primary"
       style={{
         width: '100%',
         height: '100%',
+        backgroundColor: ogColors.primary,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -70,20 +128,20 @@ export async function generateOGImage({
             gap: '12px',
           }}
         >
-          <img src={`${site.url}/favicon.png`} width={40} height={40} />
+          <img src={logoDataUrl} width={40} height={40} />
           <div
-            className="bg-black/30"
             style={{
               width: '1px',
               height: '24px',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
             }}
           />
           <span
-            className="text-muted-foreground"
             style={{
               fontSize: '20px',
               fontFamily: 'Inter',
               fontWeight: 500,
+              color: ogColors.mutedForeground,
             }}
           >
             {site.url.replace('http://', '').replace('https://', '')}
@@ -100,11 +158,9 @@ export async function generateOGImage({
           width: '100%',
           maxWidth: '900px',
           padding: '0 64px',
-          zIndex: 1,
         }}
       >
         <h1
-          className="text-primary-foreground"
           style={{
             fontSize: '72px',
             fontWeight: 800,
@@ -112,6 +168,7 @@ export async function generateOGImage({
             margin: 0,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
+            color: ogColors.primaryForeground,
           }}
         >
           {title}
@@ -150,29 +207,11 @@ export async function generateOGImage({
     </div>
   );
 
-  // Convert the markup to an SVG using Satori
-  const inlineMarkup = inlineTailwind(markup);
-  const svg = await satori(inlineMarkup, {
+  // Convert the markup to an SVG using Satori.
+  const svg = await satori(markup, {
     width: 1200,
     height: 630,
-    fonts: [
-      {
-        name: 'Inter',
-        data: await fetch('https://api.fontsource.org/v1/fonts/inter/latin-800-normal.ttf').then(
-          (res) => res.arrayBuffer(),
-        ),
-        weight: 800,
-        style: 'normal',
-      },
-      {
-        name: 'Inter',
-        data: await fetch('https://api.fontsource.org/v1/fonts/inter/latin-500-normal.ttf').then(
-          (res) => res.arrayBuffer(),
-        ),
-        weight: 500,
-        style: 'normal',
-      },
-    ],
+    fonts,
   });
 
   // Convert the SVG to PNG using Sharp with noise effect

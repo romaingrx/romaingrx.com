@@ -1,24 +1,19 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { render, type CollectionEntry } from 'astro:content';
 import CompactProse from '../ui/compact-prose.astro';
 import { formatMonthDate } from '@/lib/format';
 
 interface Props {
-  type?: 'education' | 'experience' | 'project';
+  entries: CollectionEntry<'timeline'>[];
   title: string;
+  type?: 'education' | 'experience' | 'project';
 }
 
-const { type, title } = Astro.props;
-
-// Get timeline entries
-const entries = await getCollection('timeline');
-const filteredEntries = type
-  ? entries.filter((entry: CollectionEntry<'timeline'>) => entry.data.type === type)
-  : entries;
+const { entries, title, type } = Astro.props;
 
 // Explicit order wins; otherwise use start date, then stable entry ID.
-const sortedItems = filteredEntries.toSorted((a, b) => {
+const sortedItems = entries.toSorted((a, b) => {
   if (a.data.order !== undefined || b.data.order !== undefined) {
     if (a.data.order === undefined) return 1;
     if (b.data.order === undefined) return -1;

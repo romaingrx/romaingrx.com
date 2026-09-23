@@ -1,5 +1,6 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
+import getReadingTime from 'reading-time';
 import { routes } from '@/configs/routes';
 import { formatDate } from '@/lib/format';
 import BlogLinkCard from './blog-link-card';
@@ -13,10 +14,10 @@ const entry = await getEntry('blog', postId);
 if (!entry) {
   throw new Error(`BlogLink: blog post "${postId}" not found`);
 }
-const { remarkPluginFrontmatter } = await render(entry);
 const href = routes.blog({ slug: entry.data.permalink });
 const hasChildren = Astro.slots.has('default');
 const date = formatDate(entry.data.published_date);
+const readingTime = getReadingTime(entry.body ?? '').text;
 ---
 
 <BlogLinkCard
@@ -25,7 +26,7 @@ const date = formatDate(entry.data.published_date);
   title={entry.data.title}
   description={entry.data.description}
   date={date}
-  readingTime={remarkPluginFrontmatter?.minutesRead}
+  readingTime={readingTime}
 >
   {hasChildren ? <slot /> : entry.data.title}
 </BlogLinkCard>

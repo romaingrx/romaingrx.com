@@ -1,6 +1,7 @@
-import { getCollection as astroGetCollection, render, type CollectionEntry } from 'astro:content';
+import { getCollection as astroGetCollection, type CollectionEntry } from 'astro:content';
 
 import { NODE_ENV } from 'astro:env/client';
+import getReadingTime from 'reading-time';
 
 import { absolute, routes } from '@/configs/routes';
 
@@ -20,14 +21,12 @@ export type NoteWithAuthors = WithAuthors<Note>;
 
 type ContentEntry = BlogPost | Note;
 
-async function resolveAuthors(entry: ContentEntry, authors: Author[]): Promise<Author[]> {
-  return Promise.all(
-    entry.data.authors.map((ref: { id: string }) => {
-      const author = authors.find((a) => a.id === ref.id);
-      if (!author) throw new Error(`Author ${ref.id} not found`);
-      return author;
-    }),
-  );
+function resolveAuthors(entry: ContentEntry, authors: ReadonlyMap<string, Author>): Author[] {
+  return entry.data.authors.map((ref: { id: string }) => {
+    const author = authors.get(ref.id);
+    if (!author) throw new Error(`Author ${ref.id} not found`);
+    return author;
+  });
 }
 
 function assertUniquePermalinks(entries: readonly ContentEntry[]): void {
@@ -49,41 +48,45 @@ function isVisible(entry: ContentEntry): boolean {
     : entry.data.status !== 'archived';
 }
 
-async function getContentWithAuthors<T extends ContentEntry>(
+function getContentWithAuthors<T extends ContentEntry>(
   entries: readonly T[],
   createPath: (params: { slug: string }) => string,
-): Promise<WithAuthors<T>[]> {
-  const authors = await astroGetCollection('author');
+  authorEntries: readonly Author[],
+): WithAuthors<T>[] {
+  const authors = new Map(authorEntries.map((author) => [author.id, author]));
 
-  return Promise.all(
-    entries
-      .filter(isVisible)
-      .toSorted((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
-      .map(async (entry) => {
-        const { remarkPluginFrontmatter } = await render(entry);
-        const resolved = await resolveAuthors(entry, authors);
-        const slug = entry.data.permalink;
-        const contentPath = createPath({ slug });
-        return Object.assign({}, entry, {
-          authors: resolved,
-          readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
-          slug,
-          url: absolute(contentPath.endsWith('/') ? contentPath : `${contentPath}/`),
-        });
-      }),
-  );
+  return entries
+    .filter(isVisible)
+    .toSorted((a, b) => b.data.published_date.getTime() - a.data.published_date.getTime())
+    .map((entry) => {
+      const resolved = resolveAuthors(entry, authors);
+      const slug = entry.data.permalink;
+      const path = createPath({ slug });
+      return Object.assign({}, entry, {
+        authors: resolved,
+        readingTime: getReadingTime(entry.body ?? '').text,
+        slug,
+        url: absolute(path.endsWith('/') ? path : `${path}/`),
+      });
+    });
 }
 
-export async function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
-  const entries = await astroGetCollection('blog');
+export async function getBlogPosts(authors?: readonly Author[]): Promise<BlogPostWithAuthors[]> {
+  const [entries, authorEntries] = await Promise.all([
+    astroGetCollection('blog'),
+    authors ?? astroGetCollection('author'),
+  ]);
   assertUniquePermalinks(entries);
-  return getContentWithAuthors(entries, routes.blog);
+  return getContentWithAuthors(entries, routes.blog, authorEntries);
 }
 
-export async function getNotes(): Promise<NoteWithAuthors[]> {
-  const entries = await astroGetCollection('note');
+export async function getNotes(authors?: readonly Author[]): Promise<NoteWithAuthors[]> {
+  const [entries, authorEntries] = await Promise.all([
+    astroGetCollection('note'),
+    authors ?? astroGetCollection('author'),
+  ]);
   assertUniquePermalinks(entries);
-  return getContentWithAuthors(entries, routes.note);
+  return getContentWithAuthors(entries, routes.note, authorEntries);
 }
 
 export async function getAuthors(): Promise<Author[]> {

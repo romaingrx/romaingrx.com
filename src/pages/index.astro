@@ -4,10 +4,12 @@ import RecentNotes from '@/components/home/RecentNotes.astro';
 import RecentPosts from '@/components/home/RecentPosts.astro';
 import { site } from '@/configs/site';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getBlogPosts, getNotes } from '@/lib/collections';
+import { getAuthors, getBlogPosts, getNotes } from '@/lib/collections';
 
-const posts = (await getBlogPosts()).slice(0, 4);
-const notes = (await getNotes()).slice(0, 5);
+const authors = await getAuthors();
+const [allPosts, allNotes] = await Promise.all([getBlogPosts(authors), getNotes(authors)]);
+const posts = allPosts.slice(0, 4);
+const notes = allNotes.slice(0, 5);
 ---
 
 <BaseLayout title={site.title} description={site.description}>

@@ -14,6 +14,7 @@ import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
 
 type Props = {
   post: BlogPostWithAuthors;
+  allPosts: BlogPostWithAuthors[];
 };
 
 export const Route = createRoute({ routeId: '/blog/[...slug]' });
@@ -22,11 +23,11 @@ export const getStaticPaths = Route.createGetStaticPaths<Props>(async () => {
   const posts = await getBlogPosts();
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { post, allPosts: posts },
   }));
 });
 
-const { post } = Astro.props;
+const { post, allPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
@@ -37,6 +38,6 @@ const { Content, headings } = await render(post);
     <Prose Element="article" id="article-intro">
       <Content components={components} />
     </Prose>
-    <PostFooter post={post} />
+    <PostFooter post={post} allPosts={allPosts} />
   </Shell>
 </BlogLayout>

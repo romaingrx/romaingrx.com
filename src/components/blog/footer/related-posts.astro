@@ -1,25 +1,20 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
 import BlogCard from '@/components/blog/card/index.astro';
-import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
+import type { BlogPostWithAuthors } from '@/lib/collections';
 
 interface Props {
   post: BlogPostWithAuthors;
+  allPosts: BlogPostWithAuthors[];
 }
 
-const { post } = Astro.props;
-
-// Get all blog posts sorted by date
-const allPosts = await getBlogPosts();
+const { post, allPosts } = Astro.props;
 
 // Get related posts from the post data
 const relatedFromData = post.data.related_posts
-  ? await Promise.all(
-      post.data.related_posts.map(async (ref) => {
-        const posts = await getBlogPosts();
-        return posts.find((p) => p.id === ref.id);
-      })
-    ).then((posts) => posts.filter((p): p is BlogPostWithAuthors => p !== undefined))
+  ? post.data.related_posts
+      .map((ref) => allPosts.find((candidate) => candidate.id === ref.id))
+      .filter((candidate): candidate is BlogPostWithAuthors => candidate !== undefined)
   : [];
 
 // Find posts with matching tags (excluding the current post and already included related posts)

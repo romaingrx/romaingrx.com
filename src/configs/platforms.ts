@@ -1,8 +1,6 @@
-import { z } from 'astro/zod';
-
 import { site } from './site';
 
-export const platforms_enum = z.enum([
+export const platform_names = [
   'website',
   'github',
   'twitter',
@@ -11,8 +9,9 @@ export const platforms_enum = z.enum([
   'arxiv',
   'zenodo',
   'hackernews',
-]);
-export type Platform = z.infer<typeof platforms_enum>;
+] as const;
+
+export type Platform = (typeof platform_names)[number];
 
 interface PlatformInfo {
   icon_name: string;
