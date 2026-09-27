@@ -27,13 +27,13 @@
   @apply flex max-h-full flex-col overflow-hidden;
 
   > header {
-    @apply flex items-center gap-2 border-b px-3;
+    @apply flex min-w-0 items-center gap-2 border-b px-3 py-1;
 
     svg {
       @apply size-4 shrink-0 opacity-50;
     }
     input {
-      @apply h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus focus-visible:outline-solid;
+      @apply h-12 w-full min-w-0 rounded-md bg-transparent px-2 py-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-inset;
     }
   }
 
