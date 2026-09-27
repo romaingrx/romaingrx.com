@@ -42,13 +42,31 @@ test('blog filters separate categories and tags, format labels, and show counts 
   ).toBeVisible();
 });
 
-test('coverless posts use a readable text card', async ({ page }) => {
+test('coverless posts keep the shared media frame and readable metadata', async ({ page }) => {
   await page.goto('/blog');
 
   const post = page.locator('main a[href="/blog/improvement-plan"]');
   await expect(post.getByRole('heading', { name: 'Improvement plan' })).toBeVisible();
+  await expect(post.getByRole('heading', { name: 'Improvement plan', exact: true })).toHaveCount(1);
   await expect(post.locator('img')).toHaveCount(0);
   await expect(post).toContainText('Becoming a better human at human things');
+
+  const coveredPost = page
+    .locator('main a[href^="/blog/"]')
+    .filter({ has: page.locator('img') })
+    .first();
+  const [coverlessRatio, coveredRatio] = await Promise.all(
+    [post, coveredPost].map((card) =>
+      card
+        .locator(':scope > div')
+        .first()
+        .evaluate((frame) => {
+          const { width, height } = frame.getBoundingClientRect();
+          return width / height;
+        }),
+    ),
+  );
+  expect(coverlessRatio).toBeCloseTo(coveredRatio, 2);
 });
 
 test('note tag navigation has all-notes return path and one anchor per visible card', async ({
