@@ -35,7 +35,7 @@ export default function AuthorHoverCard({ author, children }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   variant="ghost"
-                  size="icon"
+                  size="icon-sm"
                   aria-label={`Follow ${author.data.name} on ${platform}`}
                   title={`Follow ${author.data.name} on ${platform}`}
                 >

@@ -14,7 +14,10 @@ test('blog filters separate categories and tags, format labels, and show counts 
 
   const filters = page.getByRole('navigation', { name: 'Filter posts' });
   const categories = filters.getByRole('group', { name: 'Categories' });
-  const tags = filters.getByRole('group', { name: 'Tags' });
+  const tagDisclosure = filters.locator('details');
+  await expect(tagDisclosure).toHaveJSProperty('open', false);
+  await tagDisclosure.locator('summary').click();
+  const tags = tagDisclosure.getByRole('group', { name: 'Tags' });
   await expect(categories.getByText('Categories', { exact: true })).toBeVisible();
   const machineLearning = categories.getByRole('link', { name: /^ML \(\d+\)$/ });
   const fromScratch = tags.getByRole('link', { name: /^From Scratch \(\d+\)$/ });
@@ -29,17 +32,14 @@ test('blog filters separate categories and tags, format labels, and show counts 
   await fromScratch.click();
 
   await expect(page).toHaveURL(/\/blog\/tag\/from%20scratch\/?$/);
-  const selectedTag = page
-    .getByRole('navigation', { name: 'Filter posts' })
-    .getByRole('link', { name: /^From Scratch \(\d+\)$/ });
+  const activeTagFilters = page.getByRole('navigation', { name: 'Filter posts' });
+  await expect(activeTagFilters.locator('details')).toHaveJSProperty('open', true);
+  const selectedTag = activeTagFilters.getByRole('link', { name: /^From Scratch \(\d+\)$/ });
   await expect(selectedTag).toHaveAttribute('aria-current', 'page');
   await expect(selectedTag).toHaveAttribute('href', '/blog/tag/from%20scratch');
   const visibleCards = page.locator('main a[href^="/blog/"]').filter({ has: page.locator('h2') });
   const cardCount = await visibleCards.count();
   expect(cardCount).toBe(fromScratchCount);
-  await expect(
-    page.getByText(`${cardCount} ${cardCount === 1 ? 'post' : 'posts'}`, { exact: true }),
-  ).toBeVisible();
 });
 
 test('coverless posts keep the shared media frame and readable metadata', async ({ page }) => {
@@ -152,7 +152,7 @@ test('timeline uses ordered roles and readable month dates', async ({ page }) =>
   await expect(experience.locator('.font-mono').first()).toHaveText('Jan 2024 – Present');
 });
 
-test('author hover-card social links have names and 44px targets', async ({ page }) => {
+test('author hover-card social links have names and pointer-sized targets', async ({ page }) => {
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
   const authorImage = page.getByRole('img', { name: 'Romain Graux', exact: true }).first();
@@ -174,12 +174,19 @@ test('author hover-card social links have names and 44px targets', async ({ page
         return [box.width, box.height];
       }),
     );
+  const targetSize = await page.evaluate(() =>
+    window.matchMedia('(pointer: coarse)').matches ? 44 : 36,
+  );
   await expect
-    .poll(async () => (await readSizes()).every(([width, height]) => width >= 44 && height >= 44))
+    .poll(async () =>
+      (await readSizes()).every(([width, height]) => width === targetSize && height === targetSize),
+    )
     .toBe(true);
   const sizes = await readSizes();
   expect(sizes.length).toBeGreaterThan(0);
-  expect(sizes.every(([width, height]) => width >= 44 && height >= 44)).toBe(true);
+  expect(sizes.every(([width, height]) => width === targetSize && height === targetSize)).toBe(
+    true,
+  );
 });
 
 test('sharing icons are visible and use the canonical content URL', async ({ page }) => {

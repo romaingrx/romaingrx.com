@@ -1,5 +1,15 @@
 # Foundation validation ledger
 
+## 27 September 2026 visual correction pass
+
+This pass restores complete cover images and equal card frames, simplifies article headers and sharing, restores the desktop contents rail, and reduces citation and sequence comparison clutter. It also updates contact, blog filters, search focus, and compact controls. These changes supersede earlier visual assumptions for those areas.
+
+The production build, all 31 route checks, formatting, and lint pass. Astro reports no errors or warnings, with two existing deprecation hints. The three-browser suite passed 210 cases initially; five stale expectations failed in each browser. After correcting those expectations, all 15 affected cases passed. This validates all 225 current cases across Chromium, Firefox, and WebKit; it does not claim a single clean full-suite run.
+
+The production preview was reviewed at desktop and mobile widths in both themes. Card frames measured 480 × 300 px, including the coverless post, and generated images retained their original aspect ratios. Keyboard use opens the desktop contents rail and mobile disclosure. Citation backlinks show compact numbers without emojis. Search returned indexed results and fit within a 320 px viewport without horizontal overflow. The contact page uses the requested conversation and consulting copy with the existing LinkedIn destination; a booking link awaits the owner's Cal.com URL. Physical touch, screen-reader behavior, and native sharing remain unverified.
+
+The remaining results below are the historical 23 September baseline, not additional checks of this pass.
+
 Updated 23 September 2026. This ledger maps all 27 defects and 15 improvements to the implementation and regression checks.
 
 The final integrated Playwright suite passed all 228 cases across Chromium, Firefox, and WebKit. It includes committed-popup navigation readiness, focused reading scenarios, and controlled playback coverage. A fresh pinned install, production build, route checks, and lint pass.

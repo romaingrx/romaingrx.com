@@ -29,11 +29,15 @@
   > header {
     @apply flex min-w-0 items-center gap-2 border-b px-3 py-1;
 
+    &:has(input:focus-visible) {
+      @apply border-focus;
+    }
+
     svg {
       @apply size-4 shrink-0 opacity-50;
     }
     input {
-      @apply h-12 w-full min-w-0 rounded-md bg-transparent px-2 py-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-inset;
+      @apply h-12 w-full min-w-0 rounded-md bg-transparent px-2 py-3 text-sm outline-none placeholder:text-muted-foreground;
     }
   }
 
