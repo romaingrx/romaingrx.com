@@ -125,7 +125,7 @@ export function StepSlider(props: StepSliderProps) {
             <Button
               type="button"
               variant="ghost"
-              size="icon"
+              size="icon-sm"
               aria-label={
                 playback.playing
                   ? 'Pause playback'

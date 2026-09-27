@@ -17,59 +17,47 @@ function DiffRow({ recon }: { recon: Reconstruction }) {
       : pct >= 50
         ? 'bg-status-warning/15 text-status-warning'
         : 'bg-status-error/15 text-status-error';
-  const progressColor =
-    pct >= 80 ? 'bg-status-success' : pct >= 50 ? 'bg-status-warning' : 'bg-status-error';
 
   return (
     <div className="rounded-lg border border-border bg-muted/30 p-3">
-      <div className="mb-2 flex items-center justify-between">
+      <div className="mb-2">
         <span
           className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor}`}
         >
           {pct}% match
         </span>
-        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
-          <div
-            role="progressbar"
-            aria-label="Sequence match accuracy"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={pct}
-            className={`h-full rounded-full transition-all ${progressColor}`}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
-      </div>
-      <div className="mb-2 text-xs text-muted-foreground">
-        Each position: source / reconstruction / status
       </div>
       <div
-        className="flex flex-wrap gap-1 font-mono text-xs leading-relaxed"
+        className="flex flex-wrap items-start gap-x-1 font-mono text-xs leading-5"
         role="list"
         aria-label="Sequence differences by position"
       >
-        {chars.map((char, index) => (
-          <div
-            key={index}
-            role="listitem"
-            aria-label={`Position ${index + 1}: source ${char.original ?? 'none'}, reconstructed ${char.reconstructed ?? 'none'}, ${char.match ? 'match' : 'mismatch'}`}
-            className="flex min-w-9 flex-col items-center rounded-sm border border-border/60 px-1 py-1"
-          >
-            <span className="text-muted-foreground">{char.original ?? '—'}</span>
-            <span className={char.match ? 'text-status-success' : 'font-bold text-status-error'}>
-              {char.reconstructed ?? '—'}
-            </span>
+        {chars.map((char, index) => {
+          const mismatchClass =
+            'font-semibold text-status-error underline decoration-2 underline-offset-1';
+
+          return (
             <span
-              className={
-                char.match
-                  ? 'text-[0.625rem] text-status-success'
-                  : 'text-[0.625rem] font-semibold text-status-error'
-              }
+              key={`${index}-${char.original ?? 'missing'}-${char.reconstructed ?? 'missing'}`}
+              role="listitem"
+              aria-label={`Position ${index + 1}: source ${char.original ?? 'none'}, reconstructed ${char.reconstructed ?? 'none'}, ${char.match ? 'match' : 'mismatch'}`}
+              className="grid shrink-0 grid-rows-2 text-center"
             >
-              {char.match ? 'Match' : 'Mismatch'}
+              <span
+                aria-hidden="true"
+                className={char.match ? 'text-muted-foreground' : mismatchClass}
+              >
+                {char.original ?? '–'}
+              </span>
+              <span
+                aria-hidden="true"
+                className={char.match ? 'text-status-success' : mismatchClass}
+              >
+                {char.reconstructed ?? '–'}
+              </span>
             </span>
-          </div>
-        ))}
+          );
+        })}
         {chars.length === 0 && (
           <span className="text-sm text-muted-foreground">No residues to compare.</span>
         )}
@@ -86,10 +74,13 @@ export default function SequenceDiff() {
       <div>
         <h4 className="text-sm font-medium">Sequence reconstruction</h4>
         <p className="text-sm text-muted-foreground">
-          Original (src) vs reconstructed (rec) amino acid sequences. Every residue position stays
-          grouped as sequences wrap; missing and extra residues count as mismatches.
+          Original and reconstructed amino acid sequences. Missing and extra residues count as
+          mismatches.
         </p>
       </div>
+      <p className="text-xs text-muted-foreground" aria-hidden="true">
+        Top: source · bottom: reconstruction · underline: mismatch · –: missing residue
+      </p>
       {sorted.slice(0, 5).map((recon) => (
         <DiffRow key={recon.original} recon={recon} />
       ))}

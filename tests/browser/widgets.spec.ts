@@ -151,7 +151,7 @@ test('VAE differences keep each position grouped and include extra reconstructed
   expect(await positions.count()).toBeGreaterThan(0);
   await Promise.all(
     (await positions.all()).map(async (position) => {
-      await expect(position.locator(':scope > span')).toHaveCount(3);
+      await expect(position.locator(':scope > span')).toHaveCount(2);
       await expect(position).toHaveAttribute(
         'aria-label',
         /^Position \d+: source .* reconstructed .* (match|mismatch)$/,
