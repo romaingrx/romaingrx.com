@@ -13,19 +13,23 @@ const toc = buildToc(headings);
 
 {
   toc.length > 0 && (
-    <nav aria-labelledby="contents-label" class="my-8" data-reading-toc data-pagefind-ignore>
-      <details class="border-border bg-card/40 rounded-lg border">
-        <summary
-          id="contents-label"
-          class="focus-visible:outline-focus marker:text-muted-foreground min-h-11 cursor-pointer rounded-lg px-4 py-3 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid"
-        >
+    <nav
+      aria-label="Contents"
+      class="page-gutter max-w-article relative mx-auto my-4 xl:mx-0 xl:my-0 xl:h-0 xl:max-w-none xl:px-0"
+      data-reading-toc
+      data-pagefind-ignore
+    >
+      <details class="group/toc relative" data-toc-details open>
+        <summary class="marker:text-muted-foreground text-muted-foreground hover:text-foreground focus-visible:outline-focus min-h-11 cursor-pointer py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid xl:hidden">
           Contents
         </summary>
-        <ul class="divide-border space-y-1 border-t px-2 py-2">
-          {toc.map((heading) => (
-            <TocHeading heading={heading} />
-          ))}
-        </ul>
+        <div class="max-w-article mx-auto mt-2 xl:mt-0" data-toc-rail>
+          <ul class="border-border space-y-1 border-l pl-2 xl:border-0 xl:pl-0">
+            {toc.map((heading) => (
+              <TocHeading heading={heading} />
+            ))}
+          </ul>
+        </div>
       </details>
     </nav>
   )
@@ -35,6 +39,14 @@ const toc = buildToc(headings);
   const nav = document.querySelector<HTMLElement>('[data-reading-toc]');
 
   if (nav) {
+    const disclosure = nav.querySelector<HTMLDetailsElement>('[data-toc-details]');
+    const desktop = window.matchMedia('(min-width: 1280px)');
+    const syncDisclosure = () => {
+      if (disclosure) disclosure.open = desktop.matches;
+    };
+    syncDisclosure();
+    desktop.addEventListener('change', syncDisclosure);
+
     const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[data-toc-link]')];
     const targets = links
       .map((link) => ({
@@ -136,3 +148,129 @@ const toc = buildToc(headings);
     scheduleUpdate();
   }
 </script>
+
+<style is:global>
+  @media (min-width: 80rem) {
+    [data-toc-rail] {
+      position: fixed;
+      inset-block-start: 6rem;
+      inset-inline-end: 1.5rem;
+      z-index: 40;
+      box-sizing: border-box;
+      width: 4rem;
+      max-height: calc(100dvh - 7rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      padding: 0;
+      transition:
+        width var(--motion-duration-normal) var(--motion-ease-standard),
+        border-color var(--motion-duration-normal) var(--motion-ease-standard),
+        background-color var(--motion-duration-normal) var(--motion-ease-standard),
+        padding var(--motion-duration-normal) var(--motion-ease-standard);
+    }
+
+    [data-toc-rail]:is(:hover, :focus-within) {
+      width: 16rem;
+      border-color: var(--border);
+      background-color: var(--card);
+      padding: 0.75rem;
+    }
+
+    [data-toc-rail] [data-toc-link] {
+      min-height: 1.5rem;
+      justify-content: center;
+      padding-block: 0;
+      padding-inline: 0;
+      background-color: transparent;
+    }
+
+    [data-toc-rail] [data-toc-link][aria-current='location'] {
+      background-color: transparent;
+    }
+
+    [data-toc-rail] [data-toc-link]::before {
+      position: absolute;
+      inset-block-start: 50%;
+      height: 2px;
+      transform: translateY(-50%);
+      border-radius: 9999px;
+      background-color: var(--muted-foreground);
+      content: '';
+    }
+
+    [data-toc-rail] [data-toc-depth='2']::before {
+      inset-inline-start: 1rem;
+      width: 2rem;
+    }
+
+    [data-toc-rail] [data-toc-depth='3']::before {
+      inset-inline-start: 1.25rem;
+      width: 1.5rem;
+    }
+
+    [data-toc-rail] [data-toc-depth='4']::before {
+      inset-inline-start: 1.5rem;
+      width: 1rem;
+    }
+
+    [data-toc-rail] [data-toc-depth='5']::before,
+    [data-toc-rail] [data-toc-depth='6']::before {
+      inset-inline-start: 1.75rem;
+      width: 0.5rem;
+    }
+
+    [data-toc-rail] [data-toc-link][aria-current='location']::before {
+      background-color: var(--foreground);
+    }
+
+    [data-toc-rail] [data-toc-link] > span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    [data-toc-rail]:is(:hover, :focus-within) [data-toc-link] {
+      min-height: 2.75rem;
+      justify-content: flex-start;
+      padding-inline: 0.75rem;
+      background-color: transparent;
+    }
+
+    [data-toc-rail]:is(:hover, :focus-within) [data-toc-link]::before {
+      display: none;
+    }
+
+    [data-toc-rail]:is(:hover, :focus-within) [data-toc-link] > span {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+
+    [data-toc-rail]:is(:hover, :focus-within) [data-toc-link][aria-current='location'] {
+      background-color: var(--muted);
+    }
+
+    [data-toc-rail]:is(:hover, :focus-within) ul ul {
+      margin-inline-start: 0.75rem;
+      border-inline-start: 1px solid var(--border);
+      padding-inline-start: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-toc-rail] {
+      transition: none;
+    }
+  }
+</style>

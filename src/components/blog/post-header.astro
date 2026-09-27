@@ -1,13 +1,10 @@
 ---
-import ContinueReading from '@/components/animations/continue-reading.astro';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
-import Resources from '@/components/blog/resources/index.astro';
 import Shell from '@/components/Shell.astro';
 import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import Time from '../ui/time.astro';
 import BlogPostBackground from './card/background';
-import SharingBadges from './sharing-badges.astro';
 
 interface Props {
   post: BlogPostWithAuthors;
@@ -25,7 +22,7 @@ const resources = post.data.resources.map((r) =>
 <header
   class:list={[
     'relative flex w-full flex-col items-center',
-    'overflow-hidden rounded-b-xl py-6 md:py-8',
+    'overflow-hidden rounded-b-xl py-8 sm:py-10',
     'animate-[fade-in-up_0.5s_ease-out_both]',
     className,
   ]}
@@ -39,65 +36,71 @@ const resources = post.data.resources.map((r) =>
   <div class="w-full">
     <Shell type="article">
       <div class="relative z-10 mx-auto text-center">
-        <!-- Meta Information -->
-        <div
-          class="text-muted-foreground mb-3 flex items-center justify-center gap-2 text-sm"
-          data-pagefind-ignore
-        >
-          <Time date={post.data.published_date} className="text-sm" />
-          <span class="leading-none">·</span>
-          <span>{post.readingTime}</span>
-        </div>
-
-        <!-- Title -->
         <h1
-          class="mb-3 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text pb-1 text-4xl font-bold tracking-tight text-transparent md:text-5xl lg:text-6xl dark:from-white dark:to-gray-200"
-          style="min-width: min(100%, 600px);"
+          class="text-foreground text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
           data-pagefind-meta="title"
         >
           {post.data.title}
         </h1>
 
-        <!-- Description -->
-        <p class="text-muted-foreground mb-3 text-lg md:text-xl" data-pagefind-meta="description">
+        <p
+          class="text-muted-foreground mx-auto mt-4 max-w-3xl text-base sm:text-lg"
+          data-pagefind-meta="description"
+        >
           {post.data.description}
         </p>
 
-        <!-- Resources -->
-        {
-          post.data.resources.length > 0 && (
-            <div class="relative mt-3" data-pagefind-ignore>
-              <div class="flex flex-col gap-3 text-start">
-                <span class="text-muted-foreground text-sm font-medium">Resources</span>
-                <Resources resources={resources} />
-              </div>
-            </div>
-          )
-        }
-
         <div
-          class="relative mt-3 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between"
+          class="text-muted-foreground mt-5 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center sm:gap-x-3"
           data-pagefind-ignore
-          data-header-controls
+          data-post-meta
         >
-          <div class="flex min-w-0 flex-col gap-3 text-start" data-header-author>
-            <span class="text-muted-foreground text-sm font-medium">Written by</span>
-            <StackedAuthors authors={post.authors} />
-          </div>
-          <div
-            class="flex w-full min-w-0 flex-col gap-3 text-start sm:w-auto sm:flex-[1_1_18rem]"
-            data-header-share
-          >
-            <span class="text-muted-foreground text-sm font-medium">Share on</span>
-            <SharingBadges post={post} />
+          {
+            post.authors.length > 0 && (
+              <div class="text-foreground flex items-center gap-2">
+                <StackedAuthors authors={post.authors} show_name={false} />
+                <span>{post.authors.map((author) => author.data.name).join(', ')}</span>
+              </div>
+            )
+          }
+          {
+            post.authors.length > 0 && (
+              <span class="hidden sm:inline" aria-hidden="true">
+                ·
+              </span>
+            )
+          }
+          <div class="flex items-center gap-2 whitespace-nowrap">
+            <Time date={post.data.published_date} className="text-sm" />
+            <span aria-hidden="true">·</span>
+            <span>{post.readingTime}</span>
           </div>
         </div>
+
+        {
+          resources.length > 0 && (
+            <ul
+              class="text-muted-foreground mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm"
+              data-pagefind-ignore
+              aria-label="Post resources"
+            >
+              {resources.map((resource) => (
+                <li>
+                  <a
+                    href={resource.value}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-foreground focus-visible:outline-focus decoration-border hover:decoration-foreground rounded-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid"
+                  >
+                    {resource.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </div>
     </Shell>
-  </div>
-
-  <div class="relative z-10 mt-4" data-pagefind-ignore>
-    <ContinueReading />
   </div>
 </header>
 
