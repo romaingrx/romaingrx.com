@@ -27,7 +27,7 @@ export const buttonVariants = cva(
         sm: 'min-h-9 gap-1.5 rounded-md px-3 py-1.5 has-[>svg]:px-2.5',
         lg: 'min-h-11 rounded-md px-6 py-2.5 has-[>svg]:px-4',
         icon: 'size-11 p-0',
-        'icon-sm': 'size-11 p-0',
+        'icon-sm': 'size-9 p-0 pointer-coarse:size-11',
         'icon-lg': 'size-12 p-0',
       },
     },

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import sharp from 'sharp';
 
-test('empty blog discovery announces zero results and a clear empty state', async ({ page }) => {
+test('empty blog discovery keeps the all-posts count and a clear empty state', async ({ page }) => {
   await page.goto('/design/discovery');
 
   const filters = page.getByRole('navigation', { name: 'Filter posts' });
@@ -9,7 +9,6 @@ test('empty blog discovery announces zero results and a clear empty state', asyn
     'aria-current',
     'page',
   );
-  await expect(page.getByText('0 posts', { exact: true })).toBeVisible();
   await expect(page.getByText('No posts found.', { exact: true })).toBeVisible();
 });
 
@@ -23,7 +22,6 @@ test('singular blog discovery keeps the selected category and singular count', a
   await expect(category).toHaveAttribute('aria-current', 'page');
   await expect(category).toHaveAttribute('href', '/blog/category/personal');
   await expect(filters.getByRole('link', { name: 'All posts (1)' })).toBeVisible();
-  await expect(page.getByText('1 post', { exact: true })).toBeVisible();
 });
 
 test('the profile image loads from the native Sharp development service', async ({ page }) => {

@@ -66,7 +66,7 @@ export default function EpochProgress() {
             <Button
               type="button"
               variant="ghost"
-              size="icon"
+              size="icon-sm"
               aria-label={
                 playback.playing
                   ? 'Pause playback'

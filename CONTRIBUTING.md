@@ -55,8 +55,10 @@ versions change.
 
 Use semantic color, spacing, typography, and motion tokens from
 `src/styles/globals.css`. Keep renderer wrappers small and use the shared
-variants in `src/components/ui/variants.ts`; give standalone controls an
-accessible name, a visible focus state, and a preferred 44 px hit area.
+variants in `src/components/ui/variants.ts`. Use `icon-sm` for low-emphasis
+controls. It is 36 px for fine pointers and 44 px for coarse pointers. Keep
+gallery and dialog controls at 44 px. Give each standalone control an
+accessible name and a visible focus state.
 
 Build post, note, taxonomy, canonical, and share URLs with
 `src/configs/routes.ts`. Keep public slugs stable when titles change. Add a

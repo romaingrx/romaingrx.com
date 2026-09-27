@@ -1,38 +1,42 @@
 ---
-import { Icon } from 'astro-icon/components';
-import Link from '@/components/ui/link.astro';
-import { platforms_info } from '@/configs/platforms';
+import { getEntry } from 'astro:content';
 import { socialLinks } from '@/configs/social';
 import Shell from '@/components/Shell.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const title = "Let's Collaborate";
-const description = 'Have an idea, project, or question? Connect with me on LinkedIn.';
+const author = await getEntry('author', 'romaingrx');
 const linkedIn = socialLinks.find((link) => link.platform === 'linkedin');
 
-if (!linkedIn) {
-  throw new Error('LinkedIn contact destination is not configured.');
-}
+if (!author) throw new Error('Author not found for owner of the website.');
+if (!linkedIn) throw new Error('LinkedIn contact destination is not configured.');
+
+const title = 'Contact';
+const description =
+  'Romain Graux is always open to discussing interesting ideas or projects and takes on consulting work in machine learning and full-stack applications.';
 ---
 
 <BaseLayout title={title} description={description}>
   <Shell type="page">
-    <section class="mx-auto flex max-w-2xl flex-col items-center py-16 text-center md:py-24">
-      <h1 class="mb-6 text-center text-4xl font-bold tracking-tight">{title}</h1>
-      <p class="text-muted-foreground mb-8 text-center text-lg">
-        {description}
+    <section class="mx-auto max-w-2xl py-16 md:py-24">
+      <p class="text-muted-foreground mb-2 text-sm font-medium">
+        {author.data.name} · {author.data.title}
+      </p>
+      <h1 class="mb-6 text-4xl font-bold tracking-tight">{title}</h1>
+      <p class="text-muted-foreground text-lg">
+        Have an interesting idea or project? I'm always open to a conversation.
+      </p>
+      <p class="text-muted-foreground mt-3 mb-8 text-base">
+        I also take on consulting work in machine learning and full-stack applications.
       </p>
 
-      <Link
+      <a
         href={linkedIn.url}
-        variant="default"
-        size="lg"
+        class="text-link hover:text-link-hover focus-visible:outline-focus underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid"
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Icon name={platforms_info.linkedin.icon_name} />
-        Connect on LinkedIn
-      </Link>
+        Message on LinkedIn
+      </a>
     </section>
   </Shell>
 </BaseLayout>

@@ -27,8 +27,27 @@ test('contact is discoverable and uses the configured LinkedIn destination', asy
   await expect(linkedInLink).toHaveAttribute('href', 'https://go.romaingrx.com/linkedin');
   await expect(linkedInLink).toHaveAttribute('target', '_blank');
   await expect(linkedInLink).toHaveAttribute('rel', 'noopener noreferrer');
-  expect(await linkedInLink.evaluate((element) => element.getBoundingClientRect().width)).toBe(44);
-  expect(await linkedInLink.evaluate((element) => element.getBoundingClientRect().height)).toBe(44);
+  const target = await linkedInLink.evaluate((element) => {
+    const { width, height } = element.getBoundingClientRect();
+    return { width, height, coarse: window.matchMedia('(pointer: coarse)').matches };
+  });
+  expect(target.width).toBe(target.coarse ? 44 : 36);
+  expect(target.height).toBe(target.coarse ? 44 : 36);
+
+  await page.goto('/contact');
+  await expect(page.getByRole('heading', { level: 1, name: 'Contact' })).toBeVisible();
+  await expect(
+    page.getByText("Have an interesting idea or project? I'm always open to a conversation."),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      'I also take on consulting work in machine learning and full-stack applications.',
+    ),
+  ).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Message on LinkedIn' })).toHaveAttribute(
+    'href',
+    'https://go.romaingrx.com/linkedin',
+  );
 });
 
 test('mobile navigation exposes Contact', async ({ page, browserName }) => {
@@ -149,7 +168,7 @@ test('contact page has one main heading and no form', async ({ page }) => {
   await expect(main.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expect(main.locator('form')).toHaveCount(0);
 
-  const linkedInLink = main.getByRole('link', { name: 'Connect on LinkedIn', exact: true });
+  const linkedInLink = main.getByRole('link', { name: 'Message on LinkedIn', exact: true });
   await expect(linkedInLink).toHaveAttribute('href', 'https://go.romaingrx.com/linkedin');
 });
 
@@ -172,7 +191,10 @@ test('representative article renders its title heading', async ({ page }) => {
 test('taxonomy links encode values and preserve their generated route', async ({ page }) => {
   await page.goto('/blog');
 
-  const tagLink = page.getByRole('link', { name: /^From Scratch \(\d+\)$/ });
+  const tags = page.getByRole('navigation', { name: 'Filter posts' }).locator('details');
+  await expect(tags).toHaveJSProperty('open', false);
+  await tags.locator('summary').click();
+  const tagLink = tags.getByRole('link', { name: /^From Scratch \(\d+\)$/ });
   await expect(tagLink).toHaveAttribute('href', '/blog/tag/from%20scratch');
   await tagLink.click();
 
