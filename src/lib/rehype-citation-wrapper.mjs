@@ -143,16 +143,24 @@ function addCitationBacklinks(tree) {
         className: ['citation-backlinks'],
         ariaLabel: 'Citations in article',
       },
-      children: backlinks.map(({ citationId, occurrence }) => ({
-        type: 'element',
-        tagName: 'a',
-        properties: {
-          className: ['citation-backlink'],
-          href: `#${citationId}`,
-          ariaLabel: `Return to citation ${occurrence} in the article`,
+      children: [
+        {
+          type: 'element',
+          tagName: 'span',
+          properties: { className: ['citation-backlinks-label'] },
+          children: [{ type: 'text', value: 'Cited at' }],
         },
-        children: [{ type: 'text', value: `↩ ${occurrence}` }],
-      })),
+        ...backlinks.map(({ citationId, occurrence }) => ({
+          type: 'element',
+          tagName: 'a',
+          properties: {
+            className: ['citation-backlink'],
+            href: `#${citationId}`,
+            ariaLabel: `Return to citation ${occurrence} in the article`,
+          },
+          children: [{ type: 'text', value: occurrence }],
+        })),
+      ],
     });
   });
 }

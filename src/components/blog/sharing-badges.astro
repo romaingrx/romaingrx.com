@@ -52,55 +52,77 @@ const links: Partial<Record<Platform, LinkProps>> = {
 };
 ---
 
-<div class="space-y-2" data-content-share data-share-title={post.data.title}>
-  <div class="flex flex-wrap items-center gap-1.5">
-    {
-      Object.entries(links).map(([platformName, props]) => {
-        if (!props) return null;
-        const platform = platformName as Platform;
-        const platformInfo = platforms_info[platform];
-        const anchorUrl = new URL(props.pathname, platformInfo.base_url);
-        for (const [key, value] of Object.entries(props.params ?? {})) {
-          if (value) anchorUrl.searchParams.set(key, value);
-        }
-        return (
-          <Link
-            href={anchorUrl.toString()}
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="ghost"
-            size="icon"
-            aria-label={props.title}
-            title={props.title}
-          >
-            <Icon name={platformInfo.icon_name} class="size-5" />
-          </Link>
-        );
-      })
-    }
-    <Button
-      type="button"
-      size="sm"
-      variant="secondary"
-      className="min-h-11 shrink-0"
-      data-copy-link
+<div
+  class="flex flex-wrap items-start gap-x-2 gap-y-1"
+  data-content-share
+  data-share-title={post.data.title}
+>
+  <Button
+    type="button"
+    size="sm"
+    variant="ghost"
+    className="text-muted-foreground min-h-9 pointer-coarse:min-h-11"
+    data-copy-link
+  >
+    <Icon name="lucide:link" class="size-4" />
+    Copy link
+  </Button>
+  <details class="group/share-options relative" data-share-options>
+    <summary
+      class="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-focus flex min-h-9 cursor-pointer list-none items-center justify-between gap-2 rounded-md px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid pointer-coarse:min-h-11 [&::-webkit-details-marker]:hidden"
     >
-      <Icon name="lucide:link" class="size-4" />
-      Copy link
-    </Button>
-    <Button
-      type="button"
-      size="sm"
-      variant="secondary"
-      className="min-h-11 shrink-0"
-      data-native-share
-      hidden
-    >
-      <Icon name="lucide:share-2" class="size-4" />
-      Share
-    </Button>
-  </div>
-  <p class="text-muted-foreground text-sm" role="status" aria-live="polite" data-share-status></p>
+      <span>More sharing options</span>
+      <Icon
+        name="lucide:chevron-down"
+        aria-hidden="true"
+        class="size-4 transition-transform group-open/share-options:rotate-180"
+      />
+    </summary>
+    <div class="mt-2 flex flex-wrap items-center gap-1.5">
+      {
+        Object.entries(links).map(([platformName, props]) => {
+          if (!props) return null;
+          const platform = platformName as Platform;
+          const platformInfo = platforms_info[platform];
+          const anchorUrl = new URL(props.pathname, platformInfo.base_url);
+          for (const [key, value] of Object.entries(props.params ?? {})) {
+            if (value) anchorUrl.searchParams.set(key, value);
+          }
+          return (
+            <Link
+              href={anchorUrl.toString()}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="ghost"
+              size="icon-sm"
+              aria-label={props.title}
+              title={props.title}
+            >
+              <Icon name={platformInfo.icon_name} class="size-5" />
+            </Link>
+          );
+        })
+      }
+      <Button
+        type="button"
+        size="sm"
+        variant="ghost"
+        className="pointer-coarse:min-h-11"
+        data-native-share
+        hidden
+      >
+        <Icon name="lucide:share-2" class="size-4" />
+        Share
+      </Button>
+    </div>
+  </details>
+  <p
+    class="text-muted-foreground w-full text-sm"
+    role="status"
+    aria-live="polite"
+    data-share-status
+  >
+  </p>
   <div class="w-full space-y-1" data-share-fallback hidden>
     <label class="text-muted-foreground mb-1 block text-sm" for={`share-url-${post.id}`}>
       Select this URL to copy it

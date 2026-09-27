@@ -6,6 +6,7 @@ import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { formatDate } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import SharingBadges from '../sharing-badges.astro';
 import CategoryBadge from '../category-badge.astro';
 import ResourceBadges from '../resources/index.astro';
 import TagBadge from '../tag-badge.astro';
@@ -31,16 +32,16 @@ const hasRelatedContent = related_posts || tags.length > 0;
 <footer class="mt-16 flex flex-col gap-8" data-pagefind-ignore>
   <hr />
 
+  <SharingBadges post={post} />
+
   <!-- Thank You & Discuss Section -->
   <DiscussOn post={post} />
 
   <!-- Metadata Section -->
   <div
     class={cn(
-      'rounded-lg border bg-card p-6 text-card-foreground shadow-sm',
-      [resources.length, tags.length, categories.length, updated_date].some(Boolean)
-        ? 'flex'
-        : 'hidden'
+      'space-y-6',
+      [resources.length, tags.length, categories.length, updated_date].some(Boolean) ? '' : 'hidden'
     )}
   >
     <div class="space-y-6">

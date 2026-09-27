@@ -191,20 +191,23 @@ test('copy link reports success and uses the canonical content URL', async ({ pa
   });
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
-  const sharing = page.locator('[data-content-share]').first();
+  const sharing = page.locator('footer [data-content-share]').first();
+  const moreOptions = sharing.locator('[data-share-options]');
+  await expect(moreOptions).not.toHaveAttribute('open', '');
   await sharing.getByRole('button', { name: 'Copy link' }).click();
   await expect(sharing.getByRole('status')).toHaveText('Link copied.');
 
   const copiedUrl = await page.evaluate(() => Reflect.get(window, 'copiedUrl'));
   const canonicalUrl = await page.locator('link[rel="canonical"]').getAttribute('href');
   expect(copiedUrl).toBe(canonicalUrl);
+  await moreOptions.locator('summary').click();
   const linkedIn = sharing.getByRole('link', { name: /Share .* on LinkedIn/ });
   const linkedInUrl = new URL((await linkedIn.getAttribute('href'))!);
   expect(linkedInUrl.searchParams.get('url')).toBe(canonicalUrl);
   expect(linkedInUrl.searchParams.has('text')).toBe(false);
 });
 
-test('sharing controls fit at 320px and keep 44px hit targets', async ({ page }) => {
+test('sharing controls fit at 320px and keep usable hit targets', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'share', {
@@ -214,81 +217,56 @@ test('sharing controls fit at 320px and keep 44px hit targets', async ({ page })
   });
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
-  const sharing = page.locator('[data-content-share]').first();
-  const row = sharing.locator(':scope > div').first();
-  const metrics = await row.evaluate((element) => ({
-    clientWidth: element.clientWidth,
-    scrollWidth: element.scrollWidth,
-    right: element.getBoundingClientRect().right,
-    linkWidths: Array.from(element.querySelectorAll('a')).map(
-      (control) => control.getBoundingClientRect().width,
-    ),
-    controlWidths: Array.from(element.querySelectorAll('a, button')).map(
-      (control) => control.getBoundingClientRect().width,
-    ),
-    controlHeights: Array.from(element.querySelectorAll('a, button')).map(
-      (control) => control.getBoundingClientRect().height,
-    ),
-  }));
-  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
-  expect(metrics.controlHeights).toHaveLength(5);
-  expect(metrics.controlHeights.every((height) => height >= 44)).toBe(true);
-  expect(metrics.linkWidths).toHaveLength(3);
-  expect(metrics.linkWidths.every((width) => width >= 44)).toBe(true);
-  expect(metrics.controlWidths.every((width) => width >= 44)).toBe(true);
-  expect(metrics.right).toBeLessThanOrEqual(320);
+  const sharing = page.locator('footer [data-content-share]').first();
+  const options = sharing.locator('[data-share-options]');
+  await expect(options).not.toHaveAttribute('open', '');
+  await options.locator('summary').click();
   const headerBounds = await page.locator('header > .w-full > .page-gutter').evaluate((element) => {
     const { left, right, width } = element.getBoundingClientRect();
     return { left, right, width };
   });
   expect(headerBounds.left).toBeGreaterThanOrEqual(0);
   expect(headerBounds.right).toBeLessThanOrEqual(320);
-  const contentBounds = await sharing.evaluate((element) => ({
-    shareRight: element.getBoundingClientRect().right,
-    controls: Array.from(element.querySelectorAll('a, button')).map((control) => {
-      const { left, right, width, height } = control.getBoundingClientRect();
-      return { left, right, width, height };
-    }),
-  }));
-  expect(contentBounds.shareRight).toBeLessThanOrEqual(320);
-  expect(contentBounds.controls).toHaveLength(5);
+  const contentBounds = await sharing.evaluate((element) => {
+    const { left, right } = element.getBoundingClientRect();
+    const controls = Array.from(element.querySelectorAll('a, button, summary'))
+      .filter((control) => getComputedStyle(control).display !== 'none')
+      .map((control) => {
+        const { left, right, width, height } = control.getBoundingClientRect();
+        return { left, right, width, height };
+      });
+    return {
+      left,
+      right,
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      controls,
+    };
+  });
+  expect(contentBounds.right).toBeLessThanOrEqual(320);
+  expect(contentBounds.scrollWidth).toBeLessThanOrEqual(contentBounds.clientWidth);
+  expect(contentBounds.controls.length).toBeGreaterThanOrEqual(5);
   expect(
     contentBounds.controls.every(
-      ({ left, right, width, height }) => left >= 0 && right <= 320 && width >= 44 && height >= 44,
+      ({ left, right, width, height }) =>
+        left >= contentBounds.left && right <= 320 && width >= 36 && height >= 36,
     ),
   ).toBe(true);
 });
 
-test('the blog author and share controls stack without horizontal overflow on mobile', async ({
+test('the blog header stays compact and sharing lives in the footer on mobile', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, 'share', {
-      configurable: true,
-      value: (payload: ShareData) => Promise.resolve(Reflect.set(window, 'sharedPayload', payload)),
-    });
-  });
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
-  const controls = page.locator('main [data-header-controls]').first();
-  const layout = await controls.evaluate((element) => {
-    const author = element.querySelector('[data-header-author]');
-    const share = element.querySelector('[data-header-share]');
-    if (!author || !share) throw new Error('Header author or share controls are missing');
-    const authorBox = author.getBoundingClientRect();
-    const shareBox = share.getBoundingClientRect();
-    return {
-      clientWidth: element.clientWidth,
-      scrollWidth: element.scrollWidth,
-      authorBottom: authorBox.bottom,
-      shareTop: shareBox.top,
-    };
-  });
-
-  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
-  expect(layout.shareTop).toBeGreaterThanOrEqual(layout.authorBottom);
   const blogHeader = page.locator('main > header').first();
+  await expect(blogHeader.locator('[data-post-meta]')).toContainText('Romain Graux');
+  await expect(blogHeader.getByText('Written by', { exact: true })).toHaveCount(0);
+  await expect(blogHeader.getByText('Share on', { exact: true })).toHaveCount(0);
+  await expect(blogHeader.getByRole('link', { name: /Continue Reading/ })).toHaveCount(0);
+  await expect(blogHeader.locator('[data-content-share]')).toHaveCount(0);
+  await expect(page.locator('footer [data-content-share]')).toHaveCount(1);
   const blogHeaderWidth = await blogHeader.evaluate((element) => [
     element.clientWidth,
     element.scrollWidth,
@@ -313,7 +291,7 @@ test('clipboard errors show a selectable URL instead of a false success', async 
   });
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
-  const sharing = page.locator('[data-content-share]').first();
+  const sharing = page.locator('footer [data-content-share]').first();
   await sharing.getByRole('button', { name: 'Copy link' }).click();
   await expect(sharing.getByRole('status')).toHaveText(
     'Copy failed. Select the URL below to copy it.',
@@ -333,7 +311,8 @@ test('native sharing reports success, cancellation, and failure accurately', asy
   });
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
-  const sharing = page.locator('[data-content-share]').first();
+  const sharing = page.locator('footer [data-content-share]').first();
+  await sharing.locator('[data-share-options] summary').click();
   const shareButton = sharing.getByRole('button', { name: 'Share' });
   await expect(shareButton).toBeVisible();
   expect(await shareButton.evaluate((button) => getComputedStyle(button).display)).toBe('flex');

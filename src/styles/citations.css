@@ -30,11 +30,15 @@
 }
 
 .citation-backlinks {
-  @apply mt-2 flex flex-wrap gap-2;
+  @apply mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-muted-foreground;
+}
+
+.citation-backlinks-label {
+  @apply text-xs;
 }
 
 .citation-backlink {
-  @apply inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-muted px-2 text-sm text-muted-foreground no-underline hover:text-foreground;
+  @apply inline-flex min-h-6 min-w-6 items-center justify-center rounded px-1 text-link no-underline hover:text-link-hover hover:underline;
 }
 
 .citation-backlink:focus-visible {
