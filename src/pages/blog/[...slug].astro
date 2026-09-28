@@ -32,11 +32,13 @@ const { Content, headings } = await render(post);
 
 <BlogLayout post={post}>
   <PostHeader post={post} />
-  <Shell type="article">
-    <TableOfContents headings={headings} />
-    <Prose Element="article" id="article-intro">
-      <Content components={components} />
-    </Prose>
-    <PostFooter post={post} />
-  </Shell>
+  <TableOfContents headings={headings} />
+  <div class="xl:mt-8">
+    <Shell type="article">
+      <Prose Element="article" id="article-intro">
+        <Content components={components} />
+      </Prose>
+      <PostFooter post={post} />
+    </Shell>
+  </div>
 </BlogLayout>

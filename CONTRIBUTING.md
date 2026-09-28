@@ -82,10 +82,12 @@ typography and Contents component, while their headers can keep distinct
 layouts. Keep existing heading IDs stable when changing heading levels. The
 generated References heading is H2 and keeps the `references` ID.
 
-Contents is a native `<details>` disclosure with a `<summary>` label. Its links
-target body heading IDs, update `aria-current="location"` for the latest
-section above the sticky header, and use a scroll margin that clears the header.
-Keep the disclosure usable by keyboard and touch at every viewport size.
+At narrow viewports, Contents is a native `<details>` disclosure with a
+`<summary>` label. At desktop sizes, it is a compact fixed rail that expands on
+hover or focus. Its links target body heading IDs, update
+`aria-current="location"` for the latest section above the sticky header, and
+use a scroll margin that clears the header. Keep Contents usable by keyboard
+and touch at every viewport size.
 
 Inline citations remain ordinary links to bibliography entries. Each cited
 entry provides visible return links to all citation occurrences. Keep those

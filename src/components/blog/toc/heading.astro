@@ -8,17 +8,18 @@ type Props = {
 const { heading } = Astro.props;
 ---
 
-<li>
+<li class="my-1 xl:my-0">
   <a
     href={'#' + heading.slug}
     data-toc-link
-    class="text-muted-foreground hover:text-foreground focus-visible:outline-focus hover:bg-muted/60 aria-[current=location]:bg-muted aria-[current=location]:text-foreground flex min-h-11 items-center rounded-md px-3 py-2 text-sm leading-snug focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid aria-[current=location]:font-semibold"
+    data-toc-depth={heading.depth}
+    class="text-muted-foreground hover:text-foreground focus-visible:outline-focus hover:bg-muted/60 aria-[current=location]:bg-muted aria-[current=location]:text-foreground relative flex min-h-11 items-center rounded-md px-3 py-2 text-sm leading-snug focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid aria-[current=location]:font-semibold"
   >
-    {heading.text}
+    <span>{heading.text}</span>
   </a>
   {
     heading.subheadings.length > 0 && (
-      <ul class="border-border ml-3 space-y-1 border-l pl-2">
+      <ul class="border-border ml-3 space-y-1 border-l pl-2 xl:ml-0 xl:space-y-0 xl:border-l-0 xl:pl-0">
         {heading.subheadings.map((subheading) => (
           <Astro.self heading={subheading} />
         ))}

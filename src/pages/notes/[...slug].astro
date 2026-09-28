@@ -30,11 +30,13 @@ const { Content, headings } = await render(note);
 
 <NoteLayout note={note}>
   <NoteHeader note={note} />
-  <Shell type="article">
-    <TableOfContents headings={headings} />
-    <Prose Element="article" id="article-intro">
-      <Content components={components} />
-    </Prose>
-    <NoteFooter note={note} />
-  </Shell>
+  <TableOfContents headings={headings} />
+  <div class="xl:mt-8">
+    <Shell type="article">
+      <Prose Element="article" id="article-intro">
+        <Content components={components} />
+      </Prose>
+      <NoteFooter note={note} />
+    </Shell>
+  </div>
 </NoteLayout>
