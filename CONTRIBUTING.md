@@ -115,8 +115,7 @@ stable on narrow screens.
 Keep category and tag keys unchanged in routes. Format their visible labels
 separately. Keep a selected filter state and its result count visible. Note cards
 must have one link, with the date and description readable without hover. Use the
-central content URL when sharing, and report copy or share failures with a
-selectable URL. Timeline order uses numeric `order` first, then descending
+central content URL when sharing. Timeline order uses numeric `order` first, then descending
 `startDate`, then the entry ID.
 
 ## Astro image output
