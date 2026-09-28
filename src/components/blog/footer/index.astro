@@ -1,6 +1,5 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
-import DiscussOn from '@/components/blog/discuss-on.astro';
 import Comments from '@/components/comments.astro';
 import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
@@ -33,9 +32,6 @@ const hasRelatedContent = related_posts || tags.length > 0;
   <hr />
 
   <SharingBadges post={post} />
-
-  <!-- Thank You & Discuss Section -->
-  <DiscussOn post={post} />
 
   <!-- Metadata Section -->
   <div

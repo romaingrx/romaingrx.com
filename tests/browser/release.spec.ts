@@ -17,12 +17,17 @@ test('note sharing uses its canonical notes URL', async ({ page }) => {
   const shareTargets = await sharing.locator('a[href]').evaluateAll((links) =>
     links.map((link) => {
       const target = new URL((link as HTMLAnchorElement).href);
-      return target.searchParams.get('url') ?? target.searchParams.get('u');
+      return {
+        host: target.hostname,
+        url: target.searchParams.get('url') ?? target.searchParams.get('u'),
+        text: target.searchParams.get('text'),
+      };
     }),
   );
 
-  expect(shareTargets.length).toBeGreaterThan(0);
-  expect(shareTargets.every((target) => target === canonical)).toBe(true);
+  expect(shareTargets).toHaveLength(4);
+  expect(shareTargets.filter(({ url }) => url === canonical)).toHaveLength(3);
+  expect(shareTargets.find(({ host }) => host === 'bsky.app')?.text).toContain(canonical);
 });
 
 test('emitted pages have their site landmarks and no empty link destinations', async ({ page }) => {

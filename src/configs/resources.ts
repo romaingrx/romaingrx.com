@@ -14,6 +14,7 @@ export const VALID_PROVIDER_TYPES: Record<ResourceProvider, ResourceType[]> = {
   website: ['code', 'model', 'dataset', 'paper'],
   github: ['code', 'dataset'],
   twitter: [],
+  bluesky: [],
   linkedin: [],
   huggingface: ['model', 'dataset', 'paper'],
   arxiv: ['paper'],

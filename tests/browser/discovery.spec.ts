@@ -182,15 +182,97 @@ test('author hover-card social links have names and 44px targets', async ({ page
   expect(sizes.every(([width, height]) => width >= 44 && height >= 44)).toBe(true);
 });
 
-test('blog and note headers stay within the mobile viewport and show the blog author', async ({
+test('sharing icons are visible and use the canonical content URL', async ({ page }) => {
+  await page.goto('/blog/denoising-diffusion-from-scratch');
+
+  const sharing = page.locator('footer [data-content-share]').first();
+  await expect(sharing.getByText('Enjoyed reading? Share it with others.')).toBeVisible();
+  await expect(sharing.locator('details, button')).toHaveCount(0);
+  await expect(sharing.locator('a')).toHaveCount(4);
+  const canonicalUrl = await page.locator('link[rel="canonical"]').getAttribute('href');
+  expect(canonicalUrl).toBeTruthy();
+
+  const targets = await sharing.locator('a').evaluateAll((links) =>
+    links.map((link) => {
+      const anchor = link as HTMLAnchorElement;
+      const target = new URL(anchor.href);
+      return {
+        label: anchor.getAttribute('aria-label'),
+        href: target.href,
+        url: target.searchParams.get('url') ?? target.searchParams.get('u'),
+        text: target.searchParams.get('text'),
+        rel: anchor.rel,
+        target: anchor.target,
+      };
+    }),
+  );
+  expect(targets.map(({ label }) => label)).toEqual([
+    expect.stringMatching(/^Share .* on X$/),
+    expect.stringMatching(/^Share .* on Bluesky$/),
+    expect.stringMatching(/^Share .* on Hacker News$/),
+    expect.stringMatching(/^Share .* on LinkedIn$/),
+  ]);
+  expect(targets[0]?.url).toBe(canonicalUrl);
+  expect(targets[1]?.href).toContain('bsky.app/intent/compose');
+  expect(targets[1]?.text).toContain(canonicalUrl);
+  expect(targets[2]?.url).toBe(canonicalUrl);
+  expect(targets[3]?.url).toBe(canonicalUrl);
+  expect(targets.every(({ rel, target }) => rel.includes('noopener') && target === '_blank')).toBe(
+    true,
+  );
+});
+
+test('sharing controls fit at 320px and keep usable hit targets', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto('/blog/denoising-diffusion-from-scratch');
+
+  const sharing = page.locator('footer [data-content-share]').first();
+  const headerBounds = await page.locator('header > .w-full > .page-gutter').evaluate((element) => {
+    const { left, right, width } = element.getBoundingClientRect();
+    return { left, right, width };
+  });
+  expect(headerBounds.left).toBeGreaterThanOrEqual(0);
+  expect(headerBounds.right).toBeLessThanOrEqual(320);
+  const contentBounds = await sharing.evaluate((element) => {
+    const { left, right } = element.getBoundingClientRect();
+    const controls = Array.from(element.querySelectorAll('a'))
+      .filter((control) => getComputedStyle(control).display !== 'none')
+      .map((control) => {
+        const { left, right, width, height } = control.getBoundingClientRect();
+        return { left, right, width, height };
+      });
+    return {
+      left,
+      right,
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      controls,
+    };
+  });
+  expect(contentBounds.right).toBeLessThanOrEqual(320);
+  expect(contentBounds.scrollWidth).toBeLessThanOrEqual(contentBounds.clientWidth);
+  expect(contentBounds.controls.length).toBe(4);
+  expect(
+    contentBounds.controls.every(
+      ({ left, right, width, height }) =>
+        left >= contentBounds.left && right <= 320 && width >= 36 && height >= 36,
+    ),
+  ).toBe(true);
+});
+
+test('the blog header keeps its author and reading link within the viewport on mobile', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
   const blogHeader = page.locator('main > header').first();
+  await expect(blogHeader.locator('[data-post-meta]')).toContainText('Romain Graux');
   await expect(blogHeader.getByText('Written by', { exact: true })).toBeVisible();
-  await expect(blogHeader.getByText('Romain Graux', { exact: true })).toBeVisible();
+  await expect(blogHeader.getByText('Share on', { exact: true })).toHaveCount(0);
+  await expect(blogHeader.getByRole('link', { name: /Continue Reading/ })).toBeVisible();
+  await expect(blogHeader.locator('[data-content-share]')).toHaveCount(0);
+  await expect(page.locator('footer [data-content-share]')).toHaveCount(1);
   const blogHeaderWidth = await blogHeader.evaluate((element) => [
     element.clientWidth,
     element.scrollWidth,
@@ -198,7 +280,9 @@ test('blog and note headers stay within the mobile viewport and show the blog au
   expect(blogHeaderWidth[1]).toBeLessThanOrEqual(blogHeaderWidth[0]);
 
   await page.goto('/notes/corne-keyboard-5x3-3-setup');
-  const noteHeader = page.locator('main > header').first();
+  const noteHeader = page.locator('main header').first();
+  await expect(noteHeader.locator('[data-content-share]')).toHaveCount(0);
+  await expect(page.locator('footer [data-content-share]')).toHaveCount(1);
   const noteHeaderWidth = await noteHeader.evaluate((element) => [
     element.clientWidth,
     element.scrollWidth,

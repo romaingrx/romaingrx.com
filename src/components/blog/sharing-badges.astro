@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import Link from '@/components/ui/link.astro';
 import { platforms_info, type Platform } from '@/configs/platforms';
 import { getAuthorsWithSocialLinks } from '@/lib/authors';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
@@ -11,81 +12,80 @@ interface Props {
 const { post } = Astro.props;
 
 interface LinkProps {
+  platform: Platform;
   title: string;
   pathname: string;
   params?: Record<string, string | undefined>;
 }
 
-function getAuthorsWithSocialLinksAndWarn({ platform }: { platform: Platform }) {
-  const authors = getAuthorsWithSocialLinks({ authors: post.authors, platform });
-  if (authors.length > 1) {
-    console.warn(
-      `Found ${authors.length} authors with a ${platform} handle but will pick the first one only to share`
-    );
-  }
-  return authors;
+const xAuthors = getAuthorsWithSocialLinks({ authors: post.authors, platform: 'twitter' });
+if (xAuthors.length > 1) {
+  console.warn(`Found ${xAuthors.length} authors with a twitter handle; sharing uses the first.`);
 }
-
-const authors_x_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'twitter' });
-const authors_linkedin_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'linkedin' });
-
-const links = {
-  twitter: {
+const xAuthor = xAuthors[0];
+const links: LinkProps[] = [
+  {
+    platform: 'twitter',
     title: `Share ${post.data.title} on X`,
     pathname: '/intent/post',
     params: {
       url: post.url,
-      via: authors_x_handle[0]?.data.socialLinks.twitter?.handle,
-      related: authors_x_handle
-        .map(
-          (author) =>
-            `${author.data.socialLinks.twitter?.handle}:${author.data.title ?? author.data.name}`
-        )
+      via: xAuthor?.data.socialLinks.twitter?.handle,
+      related: xAuthors
+        .map((author) => {
+          const handle = author.data.socialLinks.twitter?.handle;
+          return handle ? `${handle}:${author.data.title ?? author.data.name}` : undefined;
+        })
+        .filter((value): value is string => value !== undefined)
         .join(','),
       hashtags: post.data.tags.join(','),
     },
   },
-  hackernews: {
-    title: `Share ${post.data.title} on HackerNews`,
-    pathname: '/submitlink',
-    params: {
-      u: post.url,
-      t: post.data.title,
-    },
+  {
+    platform: 'bluesky',
+    title: `Share ${post.data.title} on Bluesky`,
+    pathname: '/intent/compose',
+    params: { text: `${post.data.title} ${post.url}` },
   },
-  linkedin: {
+  {
+    platform: 'hackernews',
+    title: `Share ${post.data.title} on Hacker News`,
+    pathname: '/submitlink',
+    params: { u: post.url, t: post.data.title },
+  },
+  {
+    platform: 'linkedin',
     title: `Share ${post.data.title} on LinkedIn`,
     pathname: '/sharing/share-offsite',
-    params: {
-      text: `${post.data.title} from @${authors_linkedin_handle[0].data.socialLinks.linkedin?.handle}
-${post.data.tags.map((t) => `#${t}`).join(' ')}`,
-      url: post.url,
-    },
+    params: { url: post.url },
   },
-} as const satisfies Partial<Record<Platform, LinkProps>>;
+];
 ---
 
-<div class="flex flex-row gap-2" data-content-share>
-  {
-    Object.entries(links).map(([platform_name, props]) => {
-      const platform = platforms_info[platform_name as Platform];
-      const anchorUrl = new URL(props.pathname, platform.base_url);
-      for (const [key, value] of Object.entries(props.params ?? {})) {
-        if (value) anchorUrl.searchParams.set(key, value);
-      }
-      return (
-        <a
-          href={anchorUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-muted-foreground hover:text-foreground transition-colors"
-          aria-label={props.title}
-          title={props.title}
-        >
-          <Icon name={platform.icon_name} class="size-5" />
-          <span class="sr-only">{props.title}</span>
-        </a>
-      );
-    })
-  }
+<div class="space-y-2" data-content-share>
+  <p class="text-muted-foreground text-sm">Enjoyed reading? Share it with others.</p>
+  <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Share this post">
+    {
+      links.map((props) => {
+        const platformInfo = platforms_info[props.platform];
+        const anchorUrl = new URL(props.pathname, platformInfo.base_url);
+        for (const [key, value] of Object.entries(props.params ?? {})) {
+          if (value) anchorUrl.searchParams.set(key, value);
+        }
+        return (
+          <Link
+            href={anchorUrl.toString()}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={props.title}
+            title={props.title}
+          >
+            <Icon name={platformInfo.icon_name} class="size-5" />
+          </Link>
+        );
+      })
+    }
+  </div>
 </div>

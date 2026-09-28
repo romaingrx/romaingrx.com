@@ -1,6 +1,6 @@
 ---
 import { Icon } from '@iconify/react/dist/iconify.js';
-import DiscussOn from '@/components/blog/discuss-on.astro';
+import SharingBadges from '@/components/blog/sharing-badges.astro';
 import Resources from '@/components/blog/resources/index.astro';
 import TagBadge from '@/components/blog/tag-badge.astro';
 import Comments from '@/components/comments.astro';
@@ -27,8 +27,7 @@ const resources = note.data.resources.map((r) =>
 <footer class="mt-16 flex flex-col gap-8" data-pagefind-ignore>
   <hr />
 
-  <!-- Thank You & Discuss Section -->
-  <DiscussOn post={note} />
+  <SharingBadges post={note} />
   <div
     class={cn(
       'rounded-lg border bg-card p-6 text-card-foreground shadow-sm',

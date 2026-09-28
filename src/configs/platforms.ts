@@ -4,6 +4,7 @@ export const platform_names = [
   'website',
   'github',
   'twitter',
+  'bluesky',
   'linkedin',
   'huggingface',
   'arxiv',
@@ -31,6 +32,10 @@ export const platforms_info: Record<Platform, PlatformInfo> = {
     icon_name: 'simple-icons:x',
     base_url: 'https://x.com',
   },
+  bluesky: {
+    icon_name: 'simple-icons:bluesky',
+    base_url: 'https://bsky.app',
+  },
   linkedin: {
     icon_name: 'simple-icons:linkedin',
     base_url: 'https://linkedin.com',
@@ -49,6 +54,6 @@ export const platforms_info: Record<Platform, PlatformInfo> = {
   },
   hackernews: {
     icon_name: 'simple-icons:ycombinator',
-    base_url: 'http://news.ycombinator.com',
+    base_url: 'https://news.ycombinator.com',
   },
 } as const;
