@@ -31,7 +31,10 @@ const hasRelatedContent = related_posts || tags.length > 0;
 <footer class="mt-16 flex flex-col gap-8" data-pagefind-ignore>
   <hr />
 
-  <SharingBadges post={post} />
+  <div class="space-y-2">
+    <p class="text-muted-foreground text-sm">Enjoyed reading? Share it with others.</p>
+    <SharingBadges post={post} />
+  </div>
 
   <!-- Metadata Section -->
   <div

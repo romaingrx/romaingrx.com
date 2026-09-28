@@ -62,30 +62,32 @@ const links: LinkProps[] = [
 ];
 ---
 
-<div class="space-y-2" data-content-share>
-  <p class="text-muted-foreground text-sm">Enjoyed reading? Share it with others.</p>
-  <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Share this post">
-    {
-      links.map((props) => {
-        const platformInfo = platforms_info[props.platform];
-        const anchorUrl = new URL(props.pathname, platformInfo.base_url);
-        for (const [key, value] of Object.entries(props.params ?? {})) {
-          if (value) anchorUrl.searchParams.set(key, value);
-        }
-        return (
-          <Link
-            href={anchorUrl.toString()}
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="ghost"
-            size="icon-sm"
-            aria-label={props.title}
-            title={props.title}
-          >
-            <Icon name={platformInfo.icon_name} class="size-5" />
-          </Link>
-        );
-      })
-    }
-  </div>
+<div
+  class="flex flex-wrap items-center gap-1.5"
+  role="group"
+  aria-label="Share this post"
+  data-content-share
+>
+  {
+    links.map((props) => {
+      const platformInfo = platforms_info[props.platform];
+      const anchorUrl = new URL(props.pathname, platformInfo.base_url);
+      for (const [key, value] of Object.entries(props.params ?? {})) {
+        if (value) anchorUrl.searchParams.set(key, value);
+      }
+      return (
+        <Link
+          href={anchorUrl.toString()}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={props.title}
+          title={props.title}
+        >
+          <Icon name={platformInfo.icon_name} class="size-5" />
+        </Link>
+      );
+    })
+  }
 </div>

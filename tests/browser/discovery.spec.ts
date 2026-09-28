@@ -186,7 +186,9 @@ test('sharing icons are visible and use the canonical content URL', async ({ pag
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
   const sharing = page.locator('footer [data-content-share]').first();
-  await expect(sharing.getByText('Enjoyed reading? Share it with others.')).toBeVisible();
+  await expect(
+    page.locator('footer').getByText('Enjoyed reading? Share it with others.', { exact: true }),
+  ).toBeVisible();
   await expect(sharing.locator('details, button')).toHaveCount(0);
   await expect(sharing.locator('a')).toHaveCount(4);
   const canonicalUrl = await page.locator('link[rel="canonical"]').getAttribute('href');
@@ -227,7 +229,7 @@ test('sharing controls fit at 320px and keep usable hit targets', async ({ page 
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
   const sharing = page.locator('footer [data-content-share]').first();
-  const headerBounds = await page.locator('header > .w-full > .page-gutter').evaluate((element) => {
+  const headerBounds = await page.locator('main > header > .page-gutter').evaluate((element) => {
     const { left, right, width } = element.getBoundingClientRect();
     return { left, right, width };
   });
@@ -267,11 +269,11 @@ test('the blog header keeps its author and reading link within the viewport on m
   await page.goto('/blog/denoising-diffusion-from-scratch');
 
   const blogHeader = page.locator('main > header').first();
-  await expect(blogHeader.locator('[data-post-meta]')).toContainText('Romain Graux');
+  await expect(blogHeader.getByText('Romain Graux', { exact: true })).toBeVisible();
   await expect(blogHeader.getByText('Written by', { exact: true })).toBeVisible();
-  await expect(blogHeader.getByText('Share on', { exact: true })).toHaveCount(0);
+  await expect(blogHeader.getByText('Share on', { exact: true })).toBeVisible();
   await expect(blogHeader.getByRole('link', { name: /Continue Reading/ })).toBeVisible();
-  await expect(blogHeader.locator('[data-content-share]')).toHaveCount(0);
+  await expect(blogHeader.locator('[data-content-share]')).toHaveCount(1);
   await expect(page.locator('footer [data-content-share]')).toHaveCount(1);
   const blogHeaderWidth = await blogHeader.evaluate((element) => [
     element.clientWidth,
