@@ -24,7 +24,8 @@ import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 export default defineConfig({
   site: import.meta.env.PROD ? 'https://romaingrx.com' : 'http://localhost:4321',
   adapter: cloudflare({
-    imageService: 'passthrough',
+    // Optimize images with sharp at build time; dev serves originals.
+    imageService: import.meta.env.PROD ? 'custom' : 'passthrough',
     prerenderEnvironment: 'node',
   }),
   env: {

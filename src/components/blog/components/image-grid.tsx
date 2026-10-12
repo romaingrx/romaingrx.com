@@ -35,15 +35,17 @@ export function ImageGrid({ images, columns = 4, size = 64, className }: ImageGr
             key={item.label ?? `image-${item.src.slice(0, 32)}`}
             className="flex flex-col items-center gap-1"
           >
-            <div className="flex items-center justify-center rounded bg-black p-2">
+            <div
+              className="flex aspect-square w-full items-center justify-center rounded bg-black p-2"
+              style={{ maxWidth: renderSize + 16 }}
+            >
               <img
                 src={`data:image/png;base64,${item.src}`}
                 alt={item.label ?? `Image ${i + 1}`}
                 width={renderSize}
                 height={renderSize}
+                className="block aspect-square w-full max-w-full object-contain"
                 style={{
-                  width: renderSize,
-                  height: renderSize,
                   imageRendering: 'pixelated',
                 }}
               />

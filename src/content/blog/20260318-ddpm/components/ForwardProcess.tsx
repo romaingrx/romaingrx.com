@@ -10,6 +10,7 @@ const examples = run.forward_process.map((ex, i) => ({
 export default function ForwardProcess() {
   return (
     <StepSlider
+      mode="examples"
       examples={examples}
       title="Forward process"
       description="Adding noise to font glyphs"

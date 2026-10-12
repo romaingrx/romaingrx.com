@@ -35,7 +35,7 @@ import { Icon } from 'astro-icon/components';
       <div id="search-loading" class="hidden flex items-center justify-center py-8">
         <Icon name="lucide:loader-2" class="size-5 animate-spin text-muted-foreground" />
       </div>
-      <div id="search-no-results" class="hidden py-8 text-center text-sm text-muted-foreground">
+      <div id="search-no-results" class="hidden py-8 text-center text-sm text-muted-foreground" role="status">
         No results found.
       </div>
       <div id="search-items" role="menu" class="hidden"></div>
@@ -153,7 +153,12 @@ import { Icon } from 'astro-icon/components';
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setActive(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
-    } else if (e.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
+    } else if (
+      e.key === 'Enter' &&
+      document.activeElement === input &&
+      activeIndex >= 0 &&
+      items[activeIndex]
+    ) {
       e.preventDefault();
       const href = items[activeIndex].getAttribute('href');
       if (href) navigate(href);
@@ -162,8 +167,18 @@ import { Icon } from 'astro-icon/components';
 
   // Debounced search
   let timer: ReturnType<typeof setTimeout>;
+  let latestQuery = 0;
+
+  function showMessage(message: string) {
+    hide(elLoading);
+    hide(elItems);
+    elNoResults.textContent = message;
+    show(elNoResults);
+  }
+
   input.addEventListener('input', () => {
     clearTimeout(timer);
+    const queryId = ++latestQuery;
     const query = input.value.trim();
     activeIndex = -1;
 
@@ -182,19 +197,26 @@ import { Icon } from 'astro-icon/components';
     hide(elItems);
 
     timer = setTimeout(async () => {
-      const pf = await loadPagefind();
-      if (!pf) { hide(elLoading); return; }
+      let results: SearchResult[];
+      try {
+        const pf = await loadPagefind();
+        if (!pf) throw new Error('Search index unavailable');
+        const search = await pf.search(query);
+        results = await Promise.all(
+          search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data()),
+        );
+      } catch {
+        if (queryId === latestQuery) showMessage('Search is unavailable right now. Try again.');
+        return;
+      }
 
-      const search = await pf.search(query);
-      const results: SearchResult[] = await Promise.all(
-        search.results.slice(0, 5).map((r: { data: () => Promise<SearchResult> }) => r.data()),
-      );
+      // A newer query started while this one was loading.
+      if (queryId !== latestQuery) return;
 
       hide(elLoading);
 
       if (results.length === 0) {
-        show(elNoResults);
-        hide(elItems);
+        showMessage('No results found.');
         return;
       }
 
@@ -221,10 +243,6 @@ import { Icon } from 'astro-icon/components';
       // Mouse hover highlights
       getItems().forEach((item, i) => {
         item.addEventListener('mouseenter', () => setActive(i));
-        item.addEventListener('click', () => {
-          const href = item.getAttribute('href');
-          if (href) navigate(href);
-        });
       });
     }, 100);
   });

@@ -1,94 +1,66 @@
 import { useMemo } from 'react';
 
 import run from '../run.json';
+import { buildSequenceDiffPositions } from './sequence-diff';
 
 type Reconstruction = (typeof run.reconstructions)[number];
 
 function DiffRow({ recon }: { recon: Reconstruction }) {
   const chars = useMemo(() => {
-    const orig = recon.original.split('');
-    const reco = recon.reconstructed.split('');
-    return orig.map((o, i) => ({
-      original: o,
-      reconstructed: reco[i] ?? '?',
-      match: o === reco[i],
-    }));
+    return buildSequenceDiffPositions(recon.original, recon.reconstructed);
   }, [recon]);
 
   const pct = Math.round(recon.accuracy * 100);
+  const statusColor =
+    pct >= 80
+      ? 'bg-status-success/15 text-status-success'
+      : pct >= 50
+        ? 'bg-status-warning/15 text-status-warning'
+        : 'bg-status-error/15 text-status-error';
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border bg-muted/30 p-3">
-      <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span
-            className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-              pct >= 80
-                ? 'bg-green-500/15 text-green-600 dark:text-green-400'
-                : pct >= 50
-                  ? 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400'
-                  : 'bg-red-500/15 text-red-600 dark:text-red-400'
-            }`}
-          >
-            {pct}% match
-          </span>
-        </div>
-        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
-          <div
-            className={`h-full rounded-full transition-all ${
-              pct >= 80 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'
-            }`}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+    <div className="rounded-lg border border-border bg-muted/30 p-3">
+      <div className="mb-2">
+        <span
+          className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor}`}
+        >
+          {pct}% match
+        </span>
       </div>
-      <div className="space-y-0.5 font-mono text-xs leading-relaxed">
-        <div className="flex flex-wrap">
-          <span className="w-8 shrink-0 text-muted-foreground select-none">src</span>
-          {chars.map((c, i) => (
+      <div
+        className="flex flex-wrap items-start gap-x-1 font-mono text-xs leading-5"
+        role="list"
+        aria-label="Sequence differences by position"
+      >
+        {chars.map((char, index) => {
+          const mismatchClass =
+            'font-semibold text-status-error underline decoration-2 underline-offset-1';
+
+          return (
             <span
-              // eslint-disable-next-line react/no-array-index-key
-              key={`src-${i}-${c.original}`}
-              className={`inline-block w-[0.65em] text-center ${
-                c.match ? 'text-muted-foreground' : 'font-bold text-red-600 dark:text-red-400'
-              }`}
+              key={`${index}-${char.original ?? 'missing'}-${char.reconstructed ?? 'missing'}`}
+              role="listitem"
+              aria-label={`Position ${index + 1}: source ${char.original ?? 'none'}, reconstructed ${char.reconstructed ?? 'none'}, ${char.match ? 'match' : 'mismatch'}`}
+              className="grid shrink-0 grid-rows-2 text-center"
             >
-              {c.original}
+              <span
+                aria-hidden="true"
+                className={char.match ? 'text-muted-foreground' : mismatchClass}
+              >
+                {char.original ?? '–'}
+              </span>
+              <span
+                aria-hidden="true"
+                className={char.match ? 'text-status-success' : mismatchClass}
+              >
+                {char.reconstructed ?? '–'}
+              </span>
             </span>
-          ))}
-        </div>
-        <div className="flex flex-wrap">
-          <span className="w-8 shrink-0 text-muted-foreground select-none">rec</span>
-          {chars.map((c, i) => (
-            <span
-              // eslint-disable-next-line react/no-array-index-key
-              key={`rec-${i}-${c.reconstructed}`}
-              className={`inline-block w-[0.65em] text-center ${
-                c.match
-                  ? 'text-green-600 dark:text-green-400'
-                  : 'rounded-sm bg-red-500/10 font-bold text-red-600 dark:text-red-400'
-              }`}
-            >
-              {c.reconstructed}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-wrap">
-          <span className="w-8 shrink-0" />
-          {chars.map((c, i) => (
-            <span
-              // eslint-disable-next-line react/no-array-index-key
-              key={`diff-${i}-${c.match ? 'match' : 'miss'}`}
-              className={`inline-block w-[0.65em] text-center ${
-                c.match
-                  ? 'text-green-600/40 dark:text-green-400/40'
-                  : 'text-red-600 dark:text-red-400'
-              }`}
-            >
-              {c.match ? '·' : '×'}
-            </span>
-          ))}
-        </div>
+          );
+        })}
+        {chars.length === 0 && (
+          <span className="text-sm text-muted-foreground">No residues to compare.</span>
+        )}
       </div>
     </div>
   );
@@ -102,9 +74,13 @@ export default function SequenceDiff() {
       <div>
         <h4 className="text-sm font-medium">Sequence reconstruction</h4>
         <p className="text-sm text-muted-foreground">
-          Original (src) vs reconstructed (rec) amino acid sequences. Mismatches highlighted in red.
+          Original and reconstructed amino acid sequences. Missing and extra residues count as
+          mismatches.
         </p>
       </div>
+      <p className="text-xs text-muted-foreground" aria-hidden="true">
+        Top: source · bottom: reconstruction · underline: mismatch · –: missing residue
+      </p>
       {sorted.slice(0, 5).map((recon) => (
         <DiffRow key={recon.original} recon={recon} />
       ))}

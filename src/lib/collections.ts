@@ -2,9 +2,10 @@ import { getCollection as astroGetCollection, render, type CollectionEntry } fro
 
 import { NODE_ENV } from 'astro:env/client';
 
+import { routes } from '@/configs/routes';
 import { site } from '@/configs/site';
 
-import { getAbsoluteUrl, slugify } from './utils';
+import { getAbsoluteUrl } from './utils';
 
 export type Author = CollectionEntry<'author'>;
 export type BlogPost = CollectionEntry<'blog'>;
@@ -34,7 +35,7 @@ async function resolveAuthors(entry: ContentEntry, authors: Author[]): Promise<A
 
 async function getContentWithAuthors<T extends ContentEntry>(
   collection: 'blog' | 'note',
-  urlPrefix: string,
+  createPath: (params: { slug: string }) => string,
 ): Promise<WithAuthors<T>[]> {
   const entries = await astroGetCollection(collection, (entry) =>
     NODE_ENV === 'production'
@@ -49,23 +50,23 @@ async function getContentWithAuthors<T extends ContentEntry>(
       .map(async (entry) => {
         const { remarkPluginFrontmatter } = await render(entry);
         const resolved = await resolveAuthors(entry, authors);
-        const slug = slugify(entry.data.title);
+        const slug = entry.data.permalink;
         return Object.assign({}, entry, {
           authors: resolved,
           readingTime: remarkPluginFrontmatter?.minutesRead || '1 min read',
           slug,
-          url: getAbsoluteUrl(`/${urlPrefix}/${slug}`, new URL(site.url)),
+          url: getAbsoluteUrl(createPath({ slug }), new URL(site.url)),
         }) as WithAuthors<T>;
       }),
   );
 }
 
 export function getBlogPosts(): Promise<BlogPostWithAuthors[]> {
-  return getContentWithAuthors<BlogPost>('blog', 'blog');
+  return getContentWithAuthors<BlogPost>('blog', routes.blog);
 }
 
 export function getNotes(): Promise<NoteWithAuthors[]> {
-  return getContentWithAuthors<Note>('note', 'note');
+  return getContentWithAuthors<Note>('note', routes.note);
 }
 
 export async function getAuthors(): Promise<Author[]> {

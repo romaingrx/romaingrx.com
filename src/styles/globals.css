@@ -31,9 +31,19 @@
   --chart-3: oklch(0.602 0.098 222.7);
   --chart-4: oklch(0.608 0.133 152.6);
   --chart-5: oklch(0.639 0.16 48.7);
+
+  /* Article links: dark enough to read on the light background. */
+  --link: oklch(0.45 0.1 60);
+  --status-success: oklch(0.42 0.12 145);
+  --status-warning: oklch(0.48 0.12 75);
+  --status-error: var(--destructive);
 }
 
 .dark {
+  --link: var(--primary);
+  --status-success: oklch(0.78 0.12 145);
+  --status-warning: oklch(0.82 0.12 82);
+  --status-error: oklch(0.72 0.15 25);
   color-scheme: dark;
   --background: oklch(0.155 0.005 353.5);
   --foreground: oklch(0.984 0 0);
@@ -63,6 +73,10 @@
 }
 
 @theme inline {
+  --color-link: var(--link);
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-error: var(--status-error);
   --font-family-sans:
     ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';

@@ -39,14 +39,12 @@
 }
 
 .prose a {
-  @apply text-primary;
-  text-decoration: none;
-  transition: color 0.2s;
+  @apply text-link underline decoration-current/40 underline-offset-2;
+  transition: text-decoration-color 0.2s;
 }
 
 .prose a:hover {
-  @apply text-primary/80;
-  text-decoration: underline;
+  @apply decoration-current;
 }
 
 .prose code {
@@ -271,14 +269,12 @@
 }
 
 .prose-compact a {
-  @apply text-primary;
-  text-decoration: none;
-  transition: color 0.2s;
+  @apply text-link underline decoration-current/40 underline-offset-2;
+  transition: text-decoration-color 0.2s;
 }
 
 .prose-compact a:hover {
-  @apply text-primary/80;
-  text-decoration: underline;
+  @apply decoration-current;
 }
 
 .prose-compact strong {

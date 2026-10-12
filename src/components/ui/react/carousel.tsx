@@ -101,6 +101,7 @@ function Carousel({
 
     return () => {
       api?.off('select', onSelect);
+      api?.off('reInit', onSelect);
     };
   }, [api, onSelect]);
 
@@ -176,6 +177,7 @@ function CarouselPrevious({
   return (
     <Button
       data-slot="carousel-previous"
+      aria-label="Previous slide"
       variant={variant}
       size={size}
       className={cn(
@@ -206,6 +208,7 @@ function CarouselNext({
   return (
     <Button
       data-slot="carousel-next"
+      aria-label="Next slide"
       variant={variant}
       size={size}
       className={cn(

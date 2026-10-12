@@ -1,5 +1,6 @@
 ---
 title: 'LLM as a Jailbreak Judge'
+permalink: llm-as-a-jailbreak-judge
 description: 'Exploring different techniques for using LLMs to evaluate jailbreak attempts'
 cover: './images/cover.png'
 status: published
@@ -27,9 +28,11 @@ resources:
 bibliography: './references.bib'
 ---
 
+import BlogLink from '@/components/blog/components/blog-link.astro';
+
 # Setup
 
-For this LLM-as-a-judge experiment, I curated the dataset created during the [HarmBench evolution](https://romaingrx.com/blog/posts/red-teamer-mistral-nemo) and decided to keep only the data from the completions of starling 7B as we achieved a good ASR so it's a good balance for the labels. I also decided to drop the copyright category as it has no meaning of jailbreak in terms of harmfulness. So in the end we have a dataset of 300 entries with 167 entries labeled as jailbroken.
+For this LLM-as-a-judge experiment, I curated the dataset created during the HarmBench evolution in the <BlogLink post="20240927-mistral-nemo-red-teamer">Mistral Nemo Red Teamer post</BlogLink> and decided to keep only the data from the completions of starling 7B as we achieved a good ASR so it's a good balance for the labels. I also decided to drop the copyright category as it has no meaning of jailbreak in terms of harmfulness. So in the end we have a dataset of 300 entries with 167 entries labeled as jailbroken.
 
 The dataset can be found [here]
 

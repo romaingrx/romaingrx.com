@@ -1,0 +1,18 @@
+---
+import Shell from '@/components/Shell.astro';
+import { routes } from '@/configs/routes';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you requested could not be found.">
+  <meta slot="head" name="robots" content="noindex" />
+  <Shell type="page">
+    <section class="flex min-h-[50vh] flex-col items-center justify-center py-24 text-center">
+      <p class="text-muted-foreground text-sm">404</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight">This page doesn't exist.</h1>
+      <p class="text-muted-foreground mt-4">
+        The link may be out of date. Try the <a href={routes.blogs} class="underline underline-offset-4">blog</a>, the <a href={routes.notes} class="underline underline-offset-4">notes</a> or the <a href={routes.home} class="underline underline-offset-4">home page</a>.
+      </p>
+    </section>
+  </Shell>
+</BaseLayout>

@@ -56,6 +56,9 @@ function getStackStyles(index: number, total: number) {
 <div
   class:list={[photoStackVariants({ size, className })]}
   onclick={onclick ? `if(window['${onclick}']){window['${onclick}'](0);}` : undefined}
+  onkeydown={onclick
+    ? `if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}`
+    : undefined}
   role={onclick ? 'button' : undefined}
   tabindex={onclick ? 0 : undefined}
   aria-label={onclick ? 'View photo gallery' : undefined}

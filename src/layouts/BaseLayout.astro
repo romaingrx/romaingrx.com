@@ -19,8 +19,24 @@ const ogImageURL = new URL(`${ogImage}?t=${Date.now()}`, Astro.site);
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <!-- Apply the saved theme before first paint to avoid a light flash. -->
+    <script is:inline>
+      (() => {
+        let preference = 'system';
+        try {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark') preference = stored;
+        } catch {}
+        const dark =
+          preference === 'dark' ||
+          (preference === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+        document.documentElement.dataset.theme = preference;
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <title>{title}</title>
