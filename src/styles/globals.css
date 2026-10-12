@@ -31,9 +31,13 @@
   --chart-3: oklch(0.602 0.098 222.7);
   --chart-4: oklch(0.608 0.133 152.6);
   --chart-5: oklch(0.639 0.16 48.7);
+
+  /* Article links: dark enough to read on the light background. */
+  --link: oklch(0.45 0.1 60);
 }
 
 .dark {
+  --link: var(--primary);
   color-scheme: dark;
   --background: oklch(0.155 0.005 353.5);
   --foreground: oklch(0.984 0 0);
@@ -63,6 +67,7 @@
 }
 
 @theme inline {
+  --color-link: var(--link);
   --font-family-sans:
     ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';

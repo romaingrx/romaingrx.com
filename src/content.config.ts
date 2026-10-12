@@ -9,6 +9,10 @@ import { resource_schema } from './configs/resources';
 // Shared schema for content entries with authors, status, and metadata
 const baseContentSchema = z.object({
   title: z.string(),
+  // Stable URL segment, so editing a title never changes the post's URL.
+  permalink: z
+    .string()
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use a lowercase hyphenated permalink.'),
   description: z.string().optional(),
   authors: z.array(reference('author')),
   status: z.enum(['published', 'draft', 'archived']).default('draft'),

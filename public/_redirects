@@ -1,1 +1,3 @@
 /dotfiles/install.sh https://raw.githubusercontent.com/romaingrx/dotfiles/main/scripts/install.sh 302
+/note/* /notes/:splat 301
+/blog/posts/red-teamer-mistral-nemo /blog/mistral-nemo-red-teamer 301
