@@ -1,5 +1,7 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
+import type Run from '../run.json';
+
 import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
@@ -8,19 +10,22 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from '@/components/ui/react/chart';
+} from '@/components/ui/chart/chart';
 
-import run from '../run.json';
+import picked from '../run.json?key=noise_schedule&pick';
+
+// Only this island's slice of run.json ships with it.
+const noise_schedule = picked as (typeof Run)['noise_schedule'];
 
 const config = {
   beta: { label: 'βₜ', color: 'var(--chart-1)' },
   alpha_bar: { label: 'ᾱₜ', color: 'var(--chart-2)' },
 } satisfies ChartConfig;
 
-const data = run.noise_schedule.t.map((t, i) => ({
+const data = noise_schedule.t.map((t, i) => ({
   t,
-  beta: run.noise_schedule.beta[i],
-  alpha_bar: run.noise_schedule.alpha_bar[i],
+  beta: noise_schedule.beta[i],
+  alpha_bar: noise_schedule.alpha_bar[i],
 }));
 
 export default function NoiseScheduleChart() {

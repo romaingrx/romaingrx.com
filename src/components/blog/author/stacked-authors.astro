@@ -1,64 +1,66 @@
 ---
 import { Image } from 'astro:assets';
+import { SocialLinks } from '@/components/social';
+import { HoverCard } from '@/components/ui/hover-card';
+import { Stack } from '@/components/ui/stack';
+import { Text } from '@/components/ui/text';
+import { getAuthorSocialLinks } from '@/lib/authors';
 import type { Author } from '@/lib/collections';
 import { cn } from '@/lib/utils';
-import AuthorHoverCard from './hover-card.tsx';
 
 interface Props {
   authors: Author[];
   size?: number;
-  className?: string;
+  class?: string;
   show_name?: boolean;
+  /** Show each author's card on hover. Off when already inside a hover card. */
+  interactive?: boolean;
 }
 
-const { authors, size = 32, className, show_name = true } = Astro.props;
+const { authors, size = 32, class: className, show_name = true, interactive = true } = Astro.props;
 
 if (!authors.length) return null;
 ---
 
-<div class={cn('flex items-center', className)}>
-  <div class="flex -space-x-4">
-    {
-      authors.map((author, i) => (
-        <AuthorHoverCard author={author} client:visible>
-          <div class="flex items-center justify-center gap-2">
-            <div
-              class={cn(
-                'border-background relative overflow-hidden rounded-full',
-                'flex items-center justify-center transition-all duration-200 hover:z-10'
-              )}
-              style={{
-                height: `${size}px`,
-                width: `${size}px`,
-                zIndex: i,
-              }}
-            >
-              <Image
-                src={author.data.image}
-                alt={author.data.name}
-                width={size}
-                height={size}
-                densities={[1, 2]}
-                class="h-full w-full object-cover"
-              />
-            </div>
-            {authors.length === 1 && show_name && (
-              <div class="flex flex-col items-start justify-start">
-                <span class="text-sm font-semibold">{authors[0]?.data?.name}</span>
-                <span class="text-muted-foreground text-sm">{authors[0]?.data?.title}</span>
-              </div>
-            )}
-          </div>
-        </AuthorHoverCard>
-      ))
-    }
-  </div>
-
-  <div class="ml-3 hidden">
-    {
-      authors.length > 1 && (
-        <span class="text-muted-foreground text-sm">{authors.length} authors</span>
-      )
-    }
-  </div>
-</div>
+<span class={cn('flex -space-x-4', className)}>
+  {
+    authors.map((author, i) => (
+      <HoverCard disabled={!interactive}>
+        <span class="flex cursor-default items-center justify-center gap-2">
+          <span
+            class="relative flex items-center justify-center overflow-hidden rounded-full border-background transition-all duration-200 hover:z-10"
+            style={{ height: `${size}px`, width: `${size}px`, zIndex: i }}
+          >
+            <Image
+              src={author.data.image}
+              alt={author.data.name}
+              width={size}
+              height={size}
+              densities={[1, 2]}
+              class="h-full w-full object-cover"
+            />
+          </span>
+          {authors.length === 1 && show_name && (
+            <span class="flex flex-col items-start">
+              <Text as="span" size="sm" weight="semibold">
+                {author.data.name}
+              </Text>
+              <Text as="span" size="sm" tone="muted">
+                {author.data.title}
+              </Text>
+            </span>
+          )}
+        </span>
+        <Stack as="span" gap={1} slot="content">
+          <Text as="span" size="sm" weight="semibold">
+            {author.data.name}
+          </Text>
+          <Text as="span" size="sm" tone="muted">
+            {author.data.title}
+          </Text>
+          <SocialLinks links={getAuthorSocialLinks(author)} iconClass="size-4" class="gap-2 pt-2" />
+        </Stack>
+      </HoverCard>
+    ))
+  }
+</span>

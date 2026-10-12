@@ -1,0 +1,48 @@
+---
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { forward_process } from '../run.json';
+
+const example = forward_process[0];
+// original = thresholded binary glyph; steps[0] at t=0 ≈ clean SDF field
+const stages = [
+  { label: 'Binary glyph', image: example.original },
+  { label: 'Signed Distance Field', image: example.steps[0].image },
+  { label: 'Thresholded output', image: example.original },
+];
+---
+
+<Card class="my-8">
+  <CardHeader>
+    <CardTitle>SDF pipeline</CardTitle>
+    <CardDescription>Binary → distance field → thresholded back to crisp edges</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div class="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+      {
+        stages.map((stage, i) => (
+          <div class="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+            {i > 0 && (
+              <span class="text-2xl text-muted-foreground" aria-hidden="true">
+                <span class="sm:hidden">↓</span>
+                <span class="hidden sm:inline">→</span>
+              </span>
+            )}
+            <div class="flex flex-col items-center gap-2">
+              <div class="flex aspect-square size-24 items-center justify-center overflow-hidden rounded bg-black p-1">
+                <img
+                  src={`data:image/png;base64,${stage.image}`}
+                  alt={stage.label}
+                  width={96}
+                  height={96}
+                  loading="lazy"
+                  class="aspect-square size-full object-contain [image-rendering:pixelated]"
+                />
+              </div>
+              <span class="text-center font-mono text-xs text-muted-foreground">{stage.label}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </CardContent>
+</Card>

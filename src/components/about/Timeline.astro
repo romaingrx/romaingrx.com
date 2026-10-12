@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import CompactProse from '../ui/compact-prose.astro';
+import { Prose } from '@/components/ui/prose';
 
 interface Props {
   type?: 'education' | 'experience' | 'project';
@@ -93,9 +93,9 @@ const renderedContent = await Promise.all(
                 </div>
               </div>
               <div class="mt-4">
-                <CompactProse>
+                <Prose variant="compact">
                   <Content />
-                </CompactProse>
+                </Prose>
               </div>
             </div>
           </div>

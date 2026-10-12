@@ -2,10 +2,15 @@ import { useMemo } from 'react';
 
 import { CartesianGrid, Cell, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 
-import ChartCard from '@/components/charts/card';
-import { ChartContainer, type ChartConfig } from '@/components/ui/react/chart';
+import type Run from '../run.json';
 
-import run from '../run.json';
+import ChartCard from '@/components/charts/card';
+import { ChartContainer, type ChartConfig } from '@/components/ui/chart/chart';
+
+import picked from '../run.json?key=latent_space&pick';
+
+// Only this island's slice of run.json ships with it.
+const latent_space = picked as (typeof Run)['latent_space'];
 
 const config = {
   z: { label: 'Latent point', color: 'var(--chart-1)' },
@@ -50,7 +55,7 @@ function CustomTooltip({
 
 export default function LatentSpace() {
   const data = useMemo(
-    () => run.latent_space.map((p) => ({ x: p.z[0], y: p.z[1], sequence: p.sequence })),
+    () => latent_space.map((p) => ({ x: p.z[0], y: p.z[1], sequence: p.sequence })),
     [],
   );
 

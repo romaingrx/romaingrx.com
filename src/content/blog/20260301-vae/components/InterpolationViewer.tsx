@@ -1,8 +1,13 @@
 import { useMemo, useState } from 'react';
 
-import run from '../run.json';
+import type Run from '../run.json';
 
-type Interpolation = (typeof run.interpolations)[number];
+import picked from '../run.json?key=interpolations&pick';
+
+// Only this island's slice of run.json ships with it.
+const interpolations = picked as (typeof Run)['interpolations'];
+
+type Interpolation = (typeof interpolations)[number];
 
 function StepViewer({ interp }: { interp: Interpolation }) {
   const [step, setStep] = useState(0);
@@ -118,9 +123,9 @@ export default function InterpolationViewer() {
         </p>
       </div>
 
-      {run.interpolations.length > 1 && (
+      {interpolations.length > 1 && (
         <div className="flex gap-1.5">
-          {run.interpolations.map((interp, i) => (
+          {interpolations.map((interp, i) => (
             <button
               key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}
               type="button"
@@ -138,10 +143,10 @@ export default function InterpolationViewer() {
         </div>
       )}
 
-      {run.interpolations[selected] ? (
+      {interpolations[selected] ? (
         <StepViewer
-          key={`${run.interpolations[selected].start}-${run.interpolations[selected].end}`}
-          interp={run.interpolations[selected]}
+          key={`${interpolations[selected].start}-${interpolations[selected].end}`}
+          interp={interpolations[selected]}
         />
       ) : (
         <p role="status" className="text-sm text-muted-foreground">

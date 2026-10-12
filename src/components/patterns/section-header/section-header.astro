@@ -1,0 +1,27 @@
+---
+import { Link } from '@/components/ui/link';
+import { Heading } from '@/components/ui/text';
+import type { HeadingVariants } from '@/components/ui/text';
+import { cn } from '@/lib/utils';
+
+/** A section title with an optional "View all" style link on the right. */
+interface Props {
+  title: string;
+  size?: HeadingVariants['size'];
+  action?: { label: string; href: string };
+  class?: string;
+}
+
+const { title, size = 'subsection', action, class: className } = Astro.props;
+---
+
+<div data-slot="section-header" class={cn('flex items-baseline justify-between gap-4', className)}>
+  <Heading level={2} size={size}>{title}</Heading>
+  {
+    action && (
+      <Link href={action.href} variant="muted" class="text-sm">
+        {action.label} &rarr;
+      </Link>
+    )
+  }
+</div>

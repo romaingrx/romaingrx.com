@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { cardClasses } from './variants';
+
+type Props = HTMLAttributes<'div'> & {
+  as?: 'div' | 'article' | 'section' | 'li';
+};
+
+const { as: Tag = 'div', class: className, ...props } = Astro.props;
+---
+
+<Tag data-slot="card" class={cn(cardClasses.root, className)} {...props}>
+  <slot />
+</Tag>

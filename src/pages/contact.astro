@@ -1,5 +1,8 @@
 ---
-import Shell from '@/components/Shell.astro';
+import { PageHeader } from '@/components/patterns/page-header';
+import { Container } from '@/components/ui/container';
+import { Link } from '@/components/ui/link';
+import { Text } from '@/components/ui/text';
 import { socialLinks } from '@/configs/social';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
@@ -12,23 +15,14 @@ const description =
 ---
 
 <BaseLayout title={title} description={description}>
-  <Shell type="page">
-    <section class="mx-auto max-w-2xl py-16 md:py-24">
-      <h1 class="mb-6 text-4xl font-bold tracking-tight">{title}</h1>
-      <p class="text-muted-foreground text-lg">
-        Have an interesting idea or project? I'm always open to a conversation.
-      </p>
-      <p class="text-muted-foreground mt-3 mb-8">
-        I also take on consulting work in machine learning and full-stack applications.
-      </p>
-      <a
-        href={linkedIn.url}
-        class="hover:text-muted-foreground underline underline-offset-4"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Message me on LinkedIn
-      </a>
-    </section>
-  </Shell>
+  <Container as="section" size="content" class="max-w-2xl py-16 md:py-24">
+    <PageHeader title={title} class="mb-6" />
+    <Text size="lg" tone="muted">
+      Have an interesting idea or project? I'm always open to a conversation.
+    </Text>
+    <Text tone="muted" class="mt-3 mb-8">
+      I also take on consulting work in machine learning and full-stack applications.
+    </Text>
+    <Link href={linkedIn.url}>Message me on LinkedIn</Link>
+  </Container>
 </BaseLayout>

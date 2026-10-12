@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Badge from '@/components/ui/badge.astro';
+import { Badge } from '@/components/ui/badge';
 import { routes } from '@/configs/routes';
 
 type Props = {
@@ -12,9 +12,11 @@ type Props = {
 const { tag, isActive = false, basePath = routes.blogs } = Astro.props;
 ---
 
-<a href={isActive ? `${basePath}` : `${basePath}/tag/${tag}`}>
-  <Badge variant={isActive ? 'active' : 'secondary'} className="gap-1.5">
-    <Icon name="lucide:tag" class="size-3" />
-    <span>{tag}</span>
-  </Badge>
-</a>
+<Badge
+  href={isActive ? basePath : `${basePath}/tag/${tag}`}
+  variant={isActive ? 'active' : 'secondary'}
+  class="gap-1.5"
+>
+  <Icon name="lucide:tag" />
+  <span>{tag}</span>
+</Badge>

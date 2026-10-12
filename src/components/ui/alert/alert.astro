@@ -1,0 +1,35 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { alertVariants, type AlertVariants } from './variants';
+
+type Props = AlertVariants &
+  HTMLAttributes<'div'> & {
+    title?: string;
+    /** Icon name, e.g. `lucide:info`. */
+    icon?: string;
+  };
+
+const { variant, title, icon, class: className, ...props } = Astro.props;
+---
+
+<div data-slot="alert" role="note" class={cn(alertVariants({ variant }), className)} {...props}>
+  {
+    title && (
+      <div
+        data-slot="alert-title"
+        class="col-start-2 mb-4 flex min-h-4 items-end gap-2 font-medium tracking-tight"
+      >
+        {icon && <Icon name={icon} class="size-4" />}
+        <span class="text-md font-semibold">{title}</span>
+      </div>
+    )
+  }
+  <div
+    data-slot="alert-description"
+    class="col-start-2 grid justify-items-start gap-1 text-sm text-muted-foreground [&_p]:mb-0 [&_p]:leading-relaxed [&_p:not(:last-child)]:mb-3"
+  >
+    <slot />
+  </div>
+</div>

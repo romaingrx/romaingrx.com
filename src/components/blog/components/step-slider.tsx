@@ -4,14 +4,14 @@ import { useState } from 'react';
 
 import { Pause, Play, RotateCcw } from 'lucide-react';
 
-import { Button } from '@/components/ui/react/button';
+import { Button } from '@/components/ui/button/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/react/card';
+} from '@/components/ui/card/card';
 import { usePlayback } from '@/hooks/use-playback';
 import { cn } from '@/lib/utils';
 

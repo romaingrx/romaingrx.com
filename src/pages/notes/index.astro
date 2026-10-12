@@ -1,7 +1,7 @@
 ---
-import NoteHoverCard from '@/components/note/hover-card.astro';
-import Shell from '@/components/Shell.astro';
-import Time from '@/components/ui/time.astro';
+import NoteList from '@/components/note/note-list.astro';
+import { PageHeader } from '@/components/patterns/page-header';
+import { Container } from '@/components/ui/container';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getNotes } from '@/lib/collections';
 
@@ -13,33 +13,8 @@ const description =
 ---
 
 <BaseLayout title={title} description={description}>
-  <Shell type="article">
-    <div class="space-y-12 py-8">
-      <div class="space-y-4">
-        <h1 class="text-4xl font-bold tracking-tight">Notes</h1>
-        <p class="text-muted-foreground text-xl">
-          {description}
-        </p>
-      </div>
-
-      {
-        notes.length > 0 ? (
-          <ul class="space-y-2">
-            {notes.map((note) => (
-              <li class="group bg-card hover:bg-accent/40 rounded-lg border transition-colors">
-                <NoteHoverCard note={note}>
-                  <span class="group-hover:text-primary font-medium transition-colors">
-                    {note.data.title}
-                  </span>
-                  <Time date={note.data.published_date} className="text-sm text-muted-foreground" />
-                </NoteHoverCard>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-muted-foreground text-center">No notes found.</p>
-        )
-      }
-    </div>
-  </Shell>
+  <Container size="article" class="space-y-12 py-8">
+    <PageHeader title={title} description={description} />
+    <NoteList notes={notes} />
+  </Container>
 </BaseLayout>

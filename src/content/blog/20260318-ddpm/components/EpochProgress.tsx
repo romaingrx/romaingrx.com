@@ -2,19 +2,24 @@
 
 import { Pause, Play, RotateCcw } from 'lucide-react';
 
-import { Button } from '@/components/ui/react/button';
+import type Run from '../run.json';
+
+import { Button } from '@/components/ui/button/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/react/card';
+} from '@/components/ui/card/card';
 import { usePlayback } from '@/hooks/use-playback';
 
-import run from '../run.json';
+import picked from '../run.json?key=training_samples&pick';
 
-const entries = run.training_samples;
+// Only this island's slice of run.json ships with it.
+const training_samples = picked as (typeof Run)['training_samples'];
+
+const entries = training_samples;
 
 export default function EpochProgress() {
   const playback = usePlayback({ count: entries.length, intervalMs: 500 });

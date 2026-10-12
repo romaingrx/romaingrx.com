@@ -1,0 +1,25 @@
+---
+import { Heading, Text } from '@/components/ui/text';
+import { cn } from '@/lib/utils';
+
+/** The one `h1` of a listing or static page, with its lead paragraph. */
+interface Props {
+  title: string;
+  description?: string;
+  class?: string;
+}
+
+const { title, description, class: className } = Astro.props;
+---
+
+<header data-slot="page-header" class={cn('flex flex-col gap-4', className)}>
+  <Heading level={1}>{title}</Heading>
+  {
+    description && (
+      <Text size="xl" tone="muted">
+        {description}
+      </Text>
+    )
+  }
+  <slot />
+</header>

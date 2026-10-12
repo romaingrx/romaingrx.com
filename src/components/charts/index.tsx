@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import * as Recharts from 'recharts';
 
-import { ChartContainer, type ChartConfig } from '../ui/react/chart';
+import { ChartContainer, type ChartConfig } from '@/components/ui/chart/chart';
+
 import ChartCard, { type ChartCardProps } from './card';
 
 interface ChartProps extends ChartCardProps {

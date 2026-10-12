@@ -17,7 +17,10 @@ resources:
     description: 'JAX/Equinox VAE implementation for protein sequences'
 ---
 
-import { InterpolationViewer, LatentSpace, SequenceDiff, TrainingCurves } from './components';
+import TrainingCurves from './components/TrainingCurves';
+import LatentSpace from './components/LatentSpace';
+import SequenceDiff from './components/SequenceDiff.astro';
+import InterpolationViewer from './components/InterpolationViewer';
 
 What if you could compress a protein into just two numbers and reconstruct it? That's the promise of a **Variational Autoencoder** (VAE): learn a compact latent representation of complex data, then sample from it to generate new, plausible examples.
 
@@ -120,7 +123,7 @@ Ideally, the latent space should show smooth, continuous structure rather than s
 
 The real test: can the model reconstruct input sequences from just 2 numbers? Here are some examples showing the original and reconstructed sequences side by side, with mismatches highlighted.
 
-<SequenceDiff client:visible />
+<SequenceDiff />
 
 <Callout variant="note" title="About the accuracy">
   With only 2 latent dimensions, we lose a lot of information. Production protein VAEs typically use

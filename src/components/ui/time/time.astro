@@ -1,0 +1,19 @@
+---
+import { formatDate } from '@/lib/format';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  date: Date;
+  class?: string;
+}
+
+const { date, class: className } = Astro.props;
+---
+
+<time
+  data-slot="time"
+  datetime={date.toISOString()}
+  class={cn('text-xs whitespace-nowrap text-muted-foreground', className)}
+>
+  {formatDate(date)}
+</time>

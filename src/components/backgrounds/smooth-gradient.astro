@@ -1,0 +1,46 @@
+---
+/** A soft two-stop gradient with film grain, seeded from a string so each post keeps its colours. */
+interface Props {
+  seed: string;
+}
+
+function hash(str: string) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) - h + str.charCodeAt(i)) >>> 0;
+  }
+  return h;
+}
+
+const { seed } = Astro.props;
+const value = hash(seed);
+const hue = value % 360;
+const color1 = `hsl(${hue}, 70%, 85%)`;
+const color2 = `hsl(${(hue + 60) % 360}, 60%, 90%)`;
+const rotation = (value % 360) - 180;
+const id = `gradient-${value.toString(36)}`;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="100%"
+  height="100%"
+  viewBox="0 0 100 100"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  class="block"
+>
+  <defs>
+    <linearGradient id={`${id}-fill`} gradientTransform={`rotate(${rotation})`}>
+      <stop offset="0%" stop-color={color1}></stop>
+      <stop offset="100%" stop-color={color2}></stop>
+    </linearGradient>
+    <filter id={`${id}-noise`}>
+      <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="4" stitchTiles="stitch"
+      ></feTurbulence>
+      <feColorMatrix type="saturate" values="0"></feColorMatrix>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${id}-fill)`}></rect>
+  <rect width="100%" height="100%" filter={`url(#${id}-noise)`} opacity="0.15"></rect>
+</svg>

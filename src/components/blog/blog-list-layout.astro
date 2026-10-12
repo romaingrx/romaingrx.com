@@ -1,5 +1,9 @@
 ---
 import BlogCard from '@/components/blog/card/index.astro';
+import { PageHeader } from '@/components/patterns/page-header';
+import { Container } from '@/components/ui/container';
+import { Grid } from '@/components/ui/grid';
+import { Text } from '@/components/ui/text';
 import { routes } from '@/configs/routes';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import type { BlogPostWithAuthors } from '@/lib/collections';
@@ -17,37 +21,24 @@ interface Props {
 
 const { title, description, posts, categories, tags, activeCategory, activeTag } = Astro.props;
 
-const isAll = !activeCategory && !activeTag;
+const filterClass = (active: boolean) =>
+  cn(
+    'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+    active ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+  );
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="mx-auto max-w-5xl px-4 py-12 md:py-20">
-    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-      {title}
-    </h1>
+  <Container size="content" class="py-12 md:py-20">
+    <PageHeader title={title} />
 
     <nav class="mt-6 flex flex-wrap items-center gap-2" aria-label="Filter posts">
-      <a
-        href={routes.blogs}
-        class={cn(
-          'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
-          isAll
-            ? 'bg-foreground text-background'
-            : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-        )}
-      >
-        All
-      </a>
+      <a href={routes.blogs} class={filterClass(!activeCategory && !activeTag)}>All</a>
       {
         categories.map((cat) => (
           <a
             href={activeCategory === cat ? routes.blogs : `${routes.blogs}/category/${cat}`}
-            class={cn(
-              'rounded-full px-3 py-1.5 text-sm font-medium capitalize transition-colors',
-              activeCategory === cat
-                ? 'bg-foreground text-background'
-                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-            )}
+            class={cn(filterClass(activeCategory === cat), 'capitalize')}
           >
             {cat}
           </a>
@@ -56,16 +47,11 @@ const isAll = !activeCategory && !activeTag;
       {
         tags.length > 0 && (
           <>
-            <span class="text-border mx-1 hidden select-none sm:inline">|</span>
+            <span class="mx-1 hidden text-border select-none sm:inline">|</span>
             {tags.map((tag) => (
               <a
                 href={activeTag === tag ? routes.blogs : `${routes.blogs}/tag/${tag}`}
-                class={cn(
-                  'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
-                  activeTag === tag
-                    ? 'bg-foreground text-background'
-                    : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                )}
+                class={filterClass(activeTag === tag)}
               >
                 {tag}
               </a>
@@ -77,14 +63,16 @@ const isAll = !activeCategory && !activeTag;
 
     {
       posts.length > 0 ? (
-        <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+        <Grid gap="cards" class="mt-10">
           {posts.map((post) => (
             <BlogCard post={post} />
           ))}
-        </div>
+        </Grid>
       ) : (
-        <p class="text-muted-foreground mt-10">No posts found.</p>
+        <Text tone="muted" class="mt-10">
+          No posts found.
+        </Text>
       )
     }
-  </div>
+  </Container>
 </BaseLayout>

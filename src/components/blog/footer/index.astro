@@ -1,16 +1,16 @@
 ---
-import { Icon } from '@iconify/react/dist/iconify.js';
+import { Icon } from 'astro-icon/components';
 import DiscussOn from '@/components/blog/discuss-on.astro';
 import Comments from '@/components/comments.astro';
 import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { formatDate } from '@/lib/format';
-import { cn } from '@/lib/utils';
 import CategoryBadge from '../category-badge.astro';
 import ResourceBadges from '../resources/index.astro';
 import TagBadge from '../tag-badge.astro';
 import AuthorCards from './author-cards.astro';
 import RelatedPosts from './related-posts.astro';
+import { Heading } from '@/components/ui/text';
 
 interface Props {
   post: BlogPostWithAuthors;
@@ -32,21 +32,16 @@ const hasRelatedContent = related_posts || tags.length > 0;
   <DiscussOn post={post} />
 
   <!-- Metadata Section -->
-  <div
-    class={cn(
-      'rounded-lg border bg-card p-6 text-card-foreground shadow-sm',
-      [resources.length, tags.length, categories.length, updated_date].some(Boolean)
-        ? 'flex'
-        : 'hidden'
-    )}
-  >
+  {
+    [resources.length, tags.length, categories.length, updated_date].some(Boolean) && (
+  <div class="flex rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
     <div class="space-y-6">
       <!-- Tags and Categories -->
       <div class="space-y-4">
         {
           resources.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-muted-foreground text-sm font-medium">Resources</h3>
+              <Heading level={3} size="label" class="font-medium text-muted-foreground">Resources</Heading>
               <ResourceBadges resources={resources} />
             </div>
           )
@@ -54,7 +49,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         {
           tags.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-muted-foreground text-sm font-medium">Tags</h3>
+              <Heading level={3} size="label" class="font-medium text-muted-foreground">Tags</Heading>
               <div class="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <TagBadge tag={tag} />
@@ -66,7 +61,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         {
           categories.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-muted-foreground text-sm font-medium">Categories</h3>
+              <Heading level={3} size="label" class="font-medium text-muted-foreground">Categories</Heading>
               <div class="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <CategoryBadge category={category} />
@@ -81,21 +76,23 @@ const hasRelatedContent = related_posts || tags.length > 0;
       {
         updated_date && (
           <div class="text-muted-foreground flex items-center gap-2 text-sm">
-            <Icon icon="mdi:calendar-clock" className="size-4" />
+            <Icon name="mdi:calendar-clock" class="size-4" />
             <span>Last updated on {formatDate(updated_date)}</span>
           </div>
         )
       }
     </div>
   </div>
+    )
+  }
 
   <!-- Authors Section (Hidden) -->
   {
     authors.length > 0 && (
       <div class="mb-16 hidden">
-        <h2 class="mb-6 text-2xl font-semibold tracking-tight">
+        <Heading level={2} class="mb-6">
           About the author{authors.length > 1 ? 's' : ''}
-        </h2>
+        </Heading>
         <AuthorCards authors={authors} />
       </div>
     )
@@ -105,9 +102,9 @@ const hasRelatedContent = related_posts || tags.length > 0;
   {
     hasRelatedContent && (
       <div class="mb-16">
-        <h2 class="mb-6 text-2xl font-semibold tracking-tight">
+        <Heading level={2} class="mb-6">
           {post.data.related_posts ? 'Related Content' : 'More Posts'}
-        </h2>
+        </Heading>
         <RelatedPosts post={post} />
       </div>
     )

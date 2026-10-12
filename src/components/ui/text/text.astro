@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { textVariants, type TextVariants } from './variants';
+
+type Props = TextVariants &
+  HTMLAttributes<'p'> & {
+    as?: 'p' | 'span' | 'div' | 'small' | 'strong' | 'output';
+  };
+
+const { as: Tag = 'p', size, tone, weight, leading, clamp, class: className, ...props } = Astro.props;
+---
+
+<Tag
+  data-slot="text"
+  class={cn(textVariants({ size, tone, weight, leading, clamp }), className)}
+  {...props}
+>
+  <slot />
+</Tag>

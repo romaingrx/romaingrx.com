@@ -1,17 +1,40 @@
 ---
-import type { LucideIcon } from 'lucide-react';
-import CalloutComponent, { type CalloutVariant } from './callout.tsx';
+import { Alert, type AlertVariant } from '@/components/ui/alert';
+import { cn } from '@/lib/utils';
+
+/**
+ * MDX: GitHub-style callout.
+ *
+ * <Callout variant="tip" title="Why predict noise?">…</Callout>
+ */
+export type CalloutVariant = Exclude<AlertVariant, 'default'>;
 
 interface Props {
   variant?: CalloutVariant;
   title?: string;
+  /** Icon name overriding the variant's default, e.g. `lucide:goal`. */
+  icon?: string;
   class?: string;
-  icon?: LucideIcon;
 }
 
-const { variant = 'note', title, class: className, icon } = Astro.props;
+const defaults: Record<CalloutVariant, { icon: string; title: string }> = {
+  note: { icon: 'lucide:info', title: 'Note' },
+  destructive: { icon: 'lucide:circle-alert', title: 'Alert' },
+  tip: { icon: 'lucide:lightbulb', title: 'Tip' },
+  important: { icon: 'lucide:star', title: 'Important' },
+  warning: { icon: 'lucide:triangle-alert', title: 'Warning' },
+  question: { icon: 'lucide:circle-help', title: 'Question' },
+};
+
+const { variant = 'note', title, icon, class: className } = Astro.props;
+const config = defaults[variant] ?? defaults.note;
 ---
 
-<CalloutComponent variant={variant} title={title} class={className} icon={icon} client:visible>
+<Alert
+  variant={variant}
+  title={title ?? config.title}
+  icon={icon ?? config.icon}
+  class={cn('my-6', className)}
+>
   <slot />
-</CalloutComponent>
+</Alert>

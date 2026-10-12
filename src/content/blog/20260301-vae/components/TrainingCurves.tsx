@@ -1,5 +1,7 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
+import type Run from '../run.json';
+
 import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
@@ -8,9 +10,12 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from '@/components/ui/react/chart';
+} from '@/components/ui/chart/chart';
 
-import run from '../run.json';
+import picked from '../run.json?key=training&pick';
+
+// Only this island's slice of run.json ships with it.
+const training = picked as (typeof Run)['training'];
 
 const config = {
   recon: { label: 'Reconstruction', color: 'hsl(262 60% 50%)' },
@@ -26,7 +31,7 @@ export default function TrainingCurves() {
       className="my-4"
     >
       <ChartContainer config={config} className="min-h-[300px] w-full">
-        <LineChart data={run.training} margin={{ top: 5, right: 10, bottom: 5, left: 10 }}>
+        <LineChart data={training} margin={{ top: 5, right: 10, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="epoch"

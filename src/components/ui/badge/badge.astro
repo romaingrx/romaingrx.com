@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { badgeVariants, type BadgeVariants } from './variants';
+
+type Props = BadgeVariants &
+  (({ href: string } & HTMLAttributes<'a'>) | ({ href?: undefined } & HTMLAttributes<'span'>));
+
+const { variant, class: className, href, ...props } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag data-slot="badge" href={href} class={cn(badgeVariants({ variant }), className)} {...props}>
+  <slot />
+</Tag>

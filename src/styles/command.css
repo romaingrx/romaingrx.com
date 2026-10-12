@@ -1,7 +1,10 @@
 @reference "./globals.css";
 
+/* Search palette: a native <dialog> holding a command menu. */
 .command-dialog {
-  @apply inset-y-0 opacity-0 transition-all transition-discrete;
+  @apply inset-y-0 bg-transparent p-0 text-inherit opacity-0 transition-all transition-discrete;
+  max-width: none;
+  max-height: none;
 
   &:is([open], :popover-open) {
     @apply opacity-100;
@@ -25,30 +28,30 @@
     }
   }
   &::backdrop {
-    @apply bg-black/50 opacity-0 transition-all transition-discrete;
+    @apply bg-black/50 opacity-0 backdrop-blur-xs transition-all transition-discrete;
   }
   > * {
-    @apply fixed top-[50%] left-[50%] z-50 flex w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg border bg-background shadow-lg sm:max-w-lg;
+    @apply fixed top-[50%] left-[50%] z-50 flex w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 sm:max-w-lg;
     @apply max-h-[min(640px,calc(100%-2rem))] scale-95 transition-all;
   }
 }
 
 .command {
   > header {
-    @apply flex items-center gap-2 border-b px-3;
+    @apply m-1 mb-0 flex h-8 items-center gap-2 rounded-lg border border-input/30 bg-input/30 px-2;
 
     svg {
       @apply size-4 shrink-0 opacity-50;
     }
     input {
-      @apply flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
+      @apply w-full bg-transparent ps-1.5 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
     }
   }
   [role='menu'] {
     @apply max-h-[300px] overflow-x-hidden overflow-y-auto p-2;
 
     [role='menuitem'] {
-      @apply relative flex w-full cursor-default items-center gap-2 truncate rounded-sm px-2 py-3 text-sm outline-hidden select-none aria-disabled:pointer-events-none aria-disabled:opacity-50;
+      @apply relative flex w-full cursor-default items-center gap-2 truncate rounded-lg px-2 py-3 text-sm outline-hidden select-none aria-disabled:pointer-events-none aria-disabled:opacity-50;
 
       &:hover,
       &.active {
@@ -62,4 +65,9 @@
       @apply -mx-1 my-1 border-border;
     }
   }
+}
+
+#search-results {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }

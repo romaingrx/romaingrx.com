@@ -2,6 +2,7 @@
 import HeroSection from '@/components/home/HeroSection.astro';
 import RecentNotes from '@/components/home/RecentNotes.astro';
 import RecentPosts from '@/components/home/RecentPosts.astro';
+import { Container } from '@/components/ui/container';
 import { site } from '@/configs/site';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getBlogPosts, getNotes } from '@/lib/collections';
@@ -12,10 +13,9 @@ const notes = (await getNotes()).slice(0, 5);
 
 <BaseLayout title={site.title} description={site.description}>
   <HeroSection title={`Hi, I'm ${site.name}`} description={site.description} />
-  <div class="mx-auto max-w-5xl px-4">
+  <Container size="content" class="pb-24">
     <RecentPosts posts={posts} />
-    <hr class="border-border/50 my-16" />
+    <hr class="my-16 border-border/50" />
     <RecentNotes notes={notes} />
-    <div class="pb-24"></div>
-  </div>
+  </Container>
 </BaseLayout>

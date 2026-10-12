@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components';
+import { cva } from 'class-variance-authority';
+import { Badge } from '@/components/ui/badge';
+import { HoverCard } from '@/components/ui/hover-card';
+import { Stack } from '@/components/ui/stack';
+import { Text } from '@/components/ui/text';
+import { platforms_info } from '@/configs/platforms';
+import type { Resource, ResourceType } from '@/configs/resources';
+import { cn } from '@/lib/utils';
+
+type Props = Pick<Resource, 'type' | 'provider' | 'title' | 'value' | 'description'>;
+
+const typeTone = cva('font-medium transition-all duration-300', {
+  variants: {
+    type: {
+      code: 'border-blue-500/20 bg-blue-500/10 text-blue-500 [a&]:hover:bg-blue-500/20 [a&]:hover:text-blue-500',
+      model: 'border-purple-500/20 bg-purple-500/10 text-purple-500 [a&]:hover:bg-purple-500/20 [a&]:hover:text-purple-500',
+      dataset: 'border-green-500/20 bg-green-500/10 text-green-500 [a&]:hover:bg-green-500/20 [a&]:hover:text-green-500',
+      paper: 'border-orange-500/20 bg-orange-500/10 text-orange-500 [a&]:hover:bg-orange-500/20 [a&]:hover:text-orange-500',
+    },
+  },
+});
+
+const typeIcons: Record<ResourceType, string> = {
+  code: 'lucide:code',
+  model: 'lucide:box',
+  dataset: 'lucide:database',
+  paper: 'lucide:file-text',
+};
+
+const { type, provider, title, value, description } = Astro.props;
+---
+
+<HoverCard>
+  <Badge href={value} target="_blank" rel="noopener noreferrer" variant="outline" class={typeTone({ type })}>
+    <Icon name={typeIcons[type]} class="mr-1 size-4" />
+    {title}
+  </Badge>
+  <Stack as="span" gap={3} slot="content">
+    <Text as="span" weight="semibold">{title}</Text>
+    {
+      description && (
+        <Text as="span" size="sm" tone="muted">
+          {description}
+        </Text>
+      )
+    }
+    <Stack as="span" direction="row" align="center" gap={2}>
+      <Badge variant="outline" class={cn(typeTone({ type }), 'cursor-default')}>
+        <Icon name={typeIcons[type]} class="mr-0.5" />
+        {type}
+      </Badge>
+      <Badge variant="outline" class="bg-background/50">
+        <Icon name={platforms_info[provider].icon_name} class="mr-0.5" />
+        {provider}
+      </Badge>
+    </Stack>
+  </Stack>
+</HoverCard>

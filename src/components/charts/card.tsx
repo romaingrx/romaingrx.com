@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/react/card';
+} from '@/components/ui/card/card';
 
 export interface ChartCardProps {
   title: string;

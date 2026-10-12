@@ -1,0 +1,35 @@
+---
+import { Text } from '@/components/ui/text';
+import { Time } from '@/components/ui/time';
+import type { NoteWithAuthors } from '@/lib/collections';
+import NoteHoverCard from './hover-card.astro';
+
+/** Notes as compact rows, each previewing its note on hover. */
+interface Props {
+  notes: NoteWithAuthors[];
+  empty?: string;
+}
+
+const { notes, empty = 'No notes found.' } = Astro.props;
+---
+
+{
+  notes.length > 0 ? (
+    <ul class="space-y-2">
+      {notes.map((note) => (
+        <li class="group rounded-lg border bg-card transition-colors hover:bg-accent/40">
+          <NoteHoverCard note={note}>
+            <span class="font-medium transition-colors group-hover:text-primary">
+              {note.data.title}
+            </span>
+            <Time date={note.data.published_date} class="text-sm" />
+          </NoteHoverCard>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <Text tone="muted" class="text-center">
+      {empty}
+    </Text>
+  )
+}

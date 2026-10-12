@@ -1,0 +1,106 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+/** MDX: a swipeable row of key/value examples. Native scroll snapping; the script only drives the buttons and the counter. */
+export type Props = {
+  examples: Record<string, string>[];
+};
+
+const { examples } = Astro.props;
+---
+
+{
+  examples.length === 0 ? (
+    <p role="status" class="text-sm text-muted-foreground">
+      No examples are available.
+    </p>
+  ) : (
+    <div class="flex flex-col gap-4" data-examples>
+      <div
+        class="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none]"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Examples"
+        tabindex="0"
+        data-examples-track
+      >
+        {examples.map((example, index) => (
+          <Card
+            class="w-full shrink-0 snap-start overflow-hidden"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`Example ${index + 1} of ${examples.length}`}
+          >
+            <CardContent class="p-0">
+              <table class="w-full">
+                <tbody>
+                  {Object.entries(example).map(([key, value], i) => (
+                    <tr class={cn(i % 2 === 0 && 'bg-muted')}>
+                      <td class="p-4 font-semibold">{key}</td>
+                      <td class="p-4">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      {examples.length > 1 && (
+        <div class="flex items-center justify-between gap-3" data-pagefind-ignore>
+          <Button
+            variant="outline"
+            size="icon"
+            class="size-8 rounded-full"
+            aria-label="Previous example"
+            data-examples-prev
+            disabled
+          >
+            <Icon name="lucide:arrow-left" />
+          </Button>
+          <output class="text-sm text-muted-foreground" aria-live="polite" data-examples-status>
+            Example 1 of {examples.length}
+          </output>
+          <Button
+            variant="outline"
+            size="icon"
+            class="size-8 rounded-full"
+            aria-label="Next example"
+            data-examples-next
+          >
+            <Icon name="lucide:arrow-right" />
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+<script>
+  function initExamples() {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-examples]:not([data-ready])')) {
+      root.dataset.ready = '';
+      const track = root.querySelector<HTMLElement>('[data-examples-track]')!;
+      const prev = root.querySelector<HTMLButtonElement>('[data-examples-prev]');
+      const next = root.querySelector<HTMLButtonElement>('[data-examples-next]');
+      const status = root.querySelector<HTMLElement>('[data-examples-status]');
+      const count = track.children.length;
+      const step = () => track.clientWidth + parseFloat(getComputedStyle(track).columnGap || '0');
+      const sync = () => {
+        const index = Math.round(track.scrollLeft / step());
+        if (prev) prev.disabled = index === 0;
+        if (next) next.disabled = index === count - 1;
+        if (status) status.textContent = `Example ${index + 1} of ${count}`;
+      };
+      prev?.addEventListener('click', () => track.scrollBy({ left: -step() }));
+      next?.addEventListener('click', () => track.scrollBy({ left: step() }));
+      track.addEventListener('scrollend', sync);
+    }
+  }
+
+  initExamples();
+  document.addEventListener('astro:after-swap', initExamples);
+</script>

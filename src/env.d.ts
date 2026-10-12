@@ -7,16 +7,10 @@ declare module "*.excalidraw" {
 }
 
 
-interface BasecoatInstance {
-	register: (name: string, selector: string, init: (el: Element) => void) => void;
-	init: (name: string) => void;
-	initAll: () => void;
-	start: () => void;
-	stop: () => void;
-}
-
-declare interface Window {
-	basecoat: BasecoatInstance;
+/** One top-level key of a JSON file, see src/lib/json-pick.ts. */
+declare module "*&pick" {
+	const value: unknown;
+	export default value;
 }
 
 declare namespace App {
