@@ -27,21 +27,44 @@ export default function SDFPipeline() {
         <CardDescription>Binary → distance field → thresholded back to crisp edges</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
           {stages.map((stage, i) => (
-            <div key={stage.label} className="flex items-center gap-4">
-              {i > 0 && <span className="text-2xl text-muted-foreground">→</span>}
+            <div
+              key={stage.label}
+              className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
+            >
+              {i > 0 && (
+                <span className="text-2xl text-muted-foreground sm:hidden" aria-hidden="true">
+                  ↓
+                </span>
+              )}
+              {i > 0 && (
+                <span
+                  className="hidden text-2xl text-muted-foreground sm:inline"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              )}
               <div className="flex flex-col items-center gap-2">
-                <div className="flex items-center justify-center rounded bg-black p-1">
+                <div className="flex aspect-square size-24 items-center justify-center overflow-hidden rounded bg-black p-1">
                   <img
                     src={`data:image/png;base64,${stage.image}`}
                     alt={stage.label}
                     width={96}
                     height={96}
-                    style={{ width: 96, height: 96, imageRendering: 'pixelated' }}
+                    className="aspect-square object-contain"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      aspectRatio: '1 / 1',
+                      imageRendering: 'pixelated',
+                    }}
                   />
                 </div>
-                <span className="font-mono text-xs text-muted-foreground">{stage.label}</span>
+                <span className="text-center font-mono text-xs text-muted-foreground">
+                  {stage.label}
+                </span>
               </div>
             </div>
           ))}

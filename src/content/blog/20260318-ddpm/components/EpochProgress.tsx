@@ -45,7 +45,10 @@ export default function EpochProgress() {
     return clearTimer;
   }, [playing, clearTimer]);
 
-  const togglePlay = () => setPlaying((p) => !p);
+  const togglePlay = () => {
+    if (!playing && index >= entries.length - 1) setIndex(0);
+    setPlaying((p) => !p);
+  };
 
   return (
     <Card className="my-8">
@@ -54,23 +57,20 @@ export default function EpochProgress() {
         <CardDescription>Validation samples across training</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
-        <div className="flex gap-2">
+        <div className="flex w-full justify-center gap-2">
           {current.images.map((img, i) => (
             // oxlint-disable-next-line react/no-array-index-key -- static image list per epoch
             <div
               key={`${current.epoch}-${i}`}
-              className="flex items-center justify-center rounded bg-black p-1"
+              className="flex aspect-square max-w-34 min-w-0 flex-1 items-center justify-center rounded bg-black p-1"
             >
               <img
                 src={`data:image/png;base64,${img}`}
                 alt={`Epoch ${current.epoch + 1} sample ${i + 1}`}
                 width={128}
                 height={128}
-                style={{
-                  width: 128,
-                  height: 128,
-                  imageRendering: 'pixelated',
-                }}
+                className="aspect-square w-full"
+                style={{ imageRendering: 'pixelated' }}
               />
             </div>
           ))}
@@ -115,6 +115,8 @@ export default function EpochProgress() {
               setIndex(Number(e.target.value));
               setPlaying(false);
             }}
+            aria-label="Training epoch"
+            aria-valuetext={`Epoch ${current.epoch + 1}`}
             className="w-full accent-primary"
           />
         </div>
