@@ -168,6 +168,27 @@
   }
 }
 
+/*
+ * Native cross-document view transitions: on same-origin navigations the browser
+ * keeps the current page on screen until the next one has rendered, then
+ * cross-fades, instead of hard-cutting between full page loads. No client router
+ * or JS needed; browsers without support just navigate normally.
+ */
+@view-transition {
+  navigation: auto;
+}
+
+/* Keep the header in place while the page content cross-fades underneath. */
+#header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
 @utility dots {
   background-image: var(--background-image-dots);
 }
