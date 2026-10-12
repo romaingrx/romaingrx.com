@@ -35,7 +35,8 @@ const years = Array.from({ length: lastYear - firstYear + 1 }, (_, i) => firstYe
 const percent = (months: number) => `${((months - axisStart) / axisLength) * 100}%`;
 
 const rows = groups.map((group) => ({
-  ...group,
+  type: group.type,
+  title: group.title,
   entries: entries
     .filter((entry) => entry.data.type === group.type)
     .toSorted((a, b) => endMonths(b) - endMonths(a) || toMonths(b.data.startDate) - toMonths(a.data.startDate)),
