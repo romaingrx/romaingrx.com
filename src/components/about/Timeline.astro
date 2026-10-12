@@ -1,7 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import CompactProse from '../ui/compact-prose.astro';
 
 interface Props {
   type?: 'education' | 'experience' | 'project';
@@ -22,6 +20,18 @@ const sortedItems = filteredEntries.toSorted((a, b) => {
   const dateB = b.data.endDate === 'present' ? new Date() : new Date(b.data.startDate);
   return dateB.getTime() - dateA.getTime();
 });
+
+const formatMonth = (value: string) =>
+  new Date(`${value}-01T00:00:00Z`).toLocaleDateString('en-US', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+
+const formatPeriod = (start: string, end?: string) => {
+  if (!end) return formatMonth(start);
+  return `${formatMonth(start)} – ${end === 'present' ? 'Present' : formatMonth(end)}`;
+};
 
 // Pre-render all content
 const renderedContent = await Promise.all(
@@ -44,63 +54,38 @@ const renderedContent = await Promise.all(
     <div class="bg-border h-px flex-1"></div>
   </div>
 
-  <div class="space-y-6">
+  <ul class="space-y-3">
     {
-      renderedContent.map(({ item, Content }) => {
-        const isActive = item.data.endDate === 'present';
-        return (
-          <div class="group relative">
-            <div class="border-border/50 bg-card/30 hover:border-border hover:bg-card/50 rounded-lg border p-5 transition-all duration-200 hover:shadow-sm">
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div class="min-w-0 flex-1 space-y-1">
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-foreground font-medium">{item.data.title}</h3>
-                    {isActive && (
-                      <span class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20">
-                        Current
-                      </span>
-                    )}
-                  </div>
-
-                  <div class="text-muted-foreground text-sm">
-                    {item.data.organization_url ? (
-                      <a
-                        href={item.data.organization_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="hover:text-foreground transition-colors"
-                      >
-                        {item.data.organization}
-                      </a>
-                    ) : (
-                      <span>{item.data.organization}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div class="text-muted-foreground flex flex-col gap-1 text-xs sm:text-right">
-                  <div class="flex items-center gap-1.5 sm:justify-end">
-                    <Icon name="lucide:calendar" class="size-3" />
-                    <span class="font-mono whitespace-nowrap">
-                      {item.data.startDate}
-                      {item.data.endDate ? ` – ${item.data.endDate}` : ''}
-                    </span>
-                  </div>
-                  <div class="flex items-center gap-1.5 sm:justify-end">
-                    <Icon name="lucide:map-pin" class="size-3" />
-                    <span class="whitespace-nowrap">{item.data.location}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-4">
-                <CompactProse>
-                  <Content />
-                </CompactProse>
-              </div>
-            </div>
+      renderedContent.map(({ item, Content }) => (
+        <li class="border-border/50 bg-card/30 rounded-lg border px-5 py-4">
+          <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+            <h3 class="text-foreground font-medium">
+              {item.data.title}
+              <span class="text-muted-foreground font-normal">
+                {' · '}
+                {item.data.organization_url ? (
+                  <a
+                    href={item.data.organization_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-foreground transition-colors"
+                  >
+                    {item.data.organization}
+                  </a>
+                ) : (
+                  item.data.organization
+                )}
+              </span>
+            </h3>
+            <span class="text-muted-foreground text-xs whitespace-nowrap">
+              {formatPeriod(item.data.startDate, item.data.endDate)}
+            </span>
           </div>
-        );
-      })
+          <div class="text-muted-foreground mt-1 text-sm [&_a]:underline [&_a]:underline-offset-2 [&_p]:m-0">
+            <Content />
+          </div>
+        </li>
+      ))
     }
-  </div>
+  </ul>
 </div>

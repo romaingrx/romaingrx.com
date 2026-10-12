@@ -66,12 +66,10 @@ export const timelineSchema = z
     title: z.string(),
     organization: z.string(),
     organization_url: z.url().optional(),
-    location: z.string(),
+    location: z.string().optional(),
     startDate: z.string(), // YYYY-MM format
     endDate: z.string().optional(), // YYYY-MM format or "present"
     type: z.enum(['education', 'experience', 'project']),
-    tags: z.array(z.string()).optional(),
-    order: z.number().optional(),
   })
   .strict();
 
