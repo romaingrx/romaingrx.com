@@ -1,4 +1,6 @@
 ---
+import { Badge } from '@/components/ui/badge';
+import { Heading, Text } from '@/components/ui/text';
 import { reconstructions } from '../run.json';
 import { buildSequenceDiffPositions } from './sequence-diff';
 
@@ -23,24 +25,20 @@ const mismatchClass = 'font-semibold text-status-error underline decoration-2 un
 
 <div class="my-4 space-y-3">
   <div>
-    <h4 class="text-sm font-medium">Sequence reconstruction</h4>
-    <p class="text-sm text-muted-foreground">
+    <Heading level={4} size="label" class="font-medium">Sequence reconstruction</Heading>
+    <Text size="sm" tone="muted">
       Original and reconstructed amino acid sequences. Missing and extra residues count as
       mismatches.
-    </p>
+    </Text>
   </div>
-  <p class="text-xs text-muted-foreground" aria-hidden="true">
+  <Text size="xs" tone="muted" aria-hidden="true">
     Top: source · bottom: reconstruction · underline: mismatch · –: missing residue
-  </p>
+  </Text>
   {
     rows.map((row) => (
       <div class="rounded-lg border border-border bg-muted/30 p-3">
         <div class="mb-2">
-          <span
-            class={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${row.statusClass}`}
-          >
-            {row.pct}% match
-          </span>
+          <Badge class={row.statusClass}>{row.pct}% match</Badge>
         </div>
         <div
           class="flex flex-wrap items-start gap-x-1 font-mono text-xs leading-5"
