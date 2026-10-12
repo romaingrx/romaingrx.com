@@ -13,115 +13,48 @@ const groups = [
 
 const entries = await getCollection('timeline');
 
-// Months since year 0, so ranges can be laid out on a linear axis
-const toMonths = (value: string) => {
-  const [year, month = '1'] = value.split('-');
-  return Number(year) * 12 + Number(month) - 1;
-};
-const now = new Date();
-const nowMonths = now.getUTCFullYear() * 12 + now.getUTCMonth();
-const endMonths = (entry: Entry) =>
-  entry.data.endDate === 'present'
-    ? nowMonths
-    : toMonths(entry.data.endDate ?? entry.data.startDate) + 1;
+// Ongoing entries first, then most recent start date
+const sortKey = (entry: Entry) =>
+  `${entry.data.endDate === 'present' ? '1' : '0'}${entry.data.startDate}`;
 
-const firstYear = Math.min(...entries.map((entry) => Number(entry.data.startDate.slice(0, 4))));
-const lastYear = now.getUTCFullYear();
-const axisStart = firstYear * 12;
-// Leave a little room after today so the ongoing bar and the marker stay visible
-const axisLength = nowMonths + 4 - axisStart;
-const years = Array.from({ length: lastYear - firstYear + 1 }, (_, i) => firstYear + i);
-
-const percent = (months: number) => `${((months - axisStart) / axisLength) * 100}%`;
-
-const rows = groups.map((group) => ({
-  type: group.type,
+const sections = groups.map((group) => ({
   title: group.title,
   entries: entries
     .filter((entry) => entry.data.type === group.type)
-    .toSorted((a, b) => endMonths(b) - endMonths(a) || toMonths(b.data.startDate) - toMonths(a.data.startDate)),
+    .toSorted((a, b) => sortKey(b).localeCompare(sortKey(a))),
 }));
-
-const barTone = {
-  experience: 'bg-foreground/80',
-  project: 'bg-primary',
-  education: 'border border-foreground/40 bg-transparent',
-} as const;
 ---
 
-<section aria-label="Timeline" class="relative">
-  <!-- Year axis and gridlines, aligned with the bar track -->
-  <div aria-hidden="true" class="pointer-events-none absolute inset-0 sm:left-64">
-    {
-      years.map((year, i) => (
-        <div class="absolute inset-y-0" style={{ left: percent(year * 12) }}>
-          <span
-            class:list={[
-              'text-muted-foreground absolute top-0 -translate-x-1/2 text-[11px] tabular-nums',
-              i % 2 === 1 && 'max-sm:hidden',
-            ]}
-          >
-            '{String(year).slice(2)}
-          </span>
-          <div class="border-border/40 absolute top-6 bottom-0 border-l border-dashed max-sm:hidden" />
-        </div>
-      ))
-    }
-    <div class="absolute inset-y-0" style={{ left: percent(nowMonths) }}>
-      <span class="text-foreground absolute top-0 -translate-x-1/2 text-[11px] font-medium max-sm:hidden">
-        now
-      </span>
-      <div class="border-primary absolute top-6 bottom-0 border-l max-sm:hidden" />
-    </div>
-  </div>
-
-  <div class="relative space-y-8 pt-10">
-    {
-      rows.map((group) => (
-        <div>
-          <h2 class="text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase">{group.title}</h2>
-          <ul class="space-y-3">
-            {group.entries.map((entry) => {
-              const start = toMonths(entry.data.startDate);
-              const end = endMonths(entry);
-              return (
-                <li class="grid gap-1.5 sm:grid-cols-[16rem_1fr] sm:items-center sm:gap-0">
-                  <div class="min-w-0 pr-4 text-sm leading-tight">
-                    <p class="text-foreground truncate font-medium">
-                      {entry.data.organization_url ? (
-                        <a
-                          href={entry.data.organization_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="hover:underline hover:underline-offset-4"
-                        >
-                          {entry.data.organization}
-                        </a>
-                      ) : (
-                        entry.data.organization
-                      )}
-                    </p>
-                    <p class="text-muted-foreground truncate">
-                      {entry.data.title}
-                       <span class="tabular-nums sm:sr-only">· {formatPeriod(entry.data.startDate, entry.data.endDate)}</span>
-                    </p>
-                  </div>
-                  <div aria-hidden="true" class="relative h-2.5">
-                    <div
-                      class:list={[
-                        'absolute inset-y-0 min-w-1.5 rounded-full',
-                        barTone[entry.data.type],
-                      ]}
-                      title={formatPeriod(entry.data.startDate, entry.data.endDate)}
-                      style={{ left: percent(start), width: `calc(${percent(end)} - ${percent(start)})` }}
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))
-    }
-  </div>
-</section>
+<div class="space-y-12">
+  {
+    sections.map((section) => (
+      <section>
+        <h2 class="text-muted-foreground mb-4 text-sm">{section.title}</h2>
+        <ul class="space-y-4 sm:space-y-3">
+          {section.entries.map((entry) => (
+            <li class="grid grid-cols-[1fr_auto] items-baseline gap-x-6">
+              <p class="min-w-0">
+                {entry.data.organization_url ? (
+                  <a
+                    href={entry.data.organization_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-foreground font-medium underline-offset-4 hover:underline"
+                  >
+                    {entry.data.organization}
+                  </a>
+                ) : (
+                  <span class="text-foreground font-medium">{entry.data.organization}</span>
+                )}
+                <span class="text-muted-foreground block sm:ml-2 sm:inline">{entry.data.title}</span>
+              </p>
+              <span class="text-muted-foreground text-sm whitespace-nowrap tabular-nums">
+                {formatPeriod(entry.data.startDate, entry.data.endDate)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
