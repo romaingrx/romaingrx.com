@@ -32,7 +32,7 @@ const { Content, headings } = await render(post);
   <div class="mt-10"></div>
   <TableOfContents headings={headings} />
   <Shell type="article">
-    <Prose Element="article">
+    <Prose Element="article" data-pagefind-body data-pagefind-meta={`title:${post.data.title}`}>
       <Content components={components} />
     </Prose>
     <PostFooter post={post} />
