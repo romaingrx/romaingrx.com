@@ -1,6 +1,5 @@
 ---
 import { ArrowUpRight } from 'lucide-react';
-import { Button } from '@/components/ui/react/button';
 import { Card, CardDescription, CardTitle } from '@/components/ui/react/card';
 import { cn } from '@/lib/utils';
 
@@ -24,10 +23,14 @@ const { title, value, description, link, class: className } = Astro.props;
     <span class="text-2xl font-bold tabular-nums">{value.toLocaleString()}</span>
     {
       link && (
-        <a href={link} target="_blank">
-          <Button variant="secondary" size="sm" className="group">
-            <ArrowUpRight className="size-4 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-          </Button>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${title}`}
+          class="group bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex size-8 items-center justify-center rounded-md transition-colors"
+        >
+          <ArrowUpRight className="size-4 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
         </a>
       )
     }
