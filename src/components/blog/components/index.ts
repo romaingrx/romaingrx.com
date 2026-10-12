@@ -1,5 +1,5 @@
----
 import { Accordion } from '@/components/ui';
+
 import Center from './blocks/center.astro';
 import BlogLink from './blog-link.astro';
 import Callout from './callout.astro';
@@ -26,4 +26,3 @@ export const components = {
   Accordion,
   YouTube,
 };
----

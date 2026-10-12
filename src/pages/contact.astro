@@ -1,23 +1,34 @@
 ---
-import ContactForm from '@/components/home/ContactForm.astro';
+import Shell from '@/components/Shell.astro';
+import { socialLinks } from '@/configs/social';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const title = "Let's Collaborate";
+const linkedIn = socialLinks.find((link) => link.platform === 'linkedin');
+if (!linkedIn) throw new Error('LinkedIn contact link is not configured.');
+
+const title = 'Contact';
 const description =
-  "Have an idea, project, or question? Reach out and let's create something amazing together.";
+  'Always open to discussing interesting ideas or projects, and available for consulting work in machine learning and full-stack applications.';
 ---
 
 <BaseLayout title={title} description={description}>
-  <main class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-16">
-    <div class="w-full max-w-2xl">
-      <h1 class="mb-6 text-center text-4xl font-bold tracking-tight">{title}</h1>
-      <p class="text-muted-foreground mb-12 text-center text-lg">
-        {description}
+  <Shell type="page">
+    <section class="mx-auto max-w-2xl py-16 md:py-24">
+      <h1 class="mb-6 text-4xl font-bold tracking-tight">{title}</h1>
+      <p class="text-muted-foreground text-lg">
+        Have an interesting idea or project? I'm always open to a conversation.
       </p>
-
-      <div class="w-full">
-        <ContactForm hideTitle={true} />
-      </div>
-    </div>
-  </main>
+      <p class="text-muted-foreground mt-3 mb-8">
+        I also take on consulting work in machine learning and full-stack applications.
+      </p>
+      <a
+        href={linkedIn.url}
+        class="hover:text-muted-foreground underline underline-offset-4"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Message me on LinkedIn
+      </a>
+    </section>
+  </Shell>
 </BaseLayout>

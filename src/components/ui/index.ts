@@ -3,7 +3,4 @@ export { default as Alert } from './alert.astro';
 export { default as Badge } from './badge.astro';
 export { default as Button } from './button.astro';
 export { default as Dialog } from './dialog.astro';
-export { default as Input } from './input.astro';
-export { default as Label } from './label.astro';
 export { default as Loading } from './loading.astro';
-export { default as Textarea } from './textarea.astro';
