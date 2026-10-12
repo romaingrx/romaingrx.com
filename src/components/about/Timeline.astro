@@ -1,6 +1,8 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
+import { formatPeriod } from '@/lib/format';
+
 interface Props {
   type?: 'education' | 'experience' | 'project';
   title: string;
@@ -21,18 +23,6 @@ const sortedItems = filteredEntries.toSorted((a, b) => {
   return dateB.getTime() - dateA.getTime();
 });
 
-const formatMonth = (value: string) =>
-  new Date(`${value}-01T00:00:00Z`).toLocaleDateString('en-US', {
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
-
-const formatPeriod = (start: string, end?: string) => {
-  if (!end) return formatMonth(start);
-  return `${formatMonth(start)} – ${end === 'present' ? 'Present' : formatMonth(end)}`;
-};
-
 // Pre-render all content
 const renderedContent = await Promise.all(
   sortedItems.map(async (item: CollectionEntry<'timeline'>) => {
@@ -40,52 +30,53 @@ const renderedContent = await Promise.all(
     return {
       item,
       Content: rendered.Content,
+      hasBody: Boolean(item.body?.trim()),
     };
   })
 );
 ---
 
-<div class="space-y-6">
-  <!-- Subtle section title -->
-  <div class="flex items-center gap-3">
-    <h2 class="text-foreground text-lg font-semibold">
-      {title}
-    </h2>
-    <div class="bg-border h-px flex-1"></div>
-  </div>
-
-  <ul class="space-y-3">
+<section>
+  <h2 class="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">{title}</h2>
+  <ul class="divide-border/60 border-border/60 divide-y border-t">
     {
-      renderedContent.map(({ item, Content }) => (
-        <li class="border-border/50 bg-card/30 rounded-lg border px-5 py-4">
-          <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-            <h3 class="text-foreground font-medium">
-              {item.data.title}
-              <span class="text-muted-foreground font-normal">
-                {' · '}
+      renderedContent.map(({ item, Content, hasBody }) => (
+        <li class="flex items-start gap-4 py-4">
+          <span
+            aria-hidden="true"
+            class="border-border/70 bg-card text-muted-foreground mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md border text-sm font-medium"
+          >
+            {item.data.organization.charAt(0)}
+          </span>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-baseline justify-between gap-4">
+              <h3 class="text-foreground truncate font-medium">
                 {item.data.organization_url ? (
                   <a
                     href={item.data.organization_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="hover:text-foreground transition-colors"
+                    class="hover:underline hover:underline-offset-4"
                   >
                     {item.data.organization}
                   </a>
                 ) : (
                   item.data.organization
                 )}
+              </h3>
+              <span class="text-muted-foreground shrink-0 text-sm tabular-nums">
+                {formatPeriod(item.data.startDate, item.data.endDate)}
               </span>
-            </h3>
-            <span class="text-muted-foreground text-xs whitespace-nowrap">
-              {formatPeriod(item.data.startDate, item.data.endDate)}
-            </span>
-          </div>
-          <div class="text-muted-foreground mt-1 text-sm [&_a]:underline [&_a]:underline-offset-2 [&_p]:m-0">
-            <Content />
+            </div>
+            <p class="text-muted-foreground text-sm">{item.data.title}</p>
+            {hasBody && (
+              <div class="text-muted-foreground/80 mt-1 text-sm [&_a]:underline [&_a]:underline-offset-2 [&_p]:m-0">
+                <Content />
+              </div>
+            )}
           </div>
         </li>
       ))
     }
   </ul>
-</div>
+</section>
