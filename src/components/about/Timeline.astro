@@ -1,106 +1,60 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { getCollection, render, type CollectionEntry } from 'astro:content';
-import CompactProse from '../ui/compact-prose.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-interface Props {
-  type?: 'education' | 'experience' | 'project';
-  title: string;
-}
+import { formatPeriod } from '@/lib/format';
 
-const { type, title } = Astro.props;
+type Entry = CollectionEntry<'timeline'>;
 
-// Get timeline entries
+const groups = [
+  { type: 'experience', title: 'Work' },
+  { type: 'project', title: 'Projects' },
+  { type: 'education', title: 'Education' },
+] as const;
+
 const entries = await getCollection('timeline');
-const filteredEntries = type
-  ? entries.filter((entry: CollectionEntry<'timeline'>) => entry.data.type === type)
-  : entries;
 
-// Sort items by date (most recent first)
-const sortedItems = filteredEntries.toSorted((a, b) => {
-  const dateA = a.data.endDate === 'present' ? new Date() : new Date(a.data.startDate);
-  const dateB = b.data.endDate === 'present' ? new Date() : new Date(b.data.startDate);
-  return dateB.getTime() - dateA.getTime();
-});
+// Ongoing entries first, then most recent start date
+const sortKey = (entry: Entry) =>
+  `${entry.data.endDate === 'present' ? '1' : '0'}${entry.data.startDate}`;
 
-// Pre-render all content
-const renderedContent = await Promise.all(
-  sortedItems.map(async (item: CollectionEntry<'timeline'>) => {
-    const rendered = await render(item);
-    return {
-      item,
-      Content: rendered.Content,
-    };
-  })
-);
+const sections = groups.map((group) => ({
+  title: group.title,
+  entries: entries
+    .filter((entry) => entry.data.type === group.type)
+    .toSorted((a, b) => sortKey(b).localeCompare(sortKey(a))),
+}));
 ---
 
-<div class="space-y-6">
-  <!-- Subtle section title -->
-  <div class="flex items-center gap-3">
-    <h2 class="text-foreground text-lg font-semibold">
-      {title}
-    </h2>
-    <div class="bg-border h-px flex-1"></div>
-  </div>
-
-  <div class="space-y-6">
-    {
-      renderedContent.map(({ item, Content }) => {
-        const isActive = item.data.endDate === 'present';
-        return (
-          <div class="group relative">
-            <div class="border-border/50 bg-card/30 hover:border-border hover:bg-card/50 rounded-lg border p-5 transition-all duration-200 hover:shadow-sm">
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div class="min-w-0 flex-1 space-y-1">
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-foreground font-medium">{item.data.title}</h3>
-                    {isActive && (
-                      <span class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20">
-                        Current
-                      </span>
-                    )}
-                  </div>
-
-                  <div class="text-muted-foreground text-sm">
-                    {item.data.organization_url ? (
-                      <a
-                        href={item.data.organization_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="hover:text-foreground transition-colors"
-                      >
-                        {item.data.organization}
-                      </a>
-                    ) : (
-                      <span>{item.data.organization}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div class="text-muted-foreground flex flex-col gap-1 text-xs sm:text-right">
-                  <div class="flex items-center gap-1.5 sm:justify-end">
-                    <Icon name="lucide:calendar" class="size-3" />
-                    <span class="font-mono whitespace-nowrap">
-                      {item.data.startDate}
-                      {item.data.endDate ? ` – ${item.data.endDate}` : ''}
-                    </span>
-                  </div>
-                  <div class="flex items-center gap-1.5 sm:justify-end">
-                    <Icon name="lucide:map-pin" class="size-3" />
-                    <span class="whitespace-nowrap">{item.data.location}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-4">
-                <CompactProse>
-                  <Content />
-                </CompactProse>
-              </div>
-            </div>
-          </div>
-        );
-      })
-    }
-  </div>
+<div class="space-y-12">
+  {
+    sections.map((section) => (
+      <section>
+        <h2 class="text-muted-foreground mb-4 text-sm">{section.title}</h2>
+        <ul class="space-y-4 sm:space-y-3">
+          {section.entries.map((entry) => (
+            <li class="grid grid-cols-[1fr_auto] items-baseline gap-x-6">
+              <p class="min-w-0">
+                {entry.data.organization_url ? (
+                  <a
+                    href={entry.data.organization_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-foreground font-medium underline-offset-4 hover:underline"
+                  >
+                    {entry.data.organization}
+                  </a>
+                ) : (
+                  <span class="text-foreground font-medium">{entry.data.organization}</span>
+                )}
+                <span class="text-muted-foreground block sm:ml-2 sm:inline">{entry.data.title}</span>
+              </p>
+              <span class="text-muted-foreground text-sm whitespace-nowrap tabular-nums">
+                {formatPeriod(entry.data.startDate, entry.data.endDate)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
 </div>

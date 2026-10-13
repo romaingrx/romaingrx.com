@@ -1,6 +1,6 @@
 ---
 name: 'Romain Graux'
-title: 'ML Engineer'
+title: 'Senior ML Engineer'
 image: './romaingrx.jpeg'
 socialLinks:
   github:
@@ -19,5 +19,5 @@ socialLinks:
     handle: 'romaingrx'
 ---
 
-ML Engineer and Software Engineer interested in **AI safety**, **machine learning**, and **computers in general**.
-Currently aspiring at becoming a better version of myself every day and xp in the following subjects: hardware acceleration, cybersec and productivity.
+Senior ML Engineer working on **evals** and **post-training** for speech models at Blynt AI.
+Background in **red-teaming** and **AI safety**.
