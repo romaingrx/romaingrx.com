@@ -50,7 +50,7 @@ Content collections are configured in `src/content.config.ts` with strict schema
 - Every primitive sets `data-slot`. Compose with `cn()` and the `class` prop rather than new variants for one-off tweaks.
 - Use `Text`/`Heading` for typography and `Stack`/`Grid`/`Container` for layout instead of repeating utility strings.
 - Only reach for a React island (`client:visible`) when the component is interactive. Hover cards, tooltips, carousels and dialogs are CSS or a small inline script.
-- MDX posts import each island from its own file, never through a barrel, so each island gets its own chunk. Large JSON data is imported per key with `import x from './run.json?key=foo&pick'` (see `src/lib/json-pick.ts`).
+- MDX posts import each island from its own file, never through a barrel, so each island gets its own chunk. A post's run data lives in one JSON file per widget (`data/<field>.json`), so each island ships only its own data and keeps its inferred type.
 
 ### Key Configuration Files
 

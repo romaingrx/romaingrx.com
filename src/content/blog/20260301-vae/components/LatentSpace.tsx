@@ -2,15 +2,10 @@ import { useMemo } from 'react';
 
 import { CartesianGrid, Cell, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 
-import type Run from '../run.json';
-
 import ChartCard from '@/components/charts/card';
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart/chart';
 
-import picked from '../run.json?key=latent_space&pick';
-
-// Only this island's slice of run.json ships with it.
-const latent_space = picked as (typeof Run)['latent_space'];
+import latent_space from '../data/latent_space.json';
 
 const config = {
   z: { label: 'Latent point', color: 'var(--chart-1)' },

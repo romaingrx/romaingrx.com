@@ -1,7 +1,7 @@
 ---
 import ImageGrid from '@/components/blog/components/image-grid.astro';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { samples } from '../run.json';
+import samples from '../data/samples.json';
 
 const images = samples.map((s) => ({ src: s.image, label: s.letter }));
 ---

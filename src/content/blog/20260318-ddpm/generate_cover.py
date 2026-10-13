@@ -13,7 +13,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 HERE = Path(__file__).parent
-RUN = json.loads((HERE / "run.json").read_text())
+DENOISING = json.loads((HERE / "data" / "denoising.json").read_text())
 
 N_STEPS = 6
 GLYPH_SIZE = 128
@@ -36,7 +36,7 @@ def round_corners(img: Image.Image, radius: int) -> Image.Image:
 
 
 def main():
-    examples = RUN["denoising"][:3]
+    examples = DENOISING[:3]
 
     rows: list[list[Image.Image]] = []
     for ex in examples:

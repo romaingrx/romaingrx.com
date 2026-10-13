@@ -1,7 +1,5 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
-import type Run from '../run.json';
-
 import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
@@ -12,10 +10,7 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart/chart';
 
-import picked from '../run.json?key=noise_schedule&pick';
-
-// Only this island's slice of run.json ships with it.
-const noise_schedule = picked as (typeof Run)['noise_schedule'];
+import noise_schedule from '../data/noise_schedule.json';
 
 const config = {
   beta: { label: 'βₜ', color: 'var(--chart-1)' },

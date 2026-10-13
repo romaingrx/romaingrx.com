@@ -17,7 +17,6 @@ import remarkMath from 'remark-math';
 
 import { shikiConfig } from './src/configs/shiki';
 import { excalidraw } from './src/lib/excalidraw';
-import { jsonPick } from './src/lib/json-pick';
 import { rehypeCitationRelative } from './src/lib/rehype-citation-wrapper.mjs';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
 
@@ -82,7 +81,7 @@ export default defineConfig({
     pagefind(),
   ],
   vite: {
-    plugins: [tailwindcss(), excalidraw(), jsonPick()],
+    plugins: [tailwindcss(), excalidraw()],
     resolve: {
       // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
       // Without this, MessageChannel from node:worker_threads needs to be polyfilled.

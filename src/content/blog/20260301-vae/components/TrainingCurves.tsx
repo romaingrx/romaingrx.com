@@ -1,7 +1,5 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
-import type Run from '../run.json';
-
 import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
@@ -12,10 +10,7 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart/chart';
 
-import picked from '../run.json?key=training&pick';
-
-// Only this island's slice of run.json ships with it.
-const training = picked as (typeof Run)['training'];
+import training from '../data/training.json';
 
 const config = {
   recon: { label: 'Reconstruction', color: 'hsl(262 60% 50%)' },

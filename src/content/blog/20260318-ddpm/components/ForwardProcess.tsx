@@ -1,11 +1,6 @@
-import type Run from '../run.json';
-
 import { StepSlider } from '@/components/blog/components/step-slider';
 
-import picked from '../run.json?key=forward_process&pick';
-
-// Only this island's slice of run.json ships with it.
-const forward_process = picked as (typeof Run)['forward_process'];
+import forward_process from '../data/forward_process.json';
 
 const examples = forward_process.map((ex, i) => ({
   label: `${i + 1}`,

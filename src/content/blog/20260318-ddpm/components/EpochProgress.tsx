@@ -2,8 +2,6 @@
 
 import { Pause, Play, RotateCcw } from 'lucide-react';
 
-import type Run from '../run.json';
-
 import { Button } from '@/components/ui/button/button';
 import {
   Card,
@@ -14,10 +12,7 @@ import {
 } from '@/components/ui/card/card';
 import { usePlayback } from '@/hooks/use-playback';
 
-import picked from '../run.json?key=training_samples&pick';
-
-// Only this island's slice of run.json ships with it.
-const training_samples = picked as (typeof Run)['training_samples'];
+import training_samples from '../data/training_samples.json';
 
 const entries = training_samples;
 

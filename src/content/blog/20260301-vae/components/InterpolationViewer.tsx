@@ -1,11 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import type Run from '../run.json';
-
-import picked from '../run.json?key=interpolations&pick';
-
-// Only this island's slice of run.json ships with it.
-const interpolations = picked as (typeof Run)['interpolations'];
+import interpolations from '../data/interpolations.json';
 
 type Interpolation = (typeof interpolations)[number];
 

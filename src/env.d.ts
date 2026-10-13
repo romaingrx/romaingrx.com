@@ -7,12 +7,6 @@ declare module "*.excalidraw" {
 }
 
 
-/** One top-level key of a JSON file, see src/lib/json-pick.ts. */
-declare module "*&pick" {
-	const value: unknown;
-	export default value;
-}
-
 declare namespace App {
 	interface Locals extends Runtime {}
 }

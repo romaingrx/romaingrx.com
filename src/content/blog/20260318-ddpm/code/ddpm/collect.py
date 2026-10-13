@@ -1,4 +1,5 @@
 import base64
+import json
 from pathlib import Path
 
 import jax.numpy as jnp
@@ -15,7 +16,7 @@ from .config import (
     N_DENOISING_EXAMPLES,
     N_FORWARD_EXAMPLES,
     N_SAMPLES,
-    OUTPUT_FILE,
+    OUTPUT_DIR,
 )
 from .model import UNet
 from .sample import ddpm_sample_with_intermediates, sample_batch
@@ -163,8 +164,11 @@ def collect_and_save(
         samples=samples,
     )
 
-    OUTPUT_FILE.write_text(run.model_dump_json(indent=2))
-    log.info("saved_run", path=str(OUTPUT_FILE))
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    # One file per field, so each widget in the post ships only its own data.
+    for name, value in run.model_dump(mode="json").items():
+        (OUTPUT_DIR / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n")
+    log.info("saved_run", path=str(OUTPUT_DIR))
 
 
 def load_training_samples() -> list[TrainingSample]:
