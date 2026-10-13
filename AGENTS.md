@@ -49,14 +49,14 @@ The goal of the codebase is a site that is clean, simple, and light. Every rule 
 
 Each layer imports only from its own layer or a lower one. Never import upward.
 
-| Layer | Path                                                    | Holds                                                                      |
-| ----- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 0     | `src/lib/`, `src/configs/`, `src/content.config.ts`     | Pure helpers, data access, site config, schemas. No components.            |
-| 1     | `src/components/ui/`                                    | Primitives. Render from props alone. No content or routes.                 |
-| 2     | `src/components/patterns/`                              | Compositions of primitives used on more than one page.                     |
-| 3     | `src/components/<feature>/` (`blog/`, `note/`, `home/`) | Components that know about an entry, a route, or a page section.           |
+| Layer | Path                                                    | Holds                                                                       |
+| ----- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
+| 0     | `src/lib/`, `src/configs/`, `src/content.config.ts`     | Pure helpers, data access, site config, schemas. No components.             |
+| 1     | `src/components/ui/`                                    | Primitives. Render from props alone. No content or routes.                  |
+| 2     | `src/components/patterns/`                              | Compositions of primitives used on more than one page.                      |
+| 3     | `src/components/<feature>/` (`blog/`, `note/`, `home/`) | Components that know about an entry, a route, or a page section.            |
 | 4     | `src/layouts/`                                          | Page shells. A component that wraps `BaseLayout` is a layout and goes here. |
-| 5     | `src/pages/`                                            | Routes. Fetch data, pick a layout, render. Keep logic in `src/lib/`.       |
+| 5     | `src/pages/`                                            | Routes. Fetch data, pick a layout, render. Keep logic in `src/lib/`.        |
 
 Content lives in `src/content/<collection>/<entry>/index.mdx`, with the entry's images, data and islands in the same folder. Collections: `blog`, `note`, `timeline`, `author`.
 
@@ -88,13 +88,13 @@ Skills live in `.agents/skills/<name>/SKILL.md`. `.claude/skills` links to that 
 
 Each kind of information has one location. Link to it. Do not copy it.
 
-| Information             | Location                     |
-| ----------------------- | ---------------------------- |
-| Conventions             | `AGENTS.md`, `.agents/skills/` |
-| Content schemas         | `src/content.config.ts`      |
-| Routes                  | `src/configs/routes.ts`      |
-| Site metadata           | `src/configs/site.ts`        |
-| Build and integrations  | `astro.config.mjs`           |
-| History                 | Git commits and PRs          |
+| Information            | Location                       |
+| ---------------------- | ------------------------------ |
+| Conventions            | `AGENTS.md`, `.agents/skills/` |
+| Content schemas        | `src/content.config.ts`        |
+| Routes                 | `src/configs/routes.ts`        |
+| Site metadata          | `src/configs/site.ts`          |
+| Build and integrations | `astro.config.mjs`             |
+| History                | Git commits and PRs            |
 
 Documents describe the current code. They do not record history or status.

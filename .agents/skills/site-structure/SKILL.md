@@ -9,19 +9,19 @@ The layer table in `AGENTS.md` is the rule: a file imports only from its own lay
 
 ## Decision table
 
-| What you are adding                                          | Goes in                              |
-| ------------------------------------------------------------ | ------------------------------------ |
-| A pure function (format, sort, filter, URL)                  | `src/lib/`                           |
-| Data access for a collection (load, relate, group by tag)    | `src/lib/collections.ts`             |
-| A route or a URL shape                                       | `src/configs/routes.ts`              |
-| A site-wide value (name, repo, third-party id)               | `src/configs/site.ts`                |
-| A frontmatter field                                          | `src/content.config.ts`              |
-| UI that renders from props alone, with no entry or route     | `src/components/ui/<name>/`          |
-| A composition of primitives used on more than one page       | `src/components/patterns/<name>/`    |
-| UI that knows about an entry, a route, or one page section   | `src/components/<feature>/`          |
+| What you are adding                                          | Goes in                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------- |
+| A pure function (format, sort, filter, URL)                  | `src/lib/`                                                    |
+| Data access for a collection (load, relate, group by tag)    | `src/lib/collections.ts`                                      |
+| A route or a URL shape                                       | `src/configs/routes.ts`                                       |
+| A site-wide value (name, repo, third-party id)               | `src/configs/site.ts`                                         |
+| A frontmatter field                                          | `src/content.config.ts`                                       |
+| UI that renders from props alone, with no entry or route     | `src/components/ui/<name>/`                                   |
+| A composition of primitives used on more than one page       | `src/components/patterns/<name>/`                             |
+| UI that knows about an entry, a route, or one page section   | `src/components/<feature>/`                                   |
 | A building block that MDX authors use (`Callout`, `Columns`) | the MDX components folder, registered in its `components` map |
-| A page shell that wraps `BaseLayout`                         | `src/layouts/`                       |
-| A widget used by one entry only                              | that entry's folder in `src/content/` |
+| A page shell that wraps `BaseLayout`                         | `src/layouts/`                                                |
+| A widget used by one entry only                              | that entry's folder in `src/content/`                         |
 
 ## The props-only test
 

@@ -7,14 +7,14 @@ description: Reviews a change to this site before push or merge, and proves that
 
 ## Route each rule to the cheapest check
 
-| Check                                     | Owner                         |
-| ----------------------------------------- | ----------------------------- |
-| Syntax, imports, unused code              | `pnpm lint`                   |
-| Formatting                                | `pnpm format:check`           |
-| Types and content schemas                 | `pnpm check`                  |
-| A refactor changes nothing a reader sees  | The `dist/` diff below        |
-| Client JS per page                        | `pnpm bundle-report`          |
-| Structure, naming, duplication, clarity   | Review, with the checklist    |
+| Check                                    | Owner                      |
+| ---------------------------------------- | -------------------------- |
+| Syntax, imports, unused code             | `pnpm lint`                |
+| Formatting                               | `pnpm format:check`        |
+| Types and content schemas                | `pnpm check`               |
+| A refactor changes nothing a reader sees | The `dist/` diff below     |
+| Client JS per page                       | `pnpm bundle-report`       |
+| Structure, naming, duplication, clarity  | Review, with the checklist |
 
 Do not spend review effort on what a tool already catches. When a rule can be checked by a tool, add it to the tool. Do not add it to this checklist.
 
