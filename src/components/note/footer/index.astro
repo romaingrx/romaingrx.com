@@ -1,4 +1,5 @@
 ---
+import { Card } from '@/components/ui/card';
 import { Icon } from 'astro-icon/components';
 import DiscussOn from '@/components/blog/discuss-on.astro';
 import Resources from '@/components/blog/resources/index.astro';
@@ -28,7 +29,7 @@ const resources = note.data.resources.map((r) =>
   <DiscussOn post={note} />
   {
     resources.length + tags.length > 0 && (
-  <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+  <Card class="block rounded-lg p-6">
     <div class="space-y-6">
       <!-- Tags and Resources -->
       <div class="space-y-4">
@@ -64,7 +65,7 @@ const resources = note.data.resources.map((r) =>
         )
       }
     </div>
-  </div>
+  </Card>
     )
   }
 

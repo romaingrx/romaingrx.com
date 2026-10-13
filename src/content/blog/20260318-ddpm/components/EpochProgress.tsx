@@ -1,8 +1,6 @@
 'use client';
 
-import { Pause, Play, RotateCcw } from 'lucide-react';
-
-import { Button } from '@/components/ui/button/button';
+import { PlaybackControls } from '@/components/blog/components/playback-controls';
 import {
   Card,
   CardContent,
@@ -62,39 +60,13 @@ export default function EpochProgress() {
         )}
 
         {entries.length > 1 && current ? (
-          <div className="flex w-full items-center gap-3" data-pagefind-ignore>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              aria-label={
-                playback.playing
-                  ? 'Pause playback'
-                  : playback.index === entries.length - 1
-                    ? 'Replay from first epoch'
-                    : 'Play epochs'
-              }
-              onClick={playback.toggle}
-            >
-              {playback.playing ? (
-                <Pause />
-              ) : playback.index === entries.length - 1 ? (
-                <RotateCcw />
-              ) : (
-                <Play />
-              )}
-            </Button>
-            <input
-              type="range"
-              min={0}
-              max={entries.length - 1}
-              value={playback.index}
-              aria-label="Training epoch"
-              aria-valuetext={`epoch ${current.epoch + 1}; validation sample ${playback.index + 1} of ${entries.length}`}
-              onChange={(event) => playback.seek(Number(event.target.value))}
-              className="h-11 w-full accent-primary"
-            />
-          </div>
+          <PlaybackControls
+            playback={playback}
+            count={entries.length}
+            unit="epoch"
+            sliderLabel="Training epoch"
+            valueText={`epoch ${current.epoch + 1}; validation sample ${playback.index + 1} of ${entries.length}`}
+          />
         ) : current ? (
           <p className="text-sm text-muted-foreground" data-pagefind-ignore>
             Only epoch {current.epoch + 1} is available.

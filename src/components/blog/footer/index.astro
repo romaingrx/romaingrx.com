@@ -1,4 +1,5 @@
 ---
+import { Card } from '@/components/ui/card';
 import { Icon } from 'astro-icon/components';
 import DiscussOn from '@/components/blog/discuss-on.astro';
 import Comments from '@/components/comments.astro';
@@ -34,7 +35,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
   <!-- Metadata Section -->
   {
     [resources.length, tags.length, categories.length, updated_date].some(Boolean) && (
-  <div class="flex rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+  <Card class="flex-row gap-0 rounded-lg p-6">
     <div class="space-y-6">
       <!-- Tags and Categories -->
       <div class="space-y-4">
@@ -82,7 +83,7 @@ const hasRelatedContent = related_posts || tags.length > 0;
         )
       }
     </div>
-  </div>
+  </Card>
     )
   }
 

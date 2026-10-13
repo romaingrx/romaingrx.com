@@ -1,4 +1,5 @@
 ---
+import { Card } from '@/components/ui/card';
 import { Stack } from '@/components/ui/stack';
 import { Heading, Text } from '@/components/ui/text';
 import { Time } from '@/components/ui/time';
@@ -15,10 +16,7 @@ const { note, class: className } = Astro.props;
 ---
 
 <a href={routes.note(note)} class={cn('group block no-underline', className)}>
-  <Stack
-    gap={1.5}
-    class="overflow-hidden rounded-xl border bg-card p-4 transition-colors hover:bg-accent/40"
-  >
+  <Card class="gap-1.5 overflow-hidden p-4 text-inherit shadow-none transition-colors hover:bg-accent/40">
     <Heading level={3} size="card" class="line-clamp-2 transition-colors group-hover:text-primary">
       {note.data.title}
     </Heading>
@@ -34,5 +32,5 @@ const { note, class: className } = Astro.props;
       <span>&middot;</span>
       <span>{note.readingTime}</span>
     </Stack>
-  </Stack>
+  </Card>
 </a>

@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 
-import { Pause, Play, RotateCcw } from 'lucide-react';
-
+import { PlaybackControls } from '@/components/blog/components/playback-controls';
 import { Button } from '@/components/ui/button/button';
 import {
   Card,
@@ -121,39 +120,13 @@ export function StepSlider(props: StepSliderProps) {
         )}
 
         {steps.length > 1 && current ? (
-          <div className="flex w-full items-center gap-3" data-pagefind-ignore>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              aria-label={
-                playback.playing
-                  ? 'Pause playback'
-                  : playback.index === steps.length - 1
-                    ? 'Replay from first timestep'
-                    : 'Play timesteps'
-              }
-              onClick={playback.toggle}
-            >
-              {playback.playing ? (
-                <Pause />
-              ) : playback.index === steps.length - 1 ? (
-                <RotateCcw />
-              ) : (
-                <Play />
-              )}
-            </Button>
-            <input
-              type="range"
-              min={0}
-              max={steps.length - 1}
-              value={playback.index}
-              aria-label={`${props.title ?? 'Process'} timestep`}
-              aria-valuetext={`timestep ${current.t}; step ${playback.index + 1} of ${steps.length}`}
-              onChange={(event) => playback.seek(Number(event.target.value))}
-              className="h-11 w-full accent-primary"
-            />
-          </div>
+          <PlaybackControls
+            playback={playback}
+            count={steps.length}
+            unit="timestep"
+            sliderLabel={`${props.title ?? 'Process'} timestep`}
+            valueText={`timestep ${current.t}; step ${playback.index + 1} of ${steps.length}`}
+          />
         ) : current ? (
           <p className="text-sm text-muted-foreground" data-pagefind-ignore>
             Only timestep t = {current.t} is available.

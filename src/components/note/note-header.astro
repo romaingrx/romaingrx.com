@@ -1,4 +1,5 @@
 ---
+import { Card } from '@/components/ui/card';
 import Resources from '@/components/blog/resources/index.astro';
 import SharingBadges from '@/components/blog/sharing-badges.astro';
 import { resolveResourceValue } from '@/configs/resources';
@@ -20,7 +21,7 @@ const resources = note.data.resources.map((r) =>
 
 <header class:list={['py-8', className]}>
   <Container size="article">
-    <div class="bg-card/40 rounded-xl border p-6">
+    <Card class="block bg-card/40 p-6 text-inherit shadow-none">
       <div class="space-y-2">
         <div class="space-y-4">
           <Heading level={1}>{note.data.title}</Heading>
@@ -56,6 +57,6 @@ const resources = note.data.resources.map((r) =>
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   </Container>
 </header>

@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 
+import { Button } from '@/components/ui/button/button';
+
 import interpolations from '../data/interpolations.json';
 
 type Interpolation = (typeof interpolations)[number];
@@ -121,19 +123,17 @@ export default function InterpolationViewer() {
       {interpolations.length > 1 && (
         <div className="flex gap-1.5">
           {interpolations.map((interp, i) => (
-            <button
+            <Button
               key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}
               type="button"
+              variant="secondary"
+              size="sm"
+              className="h-auto px-2.5 py-1 text-xs aria-pressed:bg-foreground aria-pressed:text-background"
               aria-pressed={selected === i}
               onClick={() => setSelected(i)}
-              className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-                selected === i
-                  ? 'bg-foreground text-background'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
             >
               Pair {i + 1}
-            </button>
+            </Button>
           ))}
         </div>
       )}

@@ -1,4 +1,5 @@
 ---
+import { Card } from '@/components/ui/card';
 import { Text } from '@/components/ui/text';
 import { Time } from '@/components/ui/time';
 import type { NoteWithAuthors } from '@/lib/collections';
@@ -17,14 +18,14 @@ const { notes, empty = 'No notes found.' } = Astro.props;
   notes.length > 0 ? (
     <ul class="space-y-2">
       {notes.map((note) => (
-        <li class="group rounded-lg border bg-card transition-colors hover:bg-accent/40">
+        <Card as="li" class="group block rounded-lg py-0 text-inherit shadow-none transition-colors hover:bg-accent/40">
           <NoteHoverCard note={note}>
             <span class="font-medium transition-colors group-hover:text-primary">
               {note.data.title}
             </span>
             <Time date={note.data.published_date} class="text-sm" />
           </NoteHoverCard>
-        </li>
+        </Card>
       ))}
     </ul>
   ) : (
