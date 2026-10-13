@@ -145,6 +145,21 @@
   }
 }
 
+/* Native cross-document view transitions: cross-fade between pages, no JS. */
+@view-transition {
+  navigation: auto;
+}
+
+#header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
 @utility dots {
   background-image: var(--background-image-dots);
 }
