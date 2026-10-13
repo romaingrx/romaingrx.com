@@ -1,17 +1,10 @@
 ---
-import {
-  BrainIcon,
-  ClockIcon,
-  HeartIcon,
-  NetworkIcon,
-  TrainIcon,
-  type LucideIcon,
-} from 'lucide-react';
-import { Badge } from '@/components/ui/react/badge';
+import { Icon } from 'astro-icon/components';
+import { Badge } from '@/components/ui/badge';
 
 type CategoryConfig = {
   name: string;
-  icon: LucideIcon;
+  icon: string;
   backgroundColor: string;
   textColor: string;
 };
@@ -19,31 +12,31 @@ type CategoryConfig = {
 const categories = {
   skills: {
     name: 'Skills',
-    icon: TrainIcon,
+    icon: 'lucide:train',
     backgroundColor: 'var(--chart-1)',
     textColor: 'oklch(0.2 0 0)',
   },
   brain: {
     name: 'Brain clarity',
-    icon: BrainIcon,
+    icon: 'lucide:brain',
     backgroundColor: 'var(--chart-2)',
     textColor: 'oklch(0.2 0 0)',
   },
   health: {
     name: 'Health',
-    icon: HeartIcon,
+    icon: 'lucide:heart',
     backgroundColor: 'var(--chart-3)',
     textColor: 'oklch(0.2 0 0)',
   },
   time: {
     name: 'Time management',
-    icon: ClockIcon,
+    icon: 'lucide:clock',
     backgroundColor: 'var(--chart-4)',
     textColor: 'oklch(0.2 0 0)',
   },
   social: {
     name: 'Social',
-    icon: NetworkIcon,
+    icon: 'lucide:network',
     backgroundColor: 'var(--chart-5)',
     textColor: 'oklch(0.2 0 0)',
   },
@@ -62,14 +55,10 @@ if (!categoriesKeys.includes(category)) {
   throw new Error(`Category ${category} not found, please choose in ${categoriesKeys}`);
 }
 
-const { icon: Icon, backgroundColor, textColor } = categories[category];
+const { icon, backgroundColor, textColor } = categories[category];
 ---
 
-<Badge
-  style={{ backgroundColor: backgroundColor, color: textColor }}
-  className="flex items-center gap-1 text-xs"
-  client:visible
->
-  <Icon className="size-4" />
+<Badge style={{ backgroundColor, color: textColor }} class="flex items-center gap-1 text-xs [&>svg]:size-4">
+  <Icon name={icon} />
   <span class="text-xs font-medium">{categories[category].name}</span>
 </Badge>

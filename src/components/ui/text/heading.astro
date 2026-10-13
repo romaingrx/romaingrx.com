@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { headingVariants, type HeadingVariants } from './variants';
+
+type Level = 1 | 2 | 3 | 4 | 5 | 6;
+
+type Props = HeadingVariants &
+  HTMLAttributes<'h2'> & {
+    /** Document outline level. Defaults to 2. */
+    level?: Level;
+  };
+
+const sizeForLevel: Record<Level, NonNullable<HeadingVariants['size']>> = {
+  1: 'page',
+  2: 'section',
+  3: 'subsection',
+  4: 'card',
+  5: 'label',
+  6: 'label',
+};
+
+const { level = 2, size, class: className, ...props } = Astro.props;
+const Tag = `h${level}` as const;
+---
+
+<Tag
+  data-slot="heading"
+  class={cn(headingVariants({ size: size ?? sizeForLevel[level] }), className)}
+  {...props}
+>
+  <slot />
+</Tag>

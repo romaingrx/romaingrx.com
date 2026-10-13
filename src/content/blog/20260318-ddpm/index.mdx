@@ -19,22 +19,20 @@ resources:
     description: 'JAX/Equinox DDPM implementation for font glyph generation'
 ---
 
-import {
-  TrainingCurves,
-  EpochProgress,
-  NoiseScheduleChart,
-  ForwardProcess,
-  DenoisingProcess,
-  SampleGallery,
-  SDFPipeline,
-} from './components';
+import TrainingCurves from './components/TrainingCurves';
+import EpochProgress from './components/EpochProgress';
+import NoiseScheduleChart from './components/NoiseScheduleChart';
+import ForwardProcess from './components/ForwardProcess';
+import DenoisingProcess from './components/DenoisingProcess';
+import SampleGallery from './components/SampleGallery.astro';
+import SDFPipeline from './components/SDFPipeline.astro';
 import unetDiagram from './images/unet.excalidraw';
 
 What if you could teach a neural network to draw letters by showing it how ink dissolves? That's the core idea behind [**Denoising Diffusion Probabilistic Models**](https://arxiv.org/abs/2006.11239) (DDPMs): learn to reverse a noise process, and you get a generative model for free.
 
 In this post, we'll build one from scratch in [JAX](https://github.com/jax-ml/jax) and train it to generate font glyphs: all 62 alphanumeric characters, conditioned on class labels.
 
-<SampleGallery client:visible />
+<SampleGallery />
 
 # The intuition
 
@@ -182,7 +180,7 @@ Why this helps:
 
 The pipeline: download 614 bold fonts from [Google Fonts](https://fonts.google.com), render each of the 62 characters at 64×64, compute the [Euclidean distance transform](https://en.wikipedia.org/wiki/Distance_transform), clamp to $[-5, 5]$, and normalize to $[-1, 1]$. Some fonts lack certain glyphs, so we end up with 37,912 training examples rather than the full $614 \times 62 = 38{,}068$.
 
-<SDFPipeline client:visible />
+<SDFPipeline />
 
 At inference time, the model outputs a normalized SDF. We denormalize it back to $[-5, 5]$ and threshold at zero: negative values (inside the glyph) become white, positive values (outside) become black. This gives us crisp binary edges regardless of how noisy the raw field is.
 

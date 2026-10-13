@@ -1,0 +1,69 @@
+---
+import { Badge } from '@/components/ui/badge';
+import { Heading, Text } from '@/components/ui/text';
+import reconstructions from '../data/reconstructions.json';
+import { buildSequenceDiffPositions } from './sequence-diff';
+
+const rows = reconstructions
+  .toSorted((a, b) => b.accuracy - a.accuracy)
+  .slice(0, 5)
+  .map((recon) => {
+    const pct = Math.round(recon.accuracy * 100);
+    return {
+      pct,
+      chars: buildSequenceDiffPositions(recon.original, recon.reconstructed),
+      statusClass:
+        pct >= 80
+          ? 'bg-status-success/15 text-status-success'
+          : pct >= 50
+            ? 'bg-status-warning/15 text-status-warning'
+            : 'bg-status-error/15 text-status-error',
+    };
+  });
+const mismatchClass = 'font-semibold text-status-error underline decoration-2 underline-offset-1';
+---
+
+<div class="my-4 space-y-3">
+  <div>
+    <Heading level={4} size="label" class="font-medium">Sequence reconstruction</Heading>
+    <Text size="sm" tone="muted">
+      Original and reconstructed amino acid sequences. Missing and extra residues count as
+      mismatches.
+    </Text>
+  </div>
+  <Text size="xs" tone="muted" aria-hidden="true">
+    Top: source · bottom: reconstruction · underline: mismatch · –: missing residue
+  </Text>
+  {
+    rows.map((row) => (
+      <div class="rounded-lg border border-border bg-muted/30 p-3">
+        <div class="mb-2">
+          <Badge class={row.statusClass}>{row.pct}% match</Badge>
+        </div>
+        <div
+          class="flex flex-wrap items-start gap-x-1 font-mono text-xs leading-5"
+          role="list"
+          aria-label="Sequence differences by position"
+        >
+          {row.chars.map((char, index) => (
+            <span
+              role="listitem"
+              aria-label={`Position ${index + 1}: source ${char.original ?? 'none'}, reconstructed ${char.reconstructed ?? 'none'}, ${char.match ? 'match' : 'mismatch'}`}
+              class="grid shrink-0 grid-rows-2 text-center"
+            >
+              <span aria-hidden="true" class={char.match ? 'text-muted-foreground' : mismatchClass}>
+                {char.original ?? '–'}
+              </span>
+              <span aria-hidden="true" class={char.match ? 'text-status-success' : mismatchClass}>
+                {char.reconstructed ?? '–'}
+              </span>
+            </span>
+          ))}
+          {row.chars.length === 0 && (
+            <span class="text-sm text-muted-foreground">No residues to compare.</span>
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>

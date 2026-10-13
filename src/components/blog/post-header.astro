@@ -2,11 +2,12 @@
 import ContinueReading from '@/components/animations/continue-reading.astro';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
 import Resources from '@/components/blog/resources/index.astro';
-import Shell from '@/components/Shell.astro';
 import { resolveResourceValue } from '@/configs/resources';
 import type { BlogPostWithAuthors } from '@/lib/collections';
-import Time from '../ui/time.astro';
-import BlogPostBackground from './card/background';
+import SmoothGradient from '@/components/backgrounds/smooth-gradient.astro';
+import { Container } from '@/components/ui/container';
+import { Text } from '@/components/ui/text';
+import { Time } from '@/components/ui/time';
 import SharingBadges from './sharing-badges.astro';
 
 interface Props {
@@ -31,15 +32,15 @@ const resources = post.data.resources.map((r) =>
 >
   <!-- Background with subtle gradient -->
   <div class="absolute inset-0 opacity-20">
-    <BlogPostBackground value={post.id} />
+    <SmoothGradient seed={post.id} />
   </div>
 
   <!-- Main Content -->
-  <Shell type="article">
+  <Container size="article">
     <div class="relative z-10 mx-auto text-center">
       <!-- Meta Information -->
       <div class="text-muted-foreground mb-8 flex items-center justify-center gap-2 text-sm">
-        <Time date={post.data.published_date} className="text-sm" />
+        <Time date={post.data.published_date} class="text-sm" />
         <span class="leading-none">·</span>
         <span>{post.readingTime}</span>
       </div>
@@ -53,16 +54,16 @@ const resources = post.data.resources.map((r) =>
       </h1>
 
       <!-- Description -->
-      <p class="text-muted-foreground mb-8 text-lg md:text-xl">
+      <Text tone="muted" class="mb-8 text-lg md:text-xl">
         {post.data.description}
-      </p>
+      </Text>
 
       <!-- Resources -->
       {
         post.data.resources.length > 0 && (
           <div class="relative mt-4">
             <div class="flex flex-col gap-3 text-start">
-              <span class="text-muted-foreground text-sm font-medium">Resources</span>
+              <Text as="span" size="sm" tone="muted" weight="medium">Resources</Text>
               <Resources resources={resources} />
             </div>
           </div>
@@ -71,16 +72,16 @@ const resources = post.data.resources.map((r) =>
 
       <div class="relative mt-4 flex flex-row justify-between">
         <div class="flex flex-col gap-3 text-start">
-          <span class="text-muted-foreground text-sm font-medium">Written by</span>
+          <Text as="span" size="sm" tone="muted" weight="medium">Written by</Text>
           <StackedAuthors authors={post.authors} />
         </div>
         <div class="flex flex-col gap-3 text-start">
-          <span class="text-muted-foreground text-sm font-medium">Share on</span>
+          <Text as="span" size="sm" tone="muted" weight="medium">Share on</Text>
           <SharingBadges post={post} />
         </div>
       </div>
     </div>
-  </Shell>
+  </Container>
 
   <div class="absolute bottom-10 left-1/2 -translate-x-1/2 transform">
     <ContinueReading />

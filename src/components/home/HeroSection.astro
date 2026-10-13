@@ -1,6 +1,7 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { platforms_info } from '@/configs/platforms';
+import { SocialLinks } from '@/components/social';
+import { Container } from '@/components/ui/container';
+import { Heading, Text } from '@/components/ui/text';
 import { socialLinks } from '@/configs/social';
 
 interface Props {
@@ -11,26 +12,8 @@ interface Props {
 const { title, description } = Astro.props;
 ---
 
-<section class="mx-auto max-w-5xl px-4 pt-16 pb-12 md:pt-24 md:pb-16">
-  <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
-    {title}
-  </h1>
-  <p class="text-muted-foreground mt-4 max-w-xl text-lg">
-    {description}
-  </p>
-  <div class="mt-6 flex items-center gap-4">
-    {
-      socialLinks.map((link) => (
-        <a
-          href={link.url}
-          class="text-muted-foreground hover:text-foreground transition-colors"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={link.label}
-        >
-          <Icon name={platforms_info[link.platform].icon_name} class="size-5" />
-        </a>
-      ))
-    }
-  </div>
-</section>
+<Container as="section" size="content" class="pt-16 pb-12 md:pt-24 md:pb-16">
+  <Heading level={1} size="display">{title}</Heading>
+  <Text size="lg" tone="muted" class="mt-4 max-w-xl">{description}</Text>
+  <SocialLinks links={socialLinks} class="mt-6 gap-4" />
+</Container>

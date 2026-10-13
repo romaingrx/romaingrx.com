@@ -1,5 +1,6 @@
 ---
-import { Icon } from '@iconify/react/dist/iconify.js';
+import { Card } from '@/components/ui/card';
+import { Icon } from 'astro-icon/components';
 import DiscussOn from '@/components/blog/discuss-on.astro';
 import Resources from '@/components/blog/resources/index.astro';
 import TagBadge from '@/components/blog/tag-badge.astro';
@@ -7,7 +8,7 @@ import Comments from '@/components/comments.astro';
 import { resolveResourceValue } from '@/configs/resources';
 import type { NoteWithAuthors } from '@/lib/collections';
 import { formatDate } from '@/lib/format';
-import { cn } from '@/lib/utils';
+import { Heading } from '@/components/ui/text';
 import RelatedNotes from './related-notes.astro';
 
 interface Props {
@@ -26,19 +27,16 @@ const resources = note.data.resources.map((r) =>
 
   <!-- Thank You & Discuss Section -->
   <DiscussOn post={note} />
-  <div
-    class={cn(
-      'rounded-lg border bg-card p-6 text-card-foreground shadow-sm',
-      resources.length + tags.length == 0 && 'hidden'
-    )}
-  >
+  {
+    resources.length + tags.length > 0 && (
+  <Card class="block rounded-lg p-6">
     <div class="space-y-6">
       <!-- Tags and Resources -->
       <div class="space-y-4">
         {
           resources.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-muted-foreground text-sm font-medium">Resources</h3>
+              <Heading level={3} size="label" class="font-medium text-muted-foreground">Resources</Heading>
               <Resources resources={resources} />
             </div>
           )
@@ -46,7 +44,7 @@ const resources = note.data.resources.map((r) =>
         {
           tags.length > 0 && (
             <div class="space-y-3">
-              <h3 class="text-muted-foreground text-sm font-medium">Tags</h3>
+              <Heading level={3} size="label" class="font-medium text-muted-foreground">Tags</Heading>
               <div class="flex flex-wrap gap-2">
                 {note.data.tags.map((tag) => (
                   <TagBadge tag={tag} basePath="/notes" />
@@ -61,17 +59,19 @@ const resources = note.data.resources.map((r) =>
       {
         updated_date && (
           <div class="text-muted-foreground flex items-center gap-2 text-sm">
-            <Icon icon="mdi:calendar-clock" className="size-4" />
+            <Icon name="mdi:calendar-clock" class="size-4" />
             <span>Last updated on {formatDate(updated_date)}</span>
           </div>
         )
       }
     </div>
-  </div>
+  </Card>
+    )
+  }
 
   <!-- Related Content Section -->
   <div class="mb-16">
-    <h2 class="mb-6 text-2xl font-semibold tracking-tight">More Notes</h2>
+    <Heading level={2} class="mb-6">More Notes</Heading>
     <RelatedNotes note={note} />
   </div>
 

@@ -1,9 +1,12 @@
 ---
 import { getEntry, render } from 'astro:content';
+import { HoverCard } from '@/components/ui/hover-card';
+import { Stack } from '@/components/ui/stack';
+import { Text } from '@/components/ui/text';
 import { routes } from '@/configs/routes';
 import { formatDate } from '@/lib/format';
-import BlogLinkCard from './blog-link-card';
 
+/** MDX: an inline link to another post, previewing it on hover. */
 interface Props {
   post: string;
 }
@@ -14,18 +17,26 @@ if (!entry) {
   throw new Error(`BlogLink: blog post "${postId}" not found`);
 }
 const { remarkPluginFrontmatter } = await render(entry);
-const href = routes.blog({ slug: entry.data.permalink });
-const hasChildren = Astro.slots.has('default');
-const date = formatDate(entry.data.published_date);
+const readingTime: string | undefined = remarkPluginFrontmatter?.minutesRead;
 ---
 
-<BlogLinkCard
-  client:visible
-  href={href}
-  title={entry.data.title}
-  description={entry.data.description}
-  date={date}
-  readingTime={remarkPluginFrontmatter?.minutesRead}
->
-  {hasChildren ? <slot /> : entry.data.title}
-</BlogLinkCard>
+<HoverCard contentClass="w-72">
+  <a href={routes.blog({ slug: entry.data.permalink })}>
+    {Astro.slots.has('default') ? <slot /> : entry.data.title}
+  </a>
+  <Stack as="span" gap={1.5} slot="content">
+    <Text as="span" size="sm" weight="medium" leading="snug">{entry.data.title}</Text>
+    <Text as="span" size="xs" tone="muted" clamp={2}>{entry.data.description}</Text>
+    <Stack as="span" direction="row" align="center" gap={2} class="pt-1 text-xs text-muted-foreground">
+      <span>{formatDate(entry.data.published_date)}</span>
+      {
+        readingTime && (
+          <>
+            <span>·</span>
+            <span>{readingTime}</span>
+          </>
+        )
+      }
+    </Stack>
+  </Stack>
+</HoverCard>

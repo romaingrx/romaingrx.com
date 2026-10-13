@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { gridVariants, type GridVariants } from './variants';
+
+type Props = GridVariants &
+  HTMLAttributes<'div'> & {
+    as?: 'div' | 'section' | 'ul';
+  };
+
+const { as: Tag = 'div', cols, gap, class: className, ...props } = Astro.props;
+---
+
+<Tag data-slot="grid" class={cn(gridVariants({ cols, gap }), className)} {...props}>
+  <slot />
+</Tag>

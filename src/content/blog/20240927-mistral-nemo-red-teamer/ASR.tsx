@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from '@/components/ui/react/chart';
+} from '@/components/ui/chart/chart';
 
 const chartConfig = {
   asr: {

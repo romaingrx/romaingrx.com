@@ -21,3 +21,12 @@ export function formatPeriod(start: string, end?: string): string {
   const endYear = end === 'present' ? 'Present' : end.slice(0, 4);
   return startYear === endYear ? startYear : `${startYear} – ${endYear}`;
 }
+
+const numberFormatter = new Intl.NumberFormat('en-US');
+
+/**
+ * Format a count for display (e.g. "12,345")
+ */
+export function formatNumber(value: number): string {
+  return numberFormatter.format(value);
+}

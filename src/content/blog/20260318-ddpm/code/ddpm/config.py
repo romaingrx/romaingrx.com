@@ -27,6 +27,6 @@ N_SAMPLES = 12
 N_VALIDATION_SAMPLES = 3
 
 CODE_DIR = Path(__file__).parent.parent
-OUTPUT_FILE = CODE_DIR.parent / "run.json"
+OUTPUT_DIR = CODE_DIR.parent / "data"
 CACHE_DIR = CODE_DIR / ".cache"
 CHECKPOINT_DIR = CODE_DIR / ".checkpoints"

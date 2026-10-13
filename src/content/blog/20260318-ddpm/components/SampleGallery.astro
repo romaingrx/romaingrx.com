@@ -1,0 +1,17 @@
+---
+import ImageGrid from '@/components/blog/components/image-grid.astro';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import samples from '../data/samples.json';
+
+const images = samples.map((s) => ({ src: s.image, label: s.letter }));
+---
+
+<Card class="my-8">
+  <CardHeader>
+    <CardTitle>Generated glyphs</CardTitle>
+    <CardDescription>12 class-conditional samples from the trained model</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <ImageGrid images={images} columns={6} size={64} />
+  </CardContent>
+</Card>

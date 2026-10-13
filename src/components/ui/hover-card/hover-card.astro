@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+
+/**
+ * A preview card shown while the trigger is hovered or holds focus.
+ * Pure CSS: no island, no script. The card is decorative extra context,
+ * so touch users simply follow the trigger.
+ *
+ * Every element is a `span` so the card is valid inside a paragraph.
+ */
+type Props = HTMLAttributes<'span'> & {
+  /** Extra classes for the floating card (width, padding). */
+  contentClass?: string;
+  align?: 'start' | 'end';
+  /** Render only the trigger, e.g. when nested inside another hover card. */
+  disabled?: boolean;
+};
+
+const { class: className, contentClass, align = 'start', disabled = false, ...props } = Astro.props;
+---
+
+<span data-slot="hover-card" class={cn('group/hover-card relative inline-block', className)} {...props}>
+  <slot />
+  {
+    !disabled && (
+  <span
+    data-slot="hover-card-content"
+    class={cn(
+      'invisible absolute top-full z-40 block pt-1.5 opacity-0',
+      'transition-[opacity,visibility] delay-100 duration-150',
+      'group-hover/hover-card:visible group-hover/hover-card:opacity-100 group-hover/hover-card:delay-300',
+      'group-focus-within/hover-card:visible group-focus-within/hover-card:opacity-100',
+      'motion-reduce:transition-none',
+      align === 'start' ? 'left-0' : 'right-0'
+    )}
+  >
+    <span
+      class={cn(
+        'block w-80 max-w-[calc(100vw-2rem)] rounded-md border bg-popover p-4 text-left text-popover-foreground shadow-md',
+        contentClass
+      )}
+    >
+      <slot name="content" />
+    </span>
+  </span>
+    )
+  }
+</span>

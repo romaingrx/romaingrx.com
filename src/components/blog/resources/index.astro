@@ -1,6 +1,6 @@
 ---
 import type { Resource } from '@/configs/resources';
-import { ResourceBadge } from './resource-badge';
+import ResourceBadge from './resource-badge.astro';
 
 interface Props {
   resources: Resource[];
@@ -13,15 +13,7 @@ const { resources } = Astro.props;
   resources.length > 0 && (
     <div class="flex flex-wrap items-start justify-start gap-3">
       {resources.map((resource) => (
-        // @ts-ignore
-        <ResourceBadge
-          client:visible
-          type={resource.type}
-          provider={resource.provider}
-          title={resource.title}
-          value={resource.value}
-          description={resource.description}
-        />
+        <ResourceBadge {...resource} />
       ))}
     </div>
   )

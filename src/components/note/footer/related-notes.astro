@@ -1,5 +1,7 @@
 ---
 import { getNotes, type NoteWithAuthors } from '@/lib/collections';
+import { Grid } from '@/components/ui/grid';
+import { Text } from '@/components/ui/text';
 import NoteCard from '../card/index.astro';
 
 interface Props {
@@ -18,12 +20,14 @@ const relatedNotes = allNotes
   .slice(0, 3); // Limit to 3 related notes
 ---
 
-<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+<Grid cols={3}>
   {relatedNotes.map((relatedNote) => <NoteCard note={relatedNote} />)}
-</div>
+</Grid>
 
 {
   relatedNotes.length === 0 && (
-    <p class="text-muted-foreground text-center">No related notes found.</p>
+    <Text tone="muted" class="text-center">
+      No related notes found.
+    </Text>
   )
 }

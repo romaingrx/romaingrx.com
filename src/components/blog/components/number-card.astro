@@ -1,8 +1,11 @@
 ---
-import { ArrowUpRight } from 'lucide-react';
-import { Card, CardDescription, CardTitle } from '@/components/ui/react/card';
+import { Icon } from 'astro-icon/components';
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardTitle } from '@/components/ui/card';
+import { formatNumber } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
+/** MDX: a headline number with an optional external link. */
 export interface Props {
   title: string;
   value: number;
@@ -14,24 +17,29 @@ export interface Props {
 const { title, value, description, link, class: className } = Astro.props;
 ---
 
-<Card className={cn('flex flex-row items-center justify-between gap-4 px-4 py-3', className)}>
+<Card class={cn('flex flex-row items-center justify-between gap-4 px-4 py-3', className)}>
   <div class="flex min-w-0 flex-col gap-0.5">
-    <CardTitle className="text-sm font-medium">{title}</CardTitle>
-    {description && <CardDescription className="text-xs">{description}</CardDescription>}
+    <CardTitle class="text-sm font-medium">{title}</CardTitle>
+    {description && <CardDescription class="text-xs">{description}</CardDescription>}
   </div>
   <div class="flex shrink-0 items-center gap-2">
-    <span class="text-2xl font-bold tabular-nums">{value.toLocaleString()}</span>
+    <span class="text-2xl font-bold tabular-nums">{formatNumber(value)}</span>
     {
       link && (
-        <a
+        <Button
           href={link}
           target="_blank"
           rel="noopener noreferrer"
+          variant="secondary"
+          size="icon-sm"
           aria-label={`Open ${title}`}
-          class="group bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex size-8 items-center justify-center rounded-md transition-colors"
+          class="group"
         >
-          <ArrowUpRight className="size-4 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-        </a>
+          <Icon
+            name="lucide:arrow-up-right"
+            class="size-4 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+          />
+        </Button>
       )
     }
   </div>

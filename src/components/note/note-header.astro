@@ -1,10 +1,12 @@
 ---
+import { Card } from '@/components/ui/card';
 import Resources from '@/components/blog/resources/index.astro';
 import SharingBadges from '@/components/blog/sharing-badges.astro';
-import Shell from '@/components/Shell.astro';
 import { resolveResourceValue } from '@/configs/resources';
 import type { NoteWithAuthors } from '@/lib/collections';
-import Time from '../ui/time.astro';
+import { Container } from '@/components/ui/container';
+import { Heading, Text } from '@/components/ui/text';
+import { Time } from '@/components/ui/time';
 
 interface Props {
   note: NoteWithAuthors;
@@ -18,14 +20,14 @@ const resources = note.data.resources.map((r) =>
 ---
 
 <header class:list={['py-8', className]}>
-  <Shell type="article">
-    <div class="bg-card/40 rounded-xl border p-6">
+  <Container size="article">
+    <Card class="block bg-card/40 p-6 text-inherit shadow-none">
       <div class="space-y-2">
         <div class="space-y-4">
-          <h1 class="text-4xl font-bold tracking-tight">{note.data.title}</h1>
+          <Heading level={1}>{note.data.title}</Heading>
           {
             note.data.description && (
-              <p class="text-muted-foreground text-xl">{note.data.description}</p>
+              <Text size="xl" tone="muted">{note.data.description}</Text>
             )
           }
         </div>
@@ -43,18 +45,18 @@ const resources = note.data.resources.map((r) =>
             {
               note.data.resources && (
                 <>
-                  <span class="text-muted-foreground text-sm font-medium">Resources</span>
+                  <Text as="span" size="sm" tone="muted" weight="medium">Resources</Text>
                   <Resources resources={resources} />
                 </>
               )
             }
           </div>
           <div class="flex flex-col gap-3 text-start">
-            <span class="text-muted-foreground text-sm font-medium">Share on</span>
+            <Text as="span" size="sm" tone="muted" weight="medium">Share on</Text>
             <SharingBadges post={note} />
           </div>
         </div>
       </div>
-    </div>
-  </Shell>
+    </Card>
+  </Container>
 </header>

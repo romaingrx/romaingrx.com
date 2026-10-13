@@ -1,8 +1,8 @@
 import { StepSlider } from '@/components/blog/components/step-slider';
 
-import run from '../run.json';
+import denoising from '../data/denoising.json';
 
-const examples = run.denoising.slice(0, 3).map((ex) => ({
+const examples = denoising.slice(0, 3).map((ex) => ({
   label: ex.letter,
   steps: ex.steps,
 }));

@@ -1,7 +1,8 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import { Button, Loading } from '@/components/ui';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { cn } from '@/lib/utils';
 import type { ImageItem } from './types';
 
@@ -25,7 +26,7 @@ const { id, images, startIndex = 0, showCaptions = false, className } = Astro.pr
 >
   <!-- Loading indicator -->
   <div class="gallery-loading absolute inset-0 z-50 flex items-center justify-center">
-    <Loading />
+    <Spinner />
   </div>
 
   <!-- Main content container -->
@@ -36,7 +37,7 @@ const { id, images, startIndex = 0, showCaptions = false, className } = Astro.pr
     <Button
       variant="ghost"
       size="icon"
-      className="gallery-prev text-foreground hover:bg-accent absolute top-1/2 left-4 z-10 -translate-y-1/2 disabled:opacity-30"
+      class="gallery-prev text-foreground hover:bg-accent absolute top-1/2 left-4 z-10 -translate-y-1/2 disabled:opacity-30"
       aria-label="Previous image"
     >
       <Icon name="lucide:chevron-left" class="size-8" />
@@ -45,7 +46,7 @@ const { id, images, startIndex = 0, showCaptions = false, className } = Astro.pr
     <Button
       variant="ghost"
       size="icon"
-      className="gallery-next text-foreground hover:bg-accent absolute top-1/2 right-4 z-10 -translate-y-1/2 disabled:opacity-30"
+      class="gallery-next text-foreground hover:bg-accent absolute top-1/2 right-4 z-10 -translate-y-1/2 disabled:opacity-30"
       aria-label="Next image"
     >
       <Icon name="lucide:chevron-right" class="size-8" />

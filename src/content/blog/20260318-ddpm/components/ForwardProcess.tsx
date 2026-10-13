@@ -1,8 +1,8 @@
 import { StepSlider } from '@/components/blog/components/step-slider';
 
-import run from '../run.json';
+import forward_process from '../data/forward_process.json';
 
-const examples = run.forward_process.map((ex, i) => ({
+const examples = forward_process.map((ex, i) => ({
   label: `${i + 1}`,
   steps: ex.steps,
 }));

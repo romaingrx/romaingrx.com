@@ -1,0 +1,13 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { cardClasses } from './variants';
+
+type Props = HTMLAttributes<'div'>;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div data-slot="card-footer" class={cn(cardClasses.footer, className)} {...props}>
+  <slot />
+</div>

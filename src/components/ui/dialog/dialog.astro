@@ -1,0 +1,106 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '../button/variants';
+
+/** Native `<dialog>`: Escape, focus trapping and the backdrop come from the browser. */
+type Props = HTMLAttributes<'dialog'> & {
+  id: string;
+  title?: string;
+  description?: string;
+  hideCloseButton?: boolean;
+};
+
+const { id, title, description, class: className, hideCloseButton = false, ...props } = Astro.props;
+---
+
+<dialog
+  id={id}
+  data-slot="dialog"
+  class={cn('dialog', className)}
+  aria-labelledby={title ? `${id}-title` : undefined}
+  aria-describedby={description ? `${id}-description` : undefined}
+  onclick="if (event.target === this) this.close()"
+  {...props}
+>
+  <article
+    class="fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 rounded-xl bg-popover p-6 text-sm text-popover-foreground ring-1 ring-foreground/10 outline-hidden sm:max-w-md"
+  >
+    {
+      (title || description) && (
+        <header class="flex flex-col gap-2">
+          {title && (
+            <h2 id={`${id}-title`} class="text-lg leading-none font-semibold">
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p id={`${id}-description`} class="text-muted-foreground">
+              {description}
+            </p>
+          )}
+        </header>
+      )
+    }
+
+    <section class="flex-1">
+      <slot />
+    </section>
+
+    <slot name="footer" />
+    {
+      !hideCloseButton && (
+        <button
+          type="button"
+          aria-label="Close dialog"
+          onclick="this.closest('dialog').close()"
+          class={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'absolute top-4 right-4 rounded-full')}
+        >
+          <Icon name="lucide:x" class="size-4" />
+        </button>
+      )
+    }
+  </article>
+</dialog>
+
+<style>
+  .dialog {
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    opacity: 0;
+    transition:
+      opacity 150ms,
+      overlay 150ms allow-discrete,
+      display 150ms allow-discrete;
+  }
+  .dialog::backdrop {
+    background: rgb(0 0 0 / 0.1);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: inherit;
+  }
+  .dialog > article {
+    scale: 0.95;
+    transition: scale 150ms;
+  }
+  .dialog[open],
+  .dialog[open]::backdrop {
+    opacity: 1;
+  }
+  .dialog[open] > article {
+    scale: 1;
+  }
+  @starting-style {
+    .dialog[open],
+    .dialog[open]::backdrop {
+      opacity: 0;
+    }
+    .dialog[open] > article {
+      scale: 0.95;
+    }
+  }
+</style>

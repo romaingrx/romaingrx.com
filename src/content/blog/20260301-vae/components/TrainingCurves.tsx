@@ -8,9 +8,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from '@/components/ui/react/chart';
+} from '@/components/ui/chart/chart';
 
-import run from '../run.json';
+import training from '../data/training.json';
 
 const config = {
   recon: { label: 'Reconstruction', color: 'hsl(262 60% 50%)' },
@@ -26,7 +26,7 @@ export default function TrainingCurves() {
       className="my-4"
     >
       <ChartContainer config={config} className="min-h-[300px] w-full">
-        <LineChart data={run.training} margin={{ top: 5, right: 10, bottom: 5, left: 10 }}>
+        <LineChart data={training} margin={{ top: 5, right: 10, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="epoch"

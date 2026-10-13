@@ -3,8 +3,6 @@ import sharp from 'sharp';
 
 import { site } from '@/configs/site';
 
-import { inlineTailwind } from './tailwind';
-
 interface OGImageProps {
   title: string;
   description?: string;
@@ -19,7 +17,6 @@ export async function generateOGImage({
   // Create the markup using React
   const markup = (
     <div
-      className="bg-primary"
       style={{
         width: '100%',
         height: '100%',
@@ -72,14 +69,13 @@ export async function generateOGImage({
         >
           <img src={`${site.url}/favicon.png`} width={40} height={40} />
           <div
-            className="bg-black/30"
             style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
               width: '1px',
               height: '24px',
             }}
           />
           <span
-            className="text-muted-foreground"
             style={{
               fontSize: '20px',
               fontFamily: 'Inter',
@@ -104,7 +100,6 @@ export async function generateOGImage({
         }}
       >
         <h1
-          className="text-primary-foreground"
           style={{
             fontSize: '72px',
             fontWeight: 800,
@@ -151,8 +146,7 @@ export async function generateOGImage({
   );
 
   // Convert the markup to an SVG using Satori
-  const inlineMarkup = inlineTailwind(markup);
-  const svg = await satori(inlineMarkup, {
+  const svg = await satori(markup, {
     width: 1200,
     height: 630,
     fonts: [

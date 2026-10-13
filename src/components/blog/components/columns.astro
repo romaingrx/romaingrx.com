@@ -1,15 +1,11 @@
 ---
 import { cva, type VariantProps } from 'class-variance-authority';
+import { Grid, type GridVariants } from '@/components/ui/grid';
 import { cn } from '@/lib/utils';
 
-const columns = cva('grid grid-cols-1 gap-4', {
+/** MDX: lay children out side by side from `md` up. */
+const spacing = cva('', {
   variants: {
-    columns: {
-      1: 'md:grid-cols-1',
-      2: 'md:grid-cols-2',
-      3: 'md:grid-cols-3',
-      4: 'md:grid-cols-4',
-    },
     space: {
       around: 'md:justify-around',
       between: 'md:justify-between',
@@ -17,32 +13,31 @@ const columns = cva('grid grid-cols-1 gap-4', {
     },
   },
   defaultVariants: {
-    columns: 2,
     space: 'between',
   },
 });
 
-type ColumnsVariants = VariantProps<typeof columns>;
-
-interface Props extends ColumnsVariants {
+interface Props extends VariantProps<typeof spacing> {
+  columns?: GridVariants['cols'];
+  /** Kept for existing MDX; columns always stretch now. */
   spread?: boolean;
   class?: string;
 }
 
-const { columns: cols, space, spread = false, class: className, ...rest } = Astro.props;
+const { columns = 2, space, spread: _spread, class: className, ...rest } = Astro.props;
 ---
 
-<div class={cn(columns({ columns: cols, space }), spread && 'columns-spread', className)} {...rest}>
+<Grid cols={columns} gap={4} class={cn(spacing({ space }), 'columns', className)} {...rest}>
   <slot />
-</div>
+</Grid>
 
 <style>
-  /* Stretch astro-island wrappers and their children to fill column height */
-  div :global(> astro-island) {
+  /* Stretch island wrappers so cards fill the column height. */
+  .columns :global(> astro-island) {
     display: flex;
     flex-direction: column;
   }
-  div :global(> astro-island > *) {
+  .columns :global(> astro-island > *) {
     flex: 1;
   }
 </style>

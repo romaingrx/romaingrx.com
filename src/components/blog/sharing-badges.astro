@@ -1,7 +1,7 @@
 ---
 import type { Params } from 'astro';
 import { Icon } from 'astro-icon/components';
-import Tooltip from '@/components/tooltip/tooltip.astro';
+import { Tooltip } from '@/components/ui/tooltip';
 import { platforms_info, type Platform } from '@/configs/platforms';
 import { getAuthorsWithSocialLinks } from '@/lib/authors';
 import type { BlogPostWithAuthors, NoteWithAuthors } from '@/lib/collections';
@@ -86,7 +86,7 @@ ${post.data.tags.map((t) => `#${t}`).join(' ')}`,
             <Icon name={platform.icon_name} class="size-5" />
             <span class="sr-only">{props.title}</span>
           </a>
-          <div slot="content">{props.title}</div>
+          <span slot="content">{props.title}</span>
         </Tooltip>
       );
     })

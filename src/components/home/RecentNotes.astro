@@ -1,5 +1,6 @@
 ---
-import Time from '@/components/ui/time.astro';
+import { SectionHeader } from '@/components/patterns/section-header';
+import { Time } from '@/components/ui/time';
 import { routes } from '@/configs/routes';
 import type { NoteWithAuthors } from '@/lib/collections';
 
@@ -11,27 +12,16 @@ const { notes } = Astro.props;
 ---
 
 <section>
-  <div class="flex items-baseline justify-between">
-    <h2 class="text-xl font-semibold tracking-tight">Recent notes</h2>
-    <a
-      href={routes.notes}
-      class="text-muted-foreground hover:text-foreground text-sm transition-colors"
-    >
-      View all &rarr;
-    </a>
-  </div>
+  <SectionHeader title="Recent notes" action={{ label: 'View all', href: routes.notes }} />
   <ul class="mt-6 divide-y">
     {
       notes.map((note) => (
         <li>
           <a href={routes.note(note)} class="group flex items-center justify-between py-3">
-            <span class="group-hover:text-primary font-medium transition-colors">
+            <span class="font-medium transition-colors group-hover:text-primary">
               {note.data.title}
             </span>
-            <Time
-              date={note.data.published_date}
-              className="text-muted-foreground ml-4 shrink-0 text-sm"
-            />
+            <Time date={note.data.published_date} class="ml-4 shrink-0 text-sm" />
           </a>
         </li>
       ))

@@ -1,4 +1,4 @@
-import { Accordion } from '@/components/ui';
+import { Accordion } from '@/components/ui/accordion';
 
 import Center from './blocks/center.astro';
 import BlogLink from './blog-link.astro';

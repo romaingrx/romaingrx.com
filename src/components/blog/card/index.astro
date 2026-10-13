@@ -1,32 +1,35 @@
 ---
 import { Image } from 'astro:assets';
-import Time from '@/components/ui/time.astro';
+import SmoothGradient from '@/components/backgrounds/smooth-gradient.astro';
+import { Stack } from '@/components/ui/stack';
+import { Heading, Text } from '@/components/ui/text';
+import { Time } from '@/components/ui/time';
 import { routes } from '@/configs/routes';
 import type { BlogPostWithAuthors } from '@/lib/collections';
 import { cn } from '@/lib/utils';
-import BlogPostBackground from './background';
 
 interface Props {
   post: BlogPostWithAuthors;
-  className?: string;
+  class?: string;
   showDescription?: boolean;
+  /** Outline level of the title: 2 on listing pages, 3 under a section heading. */
+  headingLevel?: 2 | 3;
 }
 
-const { post, className, showDescription = true } = Astro.props;
-const hasCover = !!post.data.cover;
+const { post, class: className, showDescription = true, headingLevel = 2 } = Astro.props;
 ---
 
 <a href={routes.blog(post)} class={cn('group block no-underline', className)}>
-  <div class="bg-muted/50 relative aspect-[16/10] overflow-hidden rounded-xl">
+  <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted/50">
     <div
       class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover:scale-105"
     >
-      <BlogPostBackground value={post.id} />
+      <SmoothGradient seed={post.id} />
     </div>
     {
-      hasCover && (
+      post.data.cover && (
         <Image
-          src={post.data.cover!}
+          src={post.data.cover}
           alt={post.data.title}
           class="pointer-events-none relative z-10 h-full w-full object-contain p-6"
           width={600}
@@ -35,25 +38,23 @@ const hasCover = !!post.data.cover;
     }
   </div>
 
-  <div class="flex flex-col gap-1.5 pt-3">
-    <div class="text-muted-foreground flex items-center gap-1.5 text-xs">
+  <Stack gap={1.5} class="pt-3">
+    <Stack direction="row" align="center" gap={1.5} class="text-xs text-muted-foreground">
       {post.data.categories[0] && <span class="capitalize">{post.data.categories[0]}</span>}
       <span>&middot;</span>
       <Time date={post.data.published_date} />
       <span>&middot;</span>
       <span>{post.readingTime}</span>
-    </div>
-    <h2
-      class="group-hover:text-primary line-clamp-2 text-base leading-snug font-semibold tracking-tight transition-colors"
-    >
+    </Stack>
+    <Heading level={headingLevel} size="card" class="line-clamp-2 transition-colors group-hover:text-primary">
       {post.data.title}
-    </h2>
+    </Heading>
     {
       showDescription && post.data.description && (
-        <p class="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
+        <Text size="sm" tone="muted" leading="relaxed" clamp={2}>
           {post.data.description}
-        </p>
+        </Text>
       )
     }
-  </div>
+  </Stack>
 </a>

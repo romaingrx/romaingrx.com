@@ -1,0 +1,22 @@
+---
+import '@/styles/typography.css';
+import '@/styles/citations.css';
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+
+type Props = HTMLAttributes<'div'> & {
+  as?: 'div' | 'article' | 'section';
+  /** `compact` tightens spacing for short rich text inside cards. */
+  variant?: 'default' | 'compact';
+};
+
+const { as: Tag = 'div', variant = 'default', class: className, ...props } = Astro.props;
+---
+
+<Tag
+  data-slot="prose"
+  class={cn(variant === 'compact' ? 'prose-compact' : 'prose', className)}
+  {...props}
+>
+  <slot />
+</Tag>

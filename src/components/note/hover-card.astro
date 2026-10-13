@@ -1,9 +1,12 @@
 ---
-import type { NoteWithAuthors } from '@/lib/collections';
 import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
+import { HoverCard } from '@/components/ui/hover-card';
+import { Stack } from '@/components/ui/stack';
+import { Text } from '@/components/ui/text';
 import { routes } from '@/configs/routes';
-import NoteHoverCardInner from './hover-card-inner.tsx';
+import type { NoteWithAuthors } from '@/lib/collections';
 
+/** A note list row that previews the note's description on hover. */
 interface Props {
   note: NoteWithAuthors;
 }
@@ -11,13 +14,24 @@ interface Props {
 const { note } = Astro.props;
 ---
 
-<NoteHoverCardInner
-  href={routes.note(note)}
-  title={note.data.title}
-  description={note.data.description}
-  readingTime={note.readingTime}
-  client:visible
->
-  <slot />
-  <StackedAuthors authors={note.authors} show_name={false} slot="authors" />
-</NoteHoverCardInner>
+<HoverCard class="block">
+  <a href={routes.note(note)} class="flex items-center justify-between px-4 py-3">
+    <slot />
+  </a>
+  <Stack as="span" gap={4} slot="content">
+    <Stack as="span" gap={2}>
+      <Text as="span" size="sm" weight="semibold">{note.data.title}</Text>
+      {
+        note.data.description && (
+          <Text as="span" size="sm" tone="muted">
+            {note.data.description}
+          </Text>
+        )
+      }
+    </Stack>
+    <Stack as="span" direction="row" align="center" justify="between">
+      <StackedAuthors authors={note.authors} show_name={false} interactive={false} />
+      <Text as="span" size="sm" tone="muted">{note.readingTime}</Text>
+    </Stack>
+  </Stack>
+</HoverCard>

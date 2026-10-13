@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import equinox as eqx
@@ -28,8 +29,7 @@ N_INTERPOLATIONS = 3
 N_INTERPOLATION_STEPS = 8
 N_SAMPLES = 10
 
-OUTPUT_DIR = Path(__file__).parent.parent.parent
-OUTPUT_FILE = OUTPUT_DIR / "run.json"
+OUTPUT_DIR = Path(__file__).parent.parent.parent / "data"
 
 
 def main() -> None:
@@ -98,8 +98,11 @@ def main() -> None:
         samples=samples,
     )
 
-    OUTPUT_FILE.write_text(run.model_dump_json(indent=2))
-    log.info("saved_run", path=str(OUTPUT_FILE))
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    # One file per field, so each widget in the post ships only its own data.
+    for name, value in run.model_dump(mode="json").items():
+        (OUTPUT_DIR / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n")
+    log.info("saved_run", path=str(OUTPUT_DIR))
 
 
 

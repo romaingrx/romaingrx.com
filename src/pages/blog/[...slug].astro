@@ -3,9 +3,9 @@ import { render } from 'astro:content';
 import { components } from '@/components/blog/components';
 import PostFooter from '@/components/blog/footer/index.astro';
 import PostHeader from '@/components/blog/post-header.astro';
-import Prose from '@/components/blog/prose.astro';
 import TableOfContents from '@/components/blog/toc/index.astro';
-import Shell from '@/components/Shell.astro';
+import { Container } from '@/components/ui/container';
+import { Prose } from '@/components/ui/prose';
 import BlogLayout from '@/layouts/BlogLayout.astro';
 import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
 
@@ -31,10 +31,10 @@ const { Content, headings } = await render(post);
   <PostHeader post={post} />
   <div class="mt-10"></div>
   <TableOfContents headings={headings} />
-  <Shell type="article">
-    <Prose Element="article" data-pagefind-body data-pagefind-meta={`title:${post.data.title}`}>
+  <Container size="article">
+    <Prose as="article" data-pagefind-body data-pagefind-meta={`title:${post.data.title}`}>
       <Content components={components} />
     </Prose>
     <PostFooter post={post} />
-  </Shell>
+  </Container>
 </BlogLayout>

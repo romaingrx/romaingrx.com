@@ -1,6 +1,4 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'basecoat-css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -122,27 +120,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
 }
 
 @custom-variant theme-light (html[data-theme="light"] &);
@@ -157,7 +134,7 @@
     overflow-x: clip;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply overscroll-none bg-background text-foreground;
   }
   button:not(:disabled) {
     cursor: pointer;

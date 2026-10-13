@@ -1,9 +1,10 @@
 ---
-import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
-import CompactProse from '@/components/ui/compact-prose.astro';
-import { platforms_info, type Platform } from '@/configs/platforms';
+import { SocialLinks } from '@/components/social';
+import { Prose } from '@/components/ui/prose';
+import { Heading, Text } from '@/components/ui/text';
+import { getAuthorSocialLinks } from '@/lib/authors';
 
 interface Props {
   author: string;
@@ -13,7 +14,8 @@ const author = await getEntry('author', Astro.props.author);
 if (!author) {
   throw new Error('Author not found for owner of the website');
 }
-const { name, title, image, socialLinks } = author.data;
+const { name, title, image } = author.data;
+const socialLinks = getAuthorSocialLinks(author);
 const { Content } = await render(author);
 ---
 
@@ -40,47 +42,20 @@ const { Content } = await render(author);
 
           <!-- Name, Title, and Social Links -->
           <div class="flex flex-1 flex-col justify-center space-y-4">
-            <!-- Name and Title -->
             <div class="space-y-2">
-              <h1 class="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-                {name}
-              </h1>
-              <p class="text-muted-foreground text-xl font-medium">
+              <Heading level={1}>{name}</Heading>
+              <Text size="xl" tone="muted" weight="medium">
                 {title}
-              </p>
+              </Text>
             </div>
-
-            <!-- Social Links -->
-            {
-              Object.entries(socialLinks).length > 0 && (
-                <div class="flex flex-wrap gap-3">
-                  {Object.entries(socialLinks)
-                    .filter(([, v]) => v)
-                    .map(([platform, link]) => (
-                      <a
-                        href={link!.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="border-border/50 bg-background/80 text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground inline-flex size-10 items-center justify-center rounded-lg border transition-all"
-                        title={`Follow on ${platform}`}
-                      >
-                        <Icon
-                          name={platforms_info[platform as Platform].icon_name}
-                          class="size-4"
-                        />
-                        <span class="sr-only">Follow on {platform}</span>
-                      </a>
-                    ))}
-                </div>
-              )
-            }
+            {socialLinks.length > 0 && <SocialLinks links={socialLinks} variant="boxed" iconClass="size-4" />}
           </div>
         </div>
 
         <!-- Description spanning full width -->
-        <CompactProse>
+        <Prose variant="compact">
           <Content />
-        </CompactProse>
+        </Prose>
       </div>
     </div>
   </div>

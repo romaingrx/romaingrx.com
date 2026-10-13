@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 
-import run from '../run.json';
+import { Button } from '@/components/ui/button/button';
 
-type Interpolation = (typeof run.interpolations)[number];
+import interpolations from '../data/interpolations.json';
+
+type Interpolation = (typeof interpolations)[number];
 
 function StepViewer({ interp }: { interp: Interpolation }) {
   const [step, setStep] = useState(0);
@@ -118,30 +120,28 @@ export default function InterpolationViewer() {
         </p>
       </div>
 
-      {run.interpolations.length > 1 && (
+      {interpolations.length > 1 && (
         <div className="flex gap-1.5">
-          {run.interpolations.map((interp, i) => (
-            <button
+          {interpolations.map((interp, i) => (
+            <Button
               key={`${interp.start.slice(0, 8)}-${interp.end.slice(0, 8)}`}
               type="button"
+              variant="secondary"
+              size="sm"
+              className="h-auto px-2.5 py-1 text-xs aria-pressed:bg-foreground aria-pressed:text-background"
               aria-pressed={selected === i}
               onClick={() => setSelected(i)}
-              className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-                selected === i
-                  ? 'bg-foreground text-background'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
             >
               Pair {i + 1}
-            </button>
+            </Button>
           ))}
         </div>
       )}
 
-      {run.interpolations[selected] ? (
+      {interpolations[selected] ? (
         <StepViewer
-          key={`${run.interpolations[selected].start}-${run.interpolations[selected].end}`}
-          interp={run.interpolations[selected]}
+          key={`${interpolations[selected].start}-${interpolations[selected].end}`}
+          interp={interpolations[selected]}
         />
       ) : (
         <p role="status" className="text-sm text-muted-foreground">

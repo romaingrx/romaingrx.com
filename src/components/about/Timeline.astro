@@ -1,6 +1,9 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+import { Link } from '@/components/ui/link';
+import { Stack } from '@/components/ui/stack';
+import { Heading, Text } from '@/components/ui/text';
 import { formatPeriod } from '@/lib/format';
 
 type Entry = CollectionEntry<'timeline'>;
@@ -25,36 +28,41 @@ const sections = groups.map((group) => ({
 }));
 ---
 
-<div class="space-y-12">
+<Stack direction="col" gap={12}>
   {
     sections.map((section) => (
       <section>
-        <h2 class="text-muted-foreground mb-4 text-sm">{section.title}</h2>
-        <ul class="space-y-4 sm:space-y-3">
+        <Heading level={2} size="label" class="mb-4 font-normal text-muted-foreground">
+          {section.title}
+        </Heading>
+        <Stack as="ul" direction="col" gap={4} class="sm:gap-3">
           {section.entries.map((entry) => (
             <li class="grid grid-cols-[1fr_auto] items-baseline gap-x-6">
               <p class="min-w-0">
                 {entry.data.organization_url ? (
-                  <a
+                  <Link
                     href={entry.data.organization_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-foreground font-medium underline-offset-4 hover:underline"
+                    variant="plain"
+                    class="font-medium text-foreground underline-offset-4 hover:underline"
                   >
                     {entry.data.organization}
-                  </a>
+                  </Link>
                 ) : (
-                  <span class="text-foreground font-medium">{entry.data.organization}</span>
+                  <Text as="span" weight="medium" class="text-foreground">
+                    {entry.data.organization}
+                  </Text>
                 )}
-                <span class="text-muted-foreground block sm:ml-2 sm:inline">{entry.data.title}</span>
+                <Text as="span" tone="muted" class="block sm:ml-2 sm:inline">
+                  {entry.data.title}
+                </Text>
               </p>
-              <span class="text-muted-foreground text-sm whitespace-nowrap tabular-nums">
+              <Text as="span" size="sm" tone="muted" class="whitespace-nowrap tabular-nums">
                 {formatPeriod(entry.data.startDate, entry.data.endDate)}
-              </span>
+              </Text>
             </li>
           ))}
-        </ul>
+        </Stack>
       </section>
     ))
   }
-</div>
+</Stack>

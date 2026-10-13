@@ -1,34 +1,21 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { platforms_info } from '@/configs/platforms';
+import { SocialLinks } from '@/components/social';
+import { Container } from '@/components/ui/container';
+import { Text } from '@/components/ui/text';
 import { socialLinks } from '@/configs/social';
 
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-accent bg-primary/10 w-full border-t py-6">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
-      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 md:order-2">
-        {
-          socialLinks.map((link) => (
-            <a
-              href={link.url}
-              class="text-muted-foreground hover:text-foreground transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span class="sr-only">{link.label}</span>
-              <Icon name={platforms_info[link.platform].icon_name} class="size-6" />
-            </a>
-          ))
-        }
-      </div>
-      <div class="md:order-1">
-        <p class="text-muted-foreground text-center text-sm leading-5">
-          Made with ❤️‍🔥 by romaingrx. &copy; {currentYear}. All rights reserved.
-        </p>
-      </div>
-    </div>
-  </div>
+<footer class="w-full border-t border-accent bg-primary/10 py-6">
+  <Container class="flex flex-col items-center justify-between gap-4 md:flex-row">
+    <SocialLinks
+      links={socialLinks}
+      iconClass="size-6"
+      class="justify-center gap-x-6 gap-y-2 md:order-2"
+    />
+    <Text size="sm" tone="muted" class="text-center leading-5 md:order-1">
+      Made with ❤️‍🔥 by romaingrx. &copy; {currentYear}. All rights reserved.
+    </Text>
+  </Container>
 </footer>
