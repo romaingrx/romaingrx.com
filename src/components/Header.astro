@@ -1,5 +1,5 @@
 ---
-import Logo from '@/components/logo/logo';
+import { Logo } from '@/components/logo';
 import Search from '@/components/search/search.astro';
 import { routes } from '@/configs/routes';
 import MobileNav from './nav/header/mobile.astro';
@@ -39,7 +39,7 @@ const isActive = (href: string) => {
         class="flex items-center gap-3 transition-opacity duration-200 hover:opacity-80"
         aria-label="Go to homepage"
       >
-        <Logo class="h-7" with_text={false} />
+        <Logo />
       </a>
     </div>
 
