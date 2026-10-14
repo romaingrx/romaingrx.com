@@ -25,21 +25,20 @@ const { giscus } = site;
 </div>
 
 <script is:inline>
-  (() => {
-    const getTheme = () =>
-      document.documentElement.classList.contains('dark') ? 'gruvbox' : 'gruvbox_light';
+  function giscusTheme() {
+    return document.documentElement.classList.contains('dark') ? 'gruvbox' : 'gruvbox_light';
+  }
 
-    // Giscus reads data-theme when it creates its iframe.
-    document.querySelector('script[src*="giscus"]')?.setAttribute('data-theme', getTheme());
+  // Giscus reads data-theme when it creates its iframe.
+  document.querySelector('script[src*="giscus"]')?.setAttribute('data-theme', giscusTheme());
 
-    // Afterwards the iframe only follows theme changes through messages.
-    new MutationObserver(() => {
-      document
-        .querySelector('iframe.giscus-frame')
-        ?.contentWindow?.postMessage(
-          { giscus: { setConfig: { theme: getTheme() } } },
-          'https://giscus.app'
-        );
-    }).observe(document.documentElement, { attributeFilter: ['class'] });
-  })();
+  // Afterwards the iframe only follows theme changes through messages.
+  new MutationObserver(() => {
+    document
+      .querySelector('iframe.giscus-frame')
+      ?.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme() } } },
+        'https://giscus.app'
+      );
+  }).observe(document.documentElement, { attributeFilter: ['class'] });
 </script>

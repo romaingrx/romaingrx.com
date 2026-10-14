@@ -49,8 +49,7 @@ async function loadEntries<C extends Collection>(collection: C): Promise<Entry<C
       const { remarkPluginFrontmatter } = await render(entry);
       const slug = entry.data.permalink;
       const path = entryPath(collection, slug);
-      return {
-        ...entry,
+      return Object.assign(entry, {
         authors: entry.data.authors.map(({ id }) => {
           const author = authors.find((a) => a.id === id);
           if (!author) throw new Error(`Author ${id} not found (in ${collection}/${entry.id}).`);
@@ -64,7 +63,7 @@ async function loadEntries<C extends Collection>(collection: C): Promise<Entry<C
         slug,
         path,
         url: getAbsoluteUrl(path, new URL(site.url)),
-      } as Entry<C>;
+      }) as Entry<C>;
     }),
   );
 }

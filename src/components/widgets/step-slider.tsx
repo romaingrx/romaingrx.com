@@ -78,6 +78,7 @@ export function StepSlider(props: StepSliderProps) {
               <div className="flex flex-wrap gap-2" data-pagefind-ignore>
                 {examples.map((example, index) => (
                   <Button
+                    // oxlint-disable-next-line react/no-array-index-key -- labels are optional, and the list never reorders
                     key={`${example.label}-${index}`}
                     type="button"
                     variant={index === activeIdx ? 'default' : 'secondary'}

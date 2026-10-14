@@ -31,8 +31,8 @@ export default function EpochProgress() {
             data-pagefind-ignore
           >
             {current.images.map((image, index) => (
-              // oxlint-disable-next-line react/no-array-index-key -- static image list per epoch
               <div
+                // oxlint-disable-next-line react/no-array-index-key -- samples can be identical, and the list never reorders
                 key={`${current.epoch}-${index}`}
                 className="flex aspect-square min-w-0 items-center justify-center overflow-hidden rounded bg-black sm:size-32"
               >
