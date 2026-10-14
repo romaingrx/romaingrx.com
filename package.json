@@ -9,7 +9,6 @@
     "build": "astro check && astro build",
     "preview": "astro build && wrangler dev",
     "deploy": "pnpm build && wrangler deploy",
-    "prebuild": "node scripts/generate-favicon.mjs",
     "cf-typegen": "wrangler types",
     "format": "oxfmt --ignore-path .gitignore --write . && prettier --write '**/*.astro'",
     "format:check": "oxfmt --ignore-path .gitignore --check . && prettier --check '**/*.astro'",
@@ -48,7 +47,6 @@
     "remark-math": "^6.0.0",
     "satori": "^0.44.0",
     "sharp": "^0.35.3",
-    "sharp-ico": "^0.1.5",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"

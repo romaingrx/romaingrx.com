@@ -1,13 +1,9 @@
 import type { APIRoute } from 'astro';
 
-import sharp from 'sharp';
-
-import svg_logo from '@/components/logo/logo.svg?raw';
+import { tiles } from '@/components/logo';
+import { svgToPng } from '@/components/logo/render';
 
 export const GET: APIRoute = async () => {
-  const png = await sharp(Buffer.from(svg_logo)).resize(64).toFormat('png').toBuffer();
-
-  return new Response(new Uint8Array(png), {
-    headers: { 'Content-Type': 'image/png' },
-  });
+  const png = await svgToPng(tiles.large, 64);
+  return new Response(new Uint8Array(png), { headers: { 'Content-Type': 'image/png' } });
 };

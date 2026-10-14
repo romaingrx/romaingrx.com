@@ -1,6 +1,8 @@
 import satori from 'satori';
 import sharp from 'sharp';
 
+import { tiles } from '@/components/logo';
+import { svgToPng } from '@/components/logo/render';
 import { site } from '@/configs/site';
 
 interface OGImageProps {
@@ -14,6 +16,9 @@ export async function generateOGImage({
   description,
   showLogo = true,
 }: OGImageProps): Promise<Buffer> {
+  // Inline the mark so the image never depends on the deployed favicon.
+  const logo = `data:image/png;base64,${(await svgToPng(tiles.large, 80)).toString('base64')}`;
+
   // Create the markup using React
   const markup = (
     <div
@@ -67,7 +72,7 @@ export async function generateOGImage({
             gap: '12px',
           }}
         >
-          <img src={`${site.url}/favicon.png`} width={40} height={40} />
+          <img src={logo} width={40} height={40} />
           <div
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.3)',
