@@ -1,0 +1,28 @@
+---
+import ChartCard from '@/components/charts/chart-card.astro';
+import LineChart from '@/components/charts/line-chart.astro';
+
+import training from '../data/training.json';
+---
+
+<ChartCard
+  title="Training curves"
+  description="Loss decomposition over 200 epochs with KL annealing (first 50 epochs)"
+  class="my-4"
+>
+  <LineChart
+    x={training.map((d) => d.epoch)}
+    xAxis={{ ticks: [0, 50, 100, 150] }}
+    tooltipTitle={(v) => `Epoch ${v}`}
+    series={[
+      { label: 'Reconstruction', color: 'hsl(262 60% 50%)', values: training.map((d) => d.recon) },
+      { label: 'KL divergence', color: 'hsl(280 50% 65%)', values: training.map((d) => d.kl) },
+      {
+        label: 'Total loss',
+        color: 'hsl(250 40% 75%)',
+        values: training.map((d) => d.loss),
+        dashed: true,
+      },
+    ]}
+  />
+</ChartCard>

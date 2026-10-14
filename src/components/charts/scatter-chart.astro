@@ -1,0 +1,145 @@
+---
+import { cn } from '@/lib/utils';
+
+import PlotFrame from './plot-frame.astro';
+import { fmt, r, scale } from './scale';
+
+export interface ScatterPoint {
+  x: number;
+  y: number;
+  color: string;
+  /** Tooltip heading. */
+  title: string;
+  /** Monospace tooltip body, one colored character at a time when `charColors` is set. */
+  detail?: string;
+  /** Tooltip footer. */
+  note?: string;
+}
+
+interface Axis {
+  label?: string;
+  domain?: [number, number];
+  ticks?: number[];
+  format?: (v: number) => string;
+}
+
+interface Props {
+  points: ScatterPoint[];
+  xAxis?: Axis;
+  yAxis?: Axis;
+  charColors?: Record<string, string>;
+  height?: number;
+  class?: string;
+}
+
+const { points, xAxis = {}, yAxis = {}, charColors, height = 400, class: className } = Astro.props;
+
+const xs = scale(
+  points.map((p) => p.x),
+  xAxis
+);
+const ys = scale(
+  points.map((p) => p.y),
+  yAxis
+);
+const placed = points.map((p) => ({ p, fx: r(xs.at(p.x)), fy: r(1 - ys.at(p.y)) }));
+
+const data = JSON.stringify({
+  p: placed.map(({ p, fx, fy }) => [fx, fy, p.color, p.title, p.detail ?? '', p.note ?? '']),
+  c: charColors ?? {},
+});
+---
+
+<div
+  data-chart="scatter"
+  data-points={data}
+  class={cn('text-xs text-muted-foreground select-none', className)}
+>
+  <PlotFrame
+    height={height}
+    x={{ scale: xs, format: xAxis.format ?? fmt, label: xAxis.label }}
+    y={{ scale: ys, format: yAxis.format ?? fmt, label: yAxis.label }}
+  >
+    <svg
+      class="absolute inset-0 size-full overflow-visible"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      {
+        placed.map(({ p, fx, fy }) => (
+          <path
+            d={`M${r(fx * 1000)} ${r(fy * 1000)}h0`}
+            stroke={p.color}
+            stroke-opacity="0.7"
+            stroke-width="6"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+        ))
+      }
+    </svg>
+    <span
+      data-dot
+      class="pointer-events-none absolute hidden size-2.5 -translate-1/2 rounded-full ring-2 ring-foreground"
+    ></span>
+  </PlotFrame>
+</div>
+
+<script>
+  import { heading, tooltipBox } from './tooltip';
+
+  type Point = [x: number, y: number, color: string, title: string, detail: string, note: string];
+
+  for (const fig of document.querySelectorAll<HTMLElement>('[data-chart=scatter]')) {
+    const data: { p: Point[]; c: Record<string, string> } = JSON.parse(fig.dataset.points!);
+    const plot = fig.querySelector<HTMLElement>('[data-plot]')!;
+    const dot = plot.querySelector<HTMLElement>('[data-dot]')!;
+    const tip = tooltipBox(plot);
+
+    const hide = () => {
+      dot.classList.add('hidden');
+      tip.hide();
+    };
+
+    plot.addEventListener('pointermove', (e) => {
+      const box = plot.getBoundingClientRect();
+      const px = e.clientX - box.left;
+      const py = e.clientY - box.top;
+      let best: Point | undefined;
+      let bestDist = 12 ** 2;
+      for (const p of data.p) {
+        const d = (p[0] * box.width - px) ** 2 + (p[1] * box.height - py) ** 2;
+        if (d < bestDist) [best, bestDist] = [p, d];
+      }
+      if (!best) return hide();
+
+      const [x, y, color, title, detail, note] = best;
+      dot.style.left = `${x * 100}%`;
+      dot.style.top = `${y * 100}%`;
+      dot.style.background = color;
+      dot.classList.remove('hidden');
+
+      const content: Node[] = [heading(title)];
+      if (detail) {
+        const body = document.createElement('div');
+        body.className = 'max-w-[280px] font-mono leading-relaxed break-all';
+        for (const ch of detail) {
+          const span = document.createElement('span');
+          span.textContent = ch;
+          if (data.c[ch]) span.style.color = data.c[ch];
+          body.append(span);
+        }
+        content.push(body);
+      }
+      if (note) {
+        const foot = document.createElement('div');
+        foot.className = 'mt-1 text-muted-foreground';
+        foot.textContent = note;
+        content.push(foot);
+      }
+      tip.show(content, x, y * box.height);
+    });
+    plot.addEventListener('pointerleave', hide);
+  }
+</script>

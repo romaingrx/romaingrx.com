@@ -1,0 +1,105 @@
+---
+import { r, type Scale } from './scale';
+
+export interface FrameAxis {
+  scale: Scale;
+  format: (v: number) => string;
+  label?: string;
+}
+
+interface Props {
+  x: FrameAxis;
+  y: FrameAxis;
+  y2?: FrameAxis;
+  height: number;
+}
+
+const { x, y, y2, height } = Astro.props;
+
+// Axis columns are sized from their longest tick label (12px text is ~7px per character).
+const width = (axis: FrameAxis) =>
+  Math.max(...axis.scale.ticks.map((t) => axis.format(t).length)) * 7 + 10 + (axis.label ? 18 : 0);
+const pct = (f: number) => `${r(f * 100)}%`;
+---
+
+<div
+  class="grid"
+  style={`grid-template-columns: ${width(y)}px minmax(0, 1fr) ${y2 ? width(y2) : 8}px; grid-template-rows: ${height}px auto;`}
+>
+  <div class="relative">
+    {
+      y.label && (
+        <span class="absolute top-1/2 left-2 -translate-x-1/2 -translate-y-1/2 -rotate-90 whitespace-nowrap">
+          {y.label}
+        </span>
+      )
+    }
+    {
+      y.scale.ticks.map((t) => (
+        <span
+          class="absolute right-2 -translate-y-1/2 tabular-nums"
+          style={`top: ${pct(1 - y.scale.at(t))}`}
+        >
+          {y.format(t)}
+        </span>
+      ))
+    }
+  </div>
+
+  <div data-plot class="relative touch-pan-y">
+    <svg
+      class="absolute inset-0 size-full overflow-visible"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <g class="stroke-border" stroke-dasharray="3 3">
+        {
+          y.scale.ticks.map((t) => {
+            const v = r((1 - y.scale.at(t)) * 1000);
+            return <line x1="0" x2="1000" y1={v} y2={v} vector-effect="non-scaling-stroke" />;
+          })
+        }
+        {
+          x.scale.ticks.map((t) => {
+            const v = r(x.scale.at(t) * 1000);
+            return <line x1={v} x2={v} y1="0" y2="1000" vector-effect="non-scaling-stroke" />;
+          })
+        }
+      </g>
+    </svg>
+    <slot />
+    <div
+      data-tip
+      role="tooltip"
+      class="pointer-events-none absolute z-10 hidden min-w-32 rounded-lg border bg-background px-2.5 py-1.5 text-xs text-foreground shadow-xl"
+    >
+    </div>
+  </div>
+
+  <div class="relative">
+    {
+      y2?.scale.ticks.map((t) => (
+        <span
+          class="absolute left-2 -translate-y-1/2 tabular-nums"
+          style={`top: ${pct(1 - y2.scale.at(t))}`}
+        >
+          {y2.format(t)}
+        </span>
+      ))
+    }
+  </div>
+
+  <div></div>
+  <div class="relative h-5">
+    {
+      x.scale.ticks.map((t) => (
+        <span class="absolute top-1.5 -translate-x-1/2 tabular-nums" style={`left: ${pct(x.scale.at(t))}`}>
+          {x.format(t)}
+        </span>
+      ))
+    }
+  </div>
+  <div></div>
+</div>
+{x.label && <div class="mt-1.5 text-center">{x.label}</div>}

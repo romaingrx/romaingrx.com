@@ -1,0 +1,26 @@
+---
+import BarChart from '@/components/charts/bar-chart.astro';
+import ChartCard from '@/components/charts/chart-card.astro';
+
+const items = [
+  { label: 'baichuan2_7b', value: 0.3475 },
+  { label: 'koala_7b', value: 0.265 },
+  { label: 'llama2_7b', value: 0.0125 },
+  { label: 'mistral_7b_v2', value: 0.3675 },
+  { label: 'openchat_3_5_1210', value: 0.3825 },
+  { label: 'orca_2_7b', value: 0.315 },
+  { label: 'qwen_7b_chat', value: 0.2325 },
+  { label: 'solar_10_7b_instruct', value: 0.365 },
+  { label: 'starling_7b', value: 0.4225 },
+  { label: 'vicuna_7b_v1_5', value: 0.3425 },
+  { label: 'zephyr_7b', value: 0.41 },
+];
+---
+
+<ChartCard
+  title="Attack success rate"
+  description="ASR performance of the trained model across various models in HarmBench, evaluated using all functional categories"
+  class="my-4"
+>
+  <BarChart items={items} />
+</ChartCard>

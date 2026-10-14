@@ -19,9 +19,9 @@ resources:
     description: 'JAX/Equinox DDPM implementation for font glyph generation'
 ---
 
-import TrainingCurves from './components/TrainingCurves';
+import TrainingCurves from './components/TrainingCurves.astro';
 import EpochProgress from './components/EpochProgress';
-import NoiseScheduleChart from './components/NoiseScheduleChart';
+import NoiseScheduleChart from './components/NoiseScheduleChart.astro';
 import ForwardProcess from './components/ForwardProcess';
 import DenoisingProcess from './components/DenoisingProcess';
 import SampleGallery from './components/SampleGallery.astro';
@@ -81,7 +81,7 @@ The choice of $\beta_t$ matters more than you'd think. A linear schedule destroy
 
 $$\bar\alpha_t = \frac{f(t)}{f(0)}, \qquad f(t) = \cos\left(\frac{t/T + s}{1+s} \cdot \frac{\pi}{2}\right)^2$$
 
-<NoiseScheduleChart client:visible />
+<NoiseScheduleChart />
 
 Notice how $\bar\alpha_t$ (the signal-preserving factor) drops gently at first, then accelerates. This means the model gets useful gradients at every noise level, not just the extremes.
 
@@ -209,7 +209,7 @@ $$
 
 This smooths out training noise and consistently produces sharper samples than the raw model weights.
 
-<TrainingCurves client:visible />
+<TrainingCurves />
 
 The loss drops steeply in the first 30 epochs as the model learns coarse structure, then gradually refines. Note that the curve hasn't fully plateaued by epoch 150, so longer training would likely improve sample quality further. For the purposes of this post, the results are more than sufficient. Here's what the validation samples look like across training:
 

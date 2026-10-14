@@ -1,0 +1,176 @@
+---
+import { cn } from '@/lib/utils';
+
+import Legend from './legend.astro';
+import PlotFrame from './plot-frame.astro';
+import { fmt, r, scale, type ScaleType } from './scale';
+
+export interface LineSeries {
+  label: string;
+  /** Any CSS color, usually a `var(--chart-n)` token. */
+  color: string;
+  values: number[];
+  dashed?: boolean;
+  /** Plot against the right-hand axis. */
+  axis?: 'left' | 'right';
+}
+
+export interface LineAxis {
+  label?: string;
+  type?: ScaleType;
+  domain?: [number, number];
+  ticks?: number[];
+  format?: (v: number) => string;
+}
+
+interface Props {
+  x: number[];
+  series: LineSeries[];
+  xAxis?: LineAxis;
+  yAxis?: LineAxis;
+  /** Used only when a series sets `axis: 'right'`. */
+  y2Axis?: LineAxis;
+  /** Tooltip heading for a point; defaults to the x tick format. */
+  tooltipTitle?: (x: number) => string;
+  legend?: boolean;
+  height?: number;
+  class?: string;
+}
+
+const {
+  x,
+  series,
+  xAxis = {},
+  yAxis = {},
+  y2Axis = {},
+  tooltipTitle,
+  legend = series.length > 1,
+  height = 300,
+  class: className,
+} = Astro.props;
+
+const onRight = (s: LineSeries) => s.axis === 'right';
+const right = series.filter(onRight);
+const xs = scale(x, { ...xAxis, domain: xAxis.domain ?? [x[0], x[x.length - 1]] });
+const ys = scale(
+  series.filter((s) => !onRight(s)).flatMap((s) => s.values),
+  yAxis
+);
+const y2s = right.length ? scale(right.flatMap((s) => s.values), y2Axis) : undefined;
+
+const plotted = series.map((s) => {
+  const sc = onRight(s) && y2s ? y2s : ys;
+  const f = s.values.map((v) => r(1 - sc.at(v)));
+  return {
+    s,
+    f,
+    // Tooltips show more precision than the axis ticks.
+    labels: s.values.map(fmt),
+    points: f.map((fy, i) => `${r(xs.at(x[i]) * 1000)},${r(fy * 1000)}`).join(' '),
+  };
+});
+
+const data = JSON.stringify({
+  t: x.map(tooltipTitle ?? xAxis.format ?? fmt),
+  x: x.map((v) => r(xs.at(v))),
+  s: plotted.map(({ s, labels, f }) => ({ l: s.label, c: s.color, v: labels, f })),
+});
+---
+
+<div
+  data-chart="line"
+  data-series={data}
+  class={cn('text-xs text-muted-foreground select-none', className)}
+>
+  <PlotFrame
+    height={height}
+    x={{ scale: xs, format: xAxis.format ?? fmt, label: xAxis.label }}
+    y={{ scale: ys, format: yAxis.format ?? fmt, label: yAxis.label }}
+    y2={y2s && { scale: y2s, format: y2Axis.format ?? fmt, label: y2Axis.label }}
+  >
+    <svg
+      class="absolute inset-0 size-full overflow-visible"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      {
+        plotted.map(({ s, points }) => (
+          <polyline
+            points={points}
+            fill="none"
+            stroke={s.color}
+            stroke-width="2"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-dasharray={s.dashed ? '5 5' : undefined}
+            vector-effect="non-scaling-stroke"
+          />
+        ))
+      }
+    </svg>
+    <div data-cursor class="pointer-events-none absolute inset-y-0 hidden w-px bg-border"></div>
+    {
+      series.map((s) => (
+        <span
+          data-dot
+          class="pointer-events-none absolute hidden size-2 -translate-1/2 rounded-full ring-2 ring-background"
+          style={`background: ${s.color}`}
+        />
+      ))
+    }
+  </PlotFrame>
+  {legend && <Legend items={series} />}
+</div>
+
+<script>
+  import { heading, row, tooltipBox } from './tooltip';
+
+  interface Data {
+    t: string[];
+    x: number[];
+    s: { l: string; c: string; v: string[]; f: number[] }[];
+  }
+
+  function nearest(xs: number[], f: number) {
+    let lo = 0;
+    let hi = xs.length - 1;
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1;
+      if (xs[mid] < f) lo = mid;
+      else hi = mid;
+    }
+    return f - xs[lo] < xs[hi] - f ? lo : hi;
+  }
+
+  for (const fig of document.querySelectorAll<HTMLElement>('[data-chart=line]')) {
+    const data: Data = JSON.parse(fig.dataset.series!);
+    const plot = fig.querySelector<HTMLElement>('[data-plot]')!;
+    const cursor = plot.querySelector<HTMLElement>('[data-cursor]')!;
+    const dots = [...plot.querySelectorAll<HTMLElement>('[data-dot]')];
+    const tip = tooltipBox(plot);
+
+    plot.addEventListener('pointermove', (e) => {
+      const box = plot.getBoundingClientRect();
+      const i = nearest(data.x, (e.clientX - box.left) / box.width);
+      const left = `${data.x[i] * 100}%`;
+      cursor.style.left = left;
+      cursor.classList.remove('hidden');
+      dots.forEach((dot, k) => {
+        dot.style.left = left;
+        dot.style.top = `${data.s[k].f[i] * 100}%`;
+        dot.classList.remove('hidden');
+      });
+      tip.show(
+        [heading(data.t[i]), ...data.s.map((s) => row(s.c, s.l, s.v[i]))],
+        data.x[i],
+        e.clientY - box.top
+      );
+    });
+    plot.addEventListener('pointerleave', () => {
+      cursor.classList.add('hidden');
+      dots.forEach((dot) => dot.classList.add('hidden'));
+      tip.hide();
+    });
+  }
+</script>

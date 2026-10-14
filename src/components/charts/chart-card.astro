@@ -1,0 +1,21 @@
+---
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+interface Props {
+  title: string;
+  description: string;
+  class?: string;
+}
+
+const { title, description, class: className } = Astro.props;
+---
+
+<Card class={className}>
+  <CardHeader class="px-3 sm:px-6">
+    <CardTitle>{title}</CardTitle>
+    <CardDescription>{description}</CardDescription>
+  </CardHeader>
+  <CardContent class="px-2 sm:px-6">
+    <slot />
+  </CardContent>
+</Card>
