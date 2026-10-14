@@ -1,6 +1,6 @@
 ---
 name: site-structure
-description: Decides where a new component, helper, config value, or layout goes in this Astro site, and how to share code between blog posts and notes. Use when you add, move, or split a file.
+description: Decides where a new component, helper, config value, or layout goes in this Astro site. Use when you add, move, or split a file.
 ---
 
 # Site structure
@@ -30,25 +30,8 @@ Ask: can this component render from its props alone, with no `astro:content` imp
 - Yes: it is a primitive or a pattern. Put it in `ui/` or `patterns/`.
 - No: it is a feature component. Put it in the feature folder.
 
-## Blog posts and notes
-
-A blog post and a note share the base schema in `src/content.config.ts`. Treat them as one kind of entry.
-
-- Take the entry and its collection as props. Do not write a `note/` copy of a `blog/` component.
-- Put a difference between the two in data (a prop, a route function), not in a second file.
-- A component that only one collection uses can stay in that collection's folder.
-
 ## Before you add a file
 
 1. Search `src/components/ui/`, `src/components/patterns/` and `src/lib/` for something close.
 2. If something close exists, extend it. Do not fork it.
 3. If you copy more than a few lines from another file, extract the shared part first.
-
-## Primitive folders
-
-A primitive folder holds:
-
-- `<name>.astro` — the component.
-- `variants.ts` — CVA styles, when the component has variants.
-- `<name>.tsx` — a React twin, only when an island needs it.
-- `index.ts` — the public exports.

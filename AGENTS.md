@@ -28,8 +28,8 @@ The goal of the codebase is a site that is clean, simple, and light. Every rule 
 - Before you push, run `pnpm lint`, `pnpm format:check`, and `pnpm build`. CI runs the same checks.
 - For a refactor, the built HTML must not change. Build `main` and the branch, then diff `dist/`. The `reviewing-changes` skill tells how.
 - For a docs-only change, check formatting and the paths you reference. A build is not necessary.
-- Use conventional commits: `type(scope): description`. The `commit` skill has the rules.
-- PRs are squash merged. Merge only when Romain says to.
+- Use conventional commits: `type(scope): description`, imperative, subject under 72 characters.
+- PRs are squash merged. Merge only when Romain says to. Write the squash message from the final diff, with no AI attribution line.
 
 # Conventions
 
@@ -40,7 +40,7 @@ The goal of the codebase is a site that is clean, simple, and light. Every rule 
 - **Fail loudly.** Throw on missing or unexpected data at build time. Do not return empty strings or silent defaults.
 - **Ship no JS by default.** Use an Astro component. Use a React island (`client:visible`) only for real interaction.
 - **Prefer a maintained library to custom code**, but add a dependency only when it removes more code than it adds.
-- **Comments must earn their place.** Read the `code-comments` skill before you write or review comments.
+- **Comments must earn their place.** Default to none. Write one only for what the code cannot show: an outside constraint, a measured cost, a refused option, or a hazard. Never narrate a change, label a markup block, or keep commented-out code.
 - Use `kebab-case` for file and folder names outside `src/content/` and `src/pages/` route params.
 - Build every URL with `src/configs/routes.ts`. Do not concatenate paths in components.
 - Put site-wide values (names, ids, URLs) in `src/configs/`. Do not hard-code them in components.
@@ -74,15 +74,13 @@ The `site-structure` skill has the decision table for where a new file goes.
 
 - An MDX entry imports each island from its own file, never through a barrel, so each island gets its own chunk.
 - An entry's run data lives in one JSON file per widget (`data/<field>.json`), so each island ships only its own data.
-- The `adding-content` skill covers new posts, notes, and islands.
+- New entries start with `status: 'draft'`. `src/content.config.ts` is the source of truth for frontmatter.
 
 # Skills
 
 Skills live in `.agents/skills/<name>/SKILL.md`. `.claude/skills` links to that folder.
 
-- Read a skill when its description matches the work.
-- Read a skill's references only when the current step needs them.
-- When you find a recurring gotcha or a missing convention, propose an update to this file or to a skill.
+Add a skill only for a procedure or a decision this file cannot hold in a few lines. When you find a recurring gotcha, propose an update to this file first.
 
 # Sources of information
 
