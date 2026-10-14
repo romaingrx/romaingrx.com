@@ -1,0 +1,45 @@
+---
+import { site } from '@/configs/site';
+
+const { giscus } = site;
+---
+
+<div id={giscus.sectionId}>
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={site.repo}
+    data-repo-id={giscus.repoId}
+    data-category={giscus.category}
+    data-category-id={giscus.categoryId}
+    data-mapping="og:title"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-lang="en"
+    data-loading="eager"
+    data-theme="gruvbox"
+    crossorigin="anonymous"
+    async></script>
+</div>
+
+<script is:inline>
+  (() => {
+    const getTheme = () =>
+      document.documentElement.classList.contains('dark') ? 'gruvbox' : 'gruvbox_light';
+
+    // Giscus reads data-theme when it creates its iframe.
+    document.querySelector('script[src*="giscus"]')?.setAttribute('data-theme', getTheme());
+
+    // Afterwards the iframe only follows theme changes through messages.
+    new MutationObserver(() => {
+      document
+        .querySelector('iframe.giscus-frame')
+        ?.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme: getTheme() } } },
+          'https://giscus.app'
+        );
+    }).observe(document.documentElement, { attributeFilter: ['class'] });
+  })();
+</script>

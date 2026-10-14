@@ -1,16 +1,10 @@
 ---
-import BlogListLayout from '@/components/blog/blog-list-layout.astro';
-import { getBlogPosts } from '@/lib/collections';
-
-const posts = await getBlogPosts();
-const categories = [...new Set(posts.flatMap((post) => post.data.categories))];
-const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+import BlogListLayout from '@/layouts/blog-list-layout.astro';
+import { getEntries } from '@/lib/collections';
 ---
 
 <BlogListLayout
   title="Blog"
   description="Explore my thoughts and insights on AI, machine learning, and software development."
-  posts={posts}
-  categories={categories}
-  tags={tags}
+  posts={await getEntries('blog')}
 />

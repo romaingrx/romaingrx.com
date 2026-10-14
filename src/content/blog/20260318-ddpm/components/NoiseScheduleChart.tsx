@@ -1,6 +1,5 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
-import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
   ChartLegend,
@@ -9,6 +8,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart/chart';
+import ChartCard from '@/components/widgets/chart-card';
 
 import noise_schedule from '../data/noise_schedule.json';
 

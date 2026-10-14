@@ -1,4 +1,4 @@
-import { StepSlider } from '@/components/blog/components/step-slider';
+import { StepSlider } from '@/components/widgets/step-slider';
 
 import forward_process from '../data/forward_process.json';
 

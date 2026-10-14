@@ -1,0 +1,94 @@
+---
+import type { Params } from 'astro';
+import { Icon } from 'astro-icon/components';
+import { Tooltip } from '@/components/ui/tooltip';
+import { platforms_info, type Platform } from '@/configs/platforms';
+import { getAuthorsWithSocialLinks } from '@/lib/authors';
+import type { Entry } from '@/lib/collections';
+import { getAbsoluteUrl } from '@/lib/utils';
+
+interface Props {
+  entry: Entry;
+}
+
+const { entry } = Astro.props;
+
+interface LinkProps {
+  title: string;
+  pathname: string;
+  params?: Params;
+}
+
+function getAuthorsWithSocialLinksAndWarn({ platform }: { platform: Platform }) {
+  const authors = getAuthorsWithSocialLinks({ authors: entry.authors, platform });
+  if (authors.length > 1) {
+    console.warn(
+      `Found ${authors.length} authors with a ${platform} handle but will pick the first one only to share`
+    );
+  }
+  return authors;
+}
+
+const authors_x_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'twitter' });
+const authors_linkedin_handle = getAuthorsWithSocialLinksAndWarn({ platform: 'linkedin' });
+
+const links = {
+  twitter: {
+    title: `Share ${entry.data.title} on X`,
+    pathname: '/intent/post',
+    params: {
+      url: entry.url,
+      via: authors_x_handle[0]?.data.socialLinks.twitter?.handle,
+      related: authors_x_handle
+        .map(
+          (author) =>
+            `${author.data.socialLinks.twitter?.handle}:${author.data.title ?? author.data.name}`
+        )
+        .join(','),
+      hashtags: entry.data.tags.join(','),
+    },
+  },
+  hackernews: {
+    title: `Share ${entry.data.title} on HackerNews`,
+    pathname: '/submitlink',
+    params: {
+      u: entry.url,
+      t: entry.data.title,
+    },
+  },
+  linkedin: {
+    title: `Share ${entry.data.title} on LinkedIn`,
+    pathname: '/sharing/share-offsite',
+    params: {
+      text: `${entry.data.title} from @${authors_linkedin_handle[0].data.socialLinks.linkedin?.handle}
+${entry.data.tags.map((t) => `#${t}`).join(' ')}`,
+      url: entry.url,
+    },
+  },
+} as const satisfies Partial<Record<Platform, LinkProps>>;
+---
+
+<div class="flex flex-row gap-2">
+  {
+    Object.entries(links).map(([platform_name, props]) => {
+      const platform = platforms_info[platform_name as Platform];
+      const anchor_url = getAbsoluteUrl(props.pathname, new URL(platform.base_url), props.params);
+      return (
+        <Tooltip side="bottom" intent="default">
+          <a
+            slot="trigger"
+            href={anchor_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label={props.title}
+          >
+            <Icon name={platform.icon_name} class="size-5" />
+            <span class="sr-only">{props.title}</span>
+          </a>
+          <span slot="content">{props.title}</span>
+        </Tooltip>
+      );
+    })
+  }
+</div>

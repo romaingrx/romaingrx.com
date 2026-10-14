@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { CartesianGrid, Cell, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 
-import ChartCard from '@/components/charts/card';
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart/chart';
+import ChartCard from '@/components/widgets/chart-card';
 
 import latent_space from '../data/latent_space.json';
 

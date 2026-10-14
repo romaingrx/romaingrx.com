@@ -1,36 +1,28 @@
-/**
- * Routes configuration for the application
- * This file centralizes all route definitions to avoid hardcoding routes in components
- */
+type Slugged = { slug: string };
 
-/**
- * Type for a blog post or note slug
- */
-export interface SlugParams {
-  slug: string;
-}
-
-/**
- * Application routes
- */
 export const routes = {
-  // Main pages
   home: '/',
   about: '/about',
   contact: '/contact',
 
-  // Collection pages
   blogs: '/blog',
+  blog: ({ slug }: Slugged) => `/blog/${slug}`,
+  blogTag: (tag: string) => `/blog/tag/${tag}`,
+  blogCategory: (category: string) => `/blog/category/${category}`,
+
   notes: '/notes',
-
-  // Dynamic routes with params
-  blog: (params: SlugParams) => `/blog/${params.slug}`,
-
-  note: (params: SlugParams) => `/notes/${params.slug}`,
+  note: ({ slug }: Slugged) => `/notes/${slug}`,
+  noteTag: (tag: string) => `/notes/tag/${tag}`,
 } as const;
 
-/**
- * Type for the routes object
- * This allows for type checking when using routes in components
- */
-export type Routes = typeof routes;
+export const navigation = [
+  { name: 'Home', href: routes.home },
+  { name: 'Blog', href: routes.blogs },
+  { name: 'Notes', href: routes.notes },
+  { name: 'About', href: routes.about },
+  { name: 'Contact', href: routes.contact },
+] as const;
+
+export function isActivePath(href: string, pathname: string): boolean {
+  return href === routes.home ? pathname === routes.home : pathname.startsWith(href);
+}

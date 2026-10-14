@@ -1,6 +1,5 @@
 'use client';
 
-import { PlaybackControls } from '@/components/blog/components/playback-controls';
 import {
   Card,
   CardContent,
@@ -8,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card/card';
-import { usePlayback } from '@/hooks/use-playback';
+import { PlaybackControls } from '@/components/widgets/playback-controls';
+import { usePlayback } from '@/components/widgets/use-playback';
 
 import training_samples from '../data/training_samples.json';
 

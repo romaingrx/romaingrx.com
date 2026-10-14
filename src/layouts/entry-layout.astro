@@ -1,0 +1,30 @@
+---
+import '@/styles/katex.css';
+import type { Entry } from '@/lib/collections';
+import BaseLayout from './base-layout.astro';
+
+interface Props {
+  entry: Entry;
+}
+
+const { entry } = Astro.props;
+const isPost = entry.collection === 'blog';
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description ?? ''}
+  ogImage={`/og/${entry.collection}/${entry.id}.png`}
+>
+  {
+    isPost && (
+      <link
+        slot="head"
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+        crossorigin="anonymous"
+      />
+    )
+  }
+  <slot />
+</BaseLayout>

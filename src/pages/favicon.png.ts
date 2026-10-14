@@ -1,9 +1,8 @@
 import type { APIRoute } from 'astro';
 
-import { tiles } from '@/components/logo';
-import { svgToPng } from '@/components/logo/render';
+import { tiles } from '@/lib/logo';
+import { pngResponse, svgToPng } from '@/lib/png';
 
 export const GET: APIRoute = async () => {
-  const png = await svgToPng(tiles.large, 64);
-  return new Response(new Uint8Array(png), { headers: { 'Content-Type': 'image/png' } });
+  return pngResponse(await svgToPng(tiles.large, 64));
 };

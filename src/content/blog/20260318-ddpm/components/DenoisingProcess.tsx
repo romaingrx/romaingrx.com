@@ -1,4 +1,4 @@
-import { StepSlider } from '@/components/blog/components/step-slider';
+import { StepSlider } from '@/components/widgets/step-slider';
 
 import denoising from '../data/denoising.json';
 

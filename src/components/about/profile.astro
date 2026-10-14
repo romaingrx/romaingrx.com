@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import { getEntry, render } from 'astro:content';
+import { SocialLinks } from '@/components/patterns/social-links';
+import { Prose } from '@/components/ui/prose';
+import { Heading, Text } from '@/components/ui/text';
+import { getAuthorSocialLinks } from '@/lib/authors';
+
+interface Props {
+  author: string;
+}
+
+const author = await getEntry('author', Astro.props.author);
+if (!author) {
+  throw new Error('Author not found for owner of the website');
+}
+const { name, title, image } = author.data;
+const socialLinks = getAuthorSocialLinks(author);
+const { Content } = await render(author);
+---
+
+<section class="container mx-auto px-4 py-12">
+  <div class="mx-auto max-w-6xl">
+    <!-- Single clean card -->
+    <div class="border-border/20 bg-card/30 rounded-2xl border p-8 backdrop-blur-sm">
+      <div class="space-y-8">
+        <!-- Top section: Image + Basic Info -->
+        <div class="flex flex-col gap-6 sm:flex-row sm:gap-8">
+          <!-- Profile Image -->
+          <div class="flex-shrink-0">
+            <div class="relative size-32 overflow-hidden rounded-2xl shadow-md sm:h-40 sm:w-40">
+              <Image
+                src={image}
+                alt={name}
+                width={160}
+                height={160}
+                densities={[1, 2]}
+                class="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          <!-- Name, Title, and Social Links -->
+          <div class="flex flex-1 flex-col justify-center space-y-4">
+            <div class="space-y-2">
+              <Heading level={1}>{name}</Heading>
+              <Text size="xl" tone="muted" weight="medium">
+                {title}
+              </Text>
+            </div>
+            {socialLinks.length > 0 && <SocialLinks links={socialLinks} variant="boxed" iconClass="size-4" />}
+          </div>
+        </div>
+
+        <!-- Description spanning full width -->
+        <Prose variant="compact">
+          <Content />
+        </Prose>
+      </div>
+    </div>
+  </div>
+</section>

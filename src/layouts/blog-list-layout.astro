@@ -1,0 +1,77 @@
+---
+import BlogCard from '@/components/blog/blog-card.astro';
+import { PageHeader } from '@/components/patterns/page-header';
+import { Container } from '@/components/ui/container';
+import { Grid } from '@/components/ui/grid';
+import { Text } from '@/components/ui/text';
+import { routes } from '@/configs/routes';
+import BaseLayout from './base-layout.astro';
+import { getCategories, getTags, type BlogPost } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  posts: BlogPost[];
+  activeCategory?: string;
+  activeTag?: string;
+}
+
+const { title, description, posts, activeCategory, activeTag } = Astro.props;
+const [categories, tags] = await Promise.all([getCategories(), getTags('blog')]);
+
+const filterClass = (active: boolean) =>
+  cn(
+    'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+    active ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+  );
+---
+
+<BaseLayout title={title} description={description}>
+  <Container size="content" class="py-12 md:py-20">
+    <PageHeader title={title} />
+
+    <nav class="mt-6 flex flex-wrap items-center gap-2" aria-label="Filter posts">
+      <a href={routes.blogs} class={filterClass(!activeCategory && !activeTag)}>All</a>
+      {
+        categories.map((cat) => (
+          <a
+            href={activeCategory === cat ? routes.blogs : routes.blogCategory(cat)}
+            class={cn(filterClass(activeCategory === cat), 'capitalize')}
+          >
+            {cat}
+          </a>
+        ))
+      }
+      {
+        tags.length > 0 && (
+          <>
+            <span class="mx-1 hidden text-border select-none sm:inline">|</span>
+            {tags.map((tag) => (
+              <a
+                href={activeTag === tag ? routes.blogs : routes.blogTag(tag)}
+                class={filterClass(activeTag === tag)}
+              >
+                {tag}
+              </a>
+            ))}
+          </>
+        )
+      }
+    </nav>
+
+    {
+      posts.length > 0 ? (
+        <Grid gap="cards" class="mt-10">
+          {posts.map((post) => (
+            <BlogCard post={post} />
+          ))}
+        </Grid>
+      ) : (
+        <Text tone="muted" class="mt-10">
+          No posts found.
+        </Text>
+      )
+    }
+  </Container>
+</BaseLayout>
