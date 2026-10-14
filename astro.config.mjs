@@ -4,6 +4,7 @@ import pagefind from 'astro-pagefind';
 
 // Astro integrations
 import cloudflare from '@astrojs/cloudflare';
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -40,18 +41,22 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkMath, remarkReadingTime],
-    rehypePlugins: [
-      rehypeKatex,
-      rehypeCitationRelative,
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
-          rel: ['noopener', 'noreferrer'],
-        },
+    // Astro 7 renders Markdown with Sätteri by default; the remark/rehype
+    // plugins below need the unified processor. MDX inherits it.
+    processor: unified({
+      remarkPlugins: [remarkMath, remarkReadingTime],
+      rehypePlugins: [
+        rehypeKatex,
+        rehypeCitationRelative,
+        [
+          rehypeExternalLinks,
+          {
+            target: '_blank',
+            rel: ['noopener', 'noreferrer'],
+          },
+        ],
       ],
-    ],
+    }),
   },
   integrations: [
     expressiveCode({
@@ -65,9 +70,7 @@ export default defineConfig({
       plugins: [pluginLineNumbers()],
     }),
     mdx({
-      gfm: true,
       optimize: true,
-      smartypants: true,
     }),
     sitemap(),
     react(),
@@ -90,6 +93,9 @@ export default defineConfig({
       },
     },
   },
+  // Astro 7 defaults to 'jsx', which strips whitespace between inline
+  // elements; keep the v6 behavior so prose and links render as before.
+  compressHTML: true,
   prefetch: {
     defaultStrategy: 'viewport',
   },
