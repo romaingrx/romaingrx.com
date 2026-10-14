@@ -66,18 +66,18 @@ const data = JSON.stringify({
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      {
-        placed.map(({ p, fx, fy }) => (
-          <path
-            d={`M${r(fx * 1000)} ${r(fy * 1000)}h0`}
-            stroke={p.color}
-            stroke-opacity="0.7"
-            stroke-width="6"
-            stroke-linecap="round"
-            vector-effect="non-scaling-stroke"
-          />
-        ))
-      }
+      <g
+        stroke-opacity="0.7"
+        stroke-width="6"
+        stroke-linecap="round"
+        class="[&>path]:[vector-effect:non-scaling-stroke]"
+      >
+        {
+          placed.map(({ p, fx, fy }) => (
+            <path d={`M${Math.round(fx * 1000)} ${Math.round(fy * 1000)}h0`} stroke={p.color} />
+          ))
+        }
+      </g>
     </svg>
     <span
       data-dot
@@ -123,7 +123,7 @@ const data = JSON.stringify({
       const content: Node[] = [heading(title)];
       if (detail) {
         const body = document.createElement('div');
-        body.className = 'max-w-[280px] font-mono leading-relaxed break-all';
+        body.className = 'max-w-[min(280px,70vw)] font-mono leading-relaxed break-all';
         for (const ch of detail) {
           const span = document.createElement('span');
           span.textContent = ch;

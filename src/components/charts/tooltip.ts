@@ -31,10 +31,18 @@ export function tooltipBox(plot: HTMLElement) {
     show(content: Node[], x: number, y: number) {
       tip.replaceChildren(...content);
       tip.classList.remove('hidden');
-      const flip = x > 0.5;
-      tip.style.left = `${x * 100}%`;
-      tip.style.top = `${Math.min(Math.max(y - tip.offsetHeight / 2, 0), plot.clientHeight - tip.offsetHeight)}px`;
-      tip.style.transform = flip ? 'translateX(calc(-100% - 12px))' : 'translateX(12px)';
+      const [w, h] = [plot.clientWidth, plot.clientHeight];
+      const [tw, th] = [tip.offsetWidth, tip.offsetHeight];
+      const ax = x * w;
+      // Beside the point when it fits, otherwise clamped inside the plot above or below it.
+      let left = ax + 12 + tw <= w ? ax + 12 : ax - 12 - tw;
+      let top = y - th / 2;
+      if (left < 0) {
+        left = Math.max(0, Math.min(ax - tw / 2, w - tw));
+        top = y - th - 12 >= 0 ? y - th - 12 : y + 12;
+      }
+      tip.style.left = `${left}px`;
+      tip.style.top = `${Math.min(Math.max(top, 0), h - th)}px`;
     },
     hide() {
       tip.classList.add('hidden');

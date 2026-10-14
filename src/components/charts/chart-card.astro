@@ -1,4 +1,5 @@
 ---
+import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Props {
@@ -8,9 +9,11 @@ interface Props {
 }
 
 const { title, description, class: className } = Astro.props;
+// Off-screen charts skip layout and paint until scrolled near.
+const classes = cn('[contain-intrinsic-size:auto_480px] [content-visibility:auto]', className);
 ---
 
-<Card class={className}>
+<Card class={classes}>
   <CardHeader class="px-3 sm:px-6">
     <CardTitle>{title}</CardTitle>
     <CardDescription>{description}</CardDescription>
