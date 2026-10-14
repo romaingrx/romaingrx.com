@@ -96,8 +96,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(supports-color@10.2.2)
       satori:
-        specifier: ^0.44.0
-        version: 0.44.3
+        specifier: ^0.55.3
+        version: 0.55.3
       sharp:
         specifier: ^0.35.3
         version: 0.35.5(@types/node@26.6.5)
@@ -124,8 +124,8 @@ importers:
         specifier: ^26.2.0
         version: 26.6.5
       happy-dom:
-        specifier: ^20.11.6
-        version: 20.14.6
+        specifier: ^21.0.1
+        version: 21.0.1
       mdast-util-to-string:
         specifier: ^4.0.0
         version: 4.0.0
@@ -2159,8 +2159,8 @@ packages:
   hachure-fill@0.5.2:
     resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
 
-  happy-dom@20.14.6:
-    resolution: {integrity: sha512-5DDsf4QmEIlRL6NkCv/fxSjYHHkZceL/IaYQdJc2h3G7DRTEai++VTjbfL0LB9geW2VrA3+vrjF3Efx+OTtX0Q==}
+  happy-dom@21.0.1:
+    resolution: {integrity: sha512-pRBs/u9fhrncyByOl58DMex0R2uAj6ZPKWIjV5j5yNGZBqLw3P6BTRhlc0DD5b/Ht4/6JYTMuE2LJhUWRC6SGw==}
     engines: {node: '>=20.0.0'}
 
   harfbuzzjs@0.10.0:
@@ -3107,8 +3107,8 @@ packages:
   sass-formatter@0.7.9:
     resolution: {integrity: sha512-CWZ8XiSim+fJVG0cFLStwDvft1VI7uvXdCNJYXhDvowiv+DsbD1nXLiQ4zrE5UBvj5DWZJ93cwN0NX5PMsr1Pw==}
 
-  satori@0.44.3:
-    resolution: {integrity: sha512-3Dj7zB2jc+806+YYinNID9nvdJK2AagSmpNeG/qeHY7Yq7jQ5EpMSQ8C5rLSw1PMxnrbQaQsQnCiEGzIKKq3HA==}
+  satori@0.55.3:
+    resolution: {integrity: sha512-k998HXYxlcFp7rUPMvyrl5rTHCue3pg9gzgVLU9D2JuX0ab9EghC4kYF/XCeD4oQf9E0tKVtGnhN5PgNH1CakA==}
     engines: {node: '>=16'}
 
   satteri@0.10.5:
@@ -5528,7 +5528,7 @@ snapshots:
 
   hachure-fill@0.5.2: {}
 
-  happy-dom@20.14.6:
+  happy-dom@21.0.1:
     dependencies:
       '@types/node': 26.6.5
       '@types/whatwg-mimetype': 3.0.2
@@ -6901,7 +6901,7 @@ snapshots:
     dependencies:
       suf-log: 2.5.3
 
-  satori@0.44.3:
+  satori@0.55.3:
     dependencies:
       '@shuding/opentype.js': 1.4.0-beta.0
       css-background-parser: 0.1.0
