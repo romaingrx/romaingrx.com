@@ -1,9 +1,12 @@
 ---
-import { cn } from '@/lib/utils';
-
-import Legend from './legend.astro';
-import PlotFrame from './plot-frame.astro';
-import { fmt, r, scale, type ScaleType } from './scale';
+import ChartRoot from './parts/chart-root.astro';
+import Legend from './parts/legend.astro';
+import Marker from './parts/marker.astro';
+import PlotFrame from './parts/plot-frame.astro';
+import PlotSvg from './parts/plot-svg.astro';
+import { axis, fmt, type AxisConfig } from './lib/axis';
+import { encode, type LinePayload } from './lib/payload';
+import { r, toView } from './lib/scale';
 
 export interface LineSeries {
   label: string;
@@ -15,21 +18,13 @@ export interface LineSeries {
   axis?: 'left' | 'right';
 }
 
-export interface LineAxis {
-  label?: string;
-  type?: ScaleType;
-  domain?: [number, number];
-  ticks?: number[];
-  format?: (v: number) => string;
-}
-
 interface Props {
   x: number[];
   series: LineSeries[];
-  xAxis?: LineAxis;
-  yAxis?: LineAxis;
+  xAxis?: AxisConfig;
+  yAxis?: AxisConfig;
   /** Used only when a series sets `axis: 'right'`. */
-  y2Axis?: LineAxis;
+  y2Axis?: AxisConfig;
   /** Tooltip heading for a point; defaults to the x tick format. */
   tooltipTitle?: (x: number) => string;
   legend?: boolean;
@@ -50,50 +45,31 @@ const {
 } = Astro.props;
 
 const onRight = (s: LineSeries) => s.axis === 'right';
+const valuesOf = (list: LineSeries[]) => list.flatMap((s) => s.values);
 const right = series.filter(onRight);
-const xs = scale(x, { ...xAxis, domain: xAxis.domain ?? [x[0], x[x.length - 1]] });
-const ys = scale(
-  series.filter((s) => !onRight(s)).flatMap((s) => s.values),
-  yAxis
-);
-const y2s = right.length ? scale(right.flatMap((s) => s.values), y2Axis) : undefined;
+
+const xa = axis(x, { ...xAxis, domain: xAxis.domain ?? [x[0], x[x.length - 1]] });
+const ya = axis(valuesOf(series.filter((s) => !onRight(s))), yAxis);
+const y2a = right.length ? axis(valuesOf(right), y2Axis) : undefined;
+const xf = x.map((v) => r(xa.scale.at(v)));
 
 const plotted = series.map((s) => {
-  const sc = onRight(s) && y2s ? y2s : ys;
-  const f = s.values.map((v) => r(1 - sc.at(v)));
-  return {
-    s,
-    f,
-    // Tooltips show more precision than the axis ticks.
-    labels: s.values.map(fmt),
-    points: f.map((fy, i) => `${r(xs.at(x[i]) * 1000)},${r(fy * 1000)}`).join(' '),
-  };
+  const { scale } = onRight(s) && y2a ? y2a : ya;
+  const y = s.values.map((v) => r(1 - scale.at(v)));
+  return { s, y, points: y.map((fy, i) => `${toView(xf[i])},${toView(fy)}`).join(' ') };
 });
 
-const data = JSON.stringify({
-  t: x.map(tooltipTitle ?? xAxis.format ?? fmt),
-  x: x.map((v) => r(xs.at(v))),
-  s: plotted.map(({ s, labels, f }) => ({ l: s.label, c: s.color, v: labels, f })),
-});
+const payload: LinePayload = {
+  titles: x.map(tooltipTitle ?? xa.format),
+  x: xf,
+  // Tooltips show more precision than the axis ticks.
+  series: plotted.map(({ s, y }) => ({ label: s.label, color: s.color, values: s.values.map(fmt), y })),
+};
 ---
 
-<div
-  data-chart="line"
-  data-series={data}
-  class={cn('text-xs text-muted-foreground select-none', className)}
->
-  <PlotFrame
-    height={height}
-    x={{ scale: xs, format: xAxis.format ?? fmt, label: xAxis.label }}
-    y={{ scale: ys, format: yAxis.format ?? fmt, label: yAxis.label }}
-    y2={y2s && { scale: y2s, format: y2Axis.format ?? fmt, label: y2Axis.label }}
-  >
-    <svg
-      class="absolute inset-0 size-full overflow-visible"
-      viewBox="0 0 1000 1000"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
+<ChartRoot kind="line" payload={encode(payload)} class={className}>
+  <PlotFrame height={height} x={xa} y={ya} y2={y2a}>
+    <PlotSvg>
       {
         plotted.map(({ s, points }) => (
           <polyline
@@ -108,30 +84,19 @@ const data = JSON.stringify({
           />
         ))
       }
-    </svg>
+    </PlotSvg>
     <div data-cursor class="pointer-events-none absolute inset-y-0 hidden w-px bg-border"></div>
-    {
-      series.map((s) => (
-        <span
-          data-dot
-          class="pointer-events-none absolute hidden size-2 -translate-1/2 rounded-full ring-2 ring-background"
-          style={`background: ${s.color}`}
-        />
-      ))
-    }
+    {series.map((s) => <Marker color={s.color} />)}
   </PlotFrame>
   {legend && <Legend items={series} />}
-</div>
+</ChartRoot>
 
 <script>
-  import { heading, row, tooltipBox } from './tooltip';
+  import { bindHover } from './client/hover';
+  import { heading, row, toggle } from './client/tooltip';
+  import type { LinePayload } from './lib/payload';
 
-  interface Data {
-    t: string[];
-    x: number[];
-    s: { l: string; c: string; v: string[]; f: number[] }[];
-  }
-
+  /** Index of the sorted position closest to `f`. */
   function nearest(xs: number[], f: number) {
     let lo = 0;
     let hi = xs.length - 1;
@@ -143,34 +108,30 @@ const data = JSON.stringify({
     return f - xs[lo] < xs[hi] - f ? lo : hi;
   }
 
-  for (const fig of document.querySelectorAll<HTMLElement>('[data-chart=line]')) {
-    const data: Data = JSON.parse(fig.dataset.series!);
-    const plot = fig.querySelector<HTMLElement>('[data-plot]')!;
+  bindHover<LinePayload>('line', ({ plot, data, tip }) => {
     const cursor = plot.querySelector<HTMLElement>('[data-cursor]')!;
-    const dots = [...plot.querySelectorAll<HTMLElement>('[data-dot]')];
-    const tip = tooltipBox(plot);
+    const markers = [...plot.querySelectorAll<HTMLElement>('[data-marker]')];
+    const overlays = [cursor, ...markers];
 
-    plot.addEventListener('pointermove', (e) => {
-      const box = plot.getBoundingClientRect();
-      const i = nearest(data.x, (e.clientX - box.left) / box.width);
-      const left = `${data.x[i] * 100}%`;
-      cursor.style.left = left;
-      cursor.classList.remove('hidden');
-      dots.forEach((dot, k) => {
-        dot.style.left = left;
-        dot.style.top = `${data.s[k].f[i] * 100}%`;
-        dot.classList.remove('hidden');
-      });
-      tip.show(
-        [heading(data.t[i]), ...data.s.map((s) => row(s.c, s.l, s.v[i]))],
-        data.x[i],
-        e.clientY - box.top
-      );
-    });
-    plot.addEventListener('pointerleave', () => {
-      cursor.classList.add('hidden');
-      dots.forEach((dot) => dot.classList.add('hidden'));
-      tip.hide();
-    });
-  }
+    return {
+      move(p) {
+        const i = nearest(data.x, p.x / p.width);
+        const left = `${data.x[i] * 100}%`;
+        cursor.style.left = left;
+        markers.forEach((m, k) => {
+          m.style.left = left;
+          m.style.top = `${data.series[k].y[i] * 100}%`;
+        });
+        overlays.forEach((o) => toggle(o, true));
+        tip.show(
+          [heading(data.titles[i]), ...data.series.map((s) => row(s.color, s.label, s.values[i]))],
+          data.x[i],
+          p.y
+        );
+      },
+      leave() {
+        overlays.forEach((o) => toggle(o, false));
+      },
+    };
+  });
 </script>

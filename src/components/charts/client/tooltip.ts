@@ -1,17 +1,26 @@
-/** Hover tooltip shared by the chart scripts: positions the plot's `[data-tip]` box. */
+/** Tooltip building blocks for the chart hover scripts. */
 
-function el(tag: string, className: string, text?: string) {
+export function el(tag: string, className: string, text?: string) {
   const node = document.createElement(tag);
   node.className = className;
   if (text !== undefined) node.textContent = text;
   return node;
 }
 
+/** Shows or hides a chart overlay element. */
+export function toggle(node: HTMLElement, visible: boolean) {
+  node.classList.toggle('hidden', !visible);
+}
+
 export function heading(text: string) {
   return el('div', 'mb-1 font-medium', text);
 }
 
-/** A legend swatch, label and right-aligned value, like the old Recharts tooltip rows. */
+export function note(text: string) {
+  return el('div', 'mt-1 text-muted-foreground', text);
+}
+
+/** A legend swatch, label and right-aligned value. */
 export function row(color: string, label: string, value: string) {
   const line = el('div', 'flex items-center gap-2');
   const swatch = el('span', 'size-2 shrink-0 rounded-[2px]');
@@ -24,13 +33,27 @@ export function row(color: string, label: string, value: string) {
   return line;
 }
 
+/** Monospace text with a color per character, e.g. a protein sequence. */
+export function colored(text: string, colors: Record<string, string>) {
+  const body = el('div', 'max-w-[min(280px,70vw)] font-mono leading-relaxed break-all');
+  for (const ch of text) {
+    const span = el('span', '', ch);
+    if (colors[ch]) span.style.color = colors[ch];
+    body.append(span);
+  }
+  return body;
+}
+
+export type Tooltip = ReturnType<typeof tooltipBox>;
+
+/** Positions the plot's `[data-tip]` box next to an anchor, kept inside the plot. */
 export function tooltipBox(plot: HTMLElement) {
   const tip = plot.querySelector<HTMLElement>('[data-tip]')!;
   return {
-    /** `x` is the anchor as a fraction of the plot width, `y` the pointer offset in pixels. */
+    /** `x` is the anchor as a fraction of the plot width, `y` the anchor offset in pixels. */
     show(content: Node[], x: number, y: number) {
       tip.replaceChildren(...content);
-      tip.classList.remove('hidden');
+      toggle(tip, true);
       const [w, h] = [plot.clientWidth, plot.clientHeight];
       const [tw, th] = [tip.offsetWidth, tip.offsetHeight];
       const ax = x * w;
@@ -45,7 +68,7 @@ export function tooltipBox(plot: HTMLElement) {
       tip.style.top = `${Math.min(Math.max(top, 0), h - th)}px`;
     },
     hide() {
-      tip.classList.add('hidden');
+      toggle(tip, false);
     },
   };
 }

@@ -41,7 +41,7 @@ Content collections are configured in `src/content.config.ts` with strict schema
 - `/src/components/ui/` - Primitives, one folder each (`button/`, `badge/`, `card/`, `text/`, `stack/`, `grid/`, `container/`, `link/`, `hover-card/`, `tooltip/`, `alert/`, `dialog/`, `prose/`, ...). Import from the folder: `import { Button } from '@/components/ui/button'`.
 - `/src/components/patterns/` - Compositions of primitives reused across pages (`page-header/`, `section-header/`)
 - `/src/components/blog/` - Blog-specific components (cards, footers, resources)
-- `/src/components/charts/` - Recharts visualization components
+- `/src/components/charts/` - Build-time SVG charts (`LineChart`, `ScatterChart`, `BarChart`, `ChartCard`), imported from `@/components/charts`
 - `/src/layouts/` - Page layout templates (Base, Blog, Note)
 
 ### UI conventions
@@ -50,6 +50,7 @@ Content collections are configured in `src/content.config.ts` with strict schema
 - Every primitive sets `data-slot`. Compose with `cn()` and the `class` prop rather than new variants for one-off tweaks.
 - Use `Text`/`Heading` for typography and `Stack`/`Grid`/`Container` for layout instead of repeating utility strings.
 - Only reach for a React island (`client:visible`) when the component is interactive. Hover cards, tooltips, carousels and dialogs are CSS or a small inline script.
+- Charts render to SVG at build time and ship no framework JS. A new chart type composes `parts/` (`ChartRoot`, `PlotFrame`, `PlotSvg`, `Marker`, `Legend`) and `lib/axis.ts`, declares its payload type in `lib/payload.ts`, and adds hover with `bindHover(kind, …)` from `client/hover.ts`.
 - MDX posts import each island from its own file, never through a barrel, so each island gets its own chunk. A post's run data lives in one JSON file per widget (`data/<field>.json`), so each island ships only its own data and keeps its inferred type.
 
 ### Key Configuration Files

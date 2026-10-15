@@ -73,5 +73,11 @@ export function scale(
 /** Rounds a fraction for compact output in HTML attributes. */
 export const r = (v: number) => Math.round(v * 1e4) / 1e4;
 
-/** Default number format: up to four significant digits, no trailing zeros. */
-export const fmt = (v: number) => String(Number(v.toPrecision(4)));
+/** Plots draw in a fixed 0..VIEW box that is stretched to the plot area. */
+export const VIEW = 1000;
+
+/** A fraction in [0, 1] as a coordinate in the plot's view box. */
+export const toView = (f: number) => r(f * VIEW);
+
+/** A fraction in [0, 1] as a CSS percentage. */
+export const pct = (f: number) => `${r(f * 100)}%`;

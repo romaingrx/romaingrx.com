@@ -1,0 +1,18 @@
+---
+import { cn } from '@/lib/utils';
+
+interface Props {
+  color?: string;
+  class?: string;
+}
+
+const { color, class: className } = Astro.props;
+---
+
+<span
+  data-marker
+  class={cn(
+    'pointer-events-none absolute hidden size-2 -translate-1/2 rounded-full ring-2 ring-background',
+    className
+  )}
+  style={color && `background: ${color}`}></span>

@@ -1,8 +1,11 @@
 ---
-import { cn } from '@/lib/utils';
-
-import PlotFrame from './plot-frame.astro';
-import { fmt, r, scale } from './scale';
+import ChartRoot from './parts/chart-root.astro';
+import Marker from './parts/marker.astro';
+import PlotFrame from './parts/plot-frame.astro';
+import PlotSvg from './parts/plot-svg.astro';
+import { axis, type AxisConfig } from './lib/axis';
+import { encode, type ScatterPayload } from './lib/payload';
+import { r, VIEW } from './lib/scale';
 
 export interface ScatterPoint {
   x: number;
@@ -16,56 +19,36 @@ export interface ScatterPoint {
   note?: string;
 }
 
-interface Axis {
-  label?: string;
-  domain?: [number, number];
-  ticks?: number[];
-  format?: (v: number) => string;
-}
-
 interface Props {
   points: ScatterPoint[];
-  xAxis?: Axis;
-  yAxis?: Axis;
+  xAxis?: AxisConfig;
+  yAxis?: AxisConfig;
   charColors?: Record<string, string>;
   height?: number;
   class?: string;
 }
 
-const { points, xAxis = {}, yAxis = {}, charColors, height = 400, class: className } = Astro.props;
+const { points, xAxis = {}, yAxis = {}, charColors = {}, height = 400, class: className } = Astro.props;
 
-const xs = scale(
+const xa = axis(
   points.map((p) => p.x),
   xAxis
 );
-const ys = scale(
+const ya = axis(
   points.map((p) => p.y),
   yAxis
 );
-const placed = points.map((p) => ({ p, fx: r(xs.at(p.x)), fy: r(1 - ys.at(p.y)) }));
+const placed = points.map((p) => ({ p, fx: r(xa.scale.at(p.x)), fy: r(1 - ya.scale.at(p.y)) }));
 
-const data = JSON.stringify({
-  p: placed.map(({ p, fx, fy }) => [fx, fy, p.color, p.title, p.detail ?? '', p.note ?? '']),
-  c: charColors ?? {},
-});
+const payload: ScatterPayload = {
+  points: placed.map(({ p, fx, fy }) => [fx, fy, p.color, p.title, p.detail ?? '', p.note ?? '']),
+  charColors,
+};
 ---
 
-<div
-  data-chart="scatter"
-  data-points={data}
-  class={cn('text-xs text-muted-foreground select-none', className)}
->
-  <PlotFrame
-    height={height}
-    x={{ scale: xs, format: xAxis.format ?? fmt, label: xAxis.label }}
-    y={{ scale: ys, format: yAxis.format ?? fmt, label: yAxis.label }}
-  >
-    <svg
-      class="absolute inset-0 size-full overflow-visible"
-      viewBox="0 0 1000 1000"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
+<ChartRoot kind="scatter" payload={encode(payload)} class={className}>
+  <PlotFrame height={height} x={xa} y={ya}>
+    <PlotSvg>
       <g
         stroke-opacity="0.7"
         stroke-width="6"
@@ -74,72 +57,54 @@ const data = JSON.stringify({
       >
         {
           placed.map(({ p, fx, fy }) => (
-            <path d={`M${Math.round(fx * 1000)} ${Math.round(fy * 1000)}h0`} stroke={p.color} />
+            // Whole view units keep 500 dots compact; a unit is about a pixel.
+            <path d={`M${Math.round(fx * VIEW)} ${Math.round(fy * VIEW)}h0`} stroke={p.color} />
           ))
         }
       </g>
-    </svg>
-    <span
-      data-dot
-      class="pointer-events-none absolute hidden size-2.5 -translate-1/2 rounded-full ring-2 ring-foreground"
-    ></span>
+    </PlotSvg>
+    <Marker class="size-2.5 ring-foreground" />
   </PlotFrame>
-</div>
+</ChartRoot>
 
 <script>
-  import { heading, tooltipBox } from './tooltip';
+  import { bindHover } from './client/hover';
+  import { colored, heading, note, toggle } from './client/tooltip';
+  import type { ScatterPayload } from './lib/payload';
 
-  type Point = [x: number, y: number, color: string, title: string, detail: string, note: string];
+  /** Points snap to the pointer within this many pixels. */
+  const SNAP = 12;
 
-  for (const fig of document.querySelectorAll<HTMLElement>('[data-chart=scatter]')) {
-    const data: { p: Point[]; c: Record<string, string> } = JSON.parse(fig.dataset.points!);
-    const plot = fig.querySelector<HTMLElement>('[data-plot]')!;
-    const dot = plot.querySelector<HTMLElement>('[data-dot]')!;
-    const tip = tooltipBox(plot);
+  bindHover<ScatterPayload>('scatter', ({ plot, data, tip }) => {
+    const marker = plot.querySelector<HTMLElement>('[data-marker]')!;
 
-    const hide = () => {
-      dot.classList.add('hidden');
-      tip.hide();
-    };
-
-    plot.addEventListener('pointermove', (e) => {
-      const box = plot.getBoundingClientRect();
-      const px = e.clientX - box.left;
-      const py = e.clientY - box.top;
-      let best: Point | undefined;
-      let bestDist = 12 ** 2;
-      for (const p of data.p) {
-        const d = (p[0] * box.width - px) ** 2 + (p[1] * box.height - py) ** 2;
-        if (d < bestDist) [best, bestDist] = [p, d];
-      }
-      if (!best) return hide();
-
-      const [x, y, color, title, detail, note] = best;
-      dot.style.left = `${x * 100}%`;
-      dot.style.top = `${y * 100}%`;
-      dot.style.background = color;
-      dot.classList.remove('hidden');
-
-      const content: Node[] = [heading(title)];
-      if (detail) {
-        const body = document.createElement('div');
-        body.className = 'max-w-[min(280px,70vw)] font-mono leading-relaxed break-all';
-        for (const ch of detail) {
-          const span = document.createElement('span');
-          span.textContent = ch;
-          if (data.c[ch]) span.style.color = data.c[ch];
-          body.append(span);
+    return {
+      move(p) {
+        let best: ScatterPayload['points'][number] | undefined;
+        let bestDist = SNAP ** 2;
+        for (const point of data.points) {
+          const d = (point[0] * p.width - p.x) ** 2 + (point[1] * p.height - p.y) ** 2;
+          if (d < bestDist) [best, bestDist] = [point, d];
         }
-        content.push(body);
-      }
-      if (note) {
-        const foot = document.createElement('div');
-        foot.className = 'mt-1 text-muted-foreground';
-        foot.textContent = note;
-        content.push(foot);
-      }
-      tip.show(content, x, y * box.height);
-    });
-    plot.addEventListener('pointerleave', hide);
-  }
+        if (!best) {
+          toggle(marker, false);
+          return tip.hide();
+        }
+
+        const [x, y, color, title, detail, footer] = best;
+        marker.style.left = `${x * 100}%`;
+        marker.style.top = `${y * 100}%`;
+        marker.style.background = color;
+        toggle(marker, true);
+
+        const content: Node[] = [heading(title)];
+        if (detail) content.push(colored(detail, data.charColors));
+        if (footer) content.push(note(footer));
+        tip.show(content, x, y * p.height);
+      },
+      leave() {
+        toggle(marker, false);
+      },
+    };
+  });
 </script>

@@ -1,7 +1,9 @@
 ---
 import { cn } from '@/lib/utils';
 
-import { fmt, linearTicks, r } from './scale';
+import ChartRoot from './parts/chart-root.astro';
+import { fmt } from './lib/axis';
+import { linearTicks, pct as fraction } from './lib/scale';
 
 interface Props {
   items: { label: string; value: number }[];
@@ -16,10 +18,10 @@ const { items, color = 'var(--chart-1)', format = fmt, class: className } = Astr
 const ticks = linearTicks(0, Math.max(...items.map((i) => i.value)), 4);
 // Leave room past the longest bar for its value label.
 const max = ticks[ticks.length - 1] * 1.08;
-const pct = (v: number) => `${r((v / max) * 100)}%`;
+const pct = (v: number) => fraction(v / max);
 ---
 
-<div data-chart="bar" class={cn('relative text-xs', className)}>
+<ChartRoot kind="bar" class={cn('relative', className)}>
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     {
       ticks.map((t) => (
@@ -47,4 +49,4 @@ const pct = (v: number) => `${r((v / max) * 100)}%`;
       })
     }
   </div>
-</div>
+</ChartRoot>
