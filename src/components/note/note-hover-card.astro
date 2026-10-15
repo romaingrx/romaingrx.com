@@ -1,0 +1,36 @@
+---
+import AuthorStack from '@/components/entry/author-stack.astro';
+import { HoverCard } from '@/components/ui/hover-card';
+import { Stack } from '@/components/ui/stack';
+import { Text } from '@/components/ui/text';
+import type { Note } from '@/lib/collections';
+
+/** A note list row that previews the note's description on hover. */
+interface Props {
+  note: Note;
+}
+
+const { note } = Astro.props;
+---
+
+<HoverCard class="block">
+  <a href={note.path} class="flex items-center justify-between px-4 py-3">
+    <slot />
+  </a>
+  <Stack as="span" gap={4} slot="content">
+    <Stack as="span" gap={2}>
+      <Text as="span" size="sm" weight="semibold">{note.data.title}</Text>
+      {
+        note.data.description && (
+          <Text as="span" size="sm" tone="muted">
+            {note.data.description}
+          </Text>
+        )
+      }
+    </Stack>
+    <Stack as="span" direction="row" align="center" justify="between">
+      <AuthorStack authors={note.authors} show_name={false} interactive={false} />
+      <Text as="span" size="sm" tone="muted">{note.readingTime}</Text>
+    </Stack>
+  </Stack>
+</HoverCard>

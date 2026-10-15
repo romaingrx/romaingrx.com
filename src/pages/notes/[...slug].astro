@@ -1,31 +1,29 @@
 ---
 import { render } from 'astro:content';
-import { components } from '@/components/blog/components';
-import NoteFooter from '@/components/note/footer/index.astro';
+import EntryFooter from '@/components/entry/entry-footer.astro';
+import { components } from '@/components/mdx';
 import NoteHeader from '@/components/note/note-header.astro';
 import { Container } from '@/components/ui/container';
 import { Prose } from '@/components/ui/prose';
-import NoteLayout from '@/layouts/NoteLayout.astro';
-import { getNotes } from '@/lib/collections';
+import EntryLayout from '@/layouts/entry-layout.astro';
+import { getEntries, type Note } from '@/lib/collections';
 
 export async function getStaticPaths() {
-  const notes = await getNotes();
-  return notes.map((note) => ({
-    params: { slug: note.slug },
-    props: { note },
-  }));
+  return (await getEntries('note')).map((note) => ({ params: { slug: note.slug }, props: { note } }));
 }
+
+type Props = { note: Note };
 
 const { note } = Astro.props;
 const { Content } = await render(note);
 ---
 
-<NoteLayout note={note}>
+<EntryLayout entry={note}>
   <NoteHeader note={note} />
   <Container size="article">
     <Prose as="article" data-pagefind-body data-pagefind-meta={`title:${note.data.title}`}>
       <Content components={components} />
     </Prose>
-    <NoteFooter note={note} />
+    <EntryFooter entry={note} />
   </Container>
-</NoteLayout>
+</EntryLayout>

@@ -3,14 +3,14 @@ import { z } from 'astro/zod';
 import { platforms_enum } from './platforms';
 import { site } from './site';
 
-export const resourceTypeEnum = z.enum(['code', 'model', 'dataset', 'paper']);
-export const resourceProviderEnum = platforms_enum;
+const resourceTypeEnum = z.enum(['code', 'model', 'dataset', 'paper']);
+const resourceProviderEnum = platforms_enum;
 
 export type ResourceType = z.infer<typeof resourceTypeEnum>;
-export type ResourceProvider = z.infer<typeof resourceProviderEnum>;
+type ResourceProvider = z.infer<typeof resourceProviderEnum>;
 
 // Define provider-type compatibility matrix
-export const VALID_PROVIDER_TYPES: Record<ResourceProvider, ResourceType[]> = {
+const VALID_PROVIDER_TYPES: Record<ResourceProvider, ResourceType[]> = {
   website: ['code', 'model', 'dataset', 'paper'],
   github: ['code', 'dataset'],
   twitter: [],

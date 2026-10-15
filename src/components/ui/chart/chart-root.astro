@@ -1,0 +1,22 @@
+---
+import { cn } from '@/lib/utils';
+
+interface Props {
+  /** The hover script for this chart type selects on it. */
+  kind: string;
+  /** Serialized into `data-payload` for the hover script. */
+  data?: unknown;
+  class?: string;
+}
+
+const { kind, data, class: className } = Astro.props;
+---
+
+<div
+  data-slot="chart"
+  data-chart={kind}
+  data-payload={data === undefined ? undefined : JSON.stringify(data)}
+  class={cn('text-xs text-muted-foreground select-none', className)}
+>
+  <slot />
+</div>

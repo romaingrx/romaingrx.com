@@ -1,0 +1,20 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Badge } from '@/components/ui/badge';
+
+/** A link to the listing of one tag or category. */
+type Props = {
+  label: string;
+  href: string;
+  kind: 'tag' | 'category';
+};
+
+const icons = { tag: 'lucide:tag', category: 'lucide:folder' } as const;
+
+const { label, href, kind } = Astro.props;
+---
+
+<Badge href={href} variant="secondary" class="gap-1.5">
+  <Icon name={icons[kind]} />
+  <span>{label}</span>
+</Badge>

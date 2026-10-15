@@ -2,10 +2,10 @@
 import NoteList from '@/components/note/note-list.astro';
 import { PageHeader } from '@/components/patterns/page-header';
 import { Container } from '@/components/ui/container';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getNotes } from '@/lib/collections';
+import BaseLayout from '@/layouts/base-layout.astro';
+import { getEntries } from '@/lib/collections';
 
-const notes = await getNotes();
+const notes = await getEntries('note');
 
 const title = 'Notes';
 const description =

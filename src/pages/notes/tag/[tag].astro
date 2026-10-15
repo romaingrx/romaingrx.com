@@ -2,23 +2,15 @@
 import NoteList from '@/components/note/note-list.astro';
 import { PageHeader } from '@/components/patterns/page-header';
 import { Container } from '@/components/ui/container';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getNotes } from '@/lib/collections';
+import BaseLayout from '@/layouts/base-layout.astro';
+import { getEntries, getTags } from '@/lib/collections';
 
 export async function getStaticPaths() {
-  const notes = await getNotes();
-  const tags = [...new Set(notes.flatMap((note) => note.data.tags))];
-
-  return tags.map((tag) => ({
-    params: { tag },
-    props: {
-      tag,
-      notes: notes.filter((note) => note.data.tags.includes(tag)),
-    },
-  }));
+  return (await getTags('note')).map((tag) => ({ params: { tag } }));
 }
 
-const { tag, notes } = Astro.props;
+const { tag } = Astro.params;
+const notes = (await getEntries('note')).filter((note) => note.data.tags.includes(tag));
 
 const title = `Notes tagged "${tag}"`;
 const description = `Collection of notes tagged with "${tag}".`;

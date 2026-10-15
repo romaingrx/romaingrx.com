@@ -1,28 +1,13 @@
 ---
-import BlogListLayout from '@/components/blog/blog-list-layout.astro';
-import { getBlogPosts } from '@/lib/collections';
+import BlogListLayout from '@/layouts/blog-list-layout.astro';
+import { getEntries, getTags } from '@/lib/collections';
 
 export async function getStaticPaths() {
-  const posts = await getBlogPosts();
-  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
-  return tags.map((tag) => ({
-    params: { tag },
-    props: { tag },
-  }));
+  return (await getTags('blog')).map((tag) => ({ params: { tag } }));
 }
 
-const { tag } = Astro.props;
-const allPosts = await getBlogPosts();
-const posts = allPosts.filter((post) => post.data.tags.includes(tag));
-const categories = [...new Set(allPosts.flatMap((post) => post.data.categories))];
-const tags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
+const { tag } = Astro.params;
+const posts = (await getEntries('blog')).filter((post) => post.data.tags.includes(tag));
 ---
 
-<BlogListLayout
-  title="Blog"
-  description={`Blog posts tagged with ${tag}.`}
-  posts={posts}
-  categories={categories}
-  tags={tags}
-  activeTag={tag}
-/>
+<BlogListLayout title="Blog" description={`Blog posts tagged with ${tag}.`} posts={posts} activeTag={tag} />

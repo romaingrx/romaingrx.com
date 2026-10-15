@@ -1,33 +1,25 @@
 ---
 import { render } from 'astro:content';
-import { components } from '@/components/blog/components';
-import PostFooter from '@/components/blog/footer/index.astro';
 import PostHeader from '@/components/blog/post-header.astro';
-import TableOfContents from '@/components/blog/toc/index.astro';
+import TableOfContents from '@/components/blog/toc.astro';
+import EntryFooter from '@/components/entry/entry-footer.astro';
+import { components } from '@/components/mdx';
 import { Container } from '@/components/ui/container';
 import { Prose } from '@/components/ui/prose';
-import BlogLayout from '@/layouts/BlogLayout.astro';
-import { getBlogPosts, type BlogPostWithAuthors } from '@/lib/collections';
-
-// export const prerender = true;
-
-type Props = {
-  post: BlogPostWithAuthors;
-};
+import EntryLayout from '@/layouts/entry-layout.astro';
+import { getEntries, type BlogPost } from '@/lib/collections';
 
 export async function getStaticPaths() {
-  const posts = await getBlogPosts();
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return (await getEntries('blog')).map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
+
+type Props = { post: BlogPost };
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<BlogLayout post={post}>
+<EntryLayout entry={post}>
   <PostHeader post={post} />
   <div class="mt-10"></div>
   <TableOfContents headings={headings} />
@@ -35,6 +27,6 @@ const { Content, headings } = await render(post);
     <Prose as="article" data-pagefind-body data-pagefind-meta={`title:${post.data.title}`}>
       <Content components={components} />
     </Prose>
-    <PostFooter post={post} />
+    <EntryFooter entry={post} />
   </Container>
-</BlogLayout>
+</EntryLayout>

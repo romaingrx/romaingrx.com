@@ -1,0 +1,35 @@
+---
+import { Card } from '@/components/ui/card';
+import { Stack } from '@/components/ui/stack';
+import { Heading, Text } from '@/components/ui/text';
+import { Time } from '@/components/ui/time';
+import type { Note } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  note: Note;
+  class?: string;
+}
+
+const { note, class: className } = Astro.props;
+---
+
+<a href={note.path} class={cn('group block no-underline', className)}>
+  <Card class="gap-1.5 overflow-hidden p-4 text-inherit shadow-none transition-colors hover:bg-accent/40">
+    <Heading level={3} size="card" class="line-clamp-2 transition-colors group-hover:text-primary">
+      {note.data.title}
+    </Heading>
+    {
+      note.data.description && (
+        <Text size="sm" tone="muted" leading="relaxed" clamp={2}>
+          {note.data.description}
+        </Text>
+      )
+    }
+    <Stack direction="row" align="center" gap={1.5} class="text-xs text-muted-foreground">
+      <Time date={note.data.published_date} />
+      <span>&middot;</span>
+      <span>{note.readingTime}</span>
+    </Stack>
+  </Card>
+</a>

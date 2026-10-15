@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import SmoothGradient from './smooth-gradient.astro';
+import { Stack } from '@/components/ui/stack';
+import { Heading, Text } from '@/components/ui/text';
+import { Time } from '@/components/ui/time';
+import type { BlogPost } from '@/lib/collections';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  post: BlogPost;
+  class?: string;
+  showDescription?: boolean;
+  /** Outline level of the title: 2 on listing pages, 3 under a section heading. */
+  headingLevel?: 2 | 3;
+}
+
+const { post, class: className, showDescription = true, headingLevel = 2 } = Astro.props;
+---
+
+<a href={post.path} class={cn('group block no-underline', className)}>
+  <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted/50">
+    <div
+      class="pointer-events-none absolute inset-0 transition-transform duration-500 group-hover:scale-105"
+    >
+      <SmoothGradient seed={post.id} />
+    </div>
+    {
+      post.data.cover && (
+        <Image
+          src={post.data.cover}
+          alt={post.data.title}
+          class="pointer-events-none relative z-10 h-full w-full object-contain p-6"
+          width={600}
+        />
+      )
+    }
+  </div>
+
+  <Stack gap={1.5} class="pt-3">
+    <Stack direction="row" align="center" gap={1.5} class="text-xs text-muted-foreground">
+      {post.data.categories[0] && <span class="capitalize">{post.data.categories[0]}</span>}
+      <span>&middot;</span>
+      <Time date={post.data.published_date} />
+      <span>&middot;</span>
+      <span>{post.readingTime}</span>
+    </Stack>
+    <Heading level={headingLevel} size="card" class="line-clamp-2 transition-colors group-hover:text-primary">
+      {post.data.title}
+    </Heading>
+    {
+      showDescription && post.data.description && (
+        <Text size="sm" tone="muted" leading="relaxed" clamp={2}>
+          {post.data.description}
+        </Text>
+      )
+    }
+  </Stack>
+</a>

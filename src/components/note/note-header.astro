@@ -1,22 +1,18 @@
 ---
+import ResourceList from '@/components/entry/resource-list.astro';
+import ShareLinks from '@/components/entry/share-links.astro';
 import { Card } from '@/components/ui/card';
-import Resources from '@/components/blog/resources/index.astro';
-import SharingBadges from '@/components/blog/sharing-badges.astro';
-import { resolveResourceValue } from '@/configs/resources';
-import type { NoteWithAuthors } from '@/lib/collections';
 import { Container } from '@/components/ui/container';
 import { Heading, Text } from '@/components/ui/text';
 import { Time } from '@/components/ui/time';
+import type { Note } from '@/lib/collections';
 
 interface Props {
-  note: NoteWithAuthors;
+  note: Note;
   class?: string;
 }
 
 const { note, class: className = '' } = Astro.props;
-const resources = note.data.resources.map((r) =>
-  Object.assign({}, r, { value: resolveResourceValue(r.value, { collection: 'note', entryId: note.id }) })
-);
 ---
 
 <header class:list={['py-8', className]}>
@@ -43,17 +39,17 @@ const resources = note.data.resources.map((r) =>
         <div class="flex w-full items-center gap-6">
           <div class="flex flex-col gap-3 text-start">
             {
-              note.data.resources && (
+              note.resources.length > 0 && (
                 <>
                   <Text as="span" size="sm" tone="muted" weight="medium">Resources</Text>
-                  <Resources resources={resources} />
+                  <ResourceList resources={note.resources} />
                 </>
               )
             }
           </div>
           <div class="flex flex-col gap-3 text-start">
             <Text as="span" size="sm" tone="muted" weight="medium">Share on</Text>
-            <SharingBadges post={note} />
+            <ShareLinks entry={note} />
           </div>
         </div>
       </div>

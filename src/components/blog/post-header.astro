@@ -1,24 +1,20 @@
 ---
-import ContinueReading from '@/components/animations/continue-reading.astro';
-import StackedAuthors from '@/components/blog/author/stacked-authors.astro';
-import Resources from '@/components/blog/resources/index.astro';
-import { resolveResourceValue } from '@/configs/resources';
-import type { BlogPostWithAuthors } from '@/lib/collections';
-import SmoothGradient from '@/components/backgrounds/smooth-gradient.astro';
+import AuthorStack from '@/components/entry/author-stack.astro';
+import ResourceList from '@/components/entry/resource-list.astro';
+import ShareLinks from '@/components/entry/share-links.astro';
 import { Container } from '@/components/ui/container';
 import { Text } from '@/components/ui/text';
 import { Time } from '@/components/ui/time';
-import SharingBadges from './sharing-badges.astro';
+import type { BlogPost } from '@/lib/collections';
+import ContinueReading from './continue-reading.astro';
+import SmoothGradient from './smooth-gradient.astro';
 
 interface Props {
-  post: BlogPostWithAuthors;
+  post: BlogPost;
   class?: string;
 }
 
 const { post, class: className = '' } = Astro.props;
-const resources = post.data.resources.map((r) =>
-  Object.assign({}, r, { value: resolveResourceValue(r.value, { collection: 'blog', entryId: post.id }) })
-);
 ---
 
 <header
@@ -30,22 +26,18 @@ const resources = post.data.resources.map((r) =>
     className,
   ]}
 >
-  <!-- Background with subtle gradient -->
   <div class="absolute inset-0 opacity-20">
     <SmoothGradient seed={post.id} />
   </div>
 
-  <!-- Main Content -->
   <Container size="article">
     <div class="relative z-10 mx-auto text-center">
-      <!-- Meta Information -->
       <div class="text-muted-foreground mb-8 flex items-center justify-center gap-2 text-sm">
         <Time date={post.data.published_date} class="text-sm" />
         <span class="leading-none">·</span>
         <span>{post.readingTime}</span>
       </div>
 
-      <!-- Title -->
       <h1
         class="mb-6 bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text pb-1 text-4xl font-bold tracking-tight text-transparent md:text-5xl lg:text-6xl dark:from-white dark:to-gray-200"
         style="min-width: min(100%, 600px);"
@@ -53,18 +45,16 @@ const resources = post.data.resources.map((r) =>
         {post.data.title}
       </h1>
 
-      <!-- Description -->
       <Text tone="muted" class="mb-8 text-lg md:text-xl">
         {post.data.description}
       </Text>
 
-      <!-- Resources -->
       {
-        post.data.resources.length > 0 && (
+        post.resources.length > 0 && (
           <div class="relative mt-4">
             <div class="flex flex-col gap-3 text-start">
               <Text as="span" size="sm" tone="muted" weight="medium">Resources</Text>
-              <Resources resources={resources} />
+              <ResourceList resources={post.resources} />
             </div>
           </div>
         )
@@ -73,11 +63,11 @@ const resources = post.data.resources.map((r) =>
       <div class="relative mt-4 flex flex-row justify-between">
         <div class="flex flex-col gap-3 text-start">
           <Text as="span" size="sm" tone="muted" weight="medium">Written by</Text>
-          <StackedAuthors authors={post.authors} />
+          <AuthorStack authors={post.authors} />
         </div>
         <div class="flex flex-col gap-3 text-start">
           <Text as="span" size="sm" tone="muted" weight="medium">Share on</Text>
-          <SharingBadges post={post} />
+          <ShareLinks entry={post} />
         </div>
       </div>
     </div>
