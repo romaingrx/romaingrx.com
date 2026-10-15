@@ -1,0 +1,15 @@
+---
+import { VIEW } from '@/lib/chart/scale';
+
+/** An SVG layer stretched over the plot area; draw in 0..VIEW coordinates with non-scaling strokes. */
+---
+
+<svg
+  data-slot="chart-layer"
+  class="absolute inset-0 size-full overflow-visible"
+  viewBox={`0 0 ${VIEW} ${VIEW}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+>
+  <slot />
+</svg>

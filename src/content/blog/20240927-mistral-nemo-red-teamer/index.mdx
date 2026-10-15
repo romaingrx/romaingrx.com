@@ -30,7 +30,7 @@ resources:
 
 import Examples from '@/components/mdx/examples.astro';
 
-import ASRChart from './ASR.tsx';
+import ASRChart from './ASR.astro';
 
 In this work, I finetuned Mistral Nemo 13B on a subset of the WildJailbreak dataset, to produce prompts that are likely to jailbreak a model based on a specified goal.
 
@@ -88,7 +88,7 @@ And you can find some generated prompts below:
 
 I finally created a new baseline in harmbench to test how the model would perform against other models. Below you can find the different ASR regarding the models but also the functional categories. We can see that the model performs really poorly on copyright data. This could be explained by the underlying data it has been finetuned on, which didn’t focus on that aspect.
 
-<ASRChart client:visible />
+<ASRChart />
 
 # Next steps
 

@@ -68,7 +68,7 @@ Feature folders:
 - `blog/`, `note/` — parts used by one collection only.
 - `home/`, `about/` — sections of one page.
 - `mdx/` — building blocks for MDX authors, registered in `mdx/index.ts`.
-- `widgets/` — React islands that entries import (charts, sliders, playback).
+- `widgets/` — React islands that entries import (sliders, playback). Charts are build-time SVG in `ui/chart/`, with scales in `src/lib/chart/`.
 
 Content lives in `src/content/<collection>/<entry>/index.mdx`, with the entry's images, data and islands in the same folder. Collections: `blog`, `note`, `timeline`, `author`.
 

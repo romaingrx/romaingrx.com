@@ -1,0 +1,53 @@
+---
+import { cn } from '@/lib/utils';
+
+import { linearTicks, pct as fraction } from '@/lib/chart/scale';
+import { formatSignificant } from '@/lib/format';
+
+import ChartRoot from './chart-root.astro';
+
+interface Props {
+  items: { label: string; value: number }[];
+  /** Any CSS color, usually a `var(--chart-n)` token. */
+  color?: string;
+  format?: (v: number) => string;
+  class?: string;
+}
+
+const { items, color = 'var(--chart-1)', format = formatSignificant, class: className } = Astro.props;
+
+const ticks = linearTicks(0, Math.max(...items.map((i) => i.value)), 4);
+// Leave room past the longest bar for its value label.
+const max = ticks[ticks.length - 1] * 1.08;
+const pct = (v: number) => fraction(v / max);
+---
+
+<ChartRoot kind="bar" class={cn('relative', className)}>
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    {
+      ticks.map((t) => (
+        <span class="absolute inset-y-0 border-l border-dashed border-border" style={`left: ${pct(t)}`} />
+      ))
+    }
+  </div>
+  <div class="relative flex flex-col gap-1.5">
+    {
+      items.map((item) => {
+        // Short bars can't hold their label, so it moves next to the value.
+        const inside = item.value / max > 0.3;
+        return (
+          <div class="group flex h-7 items-center gap-2">
+            <span
+              class="flex h-full min-w-1 items-center rounded-sm opacity-90 transition-opacity group-hover:opacity-100"
+              style={`width: ${pct(item.value)}; background: ${color}`}
+            >
+              {inside && <span class="truncate px-2 text-background">{item.label}</span>}
+            </span>
+            {!inside && <span class="text-foreground">{item.label}</span>}
+            <span class="font-mono text-muted-foreground tabular-nums">{format(item.value)}</span>
+          </div>
+        );
+      })
+    }
+  </div>
+</ChartRoot>

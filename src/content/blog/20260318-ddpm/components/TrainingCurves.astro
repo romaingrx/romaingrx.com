@@ -1,0 +1,23 @@
+---
+import { ChartCard } from '@/components/patterns/chart-card';
+import { LineChart } from '@/components/ui/chart';
+
+import training from '../data/training.json';
+
+const mse = training.map((d) => d.mse);
+---
+
+<ChartCard title="Training loss" description="MSE over 150 epochs" class="my-8">
+  <LineChart
+    x={training.map((d) => d.epoch)}
+    xAxis={{ label: 'Epoch', domain: [0, 150], ticks: [0, 30, 60, 90, 120, 150] }}
+    yAxis={{
+      label: 'MSE loss',
+      type: 'log',
+      domain: [Math.min(...mse), Math.max(...mse)],
+      format: (v) => (v < 0.01 ? v.toExponential(0) : v.toFixed(3)),
+    }}
+    tooltipTitle={(v) => `Epoch ${v}`}
+    series={[{ label: 'MSE loss', color: 'var(--chart-1)', values: mse }]}
+  />
+</ChartCard>

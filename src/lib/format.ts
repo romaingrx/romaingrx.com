@@ -30,3 +30,10 @@ const numberFormatter = new Intl.NumberFormat('en-US');
 export function formatNumber(value: number): string {
   return numberFormatter.format(value);
 }
+
+/**
+ * Format a measured value with up to four significant digits (e.g. "0.008", "1234")
+ */
+export function formatSignificant(value: number): string {
+  return String(Number(value.toPrecision(4)));
+}
