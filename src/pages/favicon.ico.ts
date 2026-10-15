@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
-import { tiles } from '@/components/logo';
-import { svgToPng } from '@/components/logo/render';
+import { tiles } from '@/lib/logo';
+import { svgToPng } from '@/lib/png';
 
 // An ICO file is a small directory followed by PNG payloads.
 function ico(images: { size: number; png: Buffer }[]): Buffer {

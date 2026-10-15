@@ -18,6 +18,9 @@ The goal of the codebase is a site that is clean, simple, and light. Every rule 
 - `pnpm build` — type-check and build to `dist/`.
 - `pnpm check` — Astro type check.
 - `pnpm lint` / `pnpm lint:fix` — Oxlint.
+- `pnpm layers` — check the import direction in the layer table below.
+- `pnpm knip` — find unused files and dependencies.
+- `pnpm preflight` — lint, layers, knip, format check, and type check.
 - `pnpm format` / `pnpm format:check` — Oxfmt for JS/TS/CSS/JSON/MD/MDX, Prettier for `.astro`.
 - `pnpm bundle-report` — client JS per page.
 - `pnpm deploy` — build and deploy. Run it only when Romain asks.
@@ -25,7 +28,7 @@ The goal of the codebase is a site that is clean, simple, and light. Every rule 
 # Workflow
 
 - After an edit batch, run `pnpm format` on the changed files.
-- Before you push, run `pnpm lint`, `pnpm format:check`, and `pnpm build`. CI runs the same checks.
+- Before you push, run `pnpm preflight` and `pnpm build`. CI runs the same checks.
 - For a refactor, the built HTML must not change. Build `main` and the branch, then diff `dist/`. The `reviewing-changes` skill tells how.
 - For a docs-only change, check formatting and the paths you reference. A build is not necessary.
 - Use conventional commits: `type(scope): description`, imperative, subject under 72 characters.
@@ -49,14 +52,23 @@ The goal of the codebase is a site that is clean, simple, and light. Every rule 
 
 Each layer imports only from its own layer or a lower one. Never import upward.
 
-| Layer | Path                                                    | Holds                                                                       |
-| ----- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
-| 0     | `src/lib/`, `src/configs/`, `src/content.config.ts`     | Pure helpers, data access, site config, schemas. No components.             |
-| 1     | `src/components/ui/`                                    | Primitives. Render from props alone. No content or routes.                  |
-| 2     | `src/components/patterns/`                              | Compositions of primitives used on more than one page.                      |
-| 3     | `src/components/<feature>/` (`blog/`, `note/`, `home/`) | Components that know about an entry, a route, or a page section.            |
-| 4     | `src/layouts/`                                          | Page shells. A component that wraps `BaseLayout` is a layout and goes here. |
-| 5     | `src/pages/`                                            | Routes. Fetch data, pick a layout, render. Keep logic in `src/lib/`.        |
+| Layer | Path                                                | Holds                                                                       |
+| ----- | --------------------------------------------------- | --------------------------------------------------------------------------- |
+| 0     | `src/lib/`, `src/configs/`, `src/content.config.ts` | Pure helpers, data access, site config, schemas. No components.             |
+| 1     | `src/components/ui/`                                | Primitives. Render from props alone. No content or routes.                  |
+| 2     | `src/components/patterns/`                          | Compositions of primitives used on more than one page.                      |
+| 3     | `src/components/<feature>/`                         | Components that know about an entry, a route, or a page section.            |
+| 4     | `src/layouts/`                                      | Page shells. A component that wraps `BaseLayout` is a layout and goes here. |
+| 5     | `src/pages/`                                        | Routes. Fetch data, pick a layout, render. Keep logic in `src/lib/`.        |
+
+Feature folders:
+
+- `site/` — header, footer, navigation, search, theme toggle, logo.
+- `entry/` — parts shared by blog posts and notes: footer, related entries, share links, resources, authors, comments.
+- `blog/`, `note/` — parts used by one collection only.
+- `home/`, `about/` — sections of one page.
+- `mdx/` — building blocks for MDX authors, registered in `mdx/index.ts`.
+- `widgets/` — React islands that entries import (charts, sliders, playback).
 
 Content lives in `src/content/<collection>/<entry>/index.mdx`, with the entry's images, data and islands in the same folder. Collections: `blog`, `note`, `timeline`, `author`.
 

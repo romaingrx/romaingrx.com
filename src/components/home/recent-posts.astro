@@ -1,0 +1,20 @@
+---
+import BlogCard from '@/components/blog/blog-card.astro';
+import { SectionHeader } from '@/components/patterns/section-header';
+import { Grid } from '@/components/ui/grid';
+import { routes } from '@/configs/routes';
+import type { BlogPost } from '@/lib/collections';
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section>
+  <SectionHeader title="Recent posts" action={{ label: 'View all', href: routes.blogs }} />
+  <Grid gap="cards" class="mt-6">
+    {posts.map((post) => <BlogCard post={post} headingLevel={3} />)}
+  </Grid>
+</section>

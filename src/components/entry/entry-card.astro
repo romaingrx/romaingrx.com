@@ -1,0 +1,20 @@
+---
+import BlogCard from '@/components/blog/blog-card.astro';
+import NoteCard from '@/components/note/note-card.astro';
+import type { BlogPost, Entry, Note } from '@/lib/collections';
+
+/** The card of an entry under a section heading, picked by its collection. */
+interface Props {
+  entry: Entry;
+}
+
+const { entry } = Astro.props;
+---
+
+{
+  entry.collection === 'blog' ? (
+    <BlogCard post={entry as BlogPost} headingLevel={3} />
+  ) : (
+    <NoteCard note={entry as Note} />
+  )
+}

@@ -1,12 +1,12 @@
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
 
-import ChartCard from '@/components/charts/card';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart/chart';
+import ChartCard from '@/components/widgets/chart-card';
 
 const chartConfig = {
   asr: {

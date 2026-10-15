@@ -25,6 +25,12 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Layers
+        run: pnpm layers
+
+      - name: Unused files and dependencies
+        run: pnpm knip
+
       - name: Format check
         run: pnpm format:check
 

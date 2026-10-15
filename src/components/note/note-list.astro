@@ -2,12 +2,12 @@
 import { Card } from '@/components/ui/card';
 import { Text } from '@/components/ui/text';
 import { Time } from '@/components/ui/time';
-import type { NoteWithAuthors } from '@/lib/collections';
-import NoteHoverCard from './hover-card.astro';
+import type { Note } from '@/lib/collections';
+import NoteHoverCard from './note-hover-card.astro';
 
 /** Notes as compact rows, each previewing its note on hover. */
 interface Props {
-  notes: NoteWithAuthors[];
+  notes: Note[];
   empty?: string;
 }
 

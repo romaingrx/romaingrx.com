@@ -17,6 +17,8 @@
   },
   "ignorePatterns": [
     "dist/**",
+    ".agents/**",
+    ".claude/**",
     ".astro/**",
     "node_modules/**",
     "public/**",
