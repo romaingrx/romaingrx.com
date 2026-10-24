@@ -59,7 +59,7 @@
     "@shikijs/colorized-brackets": "^4.5.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.2.0",
-    "happy-dom": "^20.11.6",
+    "happy-dom": "^21.0.0",
     "knip": "^6.41.0",
     "mdast-util-to-string": "^4.0.0",
     "oxfmt": "^0.72.0",
