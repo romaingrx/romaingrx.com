@@ -9,6 +9,6 @@ allowBuilds:
 # TODO(ROM-21): drop the shiki pins when Astro 7 unifies the shiki version.
 overrides:
   tar: '>=7.5.19'
-  shiki: '4.0.2'
-  '@shikijs/core': '4.0.2'
-  '@shikijs/types': '4.0.2'
+  shiki: '4.5.0'
+  '@shikijs/core': '4.5.0'
+  '@shikijs/types': '4.5.0'
