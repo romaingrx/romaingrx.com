@@ -56,9 +56,16 @@ const sections = groups.map((group) => ({
                   {entry.data.title}
                 </Text>
               </p>
-              <Text as="span" size="sm" tone="muted" class="whitespace-nowrap tabular-nums">
-                {formatPeriod(entry.data.startDate, entry.data.endDate)}
-              </Text>
+              <p class="text-right">
+                <Text as="span" size="sm" tone="muted" class="block whitespace-nowrap tabular-nums">
+                  {formatPeriod(entry.data.startDate, entry.data.endDate)}
+                </Text>
+                {entry.data.location && (
+                  <Text as="span" size="xs" tone="muted" class="block whitespace-nowrap">
+                    {entry.data.location}
+                  </Text>
+                )}
+              </p>
             </li>
           ))}
         </Stack>
