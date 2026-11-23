@@ -18,5 +18,3 @@ socialLinks:
     url: 'https://go.romaingrx.com/huggingface'
     handle: 'romaingrx'
 ---
-
-ML engineer working on **evals** and **post-training**. Background in **red-teaming** and **AI safety**.

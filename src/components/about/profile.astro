@@ -1,9 +1,8 @@
 ---
 import { Image } from 'astro:assets';
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import { SocialLinks } from '@/components/patterns/social-links';
-import { Prose } from '@/components/ui/prose';
-import { Heading, Text } from '@/components/ui/text';
+import { Heading } from '@/components/ui/text';
 import { getAuthorSocialLinks } from '@/lib/authors';
 
 interface Props {
@@ -14,9 +13,8 @@ const author = await getEntry('author', Astro.props.author);
 if (!author) {
   throw new Error('Author not found for owner of the website');
 }
-const { name, title, image } = author.data;
+const { name, image } = author.data;
 const socialLinks = getAuthorSocialLinks(author);
-const { Content } = await render(author);
 ---
 
 <section class="rounded-2xl border border-border/60 bg-card/30 p-6 sm:p-8">
@@ -32,14 +30,8 @@ const { Content } = await render(author);
       />
     </div>
     <div class="flex flex-col gap-4">
-      <div class="flex flex-col gap-1">
-        <Heading level={1}>{name}</Heading>
-        <Text tone="muted">{title}</Text>
-      </div>
+      <Heading level={1}>{name}</Heading>
       {socialLinks.length > 0 && <SocialLinks links={socialLinks} variant="boxed" iconClass="size-4" />}
     </div>
   </div>
-  <Prose variant="compact" class="mt-8">
-    <Content />
-  </Prose>
 </section>
