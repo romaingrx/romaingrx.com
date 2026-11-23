@@ -1,6 +1,6 @@
 ---
 name: 'Romain Graux'
-title: 'Senior ML Engineer'
+title: 'Member of Technical Staff'
 image: './romaingrx.jpeg'
 socialLinks:
   github:
@@ -19,5 +19,4 @@ socialLinks:
     handle: 'romaingrx'
 ---
 
-Senior ML Engineer working on **evals** and **post-training** for speech models at Blynt AI.
-Background in **red-teaming** and **AI safety**.
+ML engineer working on **evals** and **post-training**. Background in **red-teaming** and **AI safety**.
