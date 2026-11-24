@@ -10,12 +10,10 @@ interface Props {
   links: SocialLink[];
   /** Icon size class. */
   iconClass?: string;
-  /** `boxed` gives each icon a bordered tile, as on the about page. */
-  variant?: 'plain' | 'boxed';
   class?: string;
 }
 
-const { links, iconClass = 'size-5', variant = 'plain', class: className } = Astro.props;
+const { links, iconClass = 'size-5', class: className } = Astro.props;
 ---
 
 <div data-slot="social-links" class={cn('flex flex-wrap items-center gap-3', className)}>
@@ -26,11 +24,6 @@ const { links, iconClass = 'size-5', variant = 'plain', class: className } = Ast
         external
         variant="muted"
         aria-label={link.label}
-        title={variant === 'boxed' ? link.label : undefined}
-        class={cn(
-          variant === 'boxed' &&
-            'inline-flex size-10 items-center justify-center rounded-lg border border-border/50 bg-background/80 hover:border-border hover:bg-muted'
-        )}
       >
         <Icon name={platforms_info[link.platform].icon_name} class={iconClass} />
       </Link>

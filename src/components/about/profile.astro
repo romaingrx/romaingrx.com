@@ -17,21 +17,17 @@ const { name, image } = author.data;
 const socialLinks = getAuthorSocialLinks(author);
 ---
 
-<section class="rounded-2xl border border-border/60 bg-card/30 p-6 sm:p-8">
-  <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
-    <div class="size-32 shrink-0 overflow-hidden rounded-2xl sm:size-40">
-      <Image
-        src={image}
-        alt={name}
-        width={160}
-        height={160}
-        densities={[1, 2]}
-        class="h-full w-full object-cover"
-      />
-    </div>
-    <div class="flex flex-col gap-4">
-      <Heading level={1}>{name}</Heading>
-      {socialLinks.length > 0 && <SocialLinks links={socialLinks} variant="boxed" iconClass="size-4" />}
-    </div>
+<section class="flex items-center gap-5">
+  <Image
+    src={image}
+    alt={name}
+    width={80}
+    height={80}
+    densities={[1, 2]}
+    class="size-20 shrink-0 rounded-xl object-cover"
+  />
+  <div class="flex flex-col gap-2">
+    <Heading level={1} size="page">{name}</Heading>
+    {socialLinks.length > 0 && <SocialLinks links={socialLinks} iconClass="size-4" />}
   </div>
 </section>
